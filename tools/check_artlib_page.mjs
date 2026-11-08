@@ -1,0 +1,73 @@
+// 离线预览页自动验收：分类筛选、搜索、点击放大、详情字段。
+//
+// 前置：先用带 --remote-debugging-port=9444 --allow-file-access-from-files 的 Chrome 打开
+//       素材库/美术总览.html（file:// 即可），再运行：
+//   node tools/check_artlib_page.mjs
+import fs from 'node:fs';
+import { pathToFileURL } from 'node:url';
+import path from 'node:path';
+
+const PORT = process.env.CDP_PORT || '9444';
+const ROOT = process.cwd().replace(/\\/g, '/');
+const PAGE = pathToFileURL(path.join(process.cwd(), '素材库', '美术总览.html')).href;
+const SHOT = `${ROOT}/tests/screenshots/artlib_modal.png`;
+
+const targets = await (await fetch(`http://127.0.0.1:${PORT}/json/list`)).json();
+const page = targets.find((t) => t.type === 'page');
+if (!page) throw new Error('no page target');
+const ws = new WebSocket(page.webSocketDebuggerUrl);
+const pending = new Map();
+let seq = 0;
+ws.onmessage = (e) => {
+  const m = JSON.parse(e.data);
+  if (m.id && pending.has(m.id)) { pending.get(m.id)(m); pending.delete(m.id); }
+};
+await new Promise((r) => { ws.onopen = r; });
+const send = (method, params = {}) => new Promise((resolve) => {
+  const id = ++seq; pending.set(id, resolve);
+  ws.send(JSON.stringify({ id, method, params }));
+});
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+const evalJs = async (expression) => {
+  const r = await send('Runtime.evaluate', { expression, returnByValue: true, awaitPromise: true });
+  return r.result?.result?.value;
+};
+
+await send('Page.enable');
+await send('Runtime.enable');
+await send('Network.enable');
+await send('Network.setCacheDisabled', { cacheDisabled: true });
+await send('Page.navigate', { url: PAGE });
+await sleep(1200);
+
+const results = [];
+const check = (name, ok, extra = '') => { results.push({ name, ok, extra }); console.log(`${ok ? 'OK  ' : 'FAIL'} ${name} ${extra}`); };
+
+check('卡片渲染 = 5', await evalJs("document.querySelectorAll('.card').length") === 5);
+check('缩略图全部加载', await evalJs("[...document.querySelectorAll('.stage img')].every(i=>i.complete&&i.naturalWidth>0)"));
+check('分类列表 = 7 项（全部 + 6 类）', await evalJs("document.querySelectorAll('#nav li').length") === 7);
+
+await evalJs("document.querySelector('#q').value='ART_SCENE';document.querySelector('#q').dispatchEvent(new Event('input'))");
+check('搜索 ART_SCENE → 1 项', await evalJs("document.querySelectorAll('.card').length") === 1);
+await evalJs("document.querySelector('#q').value='';document.querySelector('#q').dispatchEvent(new Event('input'))");
+
+await evalJs("[...document.querySelectorAll('#nav li')].find(li=>li.dataset.c==='角色').click()");
+check('分类「角色」→ 3 项', await evalJs("document.querySelectorAll('.card').length") === 3);
+await evalJs("document.querySelector('#nav li').click()");
+
+await evalJs("document.querySelector('.card').click()");
+const modal = await evalJs("JSON.stringify({open:document.querySelector('#modal').classList.contains('show'),src:document.querySelector('#big').getAttribute('src'),detail:document.querySelector('#detail').innerText.includes('运行时资源'),warn:document.querySelector('#detail').innerText.includes('不得作为正式运行时资源')})");
+const m = JSON.parse(modal);
+check('点击缩略图打开灯箱', m.open);
+check('灯箱加载原图路径', !!m.src && m.src.endsWith('.png'), m.src);
+check('详情含运行时资源字段与未批准警告', m.detail && m.warn);
+
+const shot = await send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: false });
+fs.mkdirSync(path.dirname(SHOT), { recursive: true });
+fs.writeFileSync(SHOT, Buffer.from(shot.result.data, 'base64'));
+console.log('截图：', SHOT);
+
+const failed = results.filter((r) => !r.ok);
+console.log(`\n结果：${results.length - failed.length}/${results.length} 通过`);
+ws.close();
+if (failed.length) process.exitCode = 1;

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>寒潮清单 · 美术设定库</title>
+<style>
+:root{
+  --paper:#f5f3ee; --card:#ffffff; --ink:#252a30; --muted:#7a7f86;
+  --line:#e3ded4; --accent:#8a6a3a; --accent-soft:#f0e7d7;
+  --stage:#1b2026; --shadow:0 2px 14px rgba(30,32,36,.07);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);
+  font-family:"Segoe UI","Microsoft YaHei","PingFang SC","Noto Sans SC",sans-serif;
+  font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+header{position:sticky;top:0;z-index:20;background:rgba(245,243,238,.96);
+  backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:18px 30px 14px}
+.hrow{display:flex;align-items:flex-end;gap:18px;flex-wrap:wrap}
+h1{font-size:21px;font-weight:600;margin:0;letter-spacing:.02em}
+.sub{color:var(--muted);font-size:12.5px;margin-top:3px}
+.search{margin-left:auto;min-width:230px}
+.search input{width:100%;padding:9px 13px;border:1px solid var(--line);border-radius:7px;
+  background:#fff;font-size:13px;color:var(--ink);outline:none}
+.search input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.notice{margin-top:11px;font-size:12px;color:#7c6237;background:#fbf4e6;
+  border:1px solid #ebdcbe;border-radius:6px;padding:7px 12px;display:inline-block}
+.wrap{display:grid;grid-template-columns:216px 1fr;gap:28px;padding:26px 30px 60px;max-width:1680px;margin:0 auto}
+aside{position:sticky;top:118px;align-self:start}
+.sect{font-size:11px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;margin:0 0 9px}
+.nav{list-style:none;margin:0 0 26px;padding:0}
+.nav li{display:flex;justify-content:space-between;align-items:center;padding:7px 10px;
+  border-radius:6px;cursor:pointer;color:#4c525a;font-size:13px}
+.nav li:hover{background:#ece8df}
+.nav li.on{background:var(--ink);color:#fff}
+.nav li.on span{color:#cfc6b5}
+.nav li span{color:var(--muted);font-size:11px;font-variant-numeric:tabular-nums}
+.legend{display:flex;flex-direction:column;gap:6px;font-size:12px;color:#5c626a}
+.legend div{display:flex;align-items:center;gap:8px}
+.dot{width:8px;height:8px;border-radius:50%;flex:none}
+.side-note{margin-top:26px;border-top:1px solid var(--line);padding-top:14px;
+  font-size:11.5px;color:var(--muted);line-height:1.75}
+.bar{display:flex;align-items:baseline;gap:12px;margin:0 0 16px}
+.bar strong{font-size:16px;font-weight:600}
+.bar em{font-style:normal;color:var(--muted);font-size:12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden;
+  box-shadow:var(--shadow);cursor:pointer;transition:transform .16s ease,box-shadow .16s ease}
+.card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(30,32,36,.12)}
+.stage{height:176px;background:var(--stage);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.stage img{width:100%;height:100%;object-fit:contain;display:block}
+.stage .ph{color:#6c7480;font-size:12px}
+.meta{padding:11px 13px 13px}
+.idline{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:6px}
+.pid{font-family:Consolas,"Courier New",monospace;font-size:11px;color:var(--accent);
+  background:var(--accent-soft);padding:2px 6px;border-radius:4px}
+.ver{font-size:11px;color:var(--muted);font-family:Consolas,monospace}
+.pill{margin-left:auto;font-size:10.5px;padding:2px 8px;border-radius:20px;white-space:nowrap}
+.name{font-size:14px;font-weight:600;margin:0 0 3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.small{font-size:11.5px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.empty{padding:60px 0;text-align:center;color:var(--muted);grid-column:1/-1}
+#modal{position:fixed;inset:0;z-index:50;background:rgba(20,23,27,.86);display:none;
+  align-items:center;justify-content:center;padding:26px}
+#modal.show{display:flex}
+.box{background:var(--card);border-radius:12px;max-width:1240px;width:100%;max-height:92vh;
+  display:grid;grid-template-columns:minmax(0,1.45fr) minmax(300px,.85fr);overflow:hidden}
+.viewer{background:var(--stage);display:flex;align-items:center;justify-content:center;min-height:420px;position:relative}
+.viewer img{max-width:100%;max-height:88vh;object-fit:contain;display:block}
+.navbtn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.14);
+  color:#fff;border:0;width:36px;height:44px;cursor:pointer;font-size:20px;border-radius:6px}
+.navbtn:hover{background:rgba(255,255,255,.28)}
+#prev{left:12px} #next{right:12px}
+.detail{padding:22px 24px;overflow:auto;max-height:92vh}
+.detail h2{font-size:18px;margin:0 0 4px}
+.detail .tagline{color:var(--muted);font-size:12px;margin-bottom:16px}
+.close{float:right;background:none;border:0;font-size:22px;color:var(--muted);cursor:pointer;line-height:1}
+.close:hover{color:var(--ink)}
+dl{margin:0;display:grid;grid-template-columns:88px 1fr;gap:8px 12px;font-size:12.5px}
+dt{color:var(--muted)}
+dd{margin:0;word-break:break-word}
+dd code{font-family:Consolas,monospace;font-size:11.5px;background:#f2efe8;padding:1px 5px;border-radius:4px}
+.block{margin-top:18px;padding-top:14px;border-top:1px solid var(--line)}
+.block h3{font-size:11px;letter-spacing:.12em;color:var(--muted);margin:0 0 8px;text-transform:uppercase}
+.block p{margin:0 0 8px;font-size:12.5px;color:#454b52}
+.filelist{list-style:none;margin:0;padding:0;font-size:12.5px}
+.filelist li{margin-bottom:5px;word-break:break-all}
+.warn{background:#fbf4e6;border:1px solid #ebdcbe;color:#7c6237;
+  padding:8px 10px;border-radius:6px;font-size:12px;margin-top:14px}
+footer{padding:0 30px 40px;color:var(--muted);font-size:11.5px;max-width:1680px;margin:0 auto}
+@media(max-width:900px){.wrap{grid-template-columns:1fr}aside{position:static}.box{grid-template-columns:1fr}.viewer{min-height:260px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="hrow">
+    <div><h1>寒潮清单 · 美术设定库</h1><div class="sub">ARTLIB-001　|　第一季　|　离线预览　|　数据内嵌，无需服务与网络</div></div>
+    <div class="search"><input id="q" type="search" placeholder="搜索素材 ID / 名称 / 说明 / 角色…" autocomplete="off"></div>
+  </div>
+  <div class="notice">本库仅供浏览与审核，已被 <code>.gdignore</code> 隔离，不是 Godot 运行时资源。概念图未获批准不得进入游戏。</div>
+</header>
+<div class="wrap">
+  <aside>
+    <p class="sect">分类</p><ul class="nav" id="nav"></ul>
+    <p class="sect">审核状态</p><div class="legend" id="legend"></div>
+    <div class="side-note">台账：<a href="素材台账.csv">素材台账.csv</a><br>
+      ID 对照：<a href="ID对照表.md">ID对照表.md</a><br>
+      命名与规则：<a href="README.md">README.md</a><br>
+      动画约定：<a href="美术设定集/05-特效与动画/动画素材记录规范.md">动画素材记录规范.md</a><br><br>
+      用 <code>python tools/build_artlib.py</code> 可在新增素材后重建本页。</div>
+  </aside>
+  <main>
+    <div class="bar"><strong id="title">全部素材</strong><em id="count"></em></div>
+    <div class="grid" id="grid"></div>
+  </main>
+</div>
+<footer>《寒潮清单》美术设定库 · 数据与缩略图均为本地相对路径 · 页面由 tools/build_artlib.py 生成，请勿直接手工编辑</footer>
+<div id="modal" role="dialog" aria-modal="true"><div class="box">
+  <div class="viewer"><button class="navbtn" id="prev" title="上一个">‹</button><img id="big" alt=""><button class="navbtn" id="next" title="下一个">›</button></div>
+  <div class="detail"><button class="close" id="close" title="关闭">×</button><div id="detail"></div></div>
+</div></div>
+<script id="asset-data" type="application/json">[{"id":"ART_CHAR_001","name":"许知夏原创人物设定 A","cat":"角色","subject":"许知夏（主角）","version":"v01","source":"v1.1 交接包 概念_C01（AI 生成视觉草案）","usage":"确认主角剪影、发型、服装配色与正常人体比例；供用户审美确认","makeStatus":"概念绘制","status":"待审核","license":"原创提案；AI 生成草案，未经用户审批；不得直接抠图/描摹后商用","originPath":"docs/handover_v1.1/概念_C01_许知夏原创人物设定A.png","originHref":"../docs/handover_v1.1/概念_C01_许知夏原创人物设定A.png","localPath":"美术设定集/01-角色/ART_CHAR_001_v01_许知夏原创人物设定A.png","localHref":"美术设定集/01-角色/ART_CHAR_001_v01_许知夏原创人物设定A.png","runtimePath":"","notes":"2026-11-08 ARTLIB-001 从交接包复制一份归档，SHA256 与原文件一致，原文件未移动未修改。仅为概念设定，未获批准，未进入 assets/。","related":[{"label":"05_美术资产生产台账与风格规范_v1.1.md","href":"../docs/handover_v1.1/05_美术资产生产台账与风格规范_v1.1.md"},{"label":"风格规范摘要.md","href":"美术设定集/00-美术总览/风格规范摘要.md"},{"label":"ID对照表.md","href":"ID对照表.md"}],"anim":{"frames":"","fps":"","size":"","facing":"","preview":"","sheet":""},"thumb":".thumbs/ART_CHAR_001_v01.jpg"},{"id":"ART_CHAR_002","name":"四位 NPC 侧影合集","cat":"角色","subject":"孟雨薇 / 陈叔 / 唐宁 / 韩启程","version":"v01","source":"v1.1 交接包 概念_C04-C07（AI 生成视觉草案）","usage":"确认四位配角的差异、群像色彩与整体像素密度方向","makeStatus":"概念绘制","status":"待审核","license":"原创提案；AI 生成草案，未经用户审批；四位角色尚未拆分单张设定","originPath":"docs/handover_v1.1/概念_C04-C07_四位NPC侧影.png","originHref":"../docs/handover_v1.1/概念_C04-C07_四位NPC侧影.png","localPath":"美术设定集/01-角色/ART_CHAR_002_v01_四位NPC侧影.png","localHref":"美术设定集/01-角色/ART_CHAR_002_v01_四位NPC侧影.png","runtimePath":"","notes":"2026-11-08 ARTLIB-001 归档副本，原文件保持不动。对应旧 ID C04–C07（合集覆盖），拆分单角色时另分配 ART_CHAR_103 起编号。","related":[{"label":"05_美术资产生产台账与风格规范_v1.1.md","href":"../docs/handover_v1.1/05_美术资产生产台账与风格规范_v1.1.md"},{"label":"ID对照表.md","href":"ID对照表.md"}],"anim":{"frames":"","fps":"","size":"","facing":"","preview":"","sheet":""},"thumb":".thumbs/ART_CHAR_002_v01.jpg"},{"id":"ART_CHAR_003","name":"用户指定画风参考","cat":"角色","subject":"风格参考（非本作角色）","version":"v01","source":"用户提供的外部角色画风参考图（v1.0 交接包附带）","usage":"仅用于确定精细像素、深色轮廓、低饱和配色方向","makeStatus":"不适用","status":"概念草案","license":"仅作风参考，未确认商用授权；禁止复制人物身份/造型，禁止作为正式资源","originPath":"assets/reference/reference_character_style.png","originHref":"../assets/reference/reference_character_style.png","localPath":"美术设定集/01-角色/ART_CHAR_003_v01_用户指定画风参考.png","localHref":"美术设定集/01-角色/ART_CHAR_003_v01_用户指定画风参考.png","runtimePath":"","notes":"2026-11-08 ARTLIB-001 归档副本。此条永不填写运行时资源路径；参考图身份不自动等同主角设定。","related":[{"label":"README.md","href":"../assets/reference/README.md"},{"label":"00_README_先读我.md","href":"../docs/handover_v1.0/00_README_先读我.md"}],"anim":{"frames":"","fps":"","size":"","facing":"","preview":"","sheet":""},"thumb":".thumbs/ART_CHAR_003_v01.jpg"},{"id":"ART_SCENE_001","name":"超市与安全屋概念图","cat":"场景","subject":"连锁超市 / 外婆旧两层小楼","version":"v01","source":"v1.0 交接包 参考_超市与安全屋概念图（AI 生成气氛图）","usage":"确认横版构图、货架密度、室外冷蓝灰与室内暖黄的对比","makeStatus":"概念绘制","status":"概念草案","license":"AI 生成气氛图，非可商用 tileset；透视不是最终游戏视角","originPath":"assets/reference/reference_store_and_shelter.png","originHref":"../assets/reference/reference_store_and_shelter.png","localPath":"美术设定集/02-场景/ART_SCENE_001_v01_超市与安全屋概念图.png","localHref":"美术设定集/02-场景/ART_SCENE_001_v01_超市与安全屋概念图.png","runtimePath":"","notes":"2026-11-08 ARTLIB-001 归档副本。对应旧美术 ID S01（超市）/ S02（小楼一层）合集覆盖；与剧情支线 S01/S02 无关。","related":[{"label":"README.md","href":"../assets/reference/README.md"},{"label":"01_GDD_玩法美术与数值.md","href":"../docs/handover_v1.0/01_GDD_玩法美术与数值.md"},{"label":"ID对照表.md","href":"ID对照表.md"}],"anim":{"frames":"","fps":"","size":"","facing":"","preview":"","sheet":""},"thumb":".thumbs/ART_SCENE_001_v01.jpg"},{"id":"ART_ITEM_001","name":"十二种基础物资设备概念","cat":"物品与家具","subject":"食品、水、燃油、货架、暖器、发电机等","version":"v01","source":"v1.1 交接包 概念_I01-F01（AI 生成视觉草案）","usage":"确认道具视觉尺寸、配色与统一像素密度方向","makeStatus":"概念绘制","status":"待审核","license":"AI 生成草案，未经用户审批；不是 12 个可直接交互的正式道具","originPath":"docs/handover_v1.1/概念_I01-F01_十二种基础物资设备.png","originHref":"../docs/handover_v1.1/概念_I01-F01_十二种基础物资设备.png","localPath":"美术设定集/03-物品与家具/ART_ITEM_001_v01_十二种基础物资设备概念.png","localHref":"美术设定集/03-物品与家具/ART_ITEM_001_v01_十二种基础物资设备概念.png","runtimePath":"","notes":"2026-11-08 ARTLIB-001 归档副本。对应旧美术 ID I01 / F01 概念部分；正式图标与堆叠图尚未制作。","related":[{"label":"05_美术资产生产台账与风格规范_v1.1.md","href":"../docs/handover_v1.1/05_美术资产生产台账与风格规范_v1.1.md"},{"label":"ID对照表.md","href":"ID对照表.md"}],"anim":{"frames":"","fps":"","size":"","facing":"","preview":"","sheet":""},"thumb":".thumbs/ART_ITEM_001_v01.jpg"}]</script>
+<script>
+(function(){
+  var DATA=JSON.parse(document.getElementById('asset-data').textContent);
+  var CATS=["角色", "场景", "物品与家具", "界面", "特效与动画", "世界观与剧情"], STATES=["概念草案", "待审核", "已通过设定审核", "正式素材制作中", "运行时可用", "已弃用"];
+  var COLORS={'概念草案':'#9aa3ad','待审核':'#c99a45','已通过设定审核':'#5b8f77','正式素材制作中':'#5a83ad','运行时可用':'#3f8f5b','已弃用':'#b06a6a'};
+  var state={cat:'全部',q:''}, shown=[], idx=0;
+  var $=function(id){return document.getElementById(id)};
+  function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+  function pill(s){var c=COLORS[s]||'#8a8f96';return '<span class="pill" style="color:'+c+';background:'+c+'22">'+esc(s)+'</span>'}
+  function nav(){
+    var counts={}; DATA.forEach(function(d){counts[d.cat]=(counts[d.cat]||0)+1});
+    var items=['全部'].concat(CATS);
+    $('nav').innerHTML=items.map(function(c){var n=c==='全部'?DATA.length:(counts[c]||0);
+      return '<li class="'+(state.cat===c?'on':'')+'" data-c="'+esc(c)+'">'+esc(c)+'<span>'+n+'</span></li>'}).join('');
+    Array.prototype.forEach.call($('nav').children,function(li){li.onclick=function(){state.cat=li.dataset.c;nav();render()}});
+  }
+  function legend(){
+    $('legend').innerHTML=STATES.map(function(s){var n=DATA.filter(function(d){return d.status===s}).length;
+      return '<div><i class="dot" style="background:'+COLORS[s]+'"></i>'+esc(s)+' <span style="margin-left:auto;color:#9aa0a6">'+n+'</span></div>'}).join('');
+  }
+  function render(){
+    var q=state.q.trim().toLowerCase();
+    shown=DATA.filter(function(d){
+      if(state.cat!=='全部'&&d.cat!==state.cat)return false;
+      if(!q)return true;
+      return [d.id,d.name,d.cat,d.subject,d.version,d.source,d.usage,d.status,d.notes].join(' ').toLowerCase().indexOf(q)>=0;
+    });
+    $('title').textContent=state.cat==='全部'?'全部素材':state.cat;
+    $('count').textContent='共 '+shown.length+' 项'+(q?'（已筛选）':'')+'　·　素材库不参与游戏运行';
+    $('grid').innerHTML=shown.length?shown.map(function(d,i){
+      return '<article class="card" data-i="'+i+'"><div class="stage">'+
+        (d.thumb?'<img src="'+esc(d.thumb)+'" alt="'+esc(d.name)+'" loading="lazy">':'<span class="ph">暂无预览图</span>')+
+        '</div><div class="meta"><div class="idline"><span class="pid">'+esc(d.id)+'</span>'+
+        '<span class="ver">'+esc(d.version)+'</span>'+pill(d.status)+'</div>'+
+        '<p class="name" title="'+esc(d.name)+'">'+esc(d.name)+'</p>'+
+        '<div class="small">'+esc(d.cat)+'　·　'+esc(d.subject)+'</div></div></article>';
+    }).join(''):'<div class="empty">没有匹配的素材。换个关键词，或清空搜索。</div>';
+    Array.prototype.forEach.call($('grid').children,function(el){if(el.dataset.i!==undefined)el.onclick=function(){open(+el.dataset.i)}});
+  }
+  function detail(d){
+    var a=d.anim||{}, anim=[a.frames,a.fps,a.size,a.facing,a.preview,a.sheet].some(function(x){return x});
+    var rows=[
+      ['素材 ID','<code>'+esc(d.id)+'</code>'],['版本','<code>'+esc(d.version)+'</code>'],
+      ['分类',esc(d.cat)],['对应角色/场景',esc(d.subject)],
+      ['制作状态',esc(d.makeStatus)],['审核状态',pill(d.status)],
+      ['来源',esc(d.source)],['用途',esc(d.usage)]
+    ];
+    var html='<h2>'+esc(d.name)+'</h2><div class="tagline">'+esc(d.id)+' · '+esc(d.version)+' · '+esc(d.cat)+'</div><dl>'+
+      rows.map(function(r){return '<dt>'+r[0]+'</dt><dd>'+r[1]+'</dd>'}).join('')+'</dl>';
+    html+='<div class="block"><h3>版权 / 授权</h3><p>'+esc(d.license)+'</p></div>';
+    html+='<div class="block"><h3>制作与修改说明</h3><p>'+esc(d.notes)+'</p></div>';
+    html+='<div class="block"><h3>文件</h3><ul class="filelist">'+
+      '<li>库内副本：<a href="'+esc(d.localHref)+'" target="_blank">'+esc(d.localPath||'（无）')+'</a></li>'+
+      '<li>原始来源：<a href="'+esc(d.originHref)+'" target="_blank">'+esc(d.originPath||'（无）')+'</a></li>'+
+      '<li>运行时资源：<code>'+esc(d.runtimePath||'未登记')+'</code></li></ul></div>';
+    if(d.related.length){
+      html+='<div class="block"><h3>相关文件</h3><ul class="filelist">'+d.related.map(function(f){
+        return '<li><a href="'+esc(f.href)+'" target="_blank">'+esc(f.label)+'</a></li>'}).join('')+'</ul></div>';
+    }
+    if(anim){
+      html+='<div class="block"><h3>动画记录</h3><dl style="grid-template-columns:88px 1fr">'+
+        [['帧数',a.frames],['帧率 FPS',a.fps],['尺寸',a.size],['方向',a.facing],['预览',a.preview],['精灵图',a.sheet]]
+        .map(function(r){return '<dt>'+r[0]+'</dt><dd>'+esc(r[1]||'—')+'</dd>'}).join('')+'</dl></div>';
+    }else{
+      html+='<div class="block"><h3>动画记录</h3><p>未登记动画；本条目不是可运行角色动画。</p></div>';
+    }
+    if(d.status!=='运行时可用')html+='<div class="warn">当前状态「'+esc(d.status)+'」：不得作为正式运行时资源引用。</div>';
+    return html;
+  }
+  function open(i){
+    idx=i;var d=shown[idx];if(!d)return;
+    $('big').src=d.localHref||d.thumb;$('big').alt=d.name;
+    $('detail').innerHTML=detail(d);$('modal').classList.add('show');document.body.style.overflow='hidden';
+  }
+  function close(){$('modal').classList.remove('show');document.body.style.overflow='';$('big').src=''}
+  function step(n){if(!shown.length)return;open((idx+n+shown.length)%shown.length)}
+  $('close').onclick=close;$('prev').onclick=function(){step(-1)};$('next').onclick=function(){step(1)};
+  $('modal').onclick=function(e){if(e.target===$('modal'))close()};
+  $('q').oninput=function(e){state.q=e.target.value;render()};
+  document.addEventListener('keydown',function(e){
+    if(!$('modal').classList.contains('show'))return;
+    if(e.key==='Escape')close();else if(e.key==='ArrowLeft')step(-1);else if(e.key==='ArrowRight')step(1);
+  });
+  nav();legend();render();
+})();
+</script>
+</body></html>
