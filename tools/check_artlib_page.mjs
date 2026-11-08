@@ -57,6 +57,12 @@ check('安全屋双状态并存（v01-base / v01-upgraded）',
   ['v01-base', 'v01-upgraded'].every((v) => DATA.some((d) => d.id === 'ART_SCENE_102' && d.version === v)));
 check('场景 101 / 102 / 103 已归档',
   ['101', '102', '103'].every((n) => DATA.some((d) => d.id === `ART_SCENE_${n}`)));
+check('货架双状态共用 ART_FURN_101（v01-empty / v01-stages）',
+  ['v01-empty', 'v01-stages'].every((v) => DATA.some((d) => d.id === 'ART_FURN_101' && d.version === v)));
+check('物资与家具样本已归档',
+  ['ART_ITEM_101', 'ART_ITEM_102', 'ART_FURN_102'].every((id) => DATA.some((d) => d.id === id)));
+check('无任何条目为「运行时可用」',
+  DATA.every((d) => d.status !== '运行时可用'));
 check('缩略图路径无重复（同 ID 多状态不撞名）',
   new Set(DATA.map((d) => d.thumb).filter(Boolean)).size === DATA.filter((d) => d.thumb).length);
 check('场景条目制作状态均为概念绘制',

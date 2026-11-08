@@ -46,7 +46,7 @@ SCENE = {"01": "ART_SCENE_101", "02": "ART_SCENE_102", "03": "ART_SCENE_111",
          "04": "ART_SCENE_112", "05": "ART_SCENE_104", "06": "ART_SCENE_105",
          "07": "ART_SCENE_106", "08": "ART_SCENE_107", "09": "ART_SCENE_108",
          "10": "ART_SCENE_109", "11": "ART_SCENE_110"}
-ID_TABLES = [("C", CHAR), ("S", SCENE), ("I", {"01": "ART_ITEM_001", "02": "ART_ITEM_101"}),
+ID_TABLES = [("C", CHAR), ("S", SCENE), ("I", {"01": "ART_ITEM_001", "02": "ART_ITEM_103"}),
              ("F", {"01": "ART_FURN_001"}),
              ("UI", {"01": "ART_UI_001", "02": "ART_UI_002", "03": "ART_UI_003"}),
              ("FX", {"01": "ART_FX_001"})]
@@ -216,18 +216,19 @@ aside{position:sticky;top:118px;align-self:start}
 .bar em{font-style:normal;color:var(--muted);font-size:12px}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:18px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden;
-  box-shadow:var(--shadow);cursor:pointer;transition:transform .16s ease,box-shadow .16s ease}
+  box-shadow:var(--shadow);cursor:pointer;transition:transform .16s ease,box-shadow .16s ease;
+  display:flex;flex-direction:column}
 .card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(30,32,36,.12)}
-.stage{height:176px;background:var(--stage);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.stage{height:176px;flex:none;background:var(--stage);display:flex;align-items:center;justify-content:center;overflow:hidden}
 .stage img{width:100%;height:100%;object-fit:contain;display:block}
 .stage .ph{color:#6c7480;font-size:12px}
-.meta{padding:11px 13px 13px}
+.meta{padding:11px 13px 13px;flex:1;display:flex;flex-direction:column}
 .idline{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:6px}
 .pid{font-family:Consolas,"Courier New",monospace;font-size:11px;color:var(--accent);
   background:var(--accent-soft);padding:2px 6px;border-radius:4px}
 .ver{font-size:11px;color:var(--muted);font-family:Consolas,monospace}
 .pill{margin-left:auto;font-size:10.5px;padding:2px 8px;border-radius:20px;white-space:nowrap}
-.name{font-size:14px;font-weight:600;margin:0 0 3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.name{font-size:14px;font-weight:600;margin:auto 0 3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .small{font-size:11.5px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .empty{padding:60px 0;text-align:center;color:var(--muted);grid-column:1/-1}
 #modal{position:fixed;inset:0;z-index:50;background:rgba(20,23,27,.86);display:none;
