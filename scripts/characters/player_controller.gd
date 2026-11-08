@@ -27,6 +27,8 @@ const STATE_IDLE := &"idle"
 const STATE_WALK := &"walk"
 const ANIM_IDLE := &"idle"
 const ANIM_WALK := &"walk_right"
+## ART-RUNTIME-003B：扶车静止姿态（r03 单帧）。**不是扶车行走循环**，本批没有交付那个。
+const ANIM_PUSH := &"push_idle"
 
 ## 身体中轴的目标位置（相对节点原点）。r01 的原始画法就是 -0.5，保持不变以免改动既有观感。
 const TARGET_AXIS_X := -0.5
@@ -58,8 +60,14 @@ var state: StringName = STATE_IDLE
 ## 只保留"贴地 + 状态同步"，避免两套逻辑同时改位置。
 var external_control: bool = false
 
+## 扶车姿态开关。打开时无论走停都播 push_idle（本批只有静止扶车单帧，没有扶车行走循环）；
+## 关掉则回退成 idle / walk_right。由 PushableCart 在绑定 / 解绑时切换。
+var push_pose: bool = false
+
 var _override := 0.0
 var _has_override := false
+## 截图时冻结在某帧：冻结期间 _sync_animation 不抢回播放
+var _frozen := false
 var _base_offset_y := -168.0
 ## 纹理 → 身体中轴 x 的缓存，避免每帧扫描像素
 var _axis_cache: Dictionary = {}
@@ -121,19 +129,32 @@ func _physics_process(delta: float) -> void:
 
 func _update_state() -> void:
 	var next := STATE_WALK if absf(velocity.x) > 1.0 else STATE_IDLE
-	if next == state:
+	if next != state:
+		state = next
+		state_changed.emit(state)
+	_sync_animation()
+
+
+## 动画选择只有这一处：扶车姿态优先，其次走/停。
+func _sync_animation() -> void:
+	if _frozen:
 		return
-	state = next
-	var anim := ANIM_WALK if next == STATE_WALK else ANIM_IDLE
-	if _sprite.animation != anim:
-		_sprite.play(anim)
-		# 打一行日志：桌面端与 Web 端都靠它断言"动画真的切了"，因为画面在画布上读不到
-		print("[ANIM] %s 帧数=%d FPS=%.1f" % [
-			String(anim), _sprite.sprite_frames.get_frame_count(anim),
-			_sprite.sprite_frames.get_animation_speed(anim)])
+	var anim: StringName
+	if push_pose and _sprite.sprite_frames != null and _sprite.sprite_frames.has_animation(ANIM_PUSH):
+		anim = ANIM_PUSH
+	elif state == STATE_WALK:
+		anim = ANIM_WALK
+	else:
+		anim = ANIM_IDLE
+	if _sprite.animation == anim and _sprite.is_playing():
+		return
+	_sprite.play(anim)
+	# 打一行日志：桌面端与 Web 端都靠它断言"动画真的切了"，因为画面在画布上读不到
+	print("[ANIM] %s 帧数=%d FPS=%.1f" % [
+		String(anim), _sprite.sprite_frames.get_frame_count(anim),
+		_sprite.sprite_frames.get_animation_speed(anim)])
 	# play() 之后当前帧立即是 0，先把偏移对齐，别等下一次 frame_changed
 	_apply_visual_offset()
-	state_changed.emit(state)
 
 
 # ------------------------------------------------------------------ 绘制对齐
@@ -189,6 +210,7 @@ func current_texture() -> Texture2D:
 func freeze_frame(anim: StringName, index: int) -> void:
 	if _sprite.sprite_frames == null or not _sprite.sprite_frames.has_animation(anim):
 		return
+	_frozen = true
 	_sprite.play(anim)
 	_sprite.pause()
 	_sprite.frame = clampi(index, 0, _sprite.sprite_frames.get_frame_count(anim) - 1)
@@ -196,7 +218,8 @@ func freeze_frame(anim: StringName, index: int) -> void:
 
 
 func resume_animation() -> void:
-	_sprite.play(ANIM_WALK if state == STATE_WALK else ANIM_IDLE)
+	_frozen = false
+	_sync_animation()
 
 
 # ------------------------------------------------------------------ 对外接口
@@ -215,6 +238,18 @@ func set_external_control(on: bool) -> void:
 	external_control = on
 	if on:
 		velocity = Vector2.ZERO
+
+
+## 扶车姿态开关（推车绑定/解绑时切）。没有扶车行走循环，所以移动中也是这张静止帧。
+func set_push_pose(on: bool) -> void:
+	if push_pose == on:
+		return
+	push_pose = on
+	_sync_animation()
+
+
+func is_pushing_pose() -> bool:
+	return push_pose
 
 
 func set_facing(dir: int) -> void:

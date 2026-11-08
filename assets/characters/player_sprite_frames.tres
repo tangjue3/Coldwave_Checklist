@@ -1,10 +1,11 @@
-[gd_resource type="SpriteFrames" load_steps=6 format=3]
+[gd_resource type="SpriteFrames" load_steps=7 format=3]
 
 [ext_resource type="Texture2D" path="res://assets/characters/ART_CHAR_001_r01_idle_right_128x176.png" id="1_idle"]
 [ext_resource type="Texture2D" path="res://assets/characters/ART_CHAR_001_r02_walk_right_00_contactA.png" id="2_w0"]
 [ext_resource type="Texture2D" path="res://assets/characters/ART_CHAR_001_r02_walk_right_01_pass.png" id="3_w1"]
 [ext_resource type="Texture2D" path="res://assets/characters/ART_CHAR_001_r02_walk_right_02_contactB.png" id="4_w2"]
 [ext_resource type="Texture2D" path="res://assets/characters/ART_CHAR_001_r02_walk_right_03_passB.png" id="5_w3"]
+[ext_resource type="Texture2D" path="res://assets/characters/ART_CHAR_001_r03_push_idle_right_128x176.png" id="6_push"]
 
 [resource]
 animations = [{
@@ -32,4 +33,12 @@ animations = [{
 "loop": true,
 "name": &"walk_right",
 "speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_push")
+}],
+"loop": true,
+"name": &"push_idle",
+"speed": 5.0
 }]

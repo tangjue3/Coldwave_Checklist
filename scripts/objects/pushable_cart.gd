@@ -10,13 +10,16 @@ extends Node2D
 ##   3) **撞墙整组停住，但仍可解绑**。用 1px 子步 + 矩形 shape 查询逐步试探，
 ##      停下的位置一定是"车和人都没和墙体重叠"的位置，不存在穿墙或把人挤到另一侧。
 ##
-## 视觉（ART-RUNTIME-003A）：
-##   真实精灵 128×112、可见 96×74、脚底锚点 (64,104)；车头朝右、手柄在左。
+## 视觉（ART-RUNTIME-003A → 003C）：
+##   r01 128×112 画布、可见 96×74（旧，扶手偏低，与 160px 主角的手对不上）
+##   r02 128×112 画布、可见 96×90（当前，抬高车把后的版本；横向仍是 96，锚点仍是 (64,104)）
+##   两个版本文件都留在库里，r01 可随时回滚。**画布 128 ≠ 车长 96，逻辑车长是冻结值。**
+##   车头朝右、手柄在左。
 ##   前后两层用**同一张图**：Back 在玩家之后（z=0）常驻，Front 在玩家之前（z=1）
 ##   只在两者横向重叠时显示。车篮是稀疏网眼，前景压住腿部时仍能看到裤腿，
 ##   于是"站在车后面 / 侧身绕过"的观感保住了，而且**世界坐标的行走线一条都没动**。
 ##   注意：这是单张图做的两层，不是美术给的前后分件；正式分件交付后应替换掉这一招。
-##
+
 ## 明确不做：容量、结算、装载、物资 UI、库存持久化（属 CORE-002 及以后）。
 
 signal state_changed(state: StringName)
@@ -26,12 +29,15 @@ signal moved(dx: float, speed: float)
 const STATE_PARKED := &"parked"
 const STATE_PUSHING := &"pushing"
 
-const CART_TEXTURE := preload("res://assets/facilities/ART_FURN_103_r01_empty_cart_128x112.png")
-## 精灵画布与锚点（交付说明：128×112，脚底锚点 (64,104)）
+## 当前使用加高车把的 r02（ART-RUNTIME-003C 候选件）。r01 文件保留，可一键换回。
+const CART_TEXTURE := preload("res://assets/facilities/ART_FURN_103_r02_tall_handle_128x112.png")
+const CART_TEXTURE_R01 := preload("res://assets/facilities/ART_FURN_103_r01_empty_cart_128x112.png")
+## 精灵画布与锚点（两版一致：128×112，脚底锚点 (64,104)）
 const SPRITE_CANVAS := Vector2(128, 112)
 const SPRITE_ANCHOR := Vector2(64, 104)
-## 真实可见尺寸：96×74。横向 96 与冻结的车长一致；画布 128 不等于车长。
-const VISIBLE_SIZE := Vector2(96, 74)
+## 真实可见尺寸：r02 = 96×90（r01 = 96×74）。横向 96 与冻结的车长一致；画布 128 不等于车长。
+const VISIBLE_SIZE := Vector2(96, 90)
+const VISIBLE_SIZE_R01 := Vector2(96, 74)
 
 ## 已批准尺寸：车长 96（横向占位），车身高度量用于 shape 查询
 @export var cart_width: float = 96.0
@@ -177,6 +183,8 @@ func bind(p: PlayerController) -> bool:
 	p.global_position.x = global_position.x + float(side) * side_offset
 	p.velocity = Vector2.ZERO
 	p.set_facing(-side)
+	# 扶车姿态：r03 单帧。绑定期间一直用这张，解绑才回到 idle / walk。
+	p.set_push_pose(true)
 	# 手柄朝向推车的人：默认手柄在左，玩家在右（side=+1）时才需要镜像
 	_set_visual_flip(side > 0)
 	_refresh_hotspot_prompt()
@@ -199,6 +207,7 @@ func unbind() -> void:
 	_refresh_front_layer()
 	if p != null:
 		p.set_external_control(false)
+		p.set_push_pose(false)
 		p.velocity = Vector2.ZERO
 		print("[CART] unbind 停车于 x=%.0f，玩家 x=%.0f（可自由走开）" % [parked_x, p.global_position.x])
 	state_changed.emit(state)
@@ -283,6 +292,21 @@ func _rect_free(cx: float, half_w: float, h: float) -> bool:
 
 
 # ------------------------------------------------------------------ 布局信息（供叠加层与测试）
-## 真实可见范围 96×74，不是 128×112 的画布
+## 真实可见范围 96×90（r02；r01 是 96×74），不是 128×112 的画布
 func body_rect() -> Rect2:
 	return Rect2(global_position + Vector2(-VISIBLE_SIZE.x * 0.5, -VISIBLE_SIZE.y), VISIBLE_SIZE)
+
+
+## 精灵相对节点原点的绘制偏移（= -锚点）。量测手部贴合时要和玩家用同一套坐标算法。
+func get_cart_offset() -> Vector2:
+	return -SPRITE_ANCHOR
+
+
+## 当前是否镜像绘制（手柄朝着推车的人）
+func is_visual_flipped() -> bool:
+	return _sprite_back != null and _sprite_back.flip_h
+
+
+## 前景遮挡层此刻是否显示（测试用来核对"站进车里"的层级确实生效）
+func front_layer_visible() -> bool:
+	return _sprite_front != null and _sprite_front.visible

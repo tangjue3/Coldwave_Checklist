@@ -106,21 +106,33 @@ await sleep(700);
 all = logs();
 check('真按 E → PARKED→PUSHING（[CART] bind）', all.some((l) => l.text.includes('[CART] bind')));
 
-// 继续按住右方向键推一段，验证行走动画在 Web 上真的切到 walk_right
+// 推车期间按住右键：ART-INTEGRATE-003 起绑定时播的是扶车姿态 push_idle（r03 单帧），
+// 不再是行走四帧 —— 因为本批没有交扶车行走循环，这是已知过渡限制。
 await send('Input.dispatchKeyEvent', { type: 'keyDown', windowsVirtualKeyCode: 68, nativeVirtualKeyCode: 68, code: 'KeyD', key: 'd', text: 'd' });
 await sleep(900);
 await send('Input.dispatchKeyEvent', { type: 'keyUp', windowsVirtualKeyCode: 68, nativeVirtualKeyCode: 68, code: 'KeyD', key: 'd' });
 await sleep(300);
 all = logs();
 const animLines = all.filter((l) => l.text.includes('[ANIM]')).map((l) => l.text);
-check('推车时切到行走动画（[ANIM] walk_right）',
-  animLines.some((t) => t.includes('walk_right')),
+check('推车时切到扶车姿态（[ANIM] push_idle）',
+  animLines.some((t) => t.includes('push_idle')),
   animLines.join(' | ').slice(0, 120));
 
 await pressE();
 await sleep(700);
 all = logs();
 check('再按 E → PUSHING→PARKED（[CART] unbind）', all.some((l) => l.text.includes('[CART] unbind')));
+
+// 停放后走动应该回到行走四帧，确认扶车姿态没有把普通行走也顶掉
+await send('Input.dispatchKeyEvent', { type: 'keyDown', windowsVirtualKeyCode: 68, nativeVirtualKeyCode: 68, code: 'KeyD', key: 'd', text: 'd' });
+await sleep(800);
+await send('Input.dispatchKeyEvent', { type: 'keyUp', windowsVirtualKeyCode: 68, nativeVirtualKeyCode: 68, code: 'KeyD', key: 'd' });
+await sleep(300);
+all = logs();
+const animAll = all.filter((l) => l.text.includes('[ANIM]')).map((l) => l.text);
+check('停放后走路切回行走四帧（[ANIM] walk_right）',
+  animAll.some((t) => t.includes('walk_right')),
+  animAll.join(' | ').slice(0, 160));
 
 const errsA = errors();
 check('车流程控制台无 error', errsA.length === 0,
