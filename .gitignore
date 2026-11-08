@@ -1,0 +1,21 @@
+# 工作区配置（WorkBuddy 项目数据，不入库）
+.workbuddy/
+
+# 依赖与构建产物
+node_modules/
+dist/
+build/
+.next/
+out/
+
+# 环境变量
+.env
+.env.local
+.env.*.local
+
+# 系统与编辑器
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.log
