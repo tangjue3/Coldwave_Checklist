@@ -53,6 +53,14 @@ check('缩略图全部加载', await evalJs("[...document.querySelectorAll('.sta
 check('分类列表 = 7 项（全部 + 6 类）', await evalJs("document.querySelectorAll('#nav li').length") === 7);
 check('v02 状态为「已通过设定审核」', DATA.some((d) => d.id === 'ART_CHAR_001' && d.version === 'v02' && d.status === '已通过设定审核'));
 check('v01 历史备选仍保留', DATA.some((d) => d.id === 'ART_CHAR_001' && d.version === 'v01'));
+check('安全屋双状态并存（v01-base / v01-upgraded）',
+  ['v01-base', 'v01-upgraded'].every((v) => DATA.some((d) => d.id === 'ART_SCENE_102' && d.version === v)));
+check('场景 101 / 102 / 103 已归档',
+  ['101', '102', '103'].every((n) => DATA.some((d) => d.id === `ART_SCENE_${n}`)));
+check('缩略图路径无重复（同 ID 多状态不撞名）',
+  new Set(DATA.map((d) => d.thumb).filter(Boolean)).size === DATA.filter((d) => d.thumb).length);
+check('场景条目制作状态均为概念绘制',
+  DATA.filter((d) => d.cat === '场景').every((d) => d.makeStatus === '概念绘制'));
 check('所有条目运行时路径为空', DATA.every((d) => !d.runtimePath));
 
 await evalJs("document.querySelector('#q').value='ART_SCENE';document.querySelector('#q').dispatchEvent(new Event('input'))");

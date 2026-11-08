@@ -39,8 +39,11 @@ CHAR = {"01": "ART_CHAR_001", "02": "ART_CHAR_101", "03": "ART_CHAR_102",
         "04": "ART_CHAR_104", "05": "ART_CHAR_105", "06": "ART_CHAR_106",
         "07": "ART_CHAR_107", "08": "ART_CHAR_108", "09": "ART_CHAR_109",
         "10": "ART_CHAR_110"}
-SCENE = {"01": "ART_SCENE_001", "02": "ART_SCENE_001", "03": "ART_SCENE_102",
-         "04": "ART_SCENE_103", "05": "ART_SCENE_104", "06": "ART_SCENE_105",
+# S01 超市 / S02 旧小楼一层 的拆分实号已由 ART-DESIGN-003 落定（101 / 102）；
+# 被占号的原 S03 暴雪窗外、S04 五金店顺延到队尾 111 / 112，其余规划号保持不动，
+# 以便 S10 电台特写 = ART_SCENE_109 的既有裁定继续有效（理由见 ID对照表 §3.2.1）。
+SCENE = {"01": "ART_SCENE_101", "02": "ART_SCENE_102", "03": "ART_SCENE_111",
+         "04": "ART_SCENE_112", "05": "ART_SCENE_104", "06": "ART_SCENE_105",
          "07": "ART_SCENE_106", "08": "ART_SCENE_107", "09": "ART_SCENE_108",
          "10": "ART_SCENE_109", "11": "ART_SCENE_110"}
 ID_TABLES = [("C", CHAR), ("S", SCENE), ("I", {"01": "ART_ITEM_001", "02": "ART_ITEM_101"}),
