@@ -21,12 +21,16 @@ gdscript/warnings/untyped_declaration=0
 
 window/size/viewport_width=960
 window/size/viewport_height=540
-window/size/window_width_override=1920
-window/size/window_height_override=1080
+window/size/resizable=true
+window/size/mode=0
 window/stretch/mode="viewport"
 window/stretch/aspect="keep"
 window/stretch/scale_mode="integer"
 window/vsync/vsync_mode=1
+
+[gui]
+
+theme/custom="res://assets/ui/themes/main_theme.tres"
 
 [input]
 

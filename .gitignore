@@ -2,9 +2,9 @@
 # 引擎生成的导入缓存与本地配置，不入库（首次打开工程会自动重建）
 .godot/
 *.translation
-export_presets.cfg
 # 导出产物
-/builds/
+/builds/*
+!/builds/.gdignore
 /export/
 
 # ---- 本仓库工具链（引擎二进制体积大，不入库）----
@@ -15,6 +15,7 @@ export_presets.cfg
 
 # ---- 交接包原始压缩件（内容已解包进 docs/，不留二进制历史）----
 *.zip
+*.tpz
 
 # ---- 依赖与构建产物 ----
 node_modules/

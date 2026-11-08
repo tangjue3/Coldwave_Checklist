@@ -2,62 +2,89 @@
 
 2D 横版像素游戏：重生回到末日前七天，把外婆留下的旧两层小楼改造成安全屋，熬过寒潮。
 
-> **当前状态：v0.1 工程底座。** 只有工程骨架、渲染与输入配置、启动自检场景。剧情、道具数值、购物系统、建造系统全部暂停，等 v1.1 交接包到位后再开工，避免返工。
+> **当前状态：PREP-002 工程准备完成。** 字体、窗口适配、Web 导出、版本复现、v1.1 文档接收均已验证。剧情、道具数值、购物系统、建造系统仍全部暂停，等下一阶段任务批准。
 
 ## 环境
 
 | 项目 | 要求 |
 |---|---|
-| 引擎 | Godot **4.7.2 stable**（本仓库实测 `4.7.2.stable.official.ed1daf0bf`） |
-| 脚本 | GDScript（不使用 C#，原因见 `docs/开发说明.md`） |
-| 渲染后端 | GL Compatibility（为 Web 导出保留可行性） |
-| 内部视口 | 960×540，整倍数缩放，最近邻采样 |
+| 引擎 | Godot **4.7.2 stable**（`4.7.2.stable.official.ed1daf0bf`），GDScript，不用 C# |
+| 渲染 | GL Compatibility；内部视口 960×540；整数倍缩放；全局 Nearest |
+| 中文字体 | 随工程分发的 Noto Sans SC（SIL OFL 1.1），**不依赖系统字体** |
+| Web | 默认单线程导出，已在 Chrome 157 本地 HTTP 服务实测 |
 
-## 运行
+引擎二进制不入库，换电脑怎么装见 **[docs/工程复现说明.md](docs/工程复现说明.md)**。
 
-本机已把引擎放在 `.tools/godot/`（不入库，见 `.gitignore`）：
+## 快速开始
 
 ```bash
-# 启动自检场景（会打印检查项、截图到 tests/screenshots/，然后自动退出）
-.tools/godot/Godot_v4.7.2-stable_win64_console.exe --path .
+# 首次导入资源（会自动生成 .godot/ 缓存，不入库）
+.tools/godot/Godot_v4.7.2-stable_win64_console.exe --headless --path . --import
 
-# 用编辑器打开工程
+# 启动自检场景：24 项检查 + 截图，完成后退出
+.tools/godot/Godot_v4.7.2-stable_win64_console.exe --path . -- --shot=smoke.png --quit
+
+# 窗口适配 / 模式切换
+.tools/godot/Godot_v4.7.2-stable_win64_console.exe --path . -- --profile=1366x768 --mode-cycle --shot=win.png --quit
+
+# 编辑器
 .tools/godot/Godot_v4.7.2-stable_win64.exe --editor --path .
 ```
 
-如果你自己装了 Godot 4.7.2，用编辑器「导入」本目录的 `project.godot` 即可。
+自检场景里按 `A/D/E/Tab/B/Esc` 可在右侧看到输入回显，`F10` 切最大化、`F11` 切全屏。
+Web 版不带 `--quit`，页面保持可交互。
 
 ## 目录
 
 ```text
-├─ project.godot            工程配置（版本、主场景、视口、渲染、输入映射）
-├─ icon.svg                 工程图标
-├─ scenes/
-│  ├─ dev/test_scene.tscn   启动自检场景（当前主场景）
-│  ├─ menu/ world/ characters/ objects/ ui/   预留，随玩法阶段填充
-├─ scripts/
-│  ├─ dev/startup_smoke.gd  自检脚本
-│  ├─ autoload/ systems/    预留（GameState / DayManager / Inventory 等）
+├─ project.godot             工程配置（主场景 / 视口 / 渲染 / 输入 / 全局 Theme）
+├─ export_presets.cfg        Web 导出预设（随仓库提交，保证可复现）
+├─ icon.svg
 ├─ assets/
-│  ├─ reference/            画风参考图（不是可用素材）
-│  └─ characters/ tiles/ items/ facilities/ ui/ audio/ portraits/   预留
-├─ data/                    数据驱动文件预留（items / facilities / shops / economy / story）
+│  ├─ ui/fonts/              NotoSansSC-Variable.ttf + OFL.txt + 来源说明
+│  ├─ ui/themes/             main_theme.tres（可复用 UI Theme）
+│  ├─ reference/             v1.0 两张画风参考图（不是可用素材）
+│  └─ characters|tiles|items|facilities|audio|portraits/   预留
+├─ scenes/dev/test_scene.tscn   字体 / 窗口 / 输入 / 渲染自检场景（当前主场景）
+├─ scripts/dev/
+│  ├─ startup_smoke.gd      自检与截图
+│  ├─ window_fit.gd         整数倍缩放与窗口自适应
+│  └─ generate_ui_theme.gd  生成 UI Theme 的工程工具
+├─ tools/                   复现与测试脚本（Web 模板分段下载、静态服务、浏览器冒烟）
+├─ data/                    数据驱动文件预留，**仍为空**
 ├─ docs/
-│  ├─ 开发说明.md           工程约定、设置理由、协作规范
-│  └─ handover_v1.0/        v1.0 策划交接包（GDD / 剧本 / 技术方案）
-└─ tests/
-   ├─ README.md             自检与测试约定
-   └─ screenshots/          启动截图输出目录
+│  ├─ 开发说明.md            工程约定
+│  ├─ 工程复现说明.md        版本、下载、校验、换电脑步骤
+│  ├─ PREP-002_测试报告.md   本阶段全部实测结果
+│  ├─ v1.1_冲突清单与建议.md 新旧交接包比对
+│  ├─ handover_v1.0/        v1.0 策划交接包
+│  └─ handover_v1.1/        v1.1 剧情美术补充包
+├─ tests/screenshots/        启动 / 窗口 / 桌面 / 浏览器截图（含 .gdignore）
+└─ builds/web/               Web 导出产物（不入库，含 .gdignore）
 ```
 
-## 文档
+## 文档索引
 
-- `docs/handover_v1.0/00_README_先读我.md` — 需求与范围边界
-- `docs/handover_v1.0/01_GDD_玩法美术与数值.md` — 玩法闭环、数值基线
-- `docs/handover_v1.0/02_完整剧情剧本与分支.md` — 主线/支线/结局
-- `docs/handover_v1.0/03_技术架构开发路线与验收.md` — 架构与 P0–P7 验收
-- `docs/开发说明.md` — 本工程的落地约定（先读这一份再写代码）
+| 文档 | 内容 |
+|---|---|
+| `docs/开发说明.md` | 渲染与输入设置理由、字体规范、目录命名、Git 约定 |
+| `docs/工程复现说明.md` | 引擎版本、官方下载源、SHA-256、模板安装、新电脑步骤 |
+| `docs/PREP-002_测试报告.md` | 24 项自检、三种分辨率、Web 导出包体积与浏览器结果、已知问题 |
+| `docs/v1.1_冲突清单与建议.md` | v1.1 与 v1.0 的 ID/数据结构冲突清单 |
+| `docs/handover_v1.0/00_README_先读我.md` | 需求与范围边界 |
+| `docs/handover_v1.1/00_升级说明与执行顺序.md` | v1.1 增量说明 |
 
-## 已暂停（等 v1.1）
+## Web 导出与验证
+
+```bash
+.tools/godot/Godot_v4.7.2-stable_win64_console.exe --headless --path . --export-release "Web" builds/web/index.html
+python tools/serve_web.py                 # http://127.0.0.1:8060
+node tools/web_smoke_cdp.mjs              # 需先起 --remote-debugging-port=9333 的 Chrome
+```
+
+详见 `docs/工程复现说明.md` 第 5 节。
+
+## 已暂停（等下一阶段任务批准）
 
 D-7 至 D+7 主线事件、道具与设施数值、购物车与结账、物流入库、建造与摆放、日程结算、存档、结局判定。
+v1.1 补充包已接收并归档，但**没有把任何新剧情、物品、设施写进代码或 `data/`**。
