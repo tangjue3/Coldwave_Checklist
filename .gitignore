@@ -29,6 +29,9 @@ out/
 .env.local
 .env.*.local
 
+# ---- 本地临时目录（无头 Chrome profile / 解包缓冲）----
+.tmp_*/
+
 # ---- 系统与编辑器 ----
 .DS_Store
 Thumbs.db

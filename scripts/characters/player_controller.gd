@@ -30,14 +30,26 @@ const STATE_WALK := &"walk"
 ## 输入开关。自动化测试时关掉，改用 set_input_override()。
 @export var input_enabled: bool = true
 
+## 朝左时的**纯绘制偏移**。原图 alpha 包围盒是 x=43 / 宽 41、画布宽 128，
+## 水平镜像后包围盒落到 x=44，整体比原图右移 1px（画布左右留白不对称）。
+## 这里把贴图反向平移 1px 抵掉它。
+## 关键：只改 sprite.offset，**绝不改碰撞盒、绝不改节点坐标**——世界位置必须是唯一真相，
+## 用坐标补偿会让物理和视觉互相追着跑。CORE-001B 起生效。
+@export var flip_draw_offset := Vector2(-1, 0)
+
 @onready var _sprite: Sprite2D = $Sprite
 @onready var _collision: CollisionShape2D = $Collision
 
 var facing: int = 1
 var state: StringName = STATE_IDLE
 
+## 外部接管移动（推购物车时由 PushableCart 驱动）。接管期间本组件不读输入、不 move_and_slide，
+## 只保留"贴地 + 状态同步"，避免两套逻辑同时改位置。
+var external_control: bool = false
+
 var _override := 0.0
 var _has_override := false
+var _base_offset := Vector2.ZERO
 
 
 func _ready() -> void:
@@ -45,17 +57,22 @@ func _ready() -> void:
 	# 像素画固定 1:1，Nearest，禁止任何缩放修补
 	_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	_sprite.scale = Vector2.ONE
+	_base_offset = _sprite.offset
 	set_facing(1)
 	if snap_to_ground:
 		global_position.y = ground_y
 
 
 func _physics_process(delta: float) -> void:
-	var dir := 0.0
-	if _has_override:
-		dir = _override
-	elif input_enabled:
-		dir = Input.get_axis(&"move_left", &"move_right")
+	if external_control:
+		# 位置由外部（推车组合体）决定，这里只保证贴地与状态不失真
+		velocity.y = 0.0
+		if snap_to_ground:
+			global_position.y = ground_y
+		_update_state()
+		return
+
+	var dir := input_axis()
 
 	if is_zero_approx(dir):
 		velocity.x = move_toward(velocity.x, 0.0, decel * delta)
@@ -72,6 +89,10 @@ func _physics_process(delta: float) -> void:
 	if snap_to_ground:
 		global_position.y = ground_y
 
+	_update_state()
+
+
+func _update_state() -> void:
 	var next := STATE_WALK if absf(velocity.x) > 1.0 else STATE_IDLE
 	if next != state:
 		state = next
@@ -80,13 +101,32 @@ func _physics_process(delta: float) -> void:
 
 # ------------------------------------------------------------------ 对外接口
 
+## 当前移动意图（-1/0/1）。推车组合体读同一个来源，保证"输入"只有一处定义。
+func input_axis() -> float:
+	if _has_override:
+		return _override
+	if not input_enabled:
+		return 0.0
+	return Input.get_axis(&"move_left", &"move_right")
+
+
+## 交/收回移动控制权（推车用）
+func set_external_control(on: bool) -> void:
+	external_control = on
+	if on:
+		velocity = Vector2.ZERO
+
+
 func set_facing(dir: int) -> void:
 	var d := 1 if dir >= 0 else -1
 	if d == facing and _sprite.flip_h == (d < 0):
 		return
 	facing = d
 	# 只有一张朝右的静止帧；朝左是临时翻转，仅供控制测试，不是正式左右动作。
-	_sprite.flip_h = d < 0
+	var flipped := d < 0
+	_sprite.flip_h = flipped
+	# 修正镜像造成的 1px 视觉偏移：只动绘制偏移，碰撞盒与节点坐标都不动
+	_sprite.offset = _base_offset + (flip_draw_offset if flipped else Vector2.ZERO)
 	facing_changed.emit(facing)
 
 
@@ -135,6 +175,11 @@ func set_collision_width(w: float) -> void:
 func collision_width() -> float:
 	var shape := _collision.shape as RectangleShape2D
 	return shape.size.x if shape else 0.0
+
+
+func collision_height() -> float:
+	var shape := _collision.shape as RectangleShape2D
+	return shape.size.y if shape else 0.0
 
 
 func collision_rect() -> Rect2:

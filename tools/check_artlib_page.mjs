@@ -87,7 +87,16 @@ const unqualified = usable.filter((d) =>
 check('「运行时可用」资质：路径有效 + 文件存在 + 非概念阶段',
   unqualified.length === 0,
   usable.length ? `${usable.length} 条，不合格 ${unqualified.map((d) => d.id).join(',') || '无'}` : '0 条');
-check('当前全部素材保持非运行时状态（概念素材）', usable.length === 0);
+// CORE-001B 起允许极少数条目进入「运行时可用」。白名单写死在这里，
+// 任何新增都必须在代码里显式加一条，防止概念图被误标成可运行资源。
+const APPROVED_RUNTIME = [{ id: 'ART_CHAR_001', version: 'r01' }];
+const unexpectedRuntime = usable.filter((d) =>
+  !APPROVED_RUNTIME.some((a) => a.id === d.id && a.version === d.version));
+check('「运行时可用」仅限已批准白名单（ART_CHAR_001 r01 单帧）',
+  unexpectedRuntime.length === 0,
+  `${usable.length} 条，越权 ${unexpectedRuntime.map((d) => d.id + '@' + d.version).join(',') || '无'}`);
+check('概念素材仍全部保持非运行时状态',
+  DATA.filter((d) => d.status !== '运行时可用').length === DATA.length - APPROVED_RUNTIME.length);
 check('缩略图路径无重复（同 ID 多状态不撞名）',
   new Set(DATA.map((d) => d.thumb).filter(Boolean)).size === DATA.filter((d) => d.thumb).length);
 check('场景条目制作状态均为概念绘制',

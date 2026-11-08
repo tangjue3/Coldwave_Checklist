@@ -60,6 +60,9 @@ await send('Runtime.enable');
 await send('Log.enable');
 await send('Network.enable');
 await send('Network.setCacheDisabled', { cacheDisabled: true });
+// 只设 cacheDisabled 不够：Godot 自己 fetch index.pck，浏览器仍可能复用旧包，
+// 导致「改了代码但跑的还是上一版」，必须先清一次磁盘缓存。
+await send('Network.clearBrowserCache');
 // 让画布正好是 960×540，截图即为 1:1
 await send('Emulation.setDeviceMetricsOverride', { width: 960, height: 540, deviceScaleFactor: 1, mobile: false });
 await send('Page.navigate', { url: `${URL_BASE}?dev=core001a&state=${STATE}&t=${Date.now()}` });

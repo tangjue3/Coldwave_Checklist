@@ -8,14 +8,14 @@ extends Node
 ##     让自检场景在正式入口改为主菜单后仍可独立运行与截图。
 ##
 ## 命令行参数写在 `--` 之后：
-##   --dev-scene=menu|supermarket|shelter|smoke|scale|core001a
+##   --dev-scene=menu|supermarket|shelter|smoke|scale|core001a|core001b
 ##   --scene-tour          依次切换 菜单→超市→安全屋→菜单 并逐场景截图
 ##   --shot=name.png       指定截图文件名（smoke / scale 场景自己截图）
 ##   --quit                完成后退出
 ##
-## `scale` 是 SCALE-001 的尺寸验证场景，`core001a` 是 CORE-001A 的角色移动实验场景，
-## 两者**只走命令行**，不挂到主菜单，避免把测试入口暴露成正式游戏功能。
-## Web 版没有命令行，改用 URL 参数：`?dev=core001a&state=door`（同样是开发入口）。
+## `scale` 是 SCALE-001 的尺寸验证场景，`core001a` / `core001b` 是角色与交互实验场景，
+## 三者**只走命令行**，不挂到主菜单，避免把测试入口暴露成正式游戏功能。
+## Web 版没有命令行，改用 URL 参数：`?dev=core001b&state=door`（同样是开发入口）。
 
 const PATHS: Dictionary = {
 	&"menu": "res://scenes/menu/main_menu.tscn",
@@ -24,16 +24,20 @@ const PATHS: Dictionary = {
 	&"smoke": "res://scenes/dev/test_scene.tscn",
 	&"scale": "res://scenes/dev/scale_test.tscn",
 	&"core001a": "res://scenes/dev/core_001a.tscn",
+	&"core001b": "res://scenes/dev/core_001b.tscn",
 }
 
 ## 自带检查 / 截图 / 退出逻辑的开发场景：路由不再代为截图，避免重复或抢先退出
-const SELF_MANAGED: Array[StringName] = [&"smoke", &"scale", &"core001a"]
+const SELF_MANAGED: Array[StringName] = [&"smoke", &"scale", &"core001a", &"core001b"]
 
 const SHOT_DIR := "res://tests/screenshots"
 
 ## 本次启动解析出的开发参数（命令行 + Web URL）。开发场景通过它读取 --core-state 之类的值，
 ## 因为 Web 端没有命令行，参数只能由本单例从 query string 注入。
 var dev_args: Dictionary = {}
+
+## 成功切换次数。CORE-001B 用它断言「连按 E 不会重复加载」。
+var change_count: int = 0
 
 var _busy: bool = false
 
@@ -102,7 +106,10 @@ func goto(key: StringName) -> Error:
 	_busy = true
 	var err := get_tree().change_scene_to_file(String(PATHS[key]))
 	if err == OK:
+		change_count += 1
 		GameState.set_location(key)
+		# 新载入的场景拿不到启动时挂在 root 上的 Theme（Web 端会整页变方块），换完必须重挂
+		UiTheme.reapply_after_scene_change()
 	else:
 		push_error("[SceneRouter] 切换失败 %s err=%d" % [key, err])
 	_busy = false
