@@ -32,7 +32,8 @@ INBOX = ROOT / "转存库"
 
 ID_RE = re.compile(r"^ART_(CHAR|SCENE|ITEM|FURN|UI|FX)_(\d{3})$")
 NAME_RE = re.compile(r"(ART_(?:CHAR|SCENE|ITEM|FURN|UI|FX)_\d{3})")
-VER_RE = re.compile(r"^v\d{2}(-[a-z]+)?$")
+## 版本号两套序列：vNN = 设定/概念版本，rNN = 运行时候选/运行时版本；都可带状态后缀
+VER_RE = re.compile(r"^[vr]\d{2}(-[a-z]+)?$")
 
 PREFIX_CATEGORY = {
     "ART_CHAR": ("角色", "美术设定集/01-角色"),
@@ -206,7 +207,10 @@ def write_md(reg_by_id: dict[str, dict], ledger_ids: dict[str, list[dict]]) -> N
         out.append(f"| `{seg}` | {rule} |")
     out.append("")
     out.append("文件与条目的命名：`ART_<类别>_<三位序号>_v<两位版本>_<中文短名>.<扩展名>`；")
-    out.append("版本号可带状态后缀（`v01-base`、`v01-upgraded`、`v01-empty`、`v01-stages`）。")
+    out.append("")
+    out.append("- 版本序列：`v01` 起为**设定 / 概念版本**；`r01` 起为**运行时候选 / 运行时版本**（美术交付包使用 `r`）。")
+    out.append("- 两者都可带状态后缀，例如 `v01-base`、`v01-upgraded`、`v01-empty`、`v01-stages`。")
+    out.append("- 状态后缀不写进文件名，文件名只用基础版本号（`..._v01_...png`）。")
     out.append("")
     out.append("## 2. 号段总览")
     out.append("")

@@ -8,13 +8,14 @@ extends Node
 ##     让自检场景在正式入口改为主菜单后仍可独立运行与截图。
 ##
 ## 命令行参数写在 `--` 之后：
-##   --dev-scene=menu|supermarket|shelter|smoke|scale
+##   --dev-scene=menu|supermarket|shelter|smoke|scale|core001a
 ##   --scene-tour          依次切换 菜单→超市→安全屋→菜单 并逐场景截图
 ##   --shot=name.png       指定截图文件名（smoke / scale 场景自己截图）
 ##   --quit                完成后退出
 ##
-## `scale` 是 SCALE-001 的尺寸验证场景，**只走命令行**，不挂到主菜单，
-## 避免把测试入口暴露成正式游戏功能。
+## `scale` 是 SCALE-001 的尺寸验证场景，`core001a` 是 CORE-001A 的角色移动实验场景，
+## 两者**只走命令行**，不挂到主菜单，避免把测试入口暴露成正式游戏功能。
+## Web 版没有命令行，改用 URL 参数：`?dev=core001a&state=door`（同样是开发入口）。
 
 const PATHS: Dictionary = {
 	&"menu": "res://scenes/menu/main_menu.tscn",
@@ -22,18 +23,35 @@ const PATHS: Dictionary = {
 	&"shelter": "res://scenes/world/shelter.tscn",
 	&"smoke": "res://scenes/dev/test_scene.tscn",
 	&"scale": "res://scenes/dev/scale_test.tscn",
+	&"core001a": "res://scenes/dev/core_001a.tscn",
 }
 
 ## 自带检查 / 截图 / 退出逻辑的开发场景：路由不再代为截图，避免重复或抢先退出
-const SELF_MANAGED: Array[StringName] = [&"smoke", &"scale"]
+const SELF_MANAGED: Array[StringName] = [&"smoke", &"scale", &"core001a"]
 
 const SHOT_DIR := "res://tests/screenshots"
+
+## 本次启动解析出的开发参数（命令行 + Web URL）。开发场景通过它读取 --core-state 之类的值，
+## 因为 Web 端没有命令行，参数只能由本单例从 query string 注入。
+var dev_args: Dictionary = {}
 
 var _busy: bool = false
 
 
 func _ready() -> void:
 	var args := _parse_args()
+	# Web 版没有命令行参数：用 ?dev=<场景key>&state=<检查点> 打开开发场景
+	if not args.has("dev_scene"):
+		var q := _web_query()
+		if q.has("dev") and PATHS.has(StringName(q["dev"])):
+			args["dev_scene"] = q["dev"]
+			if q.has("state"):
+				args["core_state"] = q["state"]
+			if q.has("tour"):
+				args["core_tour"] = true
+
+	dev_args = args
+
 	if args.has("dev_scene"):
 		var key := StringName(String(args["dev_scene"]))
 		if PATHS.has(key):
@@ -46,6 +64,21 @@ func _ready() -> void:
 		# 通用开发参数：截当前（默认主菜单）场景 / 退出。
 		# 没有这个分支时，主入口改成菜单后 `--quit` 会无人处理导致进程常驻。
 		call_deferred("_start_default_scene", args)
+
+
+## 只在 Web 导出里有意义；其它平台直接返回空字典
+func _web_query() -> Dictionary:
+	var out := {}
+	if not OS.has_feature("web"):
+		return out
+	var search: String = str(JavaScriptBridge.eval("window.location.search", true))
+	if search.begins_with("?"):
+		search = search.substr(1)
+	for pair in search.split("&", false):
+		var kv := pair.split("=", true, 1)
+		if kv.size() == 2 and String(kv[0]) != "":
+			out[String(kv[0])] = String(kv[1])
+	return out
 
 
 func _parse_args() -> Dictionary:

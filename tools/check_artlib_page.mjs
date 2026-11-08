@@ -92,7 +92,18 @@ check('缩略图路径无重复（同 ID 多状态不撞名）',
   new Set(DATA.map((d) => d.thumb).filter(Boolean)).size === DATA.filter((d) => d.thumb).length);
 check('场景条目制作状态均为概念绘制',
   DATA.filter((d) => d.cat === '场景').every((d) => d.makeStatus === '概念绘制'));
-check('所有条目运行时路径为空', DATA.every((d) => !d.runtimePath));
+// 运行时路径必须落在 assets/ 里：不得直接引用素材库或转存库（那里 .gdignore，克隆后也不该被打包）
+const assetsDir = path.join(ROOT, 'assets');
+const rtOutsideAssets = withPath.filter((d) => {
+  const rel = path.relative(assetsDir, resolveRuntime(d.runtimePath));
+  return rel.startsWith('..') || path.isAbsolute(rel);
+});
+check('运行时路径只允许指向 assets/（不得直接引用素材库或转存库）',
+  rtOutsideAssets.length === 0,
+  rtOutsideAssets.length
+    ? rtOutsideAssets.map((d) => d.id + ':' + d.runtimePath).join(',')
+    : withPath.length + ' 条运行时路径，全部在 assets/');
+
 
 await evalJs("document.querySelector('#q').value='ART_SCENE';document.querySelector('#q').dispatchEvent(new Event('input'))");
 check(`搜索 ART_SCENE → ${sceneCount} 项`, await evalJs("document.querySelectorAll('.card').length") === sceneCount);
