@@ -8,17 +8,24 @@ extends Node
 ##     让自检场景在正式入口改为主菜单后仍可独立运行与截图。
 ##
 ## 命令行参数写在 `--` 之后：
-##   --dev-scene=menu|supermarket|shelter|smoke
+##   --dev-scene=menu|supermarket|shelter|smoke|scale
 ##   --scene-tour          依次切换 菜单→超市→安全屋→菜单 并逐场景截图
-##   --shot=name.png       指定截图文件名（smoke 场景由自检脚本自己截图）
+##   --shot=name.png       指定截图文件名（smoke / scale 场景自己截图）
 ##   --quit                完成后退出
+##
+## `scale` 是 SCALE-001 的尺寸验证场景，**只走命令行**，不挂到主菜单，
+## 避免把测试入口暴露成正式游戏功能。
 
 const PATHS: Dictionary = {
 	&"menu": "res://scenes/menu/main_menu.tscn",
 	&"supermarket": "res://scenes/world/supermarket.tscn",
 	&"shelter": "res://scenes/world/shelter.tscn",
 	&"smoke": "res://scenes/dev/test_scene.tscn",
+	&"scale": "res://scenes/dev/scale_test.tscn",
 }
+
+## 自带检查 / 截图 / 退出逻辑的开发场景：路由不再代为截图，避免重复或抢先退出
+const SELF_MANAGED: Array[StringName] = [&"smoke", &"scale"]
 
 const SHOT_DIR := "res://tests/screenshots"
 
@@ -89,8 +96,8 @@ func _start_dev_scene(key: StringName, args: Dictionary) -> void:
 	for i in 5:
 		await get_tree().process_frame
 
-	# smoke 场景自带检查、截图与退出逻辑，避免重复截图 / 抢先退出
-	if key == &"smoke":
+	# smoke / scale 场景自带检查、截图与退出逻辑，避免重复截图 / 抢先退出
+	if SELF_MANAGED.has(key):
 		return
 
 	await RenderingServer.frame_post_draw

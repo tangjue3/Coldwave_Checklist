@@ -61,8 +61,33 @@ check('货架双状态共用 ART_FURN_101（v01-empty / v01-stages）',
   ['v01-empty', 'v01-stages'].every((v) => DATA.some((d) => d.id === 'ART_FURN_101' && d.version === v)));
 check('物资与家具样本已归档',
   ['ART_ITEM_101', 'ART_ITEM_102', 'ART_FURN_102'].every((id) => DATA.some((d) => d.id === id)));
-check('无任何条目为「运行时可用」',
-  DATA.every((d) => d.status !== '运行时可用'));
+// 「运行时可用」不是随手可写的标签，而是结论：必须同时满足
+//   ① 对应运行时资源路径非空；② 该路径下的文件真实存在；③ 不是概念绘制阶段。
+// 三条缺一，条目必须保持非运行时状态（SCALE-001 起生效）。
+const resolveRuntime = (p) => {
+  const t = (p || '').trim();
+  if (!t) return '';
+  const rel = t.startsWith('res://') ? t.slice(6) : t;
+  return path.join(ROOT, rel);
+};
+const runtimeFileExists = (p) => {
+  const f = resolveRuntime(p);
+  return !!f && fs.existsSync(f);
+};
+
+const withPath = DATA.filter((d) => (d.runtimePath || '').trim());
+const brokenPath = withPath.filter((d) => !runtimeFileExists(d.runtimePath));
+check('填写了运行时路径的条目，文件必须真实存在',
+  brokenPath.length === 0,
+  withPath.length ? `共 ${withPath.length} 条，缺失 ${brokenPath.map((d) => d.id).join(',') || '无'}` : '（暂无条目填写）');
+
+const usable = DATA.filter((d) => d.status === '运行时可用');
+const unqualified = usable.filter((d) =>
+  !(d.runtimePath || '').trim() || !runtimeFileExists(d.runtimePath) || d.makeStatus === '概念绘制');
+check('「运行时可用」资质：路径有效 + 文件存在 + 非概念阶段',
+  unqualified.length === 0,
+  usable.length ? `${usable.length} 条，不合格 ${unqualified.map((d) => d.id).join(',') || '无'}` : '0 条');
+check('当前全部素材保持非运行时状态（概念素材）', usable.length === 0);
 check('缩略图路径无重复（同 ID 多状态不撞名）',
   new Set(DATA.map((d) => d.thumb).filter(Boolean)).size === DATA.filter((d) => d.thumb).length);
 check('场景条目制作状态均为概念绘制',
