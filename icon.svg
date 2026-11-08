@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" shape-rendering="crispEdges">
+  <rect width="128" height="128" rx="18" fill="#1b2026"/>
+  <rect x="10" y="10" width="108" height="108" rx="12" fill="none" stroke="#3a424c" stroke-width="2"/>
+  <!-- 屋檐与雪 -->
+  <path d="M20 40 L64 20 L108 40 L108 46 L20 46 Z" fill="#4a525c"/>
+  <path d="M20 40 L64 20 L108 40 L104 41 L64 23 L24 41 Z" fill="#dfe6ee"/>
+  <!-- 墙体 -->
+  <rect x="26" y="46" width="76" height="62" fill="#2f3740"/>
+  <!-- 暖光窗 -->
+  <rect x="40" y="58" width="22" height="22" fill="#f0a94b"/>
+  <rect x="40" y="58" width="22" height="22" fill="none" stroke="#c9853a" stroke-width="2"/>
+  <path d="M51 58 L51 80 M40 69 L62 69" stroke="#8d5a24" stroke-width="2"/>
+  <!-- 门 -->
+  <rect x="76" y="72" width="18" height="36" fill="#3f4854"/>
+  <rect x="76" y="72" width="18" height="36" fill="none" stroke="#59636f" stroke-width="2"/>
+  <rect x="88" y="90" width="3" height="3" fill="#f0a94b"/>
+  <!-- 雪花 -->
+  <g stroke="#9fc4de" stroke-width="3" stroke-linecap="square">
+    <path d="M22 92 L22 108 M15 96 L29 104 M29 96 L15 104"/>
+    <path d="M104 60 L104 76 M97 64 L111 72 M111 64 L97 72"/>
+  </g>
+</svg>
