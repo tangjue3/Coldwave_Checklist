@@ -484,7 +484,7 @@ func _measure_and_report() -> void:
 
 	print("")
 	print("========== CORE-001A 实机量测 ==========")
-	var spr := _player.get_node("Sprite") as Sprite2D
+	var spr := _player.sprite_node()
 	print("[CORE] 纹理 %d×%d  节点 scale=%s  filter=%d(Nearest=1)" % [
 		int(tex_size.x), int(tex_size.y), str(spr.scale), spr.texture_filter])
 	print("[CORE] sprite.get_rect() = %s  （期望 (-64,-168,128,176)）" % str(draw_rect))
@@ -495,8 +495,9 @@ func _measure_and_report() -> void:
 		int(coll.size.x), int(coll.size.y), int(coll.position.x), int(coll.position.y)])
 	# alpha 洁净度：直接数加载后的像素，确认没有半透明边缘，也没有被导入流程改过
 	var alpha_levels := {}
-	var spr_node := _player.get_node("Sprite") as Sprite2D
-	var tex_img: Image = spr_node.texture.get_image() if spr_node and spr_node.texture else null
+	var spr_node := _player.sprite_node()
+	var cur_tex := _player.current_texture()
+	var tex_img: Image = cur_tex.get_image() if cur_tex != null else null
 	if tex_img != null:
 		for y in tex_img.get_height():
 			for x in tex_img.get_width():

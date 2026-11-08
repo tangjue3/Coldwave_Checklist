@@ -106,6 +106,17 @@ await sleep(700);
 all = logs();
 check('真按 E → PARKED→PUSHING（[CART] bind）', all.some((l) => l.text.includes('[CART] bind')));
 
+// 继续按住右方向键推一段，验证行走动画在 Web 上真的切到 walk_right
+await send('Input.dispatchKeyEvent', { type: 'keyDown', windowsVirtualKeyCode: 68, nativeVirtualKeyCode: 68, code: 'KeyD', key: 'd', text: 'd' });
+await sleep(900);
+await send('Input.dispatchKeyEvent', { type: 'keyUp', windowsVirtualKeyCode: 68, nativeVirtualKeyCode: 68, code: 'KeyD', key: 'd' });
+await sleep(300);
+all = logs();
+const animLines = all.filter((l) => l.text.includes('[ANIM]')).map((l) => l.text);
+check('推车时切到行走动画（[ANIM] walk_right）',
+  animLines.some((t) => t.includes('walk_right')),
+  animLines.join(' | ').slice(0, 120));
+
 await pressE();
 await sleep(700);
 all = logs();

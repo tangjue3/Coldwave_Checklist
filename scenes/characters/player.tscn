@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3]
 
 [ext_resource type="Script" path="res://scripts/characters/player_controller.gd" id="1_ctrl"]
-[ext_resource type="Texture2D" path="res://assets/characters/ART_CHAR_001_r01_idle_right_128x176.png" id="2_tex"]
+[ext_resource type="SpriteFrames" path="res://assets/characters/player_sprite_frames.tres" id="2_frames"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_col"]
 size = Vector2(28, 160)
@@ -12,11 +12,13 @@ collision_mask = 1
 motion_mode = 1
 script = ExtResource("1_ctrl")
 
-[node name="Sprite" type="Sprite2D" parent="."]
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
 centered = false
 offset = Vector2(-64, -168)
-texture = ExtResource("2_tex")
+sprite_frames = ExtResource("2_frames")
+animation = &"idle"
+autoplay = "idle"
 
 [node name="Collision" type="CollisionShape2D" parent="."]
 position = Vector2(0, -80)
