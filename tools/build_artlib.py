@@ -33,10 +33,12 @@ CATEGORIES = ["角色", "场景", "物品与家具", "界面", "特效与动画"
 STATUSES = ["概念草案", "待审核", "已通过设定审核", "正式素材制作中", "运行时可用", "已弃用"]
 
 # v1.1 美术台账旧 ID → 新 ART_* ID（唯一来源，同时用于生成修订版文档）
+# C04–C07 自 ART-DESIGN-002 起指向四位 NPC 各自的五视图条目（104–107），
+# 原「四人群像 ART_CHAR_002」仍作为历史合集保留；C08–C10 的预留号随之顺延到 108–110。
 CHAR = {"01": "ART_CHAR_001", "02": "ART_CHAR_101", "03": "ART_CHAR_102",
-        "04": "ART_CHAR_002", "05": "ART_CHAR_002", "06": "ART_CHAR_002",
-        "07": "ART_CHAR_002", "08": "ART_CHAR_106", "09": "ART_CHAR_107",
-        "10": "ART_CHAR_108"}
+        "04": "ART_CHAR_104", "05": "ART_CHAR_105", "06": "ART_CHAR_106",
+        "07": "ART_CHAR_107", "08": "ART_CHAR_108", "09": "ART_CHAR_109",
+        "10": "ART_CHAR_110"}
 SCENE = {"01": "ART_SCENE_001", "02": "ART_SCENE_001", "03": "ART_SCENE_102",
          "04": "ART_SCENE_103", "05": "ART_SCENE_104", "06": "ART_SCENE_105",
          "07": "ART_SCENE_106", "08": "ART_SCENE_107", "09": "ART_SCENE_108",
