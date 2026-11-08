@@ -1,3 +1,3 @@
 # Coldfront_Checklist
 
-冷锋清单。
+寒潮清单。
