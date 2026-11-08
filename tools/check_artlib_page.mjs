@@ -43,19 +43,29 @@ await sleep(1200);
 const results = [];
 const check = (name, ok, extra = '') => { results.push({ name, ok, extra }); console.log(`${ok ? 'OK  ' : 'FAIL'} ${name} ${extra}`); };
 
-check('卡片渲染 = 5', await evalJs("document.querySelectorAll('.card').length") === 5);
+// 期望值从页面内嵌数据推导，新增素材后无需改测试脚本
+const DATA = JSON.parse(await evalJs("document.getElementById('asset-data').textContent"));
+const charCount = DATA.filter((d) => d.cat === '角色').length;
+const sceneCount = DATA.filter((d) => d.id.startsWith('ART_SCENE_')).length;
+
+check(`卡片渲染 = ${DATA.length}`, await evalJs("document.querySelectorAll('.card').length") === DATA.length);
 check('缩略图全部加载', await evalJs("[...document.querySelectorAll('.stage img')].every(i=>i.complete&&i.naturalWidth>0)"));
 check('分类列表 = 7 项（全部 + 6 类）', await evalJs("document.querySelectorAll('#nav li').length") === 7);
+check('v02 状态为「已通过设定审核」', DATA.some((d) => d.id === 'ART_CHAR_001' && d.version === 'v02' && d.status === '已通过设定审核'));
+check('v01 历史备选仍保留', DATA.some((d) => d.id === 'ART_CHAR_001' && d.version === 'v01'));
+check('所有条目运行时路径为空', DATA.every((d) => !d.runtimePath));
 
 await evalJs("document.querySelector('#q').value='ART_SCENE';document.querySelector('#q').dispatchEvent(new Event('input'))");
-check('搜索 ART_SCENE → 1 项', await evalJs("document.querySelectorAll('.card').length") === 1);
+check(`搜索 ART_SCENE → ${sceneCount} 项`, await evalJs("document.querySelectorAll('.card').length") === sceneCount);
 await evalJs("document.querySelector('#q').value='';document.querySelector('#q').dispatchEvent(new Event('input'))");
 
 await evalJs("[...document.querySelectorAll('#nav li')].find(li=>li.dataset.c==='角色').click()");
-check('分类「角色」→ 3 项', await evalJs("document.querySelectorAll('.card').length") === 3);
+check(`分类「角色」→ ${charCount} 项`, await evalJs("document.querySelectorAll('.card').length") === charCount);
 await evalJs("document.querySelector('#nav li').click()");
 
-await evalJs("document.querySelector('.card').click()");
+// 灯箱截图固定打开 v02（第一季外观基准），便于人工核对审核状态
+const v02Index = DATA.findIndex((d) => d.id === 'ART_CHAR_001' && d.version === 'v02');
+await evalJs(`document.querySelectorAll('.card')[${v02Index}].click()`);
 const modal = await evalJs("JSON.stringify({open:document.querySelector('#modal').classList.contains('show'),src:document.querySelector('#big').getAttribute('src'),detail:document.querySelector('#detail').innerText.includes('运行时资源'),warn:document.querySelector('#detail').innerText.includes('不得作为正式运行时资源')})");
 const m = JSON.parse(modal);
 check('点击缩略图打开灯箱', m.open);

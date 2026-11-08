@@ -1,0 +1,150 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/main_menu.gd" id="1_menu"]
+
+[node name="MainMenu" type="Control"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_menu")
+
+[node name="Background" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.105882, 0.121569, 0.133333, 1)
+
+[node name="Title" type="Label" parent="."]
+offset_left = 0.0
+offset_top = 58.0
+offset_right = 960.0
+offset_bottom = 122.0
+theme_override_colors/font_color = Color(0.952941, 0.878431, 0.717647, 1)
+theme_override_font_sizes/font_size = 42
+text = "寒潮清单"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Subtitle" type="Label" parent="."]
+offset_left = 0.0
+offset_top = 124.0
+offset_right = 960.0
+offset_bottom = 150.0
+theme_override_colors/font_color = Color(0.596078, 0.647059, 0.701961, 1)
+theme_override_font_sizes/font_size = 13
+text = "COLDFRONT CHECKLIST   ·   第一季   ·   PREP-003 工程框架"
+horizontal_alignment = 1
+
+[node name="Accent" type="ColorRect" parent="."]
+offset_left = 370.0
+offset_top = 158.0
+offset_right = 590.0
+offset_bottom = 160.0
+color = Color(0.941176, 0.662745, 0.294118, 1)
+
+[node name="MenuBox" type="VBoxContainer" parent="."]
+offset_left = 350.0
+offset_top = 190.0
+offset_right = 610.0
+offset_bottom = 452.0
+theme_override_constants/separation = 9
+
+[node name="NewGame" type="Button" parent="MenuBox"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "新游戏"
+
+[node name="Continue" type="Button" parent="MenuBox"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+disabled = true
+text = "继续游戏（存档未实现）"
+
+[node name="Settings" type="Button" parent="MenuBox"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "设置"
+
+[node name="DevTest" type="Button" parent="MenuBox"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "开发测试入口"
+
+[node name="Quit" type="Button" parent="MenuBox"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "退出"
+
+[node name="Hint" type="Label" parent="."]
+offset_left = 40.0
+offset_top = 462.0
+offset_right = 920.0
+offset_bottom = 490.0
+theme_override_colors/font_color = Color(0.941176, 0.662745, 0.294118, 1)
+theme_override_font_sizes/font_size = 13
+text = ""
+horizontal_alignment = 1
+
+[node name="Footer" type="Label" parent="."]
+offset_left = 40.0
+offset_top = 502.0
+offset_right = 920.0
+offset_bottom = 526.0
+theme_override_colors/font_color = Color(0.5, 0.55, 0.6, 1)
+theme_override_font_sizes/font_size = 11
+text = "Godot 4.7.2   ·   960×540 整数倍缩放   ·   正式玩法未开发"
+horizontal_alignment = 1
+
+[node name="DevPanel" type="Panel" parent="."]
+visible = false
+offset_left = 630.0
+offset_top = 150.0
+offset_right = 930.0
+offset_bottom = 430.0
+
+[node name="Box" type="VBoxContainer" parent="DevPanel"]
+offset_left = 14.0
+offset_top = 12.0
+offset_right = 286.0
+offset_bottom = 268.0
+theme_override_constants/separation = 8
+
+[node name="Caption" type="Label" parent="DevPanel/Box"]
+custom_minimum_size = Vector2(0, 26)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.941176, 0.662745, 0.294118, 1)
+theme_override_font_sizes/font_size = 14
+text = "开发测试入口（仅工程验证）"
+
+[node name="Supermarket" type="Button" parent="DevPanel/Box"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "超市空场景"
+
+[node name="Shelter" type="Button" parent="DevPanel/Box"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "安全屋空场景"
+
+[node name="Smoke" type="Button" parent="DevPanel/Box"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "启动自检（Smoke Test）"
+
+[node name="Close" type="Button" parent="DevPanel/Box"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "关闭"

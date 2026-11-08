@@ -326,10 +326,15 @@ func _run_checks() -> void:
 				keys += OS.get_keycode_string((e as InputEventKey).physical_keycode) + " "
 		_check(keys.strip_edges() == EXPECTED_INPUTS[action], "输入 %-17s = %s" % [action, keys.strip_edges()])
 
-	# 字体 / 授权
-	var theme_path := str(ProjectSettings.get_setting("gui/theme/custom", ""))
-	_check(theme_path == THEME_PATH, "全局 UI Theme 已挂载")
-	var theme := load(THEME_PATH) as Theme
+	# 字体 / 授权（PREP-003：主题改由 UiTheme autoload 挂到根窗口）
+	var root_theme := get_tree().root.theme
+	_check(root_theme != null, "运行时 UI Theme 已挂载到根窗口")
+	_check(
+		str(ProjectSettings.get_setting("gui/theme/custom", "")) == "",
+		"项目级 custom theme 已移除（首次导入无错的前提）"
+	)
+	var theme := root_theme as Theme
+	_check(theme != null and theme.resource_path == THEME_PATH, "根窗口主题 = main_theme.tres")
 	var font: FontFile = theme.default_font as FontFile if theme else null
 	_check(font != null, "Theme.default_font = FontFile")
 	if font:

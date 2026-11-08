@@ -1,5 +1,5 @@
 ; 《寒潮清单》Coldfront Checklist — 工程底座配置
-; 阶段：v0.1 工程准备（不含正式玩法内容，剧情/道具/购物/建造暂停至 v1.1）
+; 阶段：PREP-003 基础场景框架（正式玩法仍暂停）
 ; 修改约定见 docs/开发说明.md
 
 config_version=5
@@ -8,8 +8,8 @@ config_version=5
 
 config/name="寒潮清单 Coldfront Checklist"
 config/description="2D 横版像素生存建设游戏：重生七天囤货，把旧小楼改造成安全屋，熬过寒潮。当前为工程底座阶段，玩法内容待 v1.1 交接包。"
-config/version="0.1.0"
-run/main_scene="res://scenes/dev/test_scene.tscn"
+config/version="0.3.0"
+run/main_scene="res://scenes/menu/main_menu.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"
 
@@ -28,9 +28,15 @@ window/stretch/aspect="keep"
 window/stretch/scale_mode="integer"
 window/vsync/vsync_mode=1
 
-[gui]
+; 注意：不要设置 gui/theme/custom。ThemeDB 在资源导入前加载项目主题，
+; 全新 .godot/ 时字体 .fontdata 尚不存在会导致首次导入报错。
+; 主题改由 UiTheme autoload 在运行时挂到根窗口。
+[autoload]
 
-theme/custom="res://assets/ui/themes/main_theme.tres"
+UiTheme="*res://scripts/autoload/ui_theme.gd"
+GameState="*res://scripts/autoload/game_state.gd"
+SaveManager="*res://scripts/autoload/save_manager.gd"
+SceneRouter="*res://scripts/autoload/scene_router.gd"
 
 [input]
 

@@ -21,23 +21,30 @@
 # 首次导入资源（会自动生成 .godot/ 缓存，不入库）
 .tools/godot/Godot_v4.7.2-stable_win64_console.exe --headless --path . --import
 
-# 启动自检场景：24 项检查 + 截图，完成后退出
-.tools/godot/Godot_v4.7.2-stable_win64_console.exe --path . -- --shot=smoke.png --quit
+# 默认启动：主菜单（标题 / 新游戏 / 继续[禁用] / 设置 / 开发测试入口 / 退出）
+.tools/godot/Godot_v4.7.2-stable_win64_console.exe --path . -- --shot=menu.png --quit
+
+# 启动自检（26 项，独立运行，不经过主菜单跳转）
+.tools/godot/Godot_v4.7.2-stable_win64_console.exe --path . -- --dev-scene=smoke --shot=smoke.png --quit
+
+# 场景切换巡检：菜单 → 超市 → 安全屋 → 菜单
+.tools/godot/Godot_v4.7.2-stable_win64_console.exe --path . -- --scene-tour --quit
 
 # 窗口适配 / 模式切换
-.tools/godot/Godot_v4.7.2-stable_win64_console.exe --path . -- --profile=1366x768 --mode-cycle --shot=win.png --quit
+.tools/godot/Godot_v4.7.2-stable_win64_console.exe --path . -- --dev-scene=smoke --profile=1366x768 --mode-cycle --shot=win.png --quit
 
 # 编辑器
 .tools/godot/Godot_v4.7.2-stable_win64.exe --editor --path .
 ```
 
-自检场景里按 `A/D/E/Tab/B/Esc` 可在右侧看到输入回显，`F10` 切最大化、`F11` 切全屏。
+主菜单的「开发测试入口」可切换超市 / 安全屋空场景，Esc 或按钮返回主菜单。
+自检场景里按 `A/D/E/Tab/B/Esc` 可看输入回显，`F10` 切最大化、`F11` 切全屏。
 Web 版不带 `--quit`，页面保持可交互。
 
 ## 目录
 
 ```text
-├─ project.godot             工程配置（主场景 / 视口 / 渲染 / 输入 / 全局 Theme）
+├─ project.godot             工程配置（主场景=主菜单 / 视口 / 渲染 / 输入 / 4 个 autoload）
 ├─ export_presets.cfg        Web 导出预设（随仓库提交，保证可复现）
 ├─ icon.svg
 ├─ assets/
@@ -45,17 +52,23 @@ Web 版不带 `--quit`，页面保持可交互。
 │  ├─ ui/themes/             main_theme.tres（可复用 UI Theme）
 │  ├─ reference/             v1.0 两张画风参考图（不是可用素材）
 │  └─ characters|tiles|items|facilities|audio|portraits/   预留
-├─ scenes/dev/test_scene.tscn   字体 / 窗口 / 输入 / 渲染自检场景（当前主场景）
-├─ scripts/dev/
-│  ├─ startup_smoke.gd      自检与截图
-│  ├─ window_fit.gd         整数倍缩放与窗口自适应
-│  └─ generate_ui_theme.gd  生成 UI Theme 的工程工具
-├─ tools/                   复现与测试脚本（Web 模板分段下载、静态服务、浏览器冒烟）
+├─ scenes/
+│  ├─ menu/main_menu.tscn    **正式启动入口**（PREP-003）
+│  ├─ world/supermarket.tscn 超市占位空场景
+│  ├─ world/shelter.tscn     安全屋占位空场景
+│  └─ dev/test_scene.tscn    字体 / 窗口 / 输入 / 渲染自检场景
+├─ scripts/
+│  ├─ autoload/             UiTheme · GameState · SaveManager · SceneRouter
+│  ├─ ui/main_menu.gd        主菜单入口逻辑
+│  ├─ world/placeholder_world.gd  两个空场景共用占位控制器
+│  └─ dev/                  startup_smoke · window_fit · generate_ui_theme
+├─ tools/                   复现与测试脚本（素材库索引、Web 模板、静态服务、浏览器验收）
 ├─ data/                    数据驱动文件预留，**仍为空**
 ├─ docs/
 │  ├─ 开发说明.md            工程约定
 │  ├─ 工程复现说明.md        版本、下载、校验、换电脑步骤
-│  ├─ PREP-002_测试报告.md   本阶段全部实测结果
+│  ├─ PREP-002_测试报告.md   PREP-002 实测结果
+│  ├─ PREP-003_交付报告.md   PREP-003 实测结果与遗留问题
 │  ├─ v1.1_冲突清单与建议.md 新旧交接包比对
 │  ├─ handover_v1.0/        v1.0 策划交接包
 │  └─ handover_v1.1/        v1.1 剧情美术补充包
@@ -66,6 +79,7 @@ Web 版不带 `--quit`，页面保持可交互。
 │  ├─ ID对照表.md            旧美术 ID → ART_* 新 ID
 │  ├─ 美术设定集/            按角色 / 场景 / 物品 / UI / 特效 / 世界观分类
 │  └─ 收集素材库/            候选 / 待筛选 / 已采用 / 弃用 流程
+├─ 转存库/                   新素材投递入口（含 .gdignore，不参与 Godot 导入）
 └─ builds/web/               Web 导出产物（不入库，含 .gdignore）
 ```
 
@@ -79,6 +93,7 @@ Web 版不带 `--quit`，页面保持可交互。
 | `docs/开发说明.md` | 渲染与输入设置理由、字体规范、目录命名、Git 约定 |
 | `docs/工程复现说明.md` | 引擎版本、官方下载源、SHA-256、模板安装、新电脑步骤 |
 | `docs/PREP-002_测试报告.md` | 24 项自检、三种分辨率、Web 导出包体积与浏览器结果、已知问题 |
+| `docs/PREP-003_交付报告.md` | 首次导入修复、主菜单与空场景、Windows/Web 验收、v02 收录与 S10 裁定 |
 | `docs/ARTLIB-001_交付报告.md` | 素材库目录树、台账字段、隔离测试、PCK 体积变化 |
 | `docs/v1.1_冲突清单与建议.md` | v1.1 与 v1.0 的 ID/数据结构冲突清单 |
 | `docs/handover_v1.0/00_README_先读我.md` | 需求与范围边界 |
@@ -89,7 +104,8 @@ Web 版不带 `--quit`，页面保持可交互。
 ```bash
 .tools/godot/Godot_v4.7.2-stable_win64_console.exe --headless --path . --export-release "Web" builds/web/index.html
 python tools/serve_web.py                 # http://127.0.0.1:8060
-node tools/web_smoke_cdp.mjs              # 需先起 --remote-debugging-port=9333 的 Chrome
+node tools/web_smoke_cdp.mjs              # PREP-002 三视口冒烟
+node tools/check_prep003_web.mjs           # PREP-003 主菜单 + 场景切换验收（同样需要调试端口）
 ```
 
 详见 `docs/工程复现说明.md` 第 5 节。

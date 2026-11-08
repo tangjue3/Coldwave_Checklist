@@ -1,12 +1,17 @@
 # 测试
 
-## 桌面启动自检
+## 桌面启动自检（PREP-003 起主入口为主菜单）
 
 ```bash
-.tools/godot/Godot_v4.7.2-stable_win64_console.exe --path . -- --shot=smoke.png --quit
+# 默认入口：主菜单
+.tools/godot/Godot_v4.7.2-stable_win64_console.exe --path . -- --shot=menu.png --quit
+# 独立运行自检场景
+.tools/godot/Godot_v4.7.2-stable_win64_console.exe --path . -- --dev-scene=smoke --shot=smoke.png --quit
+# 场景切换巡检
+.tools/godot/Godot_v4.7.2-stable_win64_console.exe --path . -- --scene-tour --quit
 ```
 
-由 `scenes/dev/test_scene.tscn` 触发，检查 24 项：引擎版本、视口、像素渲染设置、6 个输入动作、全局 Theme 与中文字体（含 36 个特殊字符的字形）、长文本换行、按钮字体继承、许可证随包、UI 控件边界、资源可加载、发布窗口未写死尺寸。
+由 `scenes/dev/test_scene.tscn` 触发，检查 26 项：引擎版本、视口、像素渲染设置、6 个输入动作、运行时挂载的 UI Theme 与中文字体（含 36 个特殊字符的字形）、长文本换行、按钮字体继承、许可证随包、UI 控件边界、资源可加载、发布窗口未写死尺寸。
 
 - 退出码 `0`：全部通过
 - 退出码 `1`：存在失败项，终端里以 `[SMOKE][FAIL]` 标出
@@ -14,7 +19,7 @@
 ### 窗口适配
 
 ```bash
-.tools/godot/Godot_v4.7.2-stable_win64_console.exe --path . -- --profile=1366x768 --mode-cycle --shot=win.png --quit
+.tools/godot/Godot_v4.7.2-stable_win64_console.exe --path . -- --dev-scene=smoke --profile=1366x768 --mode-cycle --shot=win.png --quit
 ```
 
 `--profile` 支持 `1366x768` / `1920x1080` / `2560x1600` 等；超过本机桌面时只做数值推演并打印说明，不会强行改窗口。
@@ -41,7 +46,7 @@ node tools/web_smoke_cdp.mjs
 
 | 前缀 | 来源 |
 |---|---|
-| `prep002_` / `win_` | 引擎内 960×540 视口截图 |
+| `prep002_` / `win_` / `prep003_` | 引擎内 960×540 视口截图 |
 | `desktop_` / `hold_` | 操作系统桌面级截图 |
 | `web_` | 浏览器 CDP 截图 |
 
