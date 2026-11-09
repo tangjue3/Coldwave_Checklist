@@ -44,8 +44,8 @@
 | `ART_SCENE_102` | v01-base / v01-upgraded | 安全屋（v01-base / v01-upgraded） | 2 | ART-DESIGN-003 |
 | `ART_SCENE_103` | v01 | 暴雪街道（D+1 后） | 1 | ART-DESIGN-003 |
 | `ART_ITEM_001` | v01 | 十二种基础物资设备概念（合集） | 1 | ARTLIB-001 |
-| `ART_ITEM_101` | v01 / r01 / r01-shelf | 六瓶装饮用水（大包 64×48） | 3 | ART-DESIGN-004 |
-| `ART_ITEM_102` | v01 / r01 / r01-shelf | 食品纸箱（64×64） | 3 | ART-DESIGN-004 |
+| `ART_ITEM_101` | v01 / r01 / r01-shelf / r02 / r02-shelf | 六瓶装饮用水（大包 64×48） | 5 | ART-DESIGN-004 |
+| `ART_ITEM_102` | v01 / r01 / r01-shelf / r02 / r02-shelf | 食品纸箱（64×64） | 5 | ART-DESIGN-004 |
 | `ART_FURN_001` | — | 设施 5 种（合集） | 0 | ARTLIB-001 |
 | `ART_FURN_101` | v01-empty / v01-stages / r01 | 四层金属货架（v01-empty / v01-stages） | 3 | ART-DESIGN-004 |
 | `ART_FURN_102` | v01 | 电暖器（通电态） | 1 | ART-DESIGN-004 |

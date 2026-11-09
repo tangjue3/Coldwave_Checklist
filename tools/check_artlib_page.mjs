@@ -49,7 +49,21 @@ const charCount = DATA.filter((d) => d.cat === '角色').length;
 const sceneCount = DATA.filter((d) => d.id.startsWith('ART_SCENE_')).length;
 
 check(`卡片渲染 = ${DATA.length}`, await evalJs("document.querySelectorAll('.card').length") === DATA.length);
-check('缩略图全部加载', await evalJs("[...document.querySelectorAll('.stage img')].every(i=>i.complete&&i.naturalWidth>0)"));
+// 卡片是 loading="lazy"：条目多到超出一屏时，视口外的图根本不会开始加载。
+// 先整页滚一遍把懒加载全部触发，再断言，否则是断言自己假失败（与资产无关）。
+await evalJs(`(async () => {
+  const step = 400;
+  for (let y = 0; y < document.body.scrollHeight; y += step) {
+    window.scrollTo(0, y);
+    await new Promise((r) => setTimeout(r, 40));
+  }
+  window.scrollTo(0, 0);
+  await new Promise((r) => setTimeout(r, 250));
+  return true;
+})()`);
+const brokenImgs = await evalJs(
+  "[...document.querySelectorAll('.stage img')].filter(i=>!(i.complete&&i.naturalWidth>0)).map(i=>i.getAttribute('src'))");
+check('缩略图全部加载', brokenImgs.length === 0, brokenImgs.join(',') || '全部 complete');
 check('分类列表 = 7 项（全部 + 6 类）', await evalJs("document.querySelectorAll('#nav li').length") === 7);
 check('v02 状态为「已通过设定审核」', DATA.some((d) => d.id === 'ART_CHAR_001' && d.version === 'v02' && d.status === '已通过设定审核'));
 check('v01 历史备选仍保留', DATA.some((d) => d.id === 'ART_CHAR_001' && d.version === 'v01'));
@@ -92,15 +106,38 @@ check('「运行时可用」资质：路径有效 + 文件存在 + 非概念阶�
 const APPROVED_RUNTIME = [
   { id: 'ART_CHAR_001', version: 'r01' },   // 朝右静止单帧（CORE-001B 批准）
   { id: 'ART_CHAR_001', version: 'r02' },   // 朝右行走四帧（ART-INTEGRATE-003 批准）
+  { id: 'ART_CHAR_001', version: 'r03' },   // 扶车待机单帧（ART-FIX-003C 批准，仅扶车待机）
   { id: 'ART_FURN_103', version: 'r01' },   // 旧购物车，保留为回滚版本（ART-INTEGRATE-003 批准）
+  { id: 'ART_FURN_103', version: 'r02' },   // 加高车把购物车（ART-FIX-003C 批准）
+  { id: 'ART_FURN_101', version: 'r01' },   // 四层空货架（ART-FIX-003C 批准）
 ];
 const unexpectedRuntime = usable.filter((d) =>
   !APPROVED_RUNTIME.some((a) => a.id === d.id && a.version === d.version));
-check('「运行时可用」仅限已批准白名单（角色 r01/r02 + 购物车 r01）',
+check('「运行时可用」仅限已批准白名单（角色 r01–r03 + 车 r01/r02 + 货架 r01）',
   unexpectedRuntime.length === 0,
   `${usable.length} 条，越权 ${unexpectedRuntime.map((d) => d.id + '@' + d.version).join(',') || '无'}`);
 check('概念素材仍全部保持非运行时状态',
   DATA.filter((d) => d.status !== '运行时可用').length === DATA.length - APPROVED_RUNTIME.length);
+// ART-FIX-003C：商品图的内容归属必须与 ID 一致。
+// 上一批四张图尺寸/alpha/锚点全对，只有"画的是什么"错了，纯结构断言抓不住。
+// 这里按 thumbnail 文件名的版本号硬绑：水的可用版本只能是 r02 / r02-shelf。
+const goodWater = DATA.filter((d) => d.id === 'ART_ITEM_101' && d.status === '运行时可用');
+const goodFood = DATA.filter((d) => d.id === 'ART_ITEM_102' && d.status === '运行时可用');
+check('101 / 102 的旧错误版（r01、r01-shelf）均为「不予通过」且无运行时路径',
+  DATA.filter((d) => (d.id === 'ART_ITEM_101' || d.id === 'ART_ITEM_102')
+      && (d.version === 'r01' || d.version === 'r01-shelf'))
+    .every((d) => d.status === '不予通过' && !(d.runtimePath || '').trim()));
+// 用 localPath 判定（缩略图名是 ID_版本，不含物品英文名）
+const nameOf = (d) => d.localPath || d.thumb || '';
+// 只管运行时序列（rNN / rNN-shelf）：概念版 v01 用中文短名，不在本断言范围内
+const badNamed = DATA.filter((d) => (d.id === 'ART_ITEM_101' || d.id === 'ART_ITEM_102')
+    && /^r\d{2}/.test(d.version) && d.status !== '不予通过')
+  .filter((d) => d.id === 'ART_ITEM_101' ? !/water/i.test(nameOf(d)) : !/food/i.test(nameOf(d)));
+check('101 只允许挂 water 文件、102 只允许挂 food 文件（防再互换）',
+  badNamed.length === 0,
+  badNamed.map((d) => d.id + '@' + d.version + ':' + nameOf(d)).join(',')
+    || `水可用 ${goodWater.length} 条、纸箱可用 ${goodFood.length} 条`);
+
 check('缩略图路径无重复（同 ID 多状态不撞名）',
   new Set(DATA.map((d) => d.thumb).filter(Boolean)).size === DATA.filter((d) => d.thumb).length);
 check('场景条目制作状态均为概念绘制',

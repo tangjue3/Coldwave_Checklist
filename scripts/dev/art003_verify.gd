@@ -35,10 +35,13 @@ const CART_TEX := preload("res://assets/facilities/ART_FURN_103_r02_tall_handle_
 const CART_TEX_R01 := preload("res://assets/facilities/ART_FURN_103_r01_empty_cart_128x112.png")
 ## 交付合同：画布 128×112，脚底锚点 (64,104)；r02 可见 96×90，r01 可见 96×74
 const CART_ANCHOR := Vector2(64, 104)
-const WATER_TEX := preload("res://assets/items/ART_ITEM_101_r01_water_64x48.png")
-const WATER_SHELF_TEX := preload("res://assets/items/ART_ITEM_101_r01_water_shelf_32x32.png")
-const FOOD_TEX := preload("res://assets/items/ART_ITEM_102_r01_food_carton_64x64.png")
-const FOOD_SHELF_TEX := preload("res://assets/items/ART_ITEM_102_r01_food_shelf_32x32.png")
+## ART-FIX-003C：四张商品图改用纠正后的 r02 / r02-shelf。
+## 旧的 r01 / r01-shelf 文件仍在 assets/items/ 里（保留可追溯），但**内容与 ID 互换**，
+## 已被总监裁定「不予审核通过」，任何代码都不得再 preload 它们。
+const WATER_TEX := preload("res://assets/items/ART_ITEM_101_r02_water_64x48.png")
+const WATER_SHELF_TEX := preload("res://assets/items/ART_ITEM_101_r02-shelf_water_32x32.png")
+const FOOD_TEX := preload("res://assets/items/ART_ITEM_102_r02_food_carton_64x64.png")
+const FOOD_SHELF_TEX := preload("res://assets/items/ART_ITEM_102_r02-shelf_food_32x32.png")
 
 ## 逻辑推车间距：CORE-001B 冻结值。**不是美术静帧的 74。**
 const CART_SEP := 80.0
@@ -55,11 +58,12 @@ const C_OK := Color(0.52, 0.84, 0.60)
 const C_BAD := Color(0.91, 0.42, 0.38)
 const C_DIM := Color(0.90, 0.88, 0.84, 0.55)
 
-const STATES := ["hand_r", "hand_l", "shelves", "compare", "overview", "mirror", "overlap"]
+const STATES := ["hand_r", "hand_l", "shelves", "items", "compare", "overview", "mirror", "overlap"]
 const STATE_LABELS := {
 	"hand_r": "① 推车朝右：玩家在左，手与加高车把（逻辑间距 80px）",
 	"hand_l": "② 推车朝左：玩家在右，车镜像后手与车把",
 	"shelves": "③ 四层空货架 + 32×32 上架商品 + 64×48 / 64×64 落地商品",
+	"items": "③b 商品归属核对：101 必须是蓝灰水、102 必须是棕色纸箱（64 与 32 两种尺寸）",
 	"compare": "④ 旧车 r01（可见 96×74）与新车 r02（可见 96×90）对照",
 	"overview": "⑤ 综合实机：货架 / 商品 / 人物 / 推车同屏",
 	"mirror": "⑥ 朝右与朝左（镜像 + 绘制偏移）并排",
@@ -175,6 +179,8 @@ func _apply_state(key: String) -> void:
 			_build_hand(1)
 		"shelves":
 			_build_shelves()
+		"items":
+			_build_items()
 		"compare":
 			_build_compare()
 		"overview":
@@ -229,6 +235,34 @@ func _build_shelves() -> void:
 	# 落地商品：64×48 与 64×64（放不进货架，只能落地）
 	_mk_sprite(_stage, WATER_TEX, Vector2(32, 48), Vector2(620.0, GROUND_Y), "WaterFloor")
 	_mk_sprite(_stage, FOOD_TEX, Vector2(32, 64), Vector2(720.0, GROUND_Y), "FoodFloor")
+
+
+## ART-FIX-003C 专用检查点：四件商品平铺，左右两组分别对应 101 / 102。
+## 上半排是 64 落地版，下半排是 32×32 货架版，同一列必须是同一个物品。
+## 这一组存在的意义：修正前"尺寸全对、内容互换"，光看图例读不出来。
+func _build_items() -> void:
+	_player.teleport_to(880.0)
+	_player.set_facing(1)
+	_player.freeze_frame(PlayerController.ANIM_IDLE, 0)
+	_cart.visible = false
+
+	# 每组放大 2 倍显示，1:1 的 64px 物件在 960 屏上太小、看不清内容
+	var scale_k := 2.0
+	var col_x := [300.0, 560.0]
+
+	# 落地版（放大后底部对齐地面线）
+	for i in 2:
+		var tex: Texture2D = WATER_TEX if i == 0 else FOOD_TEX
+		var anc: Vector2 = Vector2(32, 48) if i == 0 else Vector2(32, 64)
+		var spr := _mk_sprite(_stage, tex, anc, Vector2(col_x[i], GROUND_Y), "Item64_%d" % i)
+		spr.scale = Vector2(scale_k, scale_k)
+
+	# 货架版（同一列，缩略显示在地面上方，保持原尺寸以便核对 32px 像素）
+	for i in 2:
+		var tex: Texture2D = WATER_SHELF_TEX if i == 0 else FOOD_SHELF_TEX
+		var spr := _mk_sprite(_stage, tex, Vector2(16, 32),
+			Vector2(col_x[i], GROUND_Y - 130.0), "Item32_%d" % i)
+		spr.scale = Vector2(scale_k, scale_k)
 
 
 func _build_compare() -> void:
@@ -377,6 +411,13 @@ func _draw_captions() -> void:
 			_text_center(620.0, GROUND_Y + 26.0, "水 64×48", 10, C_MUTED)
 			_text_center(720.0, GROUND_Y + 26.0, "纸箱 64×64", 10, C_MUTED)
 			_text_center(800.0, GROUND_Y - 178.0, "人物 160", 10, C_MUTED)
+		"items":
+			_text(24, 40, STATE_LABELS["items"], 15, C_INK)
+			_text(24, 66, "每组放大 2 倍 · 左列 = ART_ITEM_101 饮用水 · 右列 = ART_ITEM_102 食品纸箱", 11, C_MUTED)
+			_text_center(300.0, GROUND_Y + 26.0, "101 · 水 64×48", 11, C_OK)
+			_text_center(560.0, GROUND_Y + 26.0, "102 · 纸箱 64×64", 11, C_AMBER)
+			_text_center(300.0, GROUND_Y - 200.0, "101 · 水 32×32（顶端留白 8px）", 10, C_OK)
+			_text_center(560.0, GROUND_Y - 200.0, "102 · 纸箱 32×32（满幅）", 10, C_AMBER)
 		"compare":
 			_text(24, 40, STATE_LABELS["compare"], 15, C_INK)
 			_text(24, 62, "横向都是 96（冻结车长）· 高度 74 → 90（+16）· 锚点都是 (64,104)", 11, C_MUTED)
@@ -571,10 +612,10 @@ func _run_tests() -> void:
 		["ART_CHAR_001 r03", PUSH_TEX, Vector2i(128, 176), Rect2(35, 8, 58, 160)],
 		["ART_FURN_103 r02", CART_TEX, Vector2i(128, 112), Rect2(16, 14, 96, 90)],
 		["ART_FURN_101 r01", SHELF_TEX, Vector2i(128, 208), Rect2(16, 8, 96, 192)],
-		["ART_ITEM_101 r01", WATER_TEX, Vector2i(64, 48), Rect2(0, 0, 64, 48)],
-		["ART_ITEM_101 r01-shelf", WATER_SHELF_TEX, Vector2i(32, 32), Rect2(0, 8, 32, 24)],
-		["ART_ITEM_102 r01", FOOD_TEX, Vector2i(64, 64), Rect2(0, 0, 64, 64)],
-		["ART_ITEM_102 r01-shelf", FOOD_SHELF_TEX, Vector2i(32, 32), Rect2(0, 0, 32, 32)],
+		["ART_ITEM_101 r02", WATER_TEX, Vector2i(64, 48), Rect2(0, 0, 64, 48)],
+		["ART_ITEM_101 r02-shelf", WATER_SHELF_TEX, Vector2i(32, 32), Rect2(0, 8, 32, 24)],
+		["ART_ITEM_102 r02", FOOD_TEX, Vector2i(64, 64), Rect2(0, 0, 64, 64)],
+		["ART_ITEM_102 r02-shelf", FOOD_SHELF_TEX, Vector2i(32, 32), Rect2(0, 0, 32, 32)],
 	]
 	for row in contract:
 		var label: String = row[0]
@@ -594,6 +635,30 @@ func _run_tests() -> void:
 			Vector2i(img.get_width(), img.get_height()) == want_size
 			and keys.size() <= 2 and bb == want_bb,
 			"实际 bbox=%s 档位=%s" % [str(bb), str(keys)])
+
+	# ---- A2 内容归属：编号画的是不是那个东西
+	# 这一组是 ART-FIX-003C 加的：上一批四张图的文件名与内容互换，尺寸/alpha/锚点全部合格，
+	# 只靠像素合同根本查不出来。判据用"不透明像素的平均色相"——水是冷蓝灰，纸箱是暖棕。
+	print("[A2] 内容归属（编号必须画对东西）")
+	var belong := [
+		["ART_ITEM_101 r02", WATER_TEX, true],
+		["ART_ITEM_101 r02-shelf", WATER_SHELF_TEX, true],
+		["ART_ITEM_102 r02", FOOD_TEX, false],
+		["ART_ITEM_102 r02-shelf", FOOD_SHELF_TEX, false],
+	]
+	for row in belong:
+		var label: String = row[0]
+		var tex: Texture2D = row[1]
+		var want_water: bool = row[2]
+		var c := _avg_rgb(tex)
+		# 水：蓝比红高 20 以上；纸箱：红比蓝高 20 以上。两条互斥，不会被同一张图同时满足
+		var is_water := (c.z - c.x) > 20.0
+		var is_carton := (c.x - c.z) > 20.0
+		var got := is_water or is_carton
+		fails += _ok("%s 内容=%s（平均 RGB %.0f,%.0f,%.0f → %s）" % [
+			label, "饮用水" if is_water else ("食品纸箱" if is_carton else "无法判定"),
+			c.x, c.y, c.z, "蓝灰偏 %+.0f" % (c.z - c.x) if is_water else "棕偏 %+.0f" % (c.x - c.z)],
+			got and (is_water == want_water))
 
 	# ---- B 锚点：按合同 offset 摆好后，可见底边必须落在脚底原点
 	print("[B] 脚底锚点")
@@ -805,6 +870,29 @@ func _label(cv: CanvasItem, x: float, y: float, s: String, size: int, c: Color) 
 func _player_frame_texture() -> Texture2D:
 	var t := _player.current_texture()
 	return t if t != null else CART_TEX
+
+
+## 不透明像素的平均颜色。用来判断"这张图画的是水还是纸箱"，
+## 尺寸、alpha、锚点都合格也查不出图形内容时，靠它兜底。
+func _avg_rgb(tex: Texture2D) -> Vector3:
+	var img := tex.get_image()
+	if img == null:
+		return Vector3.ZERO
+	var r := 0.0
+	var g := 0.0
+	var b := 0.0
+	var n := 0
+	for y in img.get_height():
+		for x in img.get_width():
+			var p := img.get_pixel(x, y)
+			if p.a > 0.5:
+				r += p.r
+				g += p.g
+				b += p.b
+				n += 1
+	if n == 0:
+		return Vector3.ZERO
+	return Vector3(r / float(n) * 255.0, g / float(n) * 255.0, b / float(n) * 255.0)
 
 
 func _alpha_bbox(img: Image) -> Rect2:
