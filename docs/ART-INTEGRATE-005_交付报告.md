@@ -12,7 +12,7 @@
 | 提交 | 内容 |
 |---|---|
 | `3854eeb` | `feat: ART-INTEGRATE-005 r03 购物车转正默认 + r04 推车行走动画接入` |
-| `fb5cbe0` | `docs: ART-INTEGRATE-005 交付报告` |
+| `34f0977` | `docs: ART-INTEGRATE-005 交付报告` |
 
 两个提交均已推送 `origin/main`。
 
