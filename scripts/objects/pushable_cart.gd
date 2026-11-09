@@ -16,7 +16,7 @@ extends Node2D
 ##       r02 128×112 画布、可见 96×90，抬高车把；两层用**同一张图**，
 ##       玩家压到车身上时整张车再画一遍到玩家前面，制造"侧身绕过"的观感。
 ##       **这是没有分件时的临时做法，保留为回退版本**。
-##   - `art_variant = r03`（本轮正式分件）：
+##   - `art_variant = r03`（默认版本，ART-INTEGRATE-005 阶段1 总监裁定）：
 ##       Back（车把 / 后框架 / 支撑 / 车轮）、Cargo（车内物资，可选）、
 ##       Front（近侧篮网与前景边缘）三张**独立**贴图，128×112 画布、锚点同为 (64,104)。
 ##       Back 与 Front 的非透明像素**互不重叠**（已用 numpy 逐像素核对），
@@ -55,7 +55,8 @@ const LOAD_FULL := &"full"
 const CART_TEXTURE := preload("res://assets/facilities/ART_FURN_103_r02_tall_handle_128x112.png")
 const CART_TEXTURE_R01 := preload("res://assets/facilities/ART_FURN_103_r01_empty_cart_128x112.png")
 
-## r03 三件分件（ART-RUNTIME-004 交付包）。画布与锚点和 r02 完全一致。
+## r03 三件分件（ART-RUNTIME-004 交付包；ART-INTEGRATE-005 阶段1 已批准为运行时可用）。
+## 画布与锚点和 r02 完全一致。
 const CART_TEX_R03_BACK := preload("res://assets/facilities/ART_FURN_103_r03_back_128x112.png")
 const CART_TEX_R03_FRONT := preload("res://assets/facilities/ART_FURN_103_r03_front_128x112.png")
 const CART_TEX_R03_CARGO_HALF := preload("res://assets/facilities/ART_FURN_103_r03_cargo_half_128x112.png")
@@ -83,8 +84,9 @@ const VISIBLE_SIZE_R01 := Vector2(96, 74)
 @export var world_left: float = -4096.0
 @export var world_right: float = 4096.0
 
-## 视觉版本与装载状态。r02 是已批准的运行时版本；r03 由开发验证场景显式启用。
-@export var art_variant: StringName = ART_VARIANT_R02
+## 视觉版本与装载状态。r03 为默认（ART-INTEGRATE-005 阶段1 总监裁定）；
+## r02 保留为回退版本，set_art_variant() 可随时切回。
+@export var art_variant: StringName = ART_VARIANT_R03
 @export var load_state: StringName = LOAD_EMPTY
 
 var state: StringName = STATE_PARKED
@@ -342,8 +344,9 @@ func bind(p: PlayerController) -> bool:
 	p.global_position.x = global_position.x + float(side) * side_offset
 	p.velocity = Vector2.ZERO
 	p.set_facing(-side)
-	# 扶车姿态：r03 单帧。绑定期间一直用这张，解绑才回到 idle / walk。
+	# 扶车姿态：绑定起步时先播 r03 静止单帧；真正推行时由 _physics_process 切 r04 四帧。
 	p.set_push_pose(true)
+	p.set_push_moving(false)
 	# 手柄朝向推车的人：默认手柄在左，玩家在右（side=+1）时才需要镜像
 	_set_visual_flip(side > 0)
 	_refresh_hotspot_prompt()
@@ -393,6 +396,7 @@ func _physics_process(delta: float) -> void:
 	if dir == 0:
 		player.velocity.x = move_toward(player.velocity.x, 0.0, 1400.0 * delta)
 		last_speed = 0.0
+		player.set_push_moving(false)
 		return
 	# 车在玩家前方（方向为 -side）时是"推"；同向 side 时是"拉 / 后退"
 	var pushing := dir == -side
@@ -402,6 +406,9 @@ func _physics_process(delta: float) -> void:
 	var spd := absf(dx) / maxf(delta, 0.0001)
 	last_speed = spd
 	player.velocity.x = dx / maxf(delta, 0.0001)
+	# 推车行走动画（r04）：只认「向前推 + 实际位移 > 0」。
+	# 撞墙（dx=0）与反向拉车都切回 push_idle 单帧（拉车脚步滑动保留现状）。
+	player.set_push_moving(pushing and spd > 1.0)
 	if not is_zero_approx(dx):
 		player.set_facing(dir)
 		moved.emit(dx, spd)

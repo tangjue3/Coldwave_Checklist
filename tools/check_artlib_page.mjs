@@ -115,20 +115,25 @@ const APPROVED_RUNTIME = [
   { id: 'ART_ITEM_101', version: 'r02-shelf' },
   { id: 'ART_ITEM_102', version: 'r02' },
   { id: 'ART_ITEM_102', version: 'r02-shelf' },
+  // ART-INTEGRATE-005 阶段1：r03 购物车四件分件经总监最终裁定升运行时可用，
+  // 且 PushableCart 默认版本切换为 r03（r02 保留为回退版本）
+  { id: 'ART_FURN_103', version: 'r03-back' },
+  { id: 'ART_FURN_103', version: 'r03-front' },
+  { id: 'ART_FURN_103', version: 'r03-half' },
+  { id: 'ART_FURN_103', version: 'r03-full' },
 ];
-// ART-INTEGRATE-004：r03 购物车分件（back / front / cargo_half / cargo_full）
-// 本轮只做开发场景接入与实机验收，**总监尚未裁定**，
-// 因此这四行必须保持「待审核」且不得进入运行时白名单。
-const PENDING_R03 = ['r03-back', 'r03-front', 'r03-half', 'r03-full'];
-const r03Pending = DATA.filter((d) => d.id === 'ART_FURN_103' && PENDING_R03.includes(d.version));
-check('r03 购物车四件分件全部为「待审核」（本轮不升运行时可用）',
-  r03Pending.length === 4 && r03Pending.every((d) => d.status !== '运行时可用'),
-  `实际 ${r03Pending.length} 条，状态 ${r03Pending.map((d) => d.version + ':' + d.status).join(',') || '无'}`);
-check('r03 四件分件均未进入运行时白名单',
-  !APPROVED_RUNTIME.some((a) => a.id === 'ART_FURN_103' && PENDING_R03.includes(a.version)));
+// ART-INTEGRATE-005 阶段1：r03 四件已获批，断言从「必须待审核」改为
+// 「四件都必须是运行时可用且已进白名单」，保留质量保护但不拦批准结果。
+const R03_PARTS = ['r03-back', 'r03-front', 'r03-half', 'r03-full'];
+const r03Parts = DATA.filter((d) => d.id === 'ART_FURN_103' && R03_PARTS.includes(d.version));
+check('r03 购物车四件分件全部为「运行时可用」（ART-INTEGRATE-005 阶段1 裁定）',
+  r03Parts.length === 4 && r03Parts.every((d) => d.status === '运行时可用'),
+  `实际 ${r03Parts.length} 条，状态 ${r03Parts.map((d) => d.version + ':' + d.status).join(',') || '无'}`);
+check('r03 四件分件全部在运行时白名单内',
+  R03_PARTS.every((v) => APPROVED_RUNTIME.some((a) => a.id === 'ART_FURN_103' && a.version === v)));
 const unexpectedRuntime = usable.filter((d) =>
   !APPROVED_RUNTIME.some((a) => a.id === d.id && a.version === d.version));
-check('「运行时可用」仅限已批准白名单（角色 r01–r03 + 车 r01/r02 + 货架 r01 + 商品 r02/r02-shelf）',
+check('「运行时可用」仅限已批准白名单（角色 r01–r03 + 车 r01–r03 + 货架 r01 + 商品 r02/r02-shelf）',
   unexpectedRuntime.length === 0,
   `${usable.length} 条，越权 ${unexpectedRuntime.map((d) => d.id + '@' + d.version).join(',') || '无'}`);
 check('概念素材仍全部保持非运行时状态',

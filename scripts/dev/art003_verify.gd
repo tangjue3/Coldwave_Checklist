@@ -763,9 +763,17 @@ func _run_tests() -> void:
 	_player.teleport_to(560.0)
 	await _frames(2)
 	var front_overlap := _cart.front_layer_visible()
-	fails += _ok("前景遮挡层：站在车旁 %s / 与车重叠 %s" % [
-		"显示" if front_on else "隐藏", "显示" if front_overlap else "隐藏"],
-		not front_on and front_overlap)
+	# ART-INTEGRATE-005 阶段1 起默认购物车为 r03 分件：近侧篮网是车的固有结构，
+	# 前景层**常驻显示**（ART-004 的行为基线）。r02 单图版的"横向重叠才再画一遍"
+	# 是旧实现细节，只在显式切回 r02 时断言，防止这条基线被静默改掉。
+	if _cart.art_variant == PushableCart.ART_VARIANT_R03:
+		fails += _ok("前景遮挡层（r03 分件）：站在车旁 %s / 与车重叠 %s（常驻显示）" % [
+			"显示" if front_on else "隐藏", "显示" if front_overlap else "隐藏"],
+			front_on and front_overlap)
+	else:
+		fails += _ok("前景遮挡层（r02 单图）：站在车旁 %s / 与车重叠 %s" % [
+			"显示" if front_on else "隐藏", "显示" if front_overlap else "隐藏"],
+			not front_on and front_overlap)
 	_cart.unbind()
 	await _frames(2)
 

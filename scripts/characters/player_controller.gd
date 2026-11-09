@@ -27,8 +27,11 @@ const STATE_IDLE := &"idle"
 const STATE_WALK := &"walk"
 const ANIM_IDLE := &"idle"
 const ANIM_WALK := &"walk_right"
-## ART-RUNTIME-003B：扶车静止姿态（r03 单帧）。**不是扶车行走循环**，本批没有交付那个。
+## ART-RUNTIME-003B：扶车静止姿态（r03 单帧）。
 const ANIM_PUSH := &"push_idle"
+## ART-RUNTIME-005：推车行走四帧（r04，待审核 / 引擎试用）。
+## 只在「绑定推车 + 向前实际移动」时播放；撞墙位移 0 或反向拉车都不播。
+const ANIM_PUSH_WALK := &"push_walk_right"
 
 ## 身体中轴的目标位置（相对节点原点）。r01 的原始画法就是 -0.5，保持不变以免改动既有观感。
 const TARGET_AXIS_X := -0.5
@@ -40,6 +43,8 @@ const TARGET_AXIS_X := -0.5
 
 ## 行走动画帧率。交付说明建议 6–7 FPS 起测，这里做成导出项，方便不进编辑器就能调。
 @export var walk_fps: float = 7.0
+## 推车行走帧率（r04）。交付包建议 6 FPS 起测、7 FPS 对照；A/B 由验证场景切换。
+@export var push_walk_fps: float = 6.0
 ## 手工微调绘制偏移（正常应为 0；只有在美术确认过某个固定补偿时才用它，别拿它盖住对轴问题）
 @export var draw_offset_bias := Vector2.ZERO
 
@@ -60,9 +65,12 @@ var state: StringName = STATE_IDLE
 ## 只保留"贴地 + 状态同步"，避免两套逻辑同时改位置。
 var external_control: bool = false
 
-## 扶车姿态开关。打开时无论走停都播 push_idle（本批只有静止扶车单帧，没有扶车行走循环）；
-## 关掉则回退成 idle / walk_right。由 PushableCart 在绑定 / 解绑时切换。
+## 扶车姿态开关。打开时由 PushableCart 在绑定 / 解绑时切换。
 var push_pose: bool = false
+## 推车行走开关：绑定且**向前实际推行**时由 PushableCart 每帧驱动为 true。
+## 反向拉车与撞墙（实际位移 0）都保持 false → 继续播 push_idle 单帧（原有过渡，
+## 拉车脚步滑动问题保留现状，待美术后续决定是否补反向帧）。
+var push_walk_active: bool = false
 
 var _override := 0.0
 var _has_override := false
@@ -96,6 +104,8 @@ func _apply_walk_fps() -> void:
 		return
 	if frames.has_animation(ANIM_WALK):
 		frames.set_animation_speed(ANIM_WALK, walk_fps)
+	if frames.has_animation(ANIM_PUSH_WALK):
+		frames.set_animation_speed(ANIM_PUSH_WALK, push_walk_fps)
 
 
 func _physics_process(delta: float) -> void:
@@ -135,13 +145,18 @@ func _update_state() -> void:
 	_sync_animation()
 
 
-## 动画选择只有这一处：扶车姿态优先，其次走/停。
+## 动画选择只有这一处：扶车姿态优先（实际推行 → push_walk_right；否则 push_idle），
+## 其次普通走/停。
 func _sync_animation() -> void:
 	if _frozen:
 		return
 	var anim: StringName
-	if push_pose and _sprite.sprite_frames != null and _sprite.sprite_frames.has_animation(ANIM_PUSH):
-		anim = ANIM_PUSH
+	if push_pose:
+		var frames := _sprite.sprite_frames
+		if push_walk_active and frames != null and frames.has_animation(ANIM_PUSH_WALK):
+			anim = ANIM_PUSH_WALK
+		else:
+			anim = ANIM_PUSH
 	elif state == STATE_WALK:
 		anim = ANIM_WALK
 	else:
@@ -240,11 +255,22 @@ func set_external_control(on: bool) -> void:
 		velocity = Vector2.ZERO
 
 
-## 扶车姿态开关（推车绑定/解绑时切）。没有扶车行走循环，所以移动中也是这张静止帧。
+## 扶车姿态开关（推车绑定/解绑时切）。
+## 绑定期间播 push_idle 还是 push_walk_right 由 push_walk_active 决定。
 func set_push_pose(on: bool) -> void:
 	if push_pose == on:
 		return
 	push_pose = on
+	if not on:
+		push_walk_active = false
+	_sync_animation()
+
+
+## 推车行走开关：由 PushableCart 每帧驱动——向前实际移动 true，停住/拉车/撞墙 false。
+func set_push_moving(moving: bool) -> void:
+	if push_walk_active == moving:
+		return
+	push_walk_active = moving
 	_sync_animation()
 
 
