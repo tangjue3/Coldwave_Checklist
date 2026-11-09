@@ -269,7 +269,7 @@ CDP_PORT=9444 node tools/check_art005e_web.mjs
 | 提交 | 内容 |
 |---|---|
 | `010f2a4` | `feat: ART-INTEGRATE-005E 接入 r09 扶车返工十六帧并新增实机验证` |
-| `（报告提交，待回填）` | `docs: ART-INTEGRATE-005E 交付报告` |
+| `ab9f874` | `docs: ART-INTEGRATE-005E 交付报告` |
 
 工程与报告提交均推送 `origin/main`。
 
