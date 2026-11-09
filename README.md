@@ -2,8 +2,10 @@
 
 2D 横版像素游戏：重生回到末日前七天，把外婆留下的旧两层小楼改造成安全屋，熬过寒潮。
 
-> **当前状态：ART-APPROVE-005E 已批准 r09 运行时可用。** 工程底座、角色移动与相机、门 / 货架交互、购物车
-> PARKED / PUSHING、r03 分层购物车，以及 **r09 扶车返工动画（16 帧 / 10 FPS，正式默认）** 均已完成并验收。
+> **当前状态：ART-RIG-001 已完成 2D 骨骼技术验证（技术原型 / 待美术审核）。** 工程底座、角色移动与相机、
+> 门 / 货架交互、购物车 PARKED / PUSHING、r03 分层购物车，以及 **r09 扶车返工动画（16 帧 / 10 FPS，正式默认）**
+> 均已完成并验收。角色动画路线已由「AI 逐帧生成」转为「分层素材 + Godot 原生骨骼」，
+> 骨骼原型在 `--dev-scene=rig001` 独立运行，**不参与正式玩法**。
 > 剧情、道具数值、购物系统、建造系统、日程结算、存档仍全部暂停，等下一阶段任务批准。
 
 ## 环境
@@ -41,7 +43,7 @@
 
 主菜单的「开发测试入口」可切换超市 / 安全屋空场景，Esc 或按钮返回主菜单。
 自检场景里按 `A/D/E/Tab/B/Esc` 可看输入回显，`F10` 切最大化、`F11` 切全屏。
-其余 dev 场景（`scale` / `core001a` / `core001b` / `art003` / `art004` / `art005` / `art005e`）
+其余 dev 场景（`scale` / `core001a` / `core001b` / `art003` / `art004` / `art005` / `art005e` / `rig001`）
 **只走命令行或 Web URL 参数**，不挂主菜单。Web 版不带 `--quit`，页面保持可交互。
 
 ## 目录
@@ -63,7 +65,8 @@
 │  ├─ world/                 supermarket.tscn / shelter.tscn（占位空场景）
 │  ├─ characters/player.tscn 可复用横向移动组件
 │  ├─ dev/                   test_scene / scale_test / core_001a / core_001b /
-│  │                        art003_verify / art004_verify / art005_verify / art005e_verify
+│  │                        art003_verify / art004_verify / art005_verify / art005e_verify /
+│  │                        rig001_verify（骨骼技术原型，隔离）
 │  └─ objects|ui/            预留
 ├─ scripts/
 │  ├─ autoload/              UiTheme · GameState · SaveManager · SceneRouter
@@ -107,6 +110,8 @@
 | `docs/ART-INTEGRATE-003_交付报告.md` ~ `005_交付报告.md` | 行走四帧、货架商品、分层购物车、r04 推车四帧 |
 | `docs/ART-INTEGRATE-005E_交付报告.md` | r09 十六帧接入、世界固定地面步态量测与全量回归 |
 | `docs/ART-APPROVE-005E_交付报告.md` | r09 正式验收裁定、状态同步与回归结果 |
+| `docs/ART-RIG-001_角色分层与骨骼制作规范.md` | 16 部件分层表、18 骨关节坐标、需补画区域、正式素材替换方法 |
+| `docs/ART-RIG-001_交付报告.md` | 骨骼技术验证结论、33 项用例、素材需求与停止声明 |
 | `docs/v1.1_冲突清单与建议.md` | v1.1 与 v1.0 的 ID/数据结构冲突清单 |
 | `docs/handover_v1.0/00_README_先读我.md` | 需求与范围边界 |
 | `docs/handover_v1.1/00_升级说明与执行顺序.md` | v1.1 增量说明 |

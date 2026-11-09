@@ -1,0 +1,418 @@
+{
+  "id": "ART_RIG_001",
+  "status": "技术验证 / 待美术审核",
+  "note": "临时分层，仅用于 ART-RIG-001 骨骼技术验证；未登记素材台账，不在运行时白名单。",
+  "canvas": {
+    "w": 128,
+    "h": 176,
+    "anchor": [
+      64,
+      168
+    ]
+  },
+  "source": "assets/characters/ART_CHAR_001_r02_walk_right_00_contactA.png",
+  "source_sha256": "aadd9a86893a14d4f22bd36991963842947dbabd0ed64159641ca46fe434538b",
+  "layer_dir": "res://assets/dev/rig001_proto/layers/",
+  "layer_names": [
+    "arm_far_fore",
+    "arm_far_upper",
+    "arm_near_fore",
+    "arm_near_upper",
+    "foot_far",
+    "foot_near",
+    "hand_far",
+    "hand_near",
+    "head",
+    "leg_far_lower",
+    "leg_far_upper",
+    "leg_near_lower",
+    "leg_near_upper",
+    "pelvis",
+    "ponytail",
+    "torso"
+  ],
+  "z_order_back_to_front": [
+    "ponytail",
+    "arm_far_upper",
+    "arm_far_fore",
+    "hand_far",
+    "leg_far_upper",
+    "leg_far_lower",
+    "foot_far",
+    "pelvis",
+    "torso",
+    "head",
+    "leg_near_upper",
+    "leg_near_lower",
+    "foot_near",
+    "arm_near_upper",
+    "arm_near_fore",
+    "hand_near"
+  ],
+  "bones": [
+    {
+      "name": "root",
+      "parent": null,
+      "origin": [
+        64,
+        168
+      ],
+      "tip": [
+        64,
+        140
+      ],
+      "rest_rot_deg": -90.0,
+      "length": 28.0
+    },
+    {
+      "name": "pelvis",
+      "parent": "root",
+      "origin": [
+        60,
+        106
+      ],
+      "tip": [
+        60,
+        97
+      ],
+      "rest_rot_deg": -90.0,
+      "length": 9.0,
+      "layer": "pelvis",
+      "z": -2,
+      "radius": 9.5,
+      "owned_px": 47,
+      "layer_px": 1130,
+      "repaint_px": 702
+    },
+    {
+      "name": "chest",
+      "parent": "pelvis",
+      "origin": [
+        60,
+        100
+      ],
+      "tip": [
+        60,
+        44
+      ],
+      "rest_rot_deg": -90.0,
+      "length": 56.0,
+      "layer": "torso",
+      "z": 0,
+      "radius": 16.0,
+      "owned_px": 1167,
+      "layer_px": 1877,
+      "repaint_px": 429
+    },
+    {
+      "name": "neck",
+      "parent": "chest",
+      "origin": [
+        61,
+        40
+      ],
+      "tip": [
+        62,
+        34
+      ],
+      "rest_rot_deg": -80.5377,
+      "length": 6.0828
+    },
+    {
+      "name": "head",
+      "parent": "neck",
+      "origin": [
+        62,
+        34
+      ],
+      "tip": [
+        62,
+        10
+      ],
+      "rest_rot_deg": -90.0,
+      "length": 24.0,
+      "layer": "head",
+      "z": 2,
+      "radius": 14.0,
+      "owned_px": 623,
+      "layer_px": 758,
+      "repaint_px": 0
+    },
+    {
+      "name": "hair_tail",
+      "parent": "head",
+      "origin": [
+        53,
+        16
+      ],
+      "tip": [
+        43,
+        33
+      ],
+      "rest_rot_deg": 120.4655,
+      "length": 19.7231,
+      "layer": "ponytail",
+      "z": -16,
+      "radius": 7.0,
+      "owned_px": 253,
+      "layer_px": 303,
+      "repaint_px": 50
+    },
+    {
+      "name": "arm_far_upper",
+      "parent": "chest",
+      "origin": [
+        66,
+        45
+      ],
+      "tip": [
+        77,
+        76
+      ],
+      "rest_rot_deg": 70.4633,
+      "length": 32.8938,
+      "layer": "arm_far_upper",
+      "z": -14,
+      "radius": 6.5,
+      "owned_px": 252,
+      "layer_px": 418,
+      "repaint_px": 166
+    },
+    {
+      "name": "arm_far_fore",
+      "parent": "arm_far_upper",
+      "origin": [
+        77,
+        76
+      ],
+      "tip": [
+        83,
+        90
+      ],
+      "rest_rot_deg": 66.8014,
+      "length": 15.2315,
+      "layer": "arm_far_fore",
+      "z": -12,
+      "radius": 5.5,
+      "owned_px": 79,
+      "layer_px": 153,
+      "repaint_px": 36
+    },
+    {
+      "name": "hand_far",
+      "parent": "arm_far_fore",
+      "origin": [
+        83,
+        90
+      ],
+      "tip": [
+        86,
+        103
+      ],
+      "rest_rot_deg": 77.0054,
+      "length": 13.3417,
+      "layer": "hand_far",
+      "z": -10,
+      "radius": 5.5,
+      "owned_px": 82,
+      "layer_px": 106,
+      "repaint_px": 0
+    },
+    {
+      "name": "arm_near_upper",
+      "parent": "chest",
+      "origin": [
+        57,
+        45
+      ],
+      "tip": [
+        50,
+        70
+      ],
+      "rest_rot_deg": 105.6422,
+      "length": 25.9615,
+      "layer": "arm_near_upper",
+      "z": 10,
+      "radius": 6.5,
+      "owned_px": 168,
+      "layer_px": 388,
+      "repaint_px": 21
+    },
+    {
+      "name": "arm_near_fore",
+      "parent": "arm_near_upper",
+      "origin": [
+        50,
+        70
+      ],
+      "tip": [
+        48,
+        88
+      ],
+      "rest_rot_deg": 96.3402,
+      "length": 18.1108,
+      "layer": "arm_near_fore",
+      "z": 12,
+      "radius": 5.5,
+      "owned_px": 103,
+      "layer_px": 232,
+      "repaint_px": 22
+    },
+    {
+      "name": "hand_near",
+      "parent": "arm_near_fore",
+      "origin": [
+        48,
+        88
+      ],
+      "tip": [
+        48,
+        102
+      ],
+      "rest_rot_deg": 90.0,
+      "length": 14.0,
+      "layer": "hand_near",
+      "z": 14,
+      "radius": 5.5,
+      "owned_px": 108,
+      "layer_px": 181,
+      "repaint_px": 0
+    },
+    {
+      "name": "leg_far_upper",
+      "parent": "pelvis",
+      "origin": [
+        56,
+        106
+      ],
+      "tip": [
+        44,
+        142
+      ],
+      "rest_rot_deg": 108.4349,
+      "length": 37.9473,
+      "layer": "leg_far_upper",
+      "z": -8,
+      "radius": 8.0,
+      "owned_px": 540,
+      "layer_px": 656,
+      "repaint_px": 116
+    },
+    {
+      "name": "leg_far_lower",
+      "parent": "leg_far_upper",
+      "origin": [
+        44,
+        142
+      ],
+      "tip": [
+        45,
+        156
+      ],
+      "rest_rot_deg": 85.9144,
+      "length": 14.0357,
+      "layer": "leg_far_lower",
+      "z": -6,
+      "radius": 7.5,
+      "owned_px": 135,
+      "layer_px": 261,
+      "repaint_px": 60
+    },
+    {
+      "name": "foot_far",
+      "parent": "leg_far_lower",
+      "origin": [
+        45,
+        156
+      ],
+      "tip": [
+        56,
+        166
+      ],
+      "rest_rot_deg": 42.2737,
+      "length": 14.8661,
+      "layer": "foot_far",
+      "z": -4,
+      "radius": 9.0,
+      "owned_px": 241,
+      "layer_px": 270,
+      "repaint_px": 0
+    },
+    {
+      "name": "leg_near_upper",
+      "parent": "pelvis",
+      "origin": [
+        64,
+        106
+      ],
+      "tip": [
+        74,
+        142
+      ],
+      "rest_rot_deg": 74.4759,
+      "length": 37.3631,
+      "layer": "leg_near_upper",
+      "z": 4,
+      "radius": 8.0,
+      "owned_px": 536,
+      "layer_px": 654,
+      "repaint_px": 39
+    },
+    {
+      "name": "leg_near_lower",
+      "parent": "leg_near_upper",
+      "origin": [
+        74,
+        142
+      ],
+      "tip": [
+        86,
+        156
+      ],
+      "rest_rot_deg": 49.3987,
+      "length": 18.4391,
+      "layer": "leg_near_lower",
+      "z": 6,
+      "radius": 7.5,
+      "owned_px": 191,
+      "layer_px": 305,
+      "repaint_px": 53
+    },
+    {
+      "name": "foot_near",
+      "parent": "leg_near_lower",
+      "origin": [
+        86,
+        156
+      ],
+      "tip": [
+        98,
+        166
+      ],
+      "rest_rot_deg": 39.8056,
+      "length": 15.6205,
+      "layer": "foot_near",
+      "z": 8,
+      "radius": 9.0,
+      "owned_px": 207,
+      "layer_px": 231,
+      "repaint_px": 0
+    }
+  ],
+  "gait": {
+    "cycle_seconds": 1.0,
+    "duty": 0.6,
+    "step_px": 42.0,
+    "speed_px_s": 70.0,
+    "lift_px": 6.5,
+    "bob_px": 1.5,
+    "hip_sway_deg": 2.0,
+    "chest_counter_deg": 3.0,
+    "arm_swing_deg": 18.0,
+    "hair_swing_deg": 6.0
+  },
+  "checks": {
+    "rest_composite_diff_px": 0,
+    "opaque_px": 4732
+  }
+}
