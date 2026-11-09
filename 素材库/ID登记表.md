@@ -49,7 +49,7 @@
 | `ART_FURN_001` | — | 设施 5 种（合集） | 0 | ARTLIB-001 |
 | `ART_FURN_101` | v01-empty / v01-stages / r01 | 四层金属货架（v01-empty / v01-stages） | 3 | ART-DESIGN-004 |
 | `ART_FURN_102` | v01 | 电暖器（通电态） | 1 | ART-DESIGN-004 |
-| `ART_FURN_103` | r01 / r02 | 空购物车（侧视，可推行） | 2 | ART-RUNTIME-003A |
+| `ART_FURN_103` | r01 / r02 / r03-back / r03-front / r03-half / r03-full | 空购物车（侧视，可推行） | 6 | ART-RUNTIME-003A |
 
 ## 4. 预留（规划中，尚未制作）
 

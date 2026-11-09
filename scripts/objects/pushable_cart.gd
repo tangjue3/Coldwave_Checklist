@@ -1,6 +1,7 @@
 class_name PushableCart
 extends Node2D
 ## CORE-001B 建立状态机 / ART-INTEGRATE-002 换成真实购物车精灵
+## ART-INTEGRATE-004 接入 r03 分层购物车（Back / Cargo / Front 三件分件）
 ##
 ## 三条硬约束，来自 CORE-001A 的实测结论：
 ##   1) **停放的车不是硬墙**。CORE-001A 里车有 StaticBody2D，人物停在 x=1030 永远过不去。
@@ -10,16 +11,27 @@ extends Node2D
 ##   3) **撞墙整组停住，但仍可解绑**。用 1px 子步 + 矩形 shape 查询逐步试探，
 ##      停下的位置一定是"车和人都没和墙体重叠"的位置，不存在穿墙或把人挤到另一侧。
 ##
-## 视觉（ART-RUNTIME-003A → 003C）：
-##   r01 128×112 画布、可见 96×74（旧，扶手偏低，与 160px 主角的手对不上）
-##   r02 128×112 画布、可见 96×90（当前，抬高车把后的版本；横向仍是 96，锚点仍是 (64,104)）
-##   两个版本文件都留在库里，r01 可随时回滚。**画布 128 ≠ 车长 96，逻辑车长是冻结值。**
-##   车头朝右、手柄在左。
-##   前后两层用**同一张图**：Back 在玩家之后（z=0）常驻，Front 在玩家之前（z=1）
-##   只在两者横向重叠时显示。车篮是稀疏网眼，前景压住腿部时仍能看到裤腿，
-##   于是"站在车后面 / 侧身绕过"的观感保住了，而且**世界坐标的行走线一条都没动**。
-##   注意：这是单张图做的两层，不是美术给的前后分件；正式分件交付后应替换掉这一招。
-
+## 视觉（ART-RUNTIME-002 → 003C → 004）：
+##   - `art_variant = r02`（旧版，单张整图两层）：
+##       r02 128×112 画布、可见 96×90，抬高车把；两层用**同一张图**，
+##       玩家压到车身上时整张车再画一遍到玩家前面，制造"侧身绕过"的观感。
+##       **这是没有分件时的临时做法，保留为回退版本**。
+##   - `art_variant = r03`（本轮正式分件）：
+##       Back（车把 / 后框架 / 支撑 / 车轮）、Cargo（车内物资，可选）、
+##       Front（近侧篮网与前景边缘）三张**独立**贴图，128×112 画布、锚点同为 (64,104)。
+##       Back 与 Front 的非透明像素**互不重叠**（已用 numpy 逐像素核对），
+##       所以 Back+Front 重组后与旧 r02 整图**像素差异 AE = 0**。
+##       图层顺序固定为 Back → Cargo → Player → Front：
+##         Back   z=0（车体后景，永远在人物之后）
+##         Cargo  z=0（车内物资，在 Back 之后、人物之前）
+##         Player z=0（人物，节点顺序在车之后）
+##         Front  z=1（近侧篮网，永远在人物之前 → 正确遮挡腿部）
+##       **约定**：购物车节点必须**先于**人物节点进入场景树，否则 z=0 的层之间
+##       只能靠树顺序决定前后。开发场景都遵守这条，`_ready()` 会做一次检查并打印警告。
+##
+## 装载状态（EMPTY / HALF / FULL）**纯视觉**：只切 Cargo 层的贴图可见性，
+## 不涉及库存、容量、结算、载重、持久化与自动装载阈值（属 CORE-002 及以后）。
+##
 ## 明确不做：容量、结算、装载、物资 UI、库存持久化（属 CORE-002 及以后）。
 
 signal state_changed(state: StringName)
@@ -29,13 +41,31 @@ signal moved(dx: float, speed: float)
 const STATE_PARKED := &"parked"
 const STATE_PUSHING := &"pushing"
 
-## 当前使用加高车把的 r02（ART-RUNTIME-003C 候选件）。r01 文件保留，可一键换回。
+## 视觉版本：r02 = 单图两层（旧，回退用）；r03 = 三件分件（本轮）
+const ART_VARIANT_R02 := &"r02"
+const ART_VARIANT_R03 := &"r03"
+
+## 装载状态（纯视觉）
+const LOAD_EMPTY := &"empty"
+const LOAD_HALF := &"half"
+const LOAD_FULL := &"full"
+
+## 当前使用加高车把的 r02（ART-RUNTIME-003C 候选件，已由 ART-FIX-003C 批准为运行时可用）。
+## r01 文件保留，可一键换回。
 const CART_TEXTURE := preload("res://assets/facilities/ART_FURN_103_r02_tall_handle_128x112.png")
 const CART_TEXTURE_R01 := preload("res://assets/facilities/ART_FURN_103_r01_empty_cart_128x112.png")
+
+## r03 三件分件（ART-RUNTIME-004 交付包）。画布与锚点和 r02 完全一致。
+const CART_TEX_R03_BACK := preload("res://assets/facilities/ART_FURN_103_r03_back_128x112.png")
+const CART_TEX_R03_FRONT := preload("res://assets/facilities/ART_FURN_103_r03_front_128x112.png")
+const CART_TEX_R03_CARGO_HALF := preload("res://assets/facilities/ART_FURN_103_r03_cargo_half_128x112.png")
+const CART_TEX_R03_CARGO_FULL := preload("res://assets/facilities/ART_FURN_103_r03_cargo_full_128x112.png")
+
 ## 精灵画布与锚点（两版一致：128×112，脚底锚点 (64,104)）
 const SPRITE_CANVAS := Vector2(128, 112)
 const SPRITE_ANCHOR := Vector2(64, 104)
-## 真实可见尺寸：r02 = 96×90（r01 = 96×74）。横向 96 与冻结的车长一致；画布 128 不等于车长。
+## 真实可见尺寸：r02 = 96×90（r01 = 96×74）；r03 的 Back+Front 合并后同样是 96×90。
+## 横向 96 与冻结的车长一致；画布 128 不等于车长。
 const VISIBLE_SIZE := Vector2(96, 90)
 const VISIBLE_SIZE_R01 := Vector2(96, 74)
 
@@ -53,6 +83,10 @@ const VISIBLE_SIZE_R01 := Vector2(96, 74)
 @export var world_left: float = -4096.0
 @export var world_right: float = 4096.0
 
+## 视觉版本与装载状态。r02 是已批准的运行时版本；r03 由开发验证场景显式启用。
+@export var art_variant: StringName = ART_VARIANT_R02
+@export var load_state: StringName = LOAD_EMPTY
+
 var state: StringName = STATE_PARKED
 var player: PlayerController
 ## 绑定瞬间确定的相对侧位：+1 = 玩家在车右侧，-1 = 玩家在车左侧。绑定期间恒定不变。
@@ -66,6 +100,11 @@ var hotspot: Interactable
 
 var _sprite_back: Sprite2D
 var _sprite_front: Sprite2D
+## r03 专用：两张货物层互斥显示（半载 / 满载不能同时出现）
+var _sprite_cargo_half: Sprite2D
+var _sprite_cargo_full: Sprite2D
+## 镜像状态单独记一份：重建视觉后精灵是新的，必须把朝向补回去
+var _flipped: bool = false
 
 
 func _ready() -> void:
@@ -78,17 +117,38 @@ func _ready() -> void:
 # ------------------------------------------------------------------ 视觉
 
 func _build_visual() -> void:
+	if art_variant == ART_VARIANT_R03:
+		_build_r03_visual()
+	else:
+		_build_r02_visual()
+
+
+## 旧版：单张整图分两层画（保留为回退路径，行为与 ART-INTEGRATE-003 完全一致）
+func _build_r02_visual() -> void:
 	# Back：玩家之后，常驻
-	_sprite_back = _make_sprite("Back", 0)
+	_sprite_back = _make_sprite("Back", 0, CART_TEXTURE)
 	# Front：玩家之前，只在横向重叠时显示（同一张图，见文件头说明）
-	_sprite_front = _make_sprite("Front", 1)
+	_sprite_front = _make_sprite("Front", 1, CART_TEXTURE)
 	_sprite_front.visible = false
 
 
-func _make_sprite(node_name: String, z: int) -> Sprite2D:
+## 本轮正式分件：Back / Cargo / Front 三层，锚点与缩放完全一致
+func _build_r03_visual() -> void:
+	# Back：车体后景（车把、后框架、支撑、车轮）
+	_sprite_back = _make_sprite("Back", 0, CART_TEX_R03_BACK)
+	# Cargo：车内物资。半载与满载是两个独立节点，互斥显示，
+	# 杜绝"半载和满载同时出现"这种错误状态。
+	_sprite_cargo_half = _make_sprite("CargoHalf", 0, CART_TEX_R03_CARGO_HALF)
+	_sprite_cargo_full = _make_sprite("CargoFull", 0, CART_TEX_R03_CARGO_FULL)
+	# Front：近侧篮网与前景边缘，永远压在人物前面 → 腿部被正确遮挡
+	_sprite_front = _make_sprite("Front", 1, CART_TEX_R03_FRONT)
+	_apply_load_state()
+
+
+func _make_sprite(node_name: String, z: int, tex: Texture2D) -> Sprite2D:
 	var s := Sprite2D.new()
 	s.name = node_name
-	s.texture = CART_TEXTURE
+	s.texture = tex
 	s.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	s.centered = false
 	s.scale = Vector2.ONE
@@ -100,18 +160,52 @@ func _make_sprite(node_name: String, z: int) -> Sprite2D:
 	return s
 
 
+## 运行时切换视觉版本（开发验证与回退用）。保留当前状态、绑定关系与镜像。
+func set_art_variant(variant: StringName) -> void:
+	if variant == art_variant:
+		return
+	art_variant = variant
+	_rebuild_visual()
+
+
+func _rebuild_visual() -> void:
+	for s in [_sprite_back, _sprite_front, _sprite_cargo_half, _sprite_cargo_full]:
+		if s != null and is_instance_valid(s):
+			s.queue_free()
+	_sprite_back = null
+	_sprite_front = null
+	_sprite_cargo_half = null
+	_sprite_cargo_full = null
+	_build_visual()
+	# 重建后把镜像状态补回去，避免切换版本后朝向突然翻面
+	_set_visual_flip(_flipped)
+	_refresh_front_layer()
+
+
 ## 车头默认朝右、手柄在左。玩家站到右边时镜像，让手柄对着推车的人。
 ## 只镜像绘制，不引入"朝向状态"，所以按反方向键不会翻面。
 func _set_visual_flip(flipped: bool) -> void:
-	if _sprite_back != null:
-		_sprite_back.flip_h = flipped
-	if _sprite_front != null:
-		_sprite_front.flip_h = flipped
+	_flipped = flipped
+	for s in _layer_sprites():
+		s.flip_h = flipped
 
 
-## 前景层只在玩家横向压到车身上时显示
+## 所有可见层（r02 两层 / r03 四层），顺序即绘制顺序
+func _layer_sprites() -> Array[Sprite2D]:
+	var out: Array[Sprite2D] = []
+	for s in [_sprite_back, _sprite_cargo_half, _sprite_cargo_full, _sprite_front]:
+		if s != null and is_instance_valid(s):
+			out.append(s)
+	return out
+
+
+## 前景遮挡层：r03 的近侧篮网是车的固有结构，**常驻显示**；
+## r02 没有真正的分件，只能沿用旧做法——横向重叠时才把整张图再画一遍。
 func _refresh_front_layer() -> void:
 	if _sprite_front == null:
+		return
+	if art_variant == ART_VARIANT_R03:
+		_sprite_front.visible = true
 		return
 	if player == null:
 		_sprite_front.visible = false
@@ -120,6 +214,71 @@ func _refresh_front_layer() -> void:
 	var lo := global_position.x - VISIBLE_SIZE.x * 0.5
 	var hi := global_position.x + VISIBLE_SIZE.x * 0.5
 	_sprite_front.visible = span.x < hi and span.y > lo
+
+
+# ------------------------------------------------------------------ 装载状态（纯视觉）
+
+## 设置装载状态。半载与满载互斥，空载不显示任何货物层。
+func set_load_state(value: StringName) -> void:
+	load_state = value
+	_apply_load_state()
+
+
+## 在三种状态之间轮转（开发场景用）
+func cycle_load_state() -> void:
+	match load_state:
+		LOAD_EMPTY:
+			set_load_state(LOAD_HALF)
+		LOAD_HALF:
+			set_load_state(LOAD_FULL)
+		_:
+			set_load_state(LOAD_EMPTY)
+
+
+func _apply_load_state() -> void:
+	if _sprite_cargo_half == null or _sprite_cargo_full == null:
+		return
+	_sprite_cargo_half.visible = load_state == LOAD_HALF
+	_sprite_cargo_full.visible = load_state == LOAD_FULL
+
+
+## 当前是否有货物层可见
+func cargo_visible() -> bool:
+	return (_sprite_cargo_half != null and _sprite_cargo_half.visible) \
+		or (_sprite_cargo_full != null and _sprite_cargo_full.visible)
+
+
+func cargo_half_visible() -> bool:
+	return _sprite_cargo_half != null and _sprite_cargo_half.visible
+
+
+func cargo_full_visible() -> bool:
+	return _sprite_cargo_full != null and _sprite_cargo_full.visible
+
+
+# ------------------------------------------------------------------ 遮挡顺序自检
+
+## z=0 的层之间只能靠树顺序决定前后：车必须先于人物进入场景树。
+## 违反时立刻打印警告，避免"看起来对但其实被人物盖住"的静默错误。
+func layer_order_is_valid() -> bool:
+	if player == null or get_parent() == null:
+		return true
+	return _draw_order_index(self) < _draw_order_index(player)
+
+
+## 节点在场景树中的绘制序（逐级比较祖先索引）。同层同序时靠前的先画。
+func _draw_order_index(n: Node) -> Array[int]:
+	var chain: Array[int] = []
+	var cur := n
+	while cur != null:
+		chain.push_front(cur.get_index())
+		cur = cur.get_parent()
+	return chain
+
+
+func _warn_if_layer_order_broken() -> void:
+	if not layer_order_is_valid():
+		push_warning("[CART] 购物车节点在人物之后入树：z=0 的 Back/Cargo 层会被人物盖住。")
 
 
 ## 玩家可见轮廓的横向范围（用真实 alpha 包围盒，不是碰撞盒——观感看的是轮廓）
@@ -189,8 +348,9 @@ func bind(p: PlayerController) -> bool:
 	_set_visual_flip(side > 0)
 	_refresh_hotspot_prompt()
 	_refresh_front_layer()
-	print("[CART] bind side=%+d  玩家 %.0f → %.0f（脚底原点距车心 %.0f）  状态=%s" % [
-		side, before, p.global_position.x, side_offset, state])
+	_warn_if_layer_order_broken()
+	print("[CART] bind side=%+d  玩家 %.0f → %.0f（脚底原点距车心 %.0f）  状态=%s  视觉=%s  装载=%s" % [
+		side, before, p.global_position.x, side_offset, state, art_variant, load_state])
 	state_changed.emit(state)
 	return true
 
@@ -292,7 +452,7 @@ func _rect_free(cx: float, half_w: float, h: float) -> bool:
 
 
 # ------------------------------------------------------------------ 布局信息（供叠加层与测试）
-## 真实可见范围 96×90（r02；r01 是 96×74），不是 128×112 的画布
+## 真实可见范围 96×90（r02 与 r03 的 Back+Front 合并结果一致），不是 128×112 的画布
 func body_rect() -> Rect2:
 	return Rect2(global_position + Vector2(-VISIBLE_SIZE.x * 0.5, -VISIBLE_SIZE.y), VISIBLE_SIZE)
 
