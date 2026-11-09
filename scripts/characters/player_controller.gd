@@ -33,7 +33,7 @@ const ANIM_PUSH := &"push_idle"
 ## ART-RUNTIME-005：推车行走四帧（r04，待审核 / 引擎试用）。
 ## 只在「绑定推车 + 向前实际移动」时播放；撞墙位移 0 或反向拉车都不播。
 const ANIM_PUSH_WALK := &"push_walk_right"
-## ART-ANIM-005E：r09 扶车返工（待审核 / 引擎试用）。
+## ART-ANIM-005E：r09 扶车返工（ART-APPROVE-005E 已批准运行时可用，正式默认）。
 ## 静止 1 帧 + 推车行走 16 帧，10 FPS、loop，只在「绑定 + 向前实际移动」时播放。
 ## 与 r03 / r04 动画并存，不删除旧资源；用 push_anim_variant 一键回退做 A/B。
 const ANIM_PUSH_R09 := &"r09_push_idle"

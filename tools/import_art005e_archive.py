@@ -8,7 +8,8 @@
 1. 从 转存库/ART-ANIM-005E_r09_修复成品.zip 解出普通文件到 转存库/ART_ANIM_005E_留档/
    （zip 被 .gitignore 忽略，留档的普通文件用于克隆后追溯与 SHA-256 核对）；
 2. 把 17 张 runtime PNG 复制到 assets/characters/ 与 素材库/美术设定集/01-角色/；
-3. 在 素材台账.csv 追加 ART_CHAR_001 / r09 一行，状态固定「待审核 / 引擎试用」；
+3. 在 素材台账.csv 追加 ART_CHAR_001 / r09 一行，**初始**登记为「待审核 / 引擎试用」；
+   批准后的状态由 tools/approve_art005e.py 同步，本脚本不会覆盖已有台账行；
 4. 在 ID登记表.csv 的 ART_CHAR_001 备注里追加本轮版本记录（不新开号）；
 5. 生成留档 README.md 与 QA_FRAME_SHA256.txt。
 
@@ -105,7 +106,8 @@ def write_qa(frames: list[Path]) -> None:
 
 - 来源包：`转存库/{ZIP.name}`（SHA-256 `{sha256(ZIP.read_bytes())}`）
 - 解包日期：2026-11-09，由 `python tools/import_art005e_archive.py` 生成，**只复制不移动不删除**。
-- 状态：**待审核 / 引擎试用**。工程侧已接入验证，但未经总监裁定，不进入「运行时可用」白名单。
+- 状态：**运行时可用**（ART-APPROVE-005E，2026-11-09 美术总监裁定）。r09 已进运行时白名单并作为
+  正式默认扶车动画，维持 16 帧 / 10 FPS；r03 / r04 完整保留回退；批准记录见 `素材库/素材台账.csv`。
 - 本目录在 `转存库/` 下，受根目录 `.gdignore` 隔离，**不参与 Godot 导入、不进 PCK**。
 - `previews/` 里的 GIF / 对照图仅供人眼复核，禁止当作运行时贴图或写进 `assets/`。
 

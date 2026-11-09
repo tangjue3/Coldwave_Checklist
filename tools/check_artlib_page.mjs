@@ -121,6 +121,8 @@ const APPROVED_RUNTIME = [
   { id: 'ART_FURN_103', version: 'r03-front' },
   { id: 'ART_FURN_103', version: 'r03-half' },
   { id: 'ART_FURN_103', version: 'r03-full' },
+  // ART-APPROVE-005E：美术总监正式批准 r09 升「运行时可用」，并作为正式默认扶车动画（16 帧 / 10 FPS）
+  { id: 'ART_CHAR_001', version: 'r09' },
 ];
 // ART-INTEGRATE-005 阶段1：r03 四件已获批，断言从「必须待审核」改为
 // 「四件都必须是运行时可用且已进白名单」，保留质量保护但不拦批准结果。
@@ -133,24 +135,35 @@ check('r03 四件分件全部在运行时白名单内',
   R03_PARTS.every((v) => APPROVED_RUNTIME.some((a) => a.id === 'ART_FURN_103' && a.version === v)));
 const unexpectedRuntime = usable.filter((d) =>
   !APPROVED_RUNTIME.some((a) => a.id === d.id && a.version === d.version));
-check('「运行时可用」仅限已批准白名单（角色 r01–r03 + 车 r01–r03 + 货架 r01 + 商品 r02/r02-shelf）',
+check('「运行时可用」仅限已批准白名单（角色 r01–r03 / r09 + 车 r01–r03 + 货架 r01 + 商品 r02/r02-shelf）',
   unexpectedRuntime.length === 0,
   `${usable.length} 条，越权 ${unexpectedRuntime.map((d) => d.id + '@' + d.version).join(',') || '无'}`);
 check('概念素材仍全部保持非运行时状态',
   DATA.filter((d) => d.status !== '运行时可用').length === DATA.length - APPROVED_RUNTIME.length);
-// ART-INTEGRATE-005E：r09 是扶车动作返工候选，工程侧只做「待审核」接入。
-// 实机用例全绿也不得擅自升「运行时可用」或塞进白名单；r03 / r04 保持原状态不动。
+// ART-APPROVE-005E：美术总监已审查实机 GIF / 对照图，正式批准 r09 升「运行时可用」
+// 并作为正式默认扶车动画。断言从「必须待审核」翻转为「必须已批准且已进白名单」，
+// 质量保护保留、不删任何断言；r03 / r04 的回退能力单独断言。
 const r09 = DATA.filter((d) => d.id === 'ART_CHAR_001' && d.version === 'r09');
-check('r09 返工动作只有一条记录且保持「待审核 / 引擎试用」',
-  r09.length === 1 && r09[0].status === '待审核' && r09[0].makeStatus === '引擎试用',
-  `实际 ${r09.length} 条 ${r09.map((d) => d.status).join(',') || '无'}`);
-check('r09 未被写进运行时可用白名单',
-  !APPROVED_RUNTIME.some((a) => a.id === 'ART_CHAR_001' && a.version === 'r09'));
+check('r09 返工动作只有一条记录且已升「运行时可用 / 扶车十六帧可用」',
+  r09.length === 1 && r09[0].status === '运行时可用' && r09[0].makeStatus === '扶车十六帧可用',
+  `实际 ${r09.length} 条 ${r09.map((d) => d.status + '/' + d.makeStatus).join(',') || '无'}`);
+check('r09 已显式登记进运行时可用白名单',
+  APPROVED_RUNTIME.some((a) => a.id === 'ART_CHAR_001' && a.version === 'r09'));
+check('r09 批准记录含任务编号 / 批准人 / 日期',
+  r09.length === 1 && r09[0].notes.includes('ART-APPROVE-005E')
+    && r09[0].notes.includes('美术总监') && r09[0].notes.includes('2026-11-09'));
 check('r09 登记 16 帧 / 10 FPS，且 r03 / r04 原状态未被改动',
   r09.length === 1 && String(r09[0].anim.frames).includes('16')
     && String(r09[0].anim.fps) === '10'
     && DATA.some((d) => d.id === 'ART_CHAR_001' && d.version === 'r03' && d.status === '运行时可用')
     && DATA.some((d) => d.id === 'ART_CHAR_001' && d.version === 'r04' && d.status === '待审核'));
+const r03Fallback = DATA.filter((d) => d.id === 'ART_CHAR_001' && d.version === 'r03');
+const r04Fallback = DATA.filter((d) => d.id === 'ART_CHAR_001' && d.version === 'r04');
+check('r03 / r04 回退版本仍完整保留（台账行 + 运行时路径 + 原审核状态）',
+  r03Fallback.length === 1 && r04Fallback.length === 1
+    && r03Fallback[0].status === '运行时可用' && r04Fallback[0].status === '待审核'
+    && !!(r03Fallback[0].runtimePath || '').trim()
+    && !!(r04Fallback[0].runtimePath || '').trim());
 // ART-FIX-003C：商品图的内容归属必须与 ID 一致。
 // 上一批四张图尺寸/alpha/锚点全对，只有"画的是什么"错了，纯结构断言抓不住。
 // 这里按 thumbnail 文件名的版本号硬绑：水的可用版本只能是 r02 / r02-shelf。

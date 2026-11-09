@@ -2,7 +2,9 @@
 
 2D 横版像素游戏：重生回到末日前七天，把外婆留下的旧两层小楼改造成安全屋，熬过寒潮。
 
-> **当前状态：PREP-002 工程准备完成。** 字体、窗口适配、Web 导出、版本复现、v1.1 文档接收均已验证。剧情、道具数值、购物系统、建造系统仍全部暂停，等下一阶段任务批准。
+> **当前状态：ART-APPROVE-005E 已批准 r09 运行时可用。** 工程底座、角色移动与相机、门 / 货架交互、购物车
+> PARKED / PUSHING、r03 分层购物车，以及 **r09 扶车返工动画（16 帧 / 10 FPS，正式默认）** 均已完成并验收。
+> 剧情、道具数值、购物系统、建造系统、日程结算、存档仍全部暂停，等下一阶段任务批准。
 
 ## 环境
 
@@ -30,8 +32,8 @@
 # 场景切换巡检：菜单 → 超市 → 安全屋 → 菜单
 .tools/godot/Godot_v4.7.2-stable_win64_console.exe --path . -- --scene-tour --quit
 
-# 窗口适配 / 模式切换
-.tools/godot/Godot_v4.7.2-stable_win64_console.exe --path . -- --dev-scene=smoke --profile=1366x768 --mode-cycle --shot=win.png --quit
+# r09 扶车动画专项验证（32 项实机用例，含世界固定地面步态量测）
+.tools/godot/Godot_v4.7.2-stable_win64_console.exe --path . -- --dev-scene=art005e --art005e-test
 
 # 编辑器
 .tools/godot/Godot_v4.7.2-stable_win64.exe --editor --path .
@@ -39,7 +41,8 @@
 
 主菜单的「开发测试入口」可切换超市 / 安全屋空场景，Esc 或按钮返回主菜单。
 自检场景里按 `A/D/E/Tab/B/Esc` 可看输入回显，`F10` 切最大化、`F11` 切全屏。
-Web 版不带 `--quit`，页面保持可交互。
+其余 dev 场景（`scale` / `core001a` / `core001b` / `art003` / `art004` / `art005` / `art005e`）
+**只走命令行或 Web URL 参数**，不挂主菜单。Web 版不带 `--quit`，页面保持可交互。
 
 ## 目录
 
@@ -49,52 +52,61 @@ Web 版不带 `--quit`，页面保持可交互。
 ├─ icon.svg
 ├─ assets/
 │  ├─ ui/fonts/              NotoSansSC-Variable.ttf + OFL.txt + 来源说明
-│  ├─ ui/themes/             main_theme.tres（可复用 UI Theme）
+│  ├─ ui/themes/             main_theme.tres
+│  ├─ characters/            ART_CHAR_001 r01/r02/r03/r04/r09 帧 + player_sprite_frames.tres
+│  ├─ facilities/            ART_FURN_103 r01/r02/r03 分件、ART_FURN_101 r01 货架
+│  ├─ items/                 ART_ITEM_101/102 落地版与 -shelf 版
 │  ├─ reference/             v1.0 两张画风参考图（不是可用素材）
-│  └─ characters|tiles|items|facilities|audio|portraits/   预留
+│  └─ tiles|audio|portraits/ 预留
 ├─ scenes/
-│  ├─ menu/main_menu.tscn    **正式启动入口**（PREP-003）
-│  ├─ world/supermarket.tscn 超市占位空场景
-│  ├─ world/shelter.tscn     安全屋占位空场景
-│  └─ dev/test_scene.tscn    字体 / 窗口 / 输入 / 渲染自检场景
+│  ├─ menu/main_menu.tscn    **正式启动入口**
+│  ├─ world/                 supermarket.tscn / shelter.tscn（占位空场景）
+│  ├─ characters/player.tscn 可复用横向移动组件
+│  ├─ dev/                   test_scene / scale_test / core_001a / core_001b /
+│  │                        art003_verify / art004_verify / art005_verify / art005e_verify
+│  └─ objects|ui/            预留
 ├─ scripts/
-│  ├─ autoload/             UiTheme · GameState · SaveManager · SceneRouter
-│  ├─ ui/main_menu.gd        主菜单入口逻辑
-│  ├─ world/placeholder_world.gd  两个空场景共用占位控制器
-│  └─ dev/                  startup_smoke · window_fit · generate_ui_theme
-├─ tools/                   复现与测试脚本（素材库索引、Web 模板、静态服务、浏览器验收）
-├─ data/                    数据驱动文件预留，**仍为空**
+│  ├─ autoload/              UiTheme · GameState · SaveManager · SceneRouter
+│  ├─ ui|world/              主菜单与占位场景控制器
+│  ├─ characters/            player_controller.gd · follow_camera.gd
+│  ├─ interaction/           Interactable / Door / Shelf / InteractionSensor
+│  ├─ objects/               pushable_cart.gd（PARKED / PUSHING）
+│  └─ dev/                   各轮验证场景与自检、主题生成脚本
+├─ tools/                    复现 / 素材库索引 / Web 验收 / PCK 体检脚本（py + mjs）
+├─ data/                     数据驱动文件预留，**仍为空**（只有 README.md）
 ├─ docs/
-│  ├─ 开发说明.md            工程约定
+│  ├─ 开发说明.md            工程与像素约定（含 §7.4 r09）
 │  ├─ 工程复现说明.md        版本、下载、校验、换电脑步骤
-│  ├─ PREP-002_测试报告.md   PREP-002 实测结果
-│  ├─ PREP-003_交付报告.md   PREP-003 实测结果与遗留问题
+│  ├─ *_交付报告.md          PREP / SCALE / CORE / ART / ART-APPROVE 各轮实测
 │  ├─ v1.1_冲突清单与建议.md 新旧交接包比对
-│  ├─ handover_v1.0/        v1.0 策划交接包
-│  └─ handover_v1.1/        v1.1 剧情美术补充包
-├─ tests/screenshots/        启动 / 窗口 / 桌面 / 浏览器截图（含 .gdignore）
+│  └─ handover_v1.0|v1.1/   策划交接包
+├─ tests/screenshots/        启动 / 窗口 / 桌面 / 浏览器 / 动画连拍截图与 GIF（含 .gdignore）
 ├─ 素材库/                   美术设定库（**仅人看**，根目录 .gdignore 隔离，不是运行时资源）
 │  ├─ 美术总览.html          离线预览页，双击即可
 │  ├─ 素材台账.csv           唯一权威台账
-│  ├─ ID对照表.md            旧美术 ID → ART_* 新 ID
-│  ├─ 美术设定集/            按角色 / 场景 / 物品 / UI / 特效 / 世界观分类
-│  └─ 收集素材库/            候选 / 待筛选 / 已采用 / 弃用 流程
+│  ├─ ID登记表.csv           编号唯一来源；ID对照表.md 为旧 ID 映射
+│  └─ 美术设定集|收集素材库/ 按角色 / 场景 / 物品 / UI / 特效 / 世界观分类
 ├─ 转存库/                   新素材投递入口（含 .gdignore，不参与 Godot 导入）
 └─ builds/web/               Web 导出产物（不入库，含 .gdignore）
 ```
 
 > 素材库与 `assets/`、`scenes/` 完全分离：禁止脚本使用 `res://素材库/`，概念图未经批准不得进入运行时资源。
 > 新增素材后运行 `python tools/build_artlib.py` 重建缩略图与预览页。
+> 只有台账 `审核状态 = 运行时可用` 且进了 `tools/check_artlib_page.mjs` 白名单的条目才能被游戏引用。
 
 ## 文档索引
 
 | 文档 | 内容 |
 |---|---|
-| `docs/开发说明.md` | 渲染与输入设置理由、字体规范、目录命名、Git 约定 |
+| `docs/开发说明.md` | 渲染与输入设置、字体规范、尺寸与动画约定、目录命名、Git 约定 |
 | `docs/工程复现说明.md` | 引擎版本、官方下载源、SHA-256、模板安装、新电脑步骤 |
-| `docs/PREP-002_测试报告.md` | 24 项自检、三种分辨率、Web 导出包体积与浏览器结果、已知问题 |
-| `docs/PREP-003_交付报告.md` | 首次导入修复、主菜单与空场景、Windows/Web 验收、v02 收录与 S10 裁定 |
-| `docs/ARTLIB-001_交付报告.md` | 素材库目录树、台账字段、隔离测试、PCK 体积变化 |
+| `docs/PREP-002_测试报告.md` | 24 项自检、三种分辨率、Web 导出包体积与浏览器结果 |
+| `docs/PREP-003_交付报告.md` | 首次导入修复、主菜单与空场景、Windows/Web 验收 |
+| `docs/SCALE-001_尺寸验证报告.md` | 第一季生产尺度定稿（160px 人物 / 32px tile / 96px 车长） |
+| `docs/CORE-001A_交付报告.md` / `CORE-001B_交付报告.md` | 移动底座 / 交互与购物车状态机 |
+| `docs/ART-INTEGRATE-003_交付报告.md` ~ `005_交付报告.md` | 行走四帧、货架商品、分层购物车、r04 推车四帧 |
+| `docs/ART-INTEGRATE-005E_交付报告.md` | r09 十六帧接入、世界固定地面步态量测与全量回归 |
+| `docs/ART-APPROVE-005E_交付报告.md` | r09 正式验收裁定、状态同步与回归结果 |
 | `docs/v1.1_冲突清单与建议.md` | v1.1 与 v1.0 的 ID/数据结构冲突清单 |
 | `docs/handover_v1.0/00_README_先读我.md` | 需求与范围边界 |
 | `docs/handover_v1.1/00_升级说明与执行顺序.md` | v1.1 增量说明 |
@@ -104,13 +116,20 @@ Web 版不带 `--quit`，页面保持可交互。
 ```bash
 .tools/godot/Godot_v4.7.2-stable_win64_console.exe --headless --path . --export-release "Web" builds/web/index.html
 python tools/serve_web.py                 # http://127.0.0.1:8060
-node tools/web_smoke_cdp.mjs              # PREP-002 三视口冒烟
-node tools/check_prep003_web.mjs           # PREP-003 主菜单 + 场景切换验收（同样需要调试端口）
+node tools/web_smoke_cdp.mjs              # 三视口冒烟（需调试端口）
+node tools/check_prep003_web.mjs          # 主菜单 + 场景切换验收
+node tools/check_art005e_web.mjs          # r09 Web 真派发（CDP_PORT=9444）
+python tools/check_art005e_pck.py         # PCK 运行贴图 / 黑名单体检
+node tools/check_artlib_page.mjs          # 素材库离线页断言（file:// + 9444）
+python tools/build_artlib.py && python tools/check_id_registry.py
 ```
 
-详见 `docs/工程复现说明.md` 第 5 节。
+详见 `docs/工程复现说明.md` 第 5 节与 `docs/开发说明.md` §8。
 
 ## 已暂停（等下一阶段任务批准）
 
 D-7 至 D+7 主线事件、道具与设施数值、购物车与结账、物流入库、建造与摆放、日程结算、存档、结局判定。
 v1.1 补充包已接收并归档，但**没有把任何新剧情、物品、设施写进代码或 `data/`**。
+
+`ART_CHAR_001 r09` 已由 ART-APPROVE-005E 批准为「运行时可用」与正式默认扶车动画，r03 / r04 完整保留回退。
+尚未交付的美术：反向拉车动作、车轮滚动、朝左独立绘制、搬运动画、正式 TileSet。

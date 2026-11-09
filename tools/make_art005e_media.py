@@ -4,8 +4,8 @@
     python tools/make_art005e_media.py
 
 产物全部落在 tests/screenshots/：
-    art005e_push_walk.gif          40 帧原生 960×540 实机连拍，20ms/帧（≈实机 50FPS）
-    art005e_push_walk_slow.gif     同帧 100ms/帧，便于逐帧检查步态接缝
+    art005e_push_walk.gif          40 帧原生 960×540 实机连拍，20ms/帧 = 50FPS，5× 加速预览
+    art005e_push_walk_slow.gif     同帧 100ms/帧 = 10FPS，正常播放速度（文件名沿用接入阶段命名，并非慢放）
     art005e_r04_vs_r09.png         r09 / r04 同帧上下对照
     art005e_ground_checkpoints.png 固定地面 8 个检查点缩略拼图
 
@@ -29,11 +29,11 @@ def build_gifs(frames: list[Image.Image]) -> None:
     real = SHOT / "art005e_push_walk.gif"
     frames[0].save(real, save_all=True, append_images=frames[1:],
                    duration=20, loop=0, optimize=False)
-    print(f"[GIF] {real.name}  {len(frames)} 帧  {frames[0].size[0]}×{frames[0].size[1]}  20ms/帧  {real.stat().st_size:,} B")
+    print(f"[GIF] {real.name}  {len(frames)} 帧  {frames[0].size[0]}×{frames[0].size[1]}  20ms/帧 = 50FPS 加速预览  {real.stat().st_size:,} B")
     slow = SHOT / "art005e_push_walk_slow.gif"
     frames[0].save(slow, save_all=True, append_images=frames[1:],
                    duration=100, loop=0, optimize=False)
-    print(f"[GIF] {slow.name}  {len(frames)} 帧  100ms/帧（5× 慢放，便于逐帧检查）")
+    print(f"[GIF] {slow.name}  {len(frames)} 帧  100ms/帧 = 10FPS 正常播放（文件名沿用历史，非慢放）")
 
 
 def label(img: Image.Image, text: str) -> Image.Image:
@@ -46,7 +46,7 @@ def label(img: Image.Image, text: str) -> Image.Image:
 
 
 def build_compare() -> None:
-    a = label(load("art005e_compare_r09.png"), "r09 / 16 frames / 10 FPS / pending review")
+    a = label(load("art005e_compare_r09.png"), "r09 / 16 frames / 10 FPS / approved runtime")
     b = label(load("art005e_compare_r04.png"), "r04 / 4 frames / 6 FPS / fallback")
     out = Image.new("RGB", (960, 1080))
     out.paste(a, (0, 0))
