@@ -1,6 +1,7 @@
 class_name PlayerController
 extends CharacterBody2D
 ## 角色移动底座（CORE-001A 建立 / CORE-001B 接推车 / ART-INTEGRATE-002 接行走动画）
+## ART-INTEGRATE-005 接 r04 推车四帧 / ART-INTEGRATE-005E 接 r09 扶车返工十六帧
 ##
 ## 适用范围：购物 + 建造的**横向叙事**游戏。
 ## 本组件只做：水平移动 / 停下 / 朝向 / 碰撞 / 脚底接地 / 供相机跟随的锚点 / 播放待机与行走动画。
@@ -32,6 +33,13 @@ const ANIM_PUSH := &"push_idle"
 ## ART-RUNTIME-005：推车行走四帧（r04，待审核 / 引擎试用）。
 ## 只在「绑定推车 + 向前实际移动」时播放；撞墙位移 0 或反向拉车都不播。
 const ANIM_PUSH_WALK := &"push_walk_right"
+## ART-ANIM-005E：r09 扶车返工（待审核 / 引擎试用）。
+## 静止 1 帧 + 推车行走 16 帧，10 FPS、loop，只在「绑定 + 向前实际移动」时播放。
+## 与 r03 / r04 动画并存，不删除旧资源；用 push_anim_variant 一键回退做 A/B。
+const ANIM_PUSH_R09 := &"r09_push_idle"
+const ANIM_PUSH_WALK_R09 := &"r09_push_walk_right"
+const PUSH_ANIM_R04 := &"r04"
+const PUSH_ANIM_R09 := &"r09"
 
 ## 身体中轴的目标位置（相对节点原点）。r01 的原始画法就是 -0.5，保持不变以免改动既有观感。
 const TARGET_AXIS_X := -0.5
@@ -45,6 +53,11 @@ const TARGET_AXIS_X := -0.5
 @export var walk_fps: float = 7.0
 ## 推车行走帧率（r04）。交付包建议 6 FPS 起测、7 FPS 对照；A/B 由验证场景切换。
 @export var push_walk_fps: float = 6.0
+## ART-INTEGRATE-005E：默认使用 r09 返工动作；切到 r04 可一键回退到上一版四帧。
+## 两个版本共用同一套 push_pose / push_walk_active 状态机，不另建动画状态机。
+@export var push_anim_variant: StringName = PUSH_ANIM_R09
+## r09 推车行走帧率：美术按 80px/s ÷ 10FPS = 8px/帧 绑定步距，不要为观感私改。
+@export var push_walk_r09_fps: float = 10.0
 ## 手工微调绘制偏移（正常应为 0；只有在美术确认过某个固定补偿时才用它，别拿它盖住对轴问题）
 @export var draw_offset_bias := Vector2.ZERO
 
@@ -106,6 +119,8 @@ func _apply_walk_fps() -> void:
 		frames.set_animation_speed(ANIM_WALK, walk_fps)
 	if frames.has_animation(ANIM_PUSH_WALK):
 		frames.set_animation_speed(ANIM_PUSH_WALK, push_walk_fps)
+	if frames.has_animation(ANIM_PUSH_WALK_R09):
+		frames.set_animation_speed(ANIM_PUSH_WALK_R09, push_walk_r09_fps)
 
 
 func _physics_process(delta: float) -> void:
@@ -145,17 +160,24 @@ func _update_state() -> void:
 	_sync_animation()
 
 
-## 动画选择只有这一处：扶车姿态优先（实际推行 → push_walk_right；否则 push_idle），
-## 其次普通走/停。
+## 动画选择只有这一处：扶车姿态优先（实际推行 → 当前版本的推车行走；否则扶车静止），
+## 其次普通走/停。r04 / r09 共用同一套 push_pose + push_walk_active 判断，不另建状态机。
 func _sync_animation() -> void:
 	if _frozen:
 		return
 	var anim: StringName
 	if push_pose:
 		var frames := _sprite.sprite_frames
-		if push_walk_active and frames != null and frames.has_animation(ANIM_PUSH_WALK):
-			anim = ANIM_PUSH_WALK
+		var has_frames := frames != null
+		var use_r09 := push_anim_variant == PUSH_ANIM_R09
+		var idle_anim := ANIM_PUSH_R09 if use_r09 else ANIM_PUSH
+		var walk_anim := ANIM_PUSH_WALK_R09 if use_r09 else ANIM_PUSH_WALK
+		if push_walk_active and has_frames and frames.has_animation(walk_anim):
+			anim = walk_anim
+		elif has_frames and frames.has_animation(idle_anim):
+			anim = idle_anim
 		else:
+			# 资源缺失时退回已验收的 r03 扶车静止帧，绝不让动画悬空
 			anim = ANIM_PUSH
 	elif state == STATE_WALK:
 		anim = ANIM_WALK
@@ -271,6 +293,18 @@ func set_push_moving(moving: bool) -> void:
 	if push_walk_active == moving:
 		return
 	push_walk_active = moving
+	_sync_animation()
+
+
+## 切换扶车动画版本（r09 默认 / r04 回退）。只换动画名，不碰任何状态与物理。
+func set_push_anim_variant(variant: StringName) -> void:
+	if variant != PUSH_ANIM_R09 and variant != PUSH_ANIM_R04:
+		push_warning("[ANIM] 未知扶车动画版本 %s，保持 %s" % [variant, push_anim_variant])
+		return
+	if push_anim_variant == variant:
+		return
+	push_anim_variant = variant
+	_apply_walk_fps()
 	_sync_animation()
 
 

@@ -8,7 +8,7 @@ extends Node
 ##     让自检场景在正式入口改为主菜单后仍可独立运行与截图。
 ##
 ## 命令行参数写在 `--` 之后：
-##   --dev-scene=menu|supermarket|shelter|smoke|scale|core001a|core001b|art003|art004|art005
+##   --dev-scene=menu|supermarket|shelter|smoke|scale|core001a|core001b|art003|art004|art005|art005e
 ##   --scene-tour          依次切换 菜单→超市→安全屋→菜单 并逐场景截图
 ##   --shot=name.png       指定截图文件名（smoke / scale 场景自己截图）
 ##   --quit                完成后退出
@@ -17,6 +17,7 @@ extends Node
 ## `art003` 是 ART-INTEGRATE-003 的正式美术实机验证场景，
 ## `art004` 是 ART-INTEGRATE-004 的购物车分层实机验证场景，
 ## `art005` 是 ART-INTEGRATE-005 的推车行走动画（r04）实机验证场景。
+## `art005e` 是 ART-INTEGRATE-005E 的扶车返工（r09 十六帧 / 10FPS）实机验证场景。
 ## 以上**只走命令行**，不挂到主菜单，避免把测试入口暴露成正式游戏功能。
 ## Web 版没有命令行，改用 URL 参数：`?dev=core001b&state=door`（同样是开发入口）。
 
@@ -31,11 +32,12 @@ const PATHS: Dictionary = {
 	&"art003": "res://scenes/dev/art003_verify.tscn",
 	&"art004": "res://scenes/dev/art004_verify.tscn",
 	&"art005": "res://scenes/dev/art005_verify.tscn",
+	&"art005e": "res://scenes/dev/art005e_verify.tscn",
 }
 
 ## 自带检查 / 截图 / 退出逻辑的开发场景：路由不再代为截图，避免重复或抢先退出
 const SELF_MANAGED: Array[StringName] = [&"smoke", &"scale", &"core001a", &"core001b",
-	&"art003", &"art004", &"art005"]
+	&"art003", &"art004", &"art005", &"art005e"]
 
 const SHOT_DIR := "res://tests/screenshots"
 
@@ -66,6 +68,9 @@ func _ready() -> void:
 			# art004 专用：?load=half|full 切装载状态（纯视觉，不涉及库存）
 			if dev_key == &"art004" and q.has("load"):
 				args["art004_load"] = q["load"]
+			# art005e 专用：?state=test|tour|gif 指定开发验证流程
+			if dev_key == &"art005e" and q.has("state"):
+				args["art005e_state"] = q["state"]
 			if q.has("tour"):
 				args["core_tour"] = true
 

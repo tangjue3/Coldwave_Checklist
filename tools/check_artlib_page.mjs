@@ -138,6 +138,19 @@ check('「运行时可用」仅限已批准白名单（角色 r01–r03 + 车 r0
   `${usable.length} 条，越权 ${unexpectedRuntime.map((d) => d.id + '@' + d.version).join(',') || '无'}`);
 check('概念素材仍全部保持非运行时状态',
   DATA.filter((d) => d.status !== '运行时可用').length === DATA.length - APPROVED_RUNTIME.length);
+// ART-INTEGRATE-005E：r09 是扶车动作返工候选，工程侧只做「待审核」接入。
+// 实机用例全绿也不得擅自升「运行时可用」或塞进白名单；r03 / r04 保持原状态不动。
+const r09 = DATA.filter((d) => d.id === 'ART_CHAR_001' && d.version === 'r09');
+check('r09 返工动作只有一条记录且保持「待审核 / 引擎试用」',
+  r09.length === 1 && r09[0].status === '待审核' && r09[0].makeStatus === '引擎试用',
+  `实际 ${r09.length} 条 ${r09.map((d) => d.status).join(',') || '无'}`);
+check('r09 未被写进运行时可用白名单',
+  !APPROVED_RUNTIME.some((a) => a.id === 'ART_CHAR_001' && a.version === 'r09'));
+check('r09 登记 16 帧 / 10 FPS，且 r03 / r04 原状态未被改动',
+  r09.length === 1 && String(r09[0].anim.frames).includes('16')
+    && String(r09[0].anim.fps) === '10'
+    && DATA.some((d) => d.id === 'ART_CHAR_001' && d.version === 'r03' && d.status === '运行时可用')
+    && DATA.some((d) => d.id === 'ART_CHAR_001' && d.version === 'r04' && d.status === '待审核'));
 // ART-FIX-003C：商品图的内容归属必须与 ID 一致。
 // 上一批四张图尺寸/alpha/锚点全对，只有"画的是什么"错了，纯结构断言抓不住。
 // 这里按 thumbnail 文件名的版本号硬绑：水的可用版本只能是 r02 / r02-shelf。

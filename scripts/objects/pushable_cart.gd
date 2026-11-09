@@ -344,7 +344,8 @@ func bind(p: PlayerController) -> bool:
 	p.global_position.x = global_position.x + float(side) * side_offset
 	p.velocity = Vector2.ZERO
 	p.set_facing(-side)
-	# 扶车姿态：绑定起步时先播 r03 静止单帧；真正推行时由 _physics_process 切 r04 四帧。
+	# 扶车姿态：绑定起步先播扶车静止帧；真正推行时由 _physics_process 切当前版本的推车行走
+	# （ART-INTEGRATE-005E 默认 r09 十六帧 / 10FPS，可一键回退 r04 四帧）。
 	p.set_push_pose(true)
 	p.set_push_moving(false)
 	# 手柄朝向推车的人：默认手柄在左，玩家在右（side=+1）时才需要镜像
@@ -406,7 +407,7 @@ func _physics_process(delta: float) -> void:
 	var spd := absf(dx) / maxf(delta, 0.0001)
 	last_speed = spd
 	player.velocity.x = dx / maxf(delta, 0.0001)
-	# 推车行走动画（r04）：只认「向前推 + 实际位移 > 0」。
+	# 推车行走动画（r04 / r09）：只认「向前推 + 实际位移 > 0」。
 	# 撞墙（dx=0）与反向拉车都切回 push_idle 单帧（拉车脚步滑动保留现状）。
 	player.set_push_moving(pushing and spd > 1.0)
 	if not is_zero_approx(dx):

@@ -82,6 +82,10 @@ func _ready() -> void:
 	_player.name = "Player"
 	_player.ground_y = GROUND_Y
 	add_child(_player)
+	# 本场景是 r04 四帧的**专项**验证。ART-INTEGRATE-005E 起全局默认扶车动画改为 r09，
+	# 必须在这里显式固定回 r04，否则帧序 / FPS / 手部基线断言会量到另一套动画。
+	# 这不是删测试项：r09 有自己的 art005e 验证场景，两套用例各自跑各自的版本。
+	_player.set_push_anim_variant(PlayerController.PUSH_ANIM_R04)
 
 	_build_wall()
 	_build_door()

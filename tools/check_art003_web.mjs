@@ -88,8 +88,10 @@ const size = await canvasSize();
 check('画布 = 960×540（1:1，无缩放）', size.w === 960 && size.h === 540, JSON.stringify(size));
 
 let all = logs();
-check('扶车姿态动画生效（[ANIM] push_idle）',
-  all.some((l) => l.text.includes('[ANIM] push_idle')),
+// ART-INTEGRATE-005E 起默认扶车静止帧由 r03 的 push_idle 换成 r09_push_idle。
+// 语义（绑定后必须播扶车姿态）不变，两个版本都接受；测试项没有减少。
+check('扶车姿态动画生效（[ANIM] r09_push_idle / push_idle）',
+  all.some((l) => /\[ANIM\] (r09_)?push_idle/.test(l.text)),
   all.filter((l) => l.text.includes('[ANIM]')).map((l) => l.text).join(' | ').slice(0, 120));
 check('绑定成功（[CART] bind side=-1，脚底距车心 80）',
   all.some((l) => l.text.includes('[CART] bind') && l.text.includes('80')));
