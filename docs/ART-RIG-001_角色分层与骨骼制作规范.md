@@ -1,5 +1,10 @@
 # ART-RIG-001 角色分层与骨骼制作规范
 
+> ⛔ **本文所述资源已于 2026-11-10 ART-RESET-001 全部删除。**
+> `assets/dev/rig001_proto/`（分层 + 诊断图 + spec）、`rig001_verify` 场景、
+> `make_rig001_layers.py` / `make_rig001_media.py` 均不在工作树中，本文仅作技术复盘。
+> 当前角色状态见 `docs/ART-RESET-001_交付报告.md`。
+
 > 对象：ART_CHAR_001 / 许知夏
 > 版本：技术原型 v0（2026-11-09）
 > 状态：**技术验证 / 待美术审核**。本文与 `assets/dev/rig001_proto/` 下的分层文件都是**临时件**，
