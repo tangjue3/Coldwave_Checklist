@@ -24,33 +24,16 @@ CSV_PATH = ROOT / "素材库" / "素材台账.csv"
 
 NEW_COLUMNS = ["动作分组", "视觉评价", "使用状态", "归档标记", "动画帧序列", "参考用途"]
 
-CHAR_DIR = "美术设定集/01-角色"
-ITEM_DIR = "美术设定集/03-物品与家具"
-
 # 键 = (素材ID, 当前版本)。未列出的行走「不适用 / 未评价 / 未使用 / 空 / 空 / 空」。
 CURATION: dict[tuple[str, str], dict[str, str]] = {
-    # ---------------------------------------------------------------- 主角外观设定
-    ("ART_CHAR_001", "v01"): dict(动作分组="外观设定", 视觉评价="不适用",
-                                  使用状态="未使用", 归档标记="是",
-                                  说明="CLEAN-001：已被 v02 取代，仅作历史追溯"),
+    # ---------------------------------------------------------------- 主角外观设定（唯一基准）
     ("ART_CHAR_001", "v02"): dict(动作分组="外观设定", 视觉评价="不适用",
                                   使用状态="未使用", 参考用途="普通行走|推购物车|搬箱|搬水",
-                                  说明="CLEAN-001：第一季外观基准，同时作为 AI 视频参考图（四个动作共用）"),
+                                  说明="ART-RESET-001：第一季唯一外观基准。"
+                                       "r01–r09 旧运行时动画已全部删除，本条同时作为 AI 视频参考图来源"),
     # ---------------------------------------------------------------- 主角运行时动作
-    ("ART_CHAR_001", "r01"): dict(动作分组="待机", 视觉评价="未评价", 使用状态="正式使用",
-                                  说明="CLEAN-001：idle 动画唯一来源，正式使用"),
-    ("ART_CHAR_001", "r02"): dict(动作分组="普通行走", 视觉评价="未评价", 使用状态="正式使用",
-                                  动画帧序列=f"{CHAR_DIR}/ART_CHAR_001_r02_walk_right_*.png",
-                                  说明="CLEAN-001：walk 四帧 glob 归属本行，帧文件不单独登记 ID"),
-    ("ART_CHAR_001", "r03"): dict(动作分组="待机", 视觉评价="未评价", 使用状态="回退保留",
-                                  说明="CLEAN-001：r09 已取代其作为默认扶车待机，本条降为回退版本"),
-    ("ART_CHAR_001", "r04"): dict(动作分组="推购物车", 视觉评价="待优化", 使用状态="回退保留",
-                                  动画帧序列=f"{CHAR_DIR}/ART_CHAR_001_r04_push_walk_right_*.png",
-                                  说明="CLEAN-001：推车行走返工前版本，视觉未过、工程回退可用"),
-    ("ART_CHAR_001", "r09"): dict(动作分组="推购物车", 视觉评价="待优化", 使用状态="正式使用",
-                                  动画帧序列=f"{CHAR_DIR}/ART_CHAR_001_r09_push_walk_*.png",
-                                  说明="CLEAN-001：技术验收通过并正式默认（ART-APPROVE-005E），"
-                                       "但视觉质量用户明确不满意 → 保留技术记录、视觉标待优化"),
+    # ART-RESET-001：v01 / r01 / r02 / r03 / r04 / r09 已删除，此处不再有条目。
+    # 新动画由 VIDEO-INTEGRATE 任务产出，届时在这里新增行并说明来源。
     # ---------------------------------------------------------------- NPC / 风格参考
     ("ART_CHAR_002", "v01"): dict(动作分组="外观设定", 视觉评价="不适用",
                                   使用状态="未使用", 归档标记="是",
@@ -74,20 +57,12 @@ CURATION: dict[tuple[str, str], dict[str, str]] = {
                                   说明="CLEAN-001：早期十二物资合集，个体条目已另立，合集仅作追溯"),
     ("ART_ITEM_101", "v01"): dict(动作分组="不适用", 参考用途="搬水",
                                   说明="CLEAN-001：饮用水最大最清晰的一张，作为「搬水」视频参考图"),
-    ("ART_ITEM_101", "r01"): dict(动作分组="不适用", 归档标记="是",
-                                  说明="CLEAN-001：内容错误版，移入 历史归档/ 仅作追溯"),
-    ("ART_ITEM_101", "r01-shelf"): dict(动作分组="不适用", 归档标记="是",
-                                        说明="CLEAN-001：内容错误版，移入 历史归档/ 仅作追溯"),
     ("ART_ITEM_101", "r02"): dict(动作分组="不适用", 使用状态="正式使用",
                                   说明="CLEAN-001：当前游戏唯一在用的饮用水落地图"),
     ("ART_ITEM_101", "r02-shelf"): dict(动作分组="不适用", 使用状态="正式使用",
                                         说明="CLEAN-001：当前游戏唯一在用的饮用水货架图"),
     ("ART_ITEM_102", "v01"): dict(动作分组="不适用", 参考用途="搬箱",
                                   说明="CLEAN-001：食品纸箱最大最清晰的一张，作为「搬箱」视频参考图"),
-    ("ART_ITEM_102", "r01"): dict(动作分组="不适用", 归档标记="是",
-                                  说明="CLEAN-001：内容错误版，移入 历史归档/ 仅作追溯"),
-    ("ART_ITEM_102", "r01-shelf"): dict(动作分组="不适用", 归档标记="是",
-                                        说明="CLEAN-001：内容错误版，移入 历史归档/ 仅作追溯"),
     ("ART_ITEM_102", "r02"): dict(动作分组="不适用", 使用状态="正式使用",
                                   说明="CLEAN-001：当前游戏唯一在用的纸箱落地图"),
     ("ART_ITEM_102", "r02-shelf"): dict(动作分组="不适用", 使用状态="正式使用",
@@ -110,34 +85,7 @@ CURATION: dict[tuple[str, str], dict[str, str]] = {
 DEFAULTS = {"动作分组": "不适用", "视觉评价": "未评价", "使用状态": "未使用",
             "归档标记": "", "动画帧序列": "", "参考用途": ""}
 
-# 归档搬移：(素材ID, 版本) → 新库内相对路径（相对 素材库/）。
-# 只搬「不予通过 / 纯追溯」的文件，不删任何东西；文件名保持不变，便于历史文档继续对得上。
-ARCHIVE_MOVES: dict[tuple[str, str], str] = {
-    ("ART_ITEM_101", "r01"): f"{ITEM_DIR}/历史归档/ART_ITEM_101_r01_water_64x48.png",
-    ("ART_ITEM_101", "r01-shelf"): f"{ITEM_DIR}/历史归档/ART_ITEM_101_r01_water_shelf_32x32.png",
-    ("ART_ITEM_102", "r01"): f"{ITEM_DIR}/历史归档/ART_ITEM_102_r01_food_carton_64x64.png",
-    ("ART_ITEM_102", "r01-shelf"): f"{ITEM_DIR}/历史归档/ART_ITEM_102_r01_food_shelf_32x32.png",
-}
-# 无独立 ID 的验收对照图：不占号，归入 验收对照/，与正式素材分开
-LOOSE_MOVES: dict[str, str] = {
-    f"{ITEM_DIR}/ART-RUNTIME-003_combined_mock_960x540.png":
-        f"{ITEM_DIR}/验收对照/ART-RUNTIME-003_combined_mock_960x540.png",
-    f"{ITEM_DIR}/ART_ITEM_101_102_r02_corrected_preview_2x.png":
-        f"{ITEM_DIR}/验收对照/ART_ITEM_101_102_r02_corrected_preview_2x.png",
-}
-
 NOTE_TAG = "2026-11-10 TASK-ARTLIB-CLEAN-001"
-
-
-def move_one(lib: Path, old_rel: str, new_rel: str) -> str:
-    src, dst = lib / old_rel, lib / new_rel
-    if src.is_file() and not dst.is_file():
-        dst.parent.mkdir(parents=True, exist_ok=True)
-        src.rename(dst)
-        return f"搬移 {old_rel} → {new_rel}"
-    if dst.is_file():
-        return f"已在归档位 {new_rel}"
-    return f"[WARN] 未找到待搬文件 {old_rel}"
 
 
 def main() -> int:
@@ -148,7 +96,6 @@ def main() -> int:
         rows = list(reader)
 
     fields = base_fields + [c for c in NEW_COLUMNS if c not in base_fields]
-    lib = ROOT / "素材库"
 
     missing_key = []
     for r in rows:
@@ -162,29 +109,12 @@ def main() -> int:
         for c in NEW_COLUMNS:
             r[c] = vals[c]
 
-        # 归档搬移：改路径 + 真搬文件
-        if key in ARCHIVE_MOVES:
-            new_rel = ARCHIVE_MOVES[key]
-            old_rel = (r.get("库内文件路径") or "").strip()
-            if old_rel and old_rel != new_rel:
-                if not check_only:
-                    print("  " + move_one(lib, old_rel, new_rel))
-                r["库内文件路径"] = new_rel
-            else:
-                r["库内文件路径"] = new_rel
-
-        # 证据留痕：把 CLEAN-001 的判断追加进「制作与修改说明」（幂等）
+        # 证据留痕：把整理判断追加进「制作与修改说明」（幂等）
         note = (cur or {}).get("说明", "")
         notes = r.get("制作与修改说明") or ""
         if note and NOTE_TAG not in notes:
             add = f"{NOTE_TAG}（整理）：{note.split('：', 1)[-1]}"
             r["制作与修改说明"] = (notes.rstrip() + " " + add).strip()
-        elif note and NOTE_TAG in notes and not check_only:
-            pass
-
-    if not check_only:
-        for old_rel, new_rel in LOOSE_MOVES.items():
-            print("  " + move_one(lib, old_rel, new_rel))
 
     if missing_key:
         print("[WARN] 以下台账行没有整理结论，已按默认值填充：")

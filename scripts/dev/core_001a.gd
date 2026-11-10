@@ -475,55 +475,24 @@ func _input(event: InputEvent) -> void:
 # ---------------------------------------------------------------- 量测与日志
 
 func _measure_and_report() -> void:
-	var tex_size := _player.sprite_texture_size()
-	var draw_rect := _player.sprite_draw_rect()
-	var vis := _player.visible_bbox()
+	# ART-RESET-001：角色贴图（r01–r09）已全部删除，这里不再量"可见包围盒 / alpha 档位"。
+	# 保留的部分全部与美术无关：碰撞盒、门净宽、通道通行余量。
+	# 旧的可见框量测属退役项，不要在这里恢复（没有贴图就没有可见框）。
 	var coll := _player.collision_rect()
 	var net_w := DOOR_W - DOOR_JAMB * 2.0
 	var net_h := DOOR_H - DOOR_HEAD
 
 	print("")
 	print("========== CORE-001A 实机量测 ==========")
-	var spr := _player.sprite_node()
-	print("[CORE] 纹理 %d×%d  节点 scale=%s  filter=%d(Nearest=1)" % [
-		int(tex_size.x), int(tex_size.y), str(spr.scale), spr.texture_filter])
-	print("[CORE] sprite.get_rect() = %s  （期望 (-64,-168,128,176)）" % str(draw_rect))
-	print("[CORE] 可见包围盒(实测 alpha) = %d×%d @ (%d,%d)  本地左下=%s" % [
-		int(vis.size.x), int(vis.size.y), int(vis.position.x - draw_rect.position.x),
-		int(vis.position.y - draw_rect.position.y), str(vis.position)])
+	print("[CORE] 角色渲染 = 空（ART-RESET-001 已删除旧贴图，等 AI 视频接入）")
 	print("[CORE] 碰撞盒 = %d×%d @ (%d,%d)" % [
 		int(coll.size.x), int(coll.size.y), int(coll.position.x), int(coll.position.y)])
-	# alpha 洁净度：直接数加载后的像素，确认没有半透明边缘，也没有被导入流程改过
-	var alpha_levels := {}
-	var spr_node := _player.sprite_node()
-	var cur_tex := _player.current_texture()
-	var tex_img: Image = cur_tex.get_image() if cur_tex != null else null
-	if tex_img != null:
-		for y in tex_img.get_height():
-			for x in tex_img.get_width():
-				alpha_levels[tex_img.get_pixel(x, y).a8] = true
-	var lv: Array = alpha_levels.keys()
-	lv.sort()
-	var lv_text := ""
-	for v in lv:
-		lv_text += ("%d " % int(v))
-	print("[CORE] alpha 档位 = [%s]（%d 档）%s" % [
-		lv_text.strip_edges(), lv.size(),
-		"无半透明，边缘干净" if lv.size() <= 2 else "存在半透明，需要清理"])
-
-	var foot_err := absf(vis.position.y + vis.size.y)
-	print("[CORE] 脚底误差 = %.1f px （可见框底边 %.1f vs 原点 0）" % [foot_err, vis.position.y + vis.size.y])
 	print("[CORE] 住宅门 净 %d×%d → 碰撞 %d 宽：左余 %d / 右余 %d；头顶余 %d" % [
 		int(net_w), int(net_h), int(coll.size.x),
 		int((net_w - coll.size.x) * 0.5), int((net_w - coll.size.x) * 0.5), int(net_h - coll.size.y)])
 	print("[CORE] 超市主通道 %d，购物车 %d → 单侧可通行 %d（碰撞 %d）" % [
 		int(AISLE_W), int(CART_W), int((AISLE_W - CART_W) * 0.5), int(coll.size.x)])
-	print("[CORE] 世界地面 y=%.0f，当前屏幕 y=%.0f （HUD 在 CanvasLayer，不影响世界地面）" % [
-		GROUND_Y, _screen_y_of_ground()])
-	print("========================================")
 
-
-# ---------------------------------------------------------------- 检查点
 
 func _apply_state(key: String) -> void:
 	var st := _find_state(key)

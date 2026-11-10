@@ -8,7 +8,6 @@ extends Node2D
 @export var show_overlay: bool = true
 
 const COL_COLLIDE := Color(0.886, 0.341, 0.302)
-const COL_VISIBLE := Color(0.941, 0.659, 0.290)
 const COL_FOOT := Color(0.455, 0.761, 0.525)
 const COL_TEXT := Color(0.95, 0.96, 0.97)
 const FONT_PATH := "res://assets/ui/fonts/NotoSansSC-Variable.ttf"
@@ -35,16 +34,13 @@ func _draw() -> void:
 		return
 	var origin := _player.global_position
 	var coll: Rect2 = _player.collision_rect()
-	var vis: Rect2 = _player.visible_bbox()
 
 	var coll_w := Rect2(coll.position + origin, coll.size)
-	var vis_w := Rect2(vis.position + origin, vis.size)
+	# ART-RESET-001：角色贴图已删，没有可见包围盒可画；只画碰撞盒与脚底锚点
 
 	# 碰撞盒
 	_rect_fill(coll_w, Color(COL_COLLIDE.r, COL_COLLIDE.g, COL_COLLIDE.b, 0.14))
 	_box(coll_w, COL_COLLIDE, 1.0)
-	# 可见包围盒（虚线）
-	_dash_box(vis_w, COL_VISIBLE)
 	# 脚底锚点
 	draw_line(Vector2(origin.x - 8, origin.y), Vector2(origin.x + 8, origin.y), COL_FOOT, 3.0)
 	draw_line(Vector2(origin.x, origin.y - 8), Vector2(origin.x, origin.y + 8), COL_FOOT, 3.0)
@@ -55,14 +51,9 @@ func _draw() -> void:
 	_hline(Vector2(x1, y1), coll.size.x, COL_COLLIDE)
 	_plate_text(x1 + coll.size.x + 6.0, y1 - 2.0, "碰撞 %d" % int(coll.size.x), 9, COL_COLLIDE)
 
-	var y2 := origin.y + 56.0
-	var x2 := origin.x + vis.position.x
-	_hline(Vector2(x2, y2), vis.size.x, COL_VISIBLE)
-	_plate_text(x2 + vis.size.x + 6.0, y2 - 2.0, "可见 %d×%d" % [int(vis.size.x), int(vis.size.y)], 9, COL_VISIBLE)
-
-	# 画布与锚点说明放到画布上方，别压到头发；加深色底板，压在货架上也读得清
-	_plate_text(origin.x - 152.0, origin.y - 200.0, "画布 128×176", 9, Color(0.80, 0.84, 0.88))
-	_plate_text(origin.x - 152.0, origin.y - 186.0, "锚点 (64,168)", 9, Color(0.80, 0.84, 0.88))
+	# 可见包围盒的标注已随角色贴图退役（ART-RESET-001）；画布与锚点说明也不再成立
+	_plate_text(origin.x - 152.0, origin.y - 200.0, "角色渲染为空", 9, Color(0.80, 0.84, 0.88))
+	_plate_text(origin.x - 152.0, origin.y - 186.0, "碰撞 28×160 · 脚底原点", 9, Color(0.80, 0.84, 0.88))
 
 
 ## 带深色底板的文字

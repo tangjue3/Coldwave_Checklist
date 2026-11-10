@@ -2,10 +2,13 @@
 
 2D 横版像素游戏：重生回到末日前七天，把外婆留下的旧两层小楼改造成安全屋，熬过寒潮。
 
-> **当前状态：ART-RIG-001 已完成 2D 骨骼技术验证（技术原型 / 待美术审核）。** 工程底座、角色移动与相机、
-> 门 / 货架交互、购物车 PARKED / PUSHING、r03 分层购物车，以及 **r09 扶车返工动画（16 帧 / 10 FPS，正式默认）**
-> 均已完成并验收。角色动画路线已由「AI 逐帧生成」转为「分层素材 + Godot 原生骨骼」，
-> 骨骼原型在 `--dev-scene=rig001` 独立运行，**不参与正式玩法**。
+> **当前状态：角色美术已整体重置（ART-RESET-001，2026-11-10）。**
+> 许知夏旧运行时动画 r01 / r02 / r03 / r04 / r09 及 RIG 骨骼原型已**全部删除**，
+> 唯一外观基准是 `ART_CHAR_001_v02` 五视图，另有 5 张从它无损裁取的视频参考图。
+> **游戏里角色暂时不可见**，但移动（100 px/s）、碰撞、摄像机、场景切换、门 / 货架交互、
+> 购物车绑定与推 80 / 拉 40 全部正常。新角色动画走
+> **[docs/AI视频转Godot动画接入规范.md](docs/AI视频转Godot动画接入规范.md)**：用户生成视频，
+> 开发侧拆帧抠像对齐后接入。
 > 剧情、道具数值、购物系统、建造系统、日程结算、存档仍全部暂停，等下一阶段任务批准。
 
 ## 环境
@@ -34,8 +37,9 @@
 # 场景切换巡检：菜单 → 超市 → 安全屋 → 菜单
 .tools/godot/Godot_v4.7.2-stable_win64_console.exe --path . -- --scene-tour --quit
 
-# r09 扶车动画专项验证（32 项实机用例，含世界固定地面步态量测）
-.tools/godot/Godot_v4.7.2-stable_win64_console.exe --path . -- --dev-scene=art005e --art005e-test
+# 素材库完整性审计 + 预览页重建（改素材后必跑）
+python tools/audit_artlib.py
+python tools/build_artlib.py
 
 # 编辑器
 .tools/godot/Godot_v4.7.2-stable_win64.exe --editor --path .
@@ -43,7 +47,7 @@
 
 主菜单的「开发测试入口」可切换超市 / 安全屋空场景，Esc 或按钮返回主菜单。
 自检场景里按 `A/D/E/Tab/B/Esc` 可看输入回显，`F10` 切最大化、`F11` 切全屏。
-其余 dev 场景（`scale` / `core001a` / `core001b` / `art003` / `art004` / `art005` / `art005e` / `rig001`）
+其余 dev 场景（`scale` / `core001a` / `core001b` / `art003` / `art004` / `video`）
 **只走命令行或 Web URL 参数**，不挂主菜单。Web 版不带 `--quit`，页面保持可交互。
 
 ## 目录
@@ -55,7 +59,7 @@
 ├─ assets/
 │  ├─ ui/fonts/              NotoSansSC-Variable.ttf + OFL.txt + 来源说明
 │  ├─ ui/themes/             main_theme.tres
-│  ├─ characters/            ART_CHAR_001 r01/r02/r03/r04/r09 帧 + player_sprite_frames.tres
+│  ├─ characters/            已清空（ART-RESET-001 删除了全部角色帧与 SpriteFrames）
 │  ├─ facilities/            ART_FURN_103 r01/r02/r03 分件、ART_FURN_101 r01 货架
 │  ├─ items/                 ART_ITEM_101/102 落地版与 -shelf 版
 │  ├─ reference/             v1.0 两张画风参考图（不是可用素材）
@@ -65,8 +69,7 @@
 │  ├─ world/                 supermarket.tscn / shelter.tscn（占位空场景）
 │  ├─ characters/player.tscn 可复用横向移动组件
 │  ├─ dev/                   test_scene / scale_test / core_001a / core_001b /
-│  │                        art003_verify / art004_verify / art005_verify / art005e_verify /
-│  │                        rig001_verify（骨骼技术原型，隔离）
+│  │                        art003_verify / art004_verify / video_preview（视频候选体检）
 │  └─ objects|ui/            预留
 ├─ scripts/
 │  ├─ autoload/              UiTheme · GameState · SaveManager · SceneRouter
@@ -78,7 +81,7 @@
 ├─ tools/                    复现 / 素材库索引 / Web 验收 / PCK 体检脚本（py + mjs）
 ├─ data/                     数据驱动文件预留，**仍为空**（只有 README.md）
 ├─ docs/
-│  ├─ 开发说明.md            工程与像素约定（含 §7.4 r09）
+│  ├─ 开发说明.md            工程与像素约定（§7.4 记录角色动画移除后的状态）
 │  ├─ 工程复现说明.md        版本、下载、校验、换电脑步骤
 │  ├─ *_交付报告.md          PREP / SCALE / CORE / ART / ART-APPROVE 各轮实测
 │  ├─ v1.1_冲突清单与建议.md 新旧交接包比对
@@ -123,10 +126,10 @@
 python tools/serve_web.py                 # http://127.0.0.1:8060
 node tools/web_smoke_cdp.mjs              # 三视口冒烟（需调试端口）
 node tools/check_prep003_web.mjs          # 主菜单 + 场景切换验收
-node tools/check_art005e_web.mjs          # r09 Web 真派发（CDP_PORT=9444）
-python tools/check_art005e_pck.py         # PCK 运行贴图 / 黑名单体检
+node tools/check_art003_web.mjs           # 购物车 / 交互 Web 验收（角色动画断言已退役）
+node tools/check_core001b_web.mjs         # 门 / 货架 / 推车 Web 验收
 node tools/check_artlib_page.mjs          # 素材库离线页断言（file:// + 9444）
-python tools/build_artlib.py && python tools/check_id_registry.py
+python tools/build_artlib.py && python tools/check_id_registry.py && python tools/audit_artlib.py
 ```
 
 详见 `docs/工程复现说明.md` 第 5 节与 `docs/开发说明.md` §8。

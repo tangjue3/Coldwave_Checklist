@@ -1,4 +1,4 @@
-// 页面视觉自查：截主视图 / 参考图 / 缺口 / 灯箱（含版本对照与序列播放器）
+// 页面视觉自查（ART-RESET-001 版）：素材网格 / 视频参考图 / 角色动作状态 / v02 灯箱 / 裁图灯箱
 import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
@@ -29,35 +29,36 @@ await send('Page.enable');
 await send('Runtime.enable');
 await send('Page.navigate', { url: PAGE });
 await sleep(1400);
-await shot('artlib_v2_main.png');
+await shot('artlib_reset_main.png');
 
-// 参考图视图
+// 分类「角色」→ 只剩 v02
+await evalJs("[...document.querySelectorAll('#nav li')].find(li=>li.dataset.c==='角色').click()");
+await sleep(300);
+await shot('artlib_reset_character.png');
+await evalJs("document.querySelector('#nav li').click()");
+
+// 视频参考图 + 裁图
 await evalJs("[...document.querySelectorAll('#tabs .tab')].find(t=>t.dataset.v==='refs').click()");
-await sleep(400);
-await shot('artlib_v2_refs.png');
+await sleep(500);
+await shot('artlib_reset_refs.png');
 
-// 缺口视图
+// 裁图灯箱（朝右全身）
+await evalJs("[...document.querySelectorAll('.refitem')].find(e=>e.dataset.label==='朝右全身').click()");
+await sleep(400);
+await shot('artlib_reset_crop_lightbox.png');
+await evalJs("document.querySelector('#close').click()");
+
+// 角色动作状态
 await evalJs("[...document.querySelectorAll('#tabs .tab')].find(t=>t.dataset.v==='gaps').click()");
 await sleep(300);
-await shot('artlib_v2_gaps.png');
+await shot('artlib_reset_actions.png');
 
-// 回到素材，打开 r09（版本对照 + 序列帧）
+// v02 灯箱
 await evalJs("[...document.querySelectorAll('#tabs .tab')].find(t=>t.dataset.v==='assets').click()");
 await sleep(300);
-const i = await evalJs("(()=>{const D=JSON.parse(document.getElementById('asset-data').textContent);return D.findIndex(d=>d.id==='ART_CHAR_001'&&d.version==='r09')})()");
+const i = await evalJs("(()=>{const D=JSON.parse(document.getElementById('asset-data').textContent);return D.findIndex(d=>d.id==='ART_CHAR_001'&&d.version==='v02')})()");
 await evalJs(`document.querySelectorAll('#grid .card')[${i}].click()`);
 await sleep(500);
-await shot('artlib_v2_modal_r09.png');
-
-// 播放序列
-await evalJs("document.querySelector('#play').click()");
-await sleep(700);
-await shot('artlib_v2_play.png');
-
-// 标记筛选：视觉质量待优化
-await evalJs("document.querySelector('#close').click()");
-await evalJs("[...document.querySelectorAll('#chips .chip')].find(c=>c.dataset.t==='视觉质量待优化').click()");
-await sleep(300);
-await shot('artlib_v2_filter_visual.png');
+await shot('artlib_reset_v02_modal.png');
 console.log('done');
 ws.close();

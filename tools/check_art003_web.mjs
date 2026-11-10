@@ -88,11 +88,12 @@ const size = await canvasSize();
 check('画布 = 960×540（1:1，无缩放）', size.w === 960 && size.h === 540, JSON.stringify(size));
 
 let all = logs();
-// ART-INTEGRATE-005E 起默认扶车静止帧由 r03 的 push_idle 换成 r09_push_idle。
-// 语义（绑定后必须播扶车姿态）不变，两个版本都接受；测试项没有减少。
-check('扶车姿态动画生效（[ANIM] r09_push_idle / push_idle）',
-  all.some((l) => /\[ANIM\] (r09_)?push_idle/.test(l.text)),
-  all.filter((l) => l.text.includes('[ANIM]')).map((l) => l.text).join(' | ').slice(0, 120));
+// ART-RESET-001：角色贴图全部删除，PlayerController 不再输出 [ANIM]。
+// 扶车姿态现在是纯状态标记（push_pose），没有帧可播 —— 这里断言"确实没有动画"。
+check('绑定后没有任何角色动画日志（旧扶车动画已退役）',
+  all.filter((l) => l.text.includes('[ANIM]')).length === 0,
+  all.filter((l) => l.text.includes('[ANIM]')).map((l) => l.text).join(' | ').slice(0, 120)
+    || '无 [ANIM] 输出，符合预期');
 check('绑定成功（[CART] bind side=-1，脚底距车心 80）',
   all.some((l) => l.text.includes('[CART] bind') && l.text.includes('80')));
 check('交互提示「E 停车」出现', all.some((l) => l.text.includes('提示=E 停车')));

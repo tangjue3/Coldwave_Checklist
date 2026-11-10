@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3]
-
-[ext_resource type="Script" path="res://scripts/dev/rig001_verify.gd" id="1_verify"]
-
-[node name="Rig001Verify" type="Node2D"]
-script = ExtResource("1_verify")

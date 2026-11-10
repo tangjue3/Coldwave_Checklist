@@ -283,11 +283,12 @@ func _warn_if_layer_order_broken() -> void:
 		push_warning("[CART] 购物车节点在人物之后入树：z=0 的 Back/Cargo 层会被人物盖住。")
 
 
-## 玩家可见轮廓的横向范围（用真实 alpha 包围盒，不是碰撞盒——观感看的是轮廓）
+## 玩家"身体横向范围"（用于 r02 单图版判断前景重叠）。
+## ART-RESET-001 起角色没有贴图，改用量碰撞盒估算；r03 分件默认常驻前景，不依赖这一项。
 func player_visible_span() -> Vector2:
 	if player == null:
 		return Vector2(global_position.x, global_position.x)
-	var b := player.visible_bbox()
+	var b := player.collision_rect()
 	var x0 := player.global_position.x + b.position.x
 	return Vector2(x0, x0 + b.size.x)
 

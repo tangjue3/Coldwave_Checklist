@@ -34,7 +34,7 @@ VISUAL = ["认可", "待优化", "未评价", "不适用"]
 USAGE = ["正式使用", "回退保留", "未使用"]
 
 # 没有独立 ID、也不该占号的衍生目录（各自 README 说明了原因）
-DERIVED_DIRS = ["验收对照"]
+DERIVED_DIRS = ["验收对照", "参考图"]
 # assets/ 下不参与台账的目录：rig001 是技术原型，reference 是外部参考图
 ASSET_EXEMPT = ["assets/dev/", "assets/reference/"]
 
@@ -185,13 +185,8 @@ def main() -> int:
                for r in rows if (r.get("对应运行时资源路径") or "").strip()}
     usable_ids = sorted({(r["素材ID"] or "").strip() for r in rows
                          if (r.get("动画帧序列") or "").strip()}, key=len, reverse=True)
-    # 已知遗留：判定不予通过、但当时已导入 assets/ 的内容错误图。不擅自删，等用户裁决。
-    KNOWN_LEGACY = {
-        "assets/items/ART_ITEM_101_r01_water_64x48.png",
-        "assets/items/ART_ITEM_101_r01_water_shelf_32x32.png",
-        "assets/items/ART_ITEM_102_r01_food_carton_64x64.png",
-        "assets/items/ART_ITEM_102_r01_food_shelf_32x32.png",
-    }
+    # ART-RESET-001：四张内容错误图已彻底删除，这里不再留例外。
+    KNOWN_LEGACY: set[str] = set()
     orphans, legacies = [], []
     for p in sorted(ASSETS.rglob("*.png")):
         rp = p.resolve()
@@ -214,12 +209,17 @@ def main() -> int:
     # ---------------------------------------------------------------- 7. .thumbs 一致性
     if THUMBS.is_dir():
         thumbs = list(THUMBS.glob("*.jpg"))
-        want = len([r for r in rows if (r.get("库内文件路径") or "").strip()])
-        if len(thumbs) != want:
-            fail(f".thumbs 缩略图 {len(thumbs)} 张，与应生成条数 {want} 不符（重跑 build_artlib.py）")
-        stale = {p.name for p in thumbs} - {f"{r['素材ID']}_{r['当前版本']}.jpg" for r in rows}
-        for s in sorted(stale):
-            warn(f".thumbs 有失效缩略图（台账已无此行）：{s}")
+        # 期望值 = 台账有条目的行 + 参考图目录里的派生裁图（裁图不占 ID，不进台账）
+        crop_dir = ART_DIR / "01-角色" / "参考图"
+        crop_names = {f"crop_{p.stem.rsplit('_', 1)[-1]}.jpg"
+                      for p in crop_dir.glob("ART_CHAR_001_v02_ref_*.png")} if crop_dir.is_dir() else set()
+        want_names = {f"{r['素材ID']}_{r['当前版本']}.jpg"
+                      for r in rows if (r.get("库内文件路径") or "").strip()} | crop_names
+        if len(thumbs) != len(want_names):
+            fail(f".thumbs 缩略图 {len(thumbs)} 张，与应生成条数 {len(want_names)} 不符（重跑 build_artlib.py）")
+        stale = {p.name for p in thumbs} - want_names
+        for s_ in sorted(stale):
+            warn(f".thumbs 有失效缩略图（台账已无此行）：{s_}")
 
     # ---------------------------------------------------------------- 8. 文档死链
     dead = []

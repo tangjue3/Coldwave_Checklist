@@ -30,7 +30,6 @@ const PLAYER_SCENE := preload("res://scenes/characters/player.tscn")
 const SHELF_TEX := preload("res://assets/facilities/ART_FURN_101_r01_empty_shelf_128x208.png")
 ## 交付合同：画布 128×208，可见 96×192，脚底锚点 (64,200)
 const SHELF_ANCHOR := Vector2(64, 200)
-const PUSH_TEX := preload("res://assets/characters/ART_CHAR_001_r03_push_idle_right_128x176.png")
 const CART_TEX := preload("res://assets/facilities/ART_FURN_103_r02_tall_handle_128x112.png")
 const CART_TEX_R01 := preload("res://assets/facilities/ART_FURN_103_r01_empty_cart_128x112.png")
 ## 交付合同：画布 128×112，脚底锚点 (64,104)；r02 可见 96×90，r01 可见 96×74
@@ -58,16 +57,14 @@ const C_OK := Color(0.52, 0.84, 0.60)
 const C_BAD := Color(0.91, 0.42, 0.38)
 const C_DIM := Color(0.90, 0.88, 0.84, 0.55)
 
-const STATES := ["hand_r", "hand_l", "shelves", "items", "compare", "overview", "mirror", "overlap"]
+# ART-RESET-001：hand_r / hand_l / mirror / overlap 四个检查点依赖角色贴图，已删除。
+# 保留的检查点只画车 / 货架 / 商品，与角色无关。
+const STATES := ["shelves", "items", "compare", "overview"]
 const STATE_LABELS := {
-	"hand_r": "① 推车朝右：玩家在左，手与加高车把（逻辑间距 80px）",
-	"hand_l": "② 推车朝左：玩家在右，车镜像后手与车把",
-	"shelves": "③ 四层空货架 + 32×32 上架商品 + 64×48 / 64×64 落地商品",
-	"items": "③b 商品归属核对：101 必须是蓝灰水、102 必须是棕色纸箱（64 与 32 两种尺寸）",
-	"compare": "④ 旧车 r01（可见 96×74）与新车 r02（可见 96×90）对照",
-	"overview": "⑤ 综合实机：货架 / 商品 / 人物 / 推车同屏",
-	"mirror": "⑥ 朝右与朝左（镜像 + 绘制偏移）并排",
-	"overlap": "⑦ 站进车里：加高车篮对腿部的遮挡（前景层，纯绘制）",
+	"shelves": "① 四层空货架 + 32×32 上架商品 + 64×48 / 64×64 落地商品",
+	"items": "①b 商品归属核对：101 必须是蓝灰水、102 必须是棕色纸箱（64 与 32 两种尺寸）",
+	"compare": "② 旧车 r01（可见 96×74）与新车 r02（可见 96×90）对照",
+	"overview": "③ 综合实机：货架 / 商品 / 推车同屏（角色渲染为空）",
 }
 
 var _args: Dictionary = {}
@@ -170,13 +167,8 @@ func _apply_state(key: String) -> void:
 		_cart.unbind()
 	_cart.visible = false
 	_player.clear_input_override()
-	_player.freeze_frame(PlayerController.ANIM_IDLE, 0)
 
 	match key:
-		"hand_r":
-			_build_hand(-1)
-		"hand_l":
-			_build_hand(1)
 		"shelves":
 			_build_shelves()
 		"items":
@@ -185,32 +177,21 @@ func _apply_state(key: String) -> void:
 			_build_compare()
 		"overview":
 			_build_overview()
-		"mirror":
-			_build_mirror()
-		"overlap":
-			_build_overlap()
 		_:
-			_build_hand(-1)
+			_build_shelves()
 
 	queue_redraw()
 	_overlay.queue_redraw()
 
 
-## 推车贴合：side=+1 玩家在右（车镜像），side=-1 玩家在左
-func _build_hand(side: int) -> void:
-	_cart.visible = true
-	_cart.place_at(480.0 - float(side) * 40.0)
-	_player.teleport_to(_cart.global_position.x + float(side) * CART_SEP)
-	_cart.bind(_player)
-	_player.resume_animation()
-	_sensor.enabled = true
-	_hand = _measure_hand()
+## ART-RESET-001：_build_hand / _build_mirror / _build_overlap 已随角色贴图退役。
+## 它们搭的是「角色手部与车把的贴合对照画面」，没有角色像素就没有对照对象。
+## _build_overlap 的"站进车里"改由 art004 的图层断言覆盖（那组不依赖角色贴图）。
 
 
 func _build_shelves() -> void:
 	_player.teleport_to(800.0)
 	_player.set_facing(1)
-	_player.freeze_frame(PlayerController.ANIM_IDLE, 0)
 
 	var xs := [150.0, 300.0, 450.0]
 	# A：空载本体
@@ -243,7 +224,6 @@ func _build_shelves() -> void:
 func _build_items() -> void:
 	_player.teleport_to(880.0)
 	_player.set_facing(1)
-	_player.freeze_frame(PlayerController.ANIM_IDLE, 0)
 	_cart.visible = false
 
 	# 每组放大 2 倍显示，1:1 的 64px 物件在 960 屏上太小、看不清内容
@@ -268,7 +248,6 @@ func _build_items() -> void:
 func _build_compare() -> void:
 	_player.teleport_to(760.0)
 	_player.set_facing(1)
-	_player.freeze_frame(PlayerController.ANIM_IDLE, 0)
 	_cart.visible = false
 
 	_r01_ghost = _mk_sprite(_stage, CART_TEX_R01, CART_ANCHOR, Vector2(240.0, GROUND_Y), "CartR01")
@@ -293,43 +272,10 @@ func _build_overview() -> void:
 	_cart.place_at(700.0)
 	_player.teleport_to(700.0 - CART_SEP)
 	_cart.bind(_player)
-	_player.resume_animation()
 	_player.set_input_override(1.0)
 	await _frames(6)
 	_player.clear_input_override()
 	await _frames(2)
-
-
-func _build_mirror() -> void:
-	# 左：朝右推车（真实组件，玩家在车左）
-	_cart.visible = true
-	_cart.place_at(300.0)
-	_player.teleport_to(300.0 - CART_SEP)
-	_cart.bind(_player)
-	_player.resume_animation()
-
-	# 右：朝左（镜像）。用静态精灵复刻"镜像 + 绘制偏移"的最终结果：
-	# 偏移直接取控制器的实测值，保证和真实组件画在同一位置，1px 都不靠手调。
-	var right_cart := _mk_sprite(_stage, CART_TEX, CART_ANCHOR,
-		Vector2(700.0, GROUND_Y), "CartMirror")
-	right_cart.flip_h = true
-	_player.set_facing(-1)
-	var flip_offset: Vector2 = _player.sprite_node().offset
-	_player.set_facing(1)
-	var right_char := _mk_sprite(_stage, PUSH_TEX, Vector2(64, 168),
-		Vector2(700.0 + CART_SEP, GROUND_Y), "CharMirror")
-	right_char.flip_h = true
-	right_char.offset = flip_offset
-
-
-## 站进车里：车停放、玩家与车同心。加高到 90 的车篮会盖住更多腿部，
-## 靠的仍是前面那层"同一张图"（Front, z=1），世界坐标没动。
-func _build_overlap() -> void:
-	_cart.visible = true
-	_cart.place_at(480.0)
-	_player.teleport_to(480.0)
-	_player.set_facing(1)
-	_player.freeze_frame(PlayerController.ANIM_IDLE, 0)
 
 
 func _mk_sprite(parent: Node, tex: Texture2D, anchor: Vector2, pos: Vector2, node_name: String) -> Sprite2D:
@@ -427,9 +373,7 @@ func _draw_captions() -> void:
 			_text_center(480.0, GROUND_Y + 26.0, "r02 加高车把", 11, C_AMBER)
 		"overview":
 			_text(24, 40, STATE_LABELS["overview"], 15, C_INK)
-		"mirror":
-			_text(24, 40, STATE_LABELS["mirror"], 15, C_INK)
-			_text(24, 62, "镜像只改绘制偏移：碰撞盒 28×160 与节点坐标不变", 11, C_MUTED)
+		# ART-RESET-001：mirror / overlap / hand_* 三个检查点已随角色贴图删除
 
 
 ## 竖直尺寸括号
@@ -517,89 +461,10 @@ func _analyze_shelf() -> Dictionary:
 	}
 
 
-## 纹理像素在某世界 y 带内的横向范围（左闭右开，含实际 offset / flip）
-func _band_x(tex: Texture2D, node_pos: Vector2, offset: Vector2, flip: bool,
-		y0: float, y1: float) -> Vector2:
-	var img := tex.get_image()
-	if img == null:
-		return Vector2.ZERO
-	var w := img.get_width()
-	var lo := 1 << 30
-	var hi := -(1 << 30)
-	for y in img.get_height():
-		var wy := node_pos.y + offset.y + float(y)
-		if wy + 1.0 <= y0 or wy >= y1:
-			continue
-		for x in w:
-			if img.get_pixel(x, y).a > 0.5:
-				var col := (w - 1 - x) if flip else x
-				var wx := int(node_pos.x + offset.x) + col
-				lo = mini(lo, wx)
-				hi = maxi(hi, wx + 1)
-	return Vector2(float(lo), float(hi)) if hi > lo else Vector2.ZERO
+## ART-RESET-001：_band_x / _hand_rows / _measure_hand / _top_row_y 已随角色贴图退役。
+## 它们量的是角色像素与车把的横向间隙；没有角色像素就没有可量对象。
+## 接新动画后按新帧画布重写，不要恢复旧实现。
 
-
-## 角色"手"所在的行区间（纹理坐标）：取向前伸出最多的那几行
-func _hand_rows(tex: Texture2D) -> Vector2i:
-	var img := tex.get_image()
-	var used := img.get_used_rect()
-	var right := used.position.x + used.size.x
-	var lo := 1 << 30
-	var hi := -1
-	for y in range(used.position.y, used.position.y + used.size.y):
-		for x in range(right - 1, used.position.x - 1, -1):
-			if img.get_pixel(x, y).a > 0.5:
-				if x >= right - 5:
-					lo = mini(lo, y)
-					hi = maxi(hi, y)
-				break
-	if hi < 0:
-		return Vector2i(used.position.y, used.position.y + used.size.y)
-	return Vector2i(lo, hi)
-
-
-## 量手部与车把的贴合：返回 side / gap（正=有间隙，负=重叠）/ dy（手与车把顶端高度差）
-func _measure_hand() -> Dictionary:
-	var tex := _player.current_texture()
-	var off := _player.sprite_node().offset
-	var flip := _player.sprite_node().flip_h
-	var rows := _hand_rows(tex)
-	var y0 := _player.global_position.y + off.y + float(rows.x)
-	var y1 := _player.global_position.y + off.y + float(rows.y + 1)
-
-	var char_band := _band_x(tex, _player.global_position, off, flip, y0, y1)
-	var cart_off := _cart.get_cart_offset()
-	var cart_flip := _cart.is_visual_flipped()
-	var cart_band := _band_x(CART_TEX, _cart.global_position, cart_off, cart_flip, y0, y1)
-
-	var gap := 0.0
-	var hand_edge := 0.0
-	var cart_edge := 0.0
-	if _cart.side > 0:
-		# 玩家在车右侧：手在左，车把在右
-		hand_edge = char_band.x
-		cart_edge = cart_band.y
-		gap = hand_edge - cart_edge
-	else:
-		hand_edge = char_band.y
-		cart_edge = cart_band.x
-		gap = cart_edge - hand_edge
-
-	# 车把顶端（车纹理里最上面那一行的世界 y）与手顶端的差
-	var cart_top := _top_row_y(CART_TEX, cart_off.y, _cart.global_position.y)
-	var dy := y0 - cart_top
-	return {"side": _cart.side, "gap": gap, "dy": dy, "rows": rows,
-		"char_band": char_band, "cart_band": cart_band, "y0": y0, "y1": y1,
-		"cart_top": cart_top}
-
-
-func _top_row_y(tex: Texture2D, off_y: float, node_y: float) -> float:
-	var img := tex.get_image()
-	var used := img.get_used_rect()
-	return node_y + off_y + float(used.position.y)
-
-
-# ---------------------------------------------------------------- 自动化用例
 
 func _run_tests() -> void:
 	var fails := 0
@@ -609,7 +474,6 @@ func _run_tests() -> void:
 	# ---- A 图片合同：尺寸 / alpha 档位 / 包围盒
 	print("[A] 候选件像素合同")
 	var contract := [
-		["ART_CHAR_001 r03", PUSH_TEX, Vector2i(128, 176), Rect2(35, 8, 58, 160)],
 		["ART_FURN_103 r02", CART_TEX, Vector2i(128, 112), Rect2(16, 14, 96, 90)],
 		["ART_FURN_101 r01", SHELF_TEX, Vector2i(128, 208), Rect2(16, 8, 96, 192)],
 		["ART_ITEM_101 r02", WATER_TEX, Vector2i(64, 48), Rect2(0, 0, 64, 48)],
@@ -663,7 +527,6 @@ func _run_tests() -> void:
 	# ---- B 锚点：按合同 offset 摆好后，可见底边必须落在脚底原点
 	print("[B] 脚底锚点")
 	var anchor_cases := [
-		["角色 r03", _player_frame_texture(), Vector2(64, 168), 0.0],
 		["购物车 r02", CART_TEX, CART_ANCHOR, 0.0],
 		["货架 r01", SHELF_TEX, SHELF_ANCHOR, 0.0],
 		["水 64×48", WATER_TEX, Vector2(32, 48), 0.0],
@@ -677,30 +540,9 @@ func _run_tests() -> void:
 		fails += _ok("%s 锚点 (%.0f,%.0f) → 可见底边误差 %.1f px" % [row[0], anc.x, anc.y, err],
 			err < 0.51, "bbox 底 = %.1f" % (bb.position.y + bb.size.y))
 
-	# ---- C 手部贴合：两侧各量一次，对比 80（逻辑）与 74（美术参考）
-	print("[C] 手部贴合（不改 side_offset，只换玩家站位来对比）")
-	for side in [1, -1]:
-		_cart.visible = true
-		_cart.place_at(480.0 - float(side) * 40.0)
-		_player.teleport_to(_cart.global_position.x + float(side) * CART_SEP)
-		_cart.bind(_player)
-		await _frames(2)
-		var m := _measure_hand()
-		print("     side=%+d  逻辑 80px：手 %+.1f / 车把 %+.1f → 间隙 %+.1f px，垂直差 %+.1f px" % [
-			int(m["side"]), float(m["char_band"].y if side < 0 else m["char_band"].x),
-			float(m["cart_band"].x if side < 0 else m["cart_band"].y),
-			float(m["gap"]), float(m["dy"])])
-		fails += _ok("side=%+d 逻辑间距 80px → 间隙 %+.1f px（±8 内算贴合）" % [side, float(m["gap"])],
-			absf(float(m["gap"])) <= 8.0)
-
-		# 美术参考 74：仅测量，不改逻辑
-		_player.teleport_to(_cart.global_position.x + float(side) * CART_SEP_ART)
-		var m74 := _measure_hand()
-		print("     side=%+d  美术参考 74px：间隙 %+.1f px（仅供对照，逻辑仍是 80）" % [
-			side, float(m74["gap"])])
-
-		_cart.unbind()
-	print("[C] 说明：80px 下间隙为正数=没穿模；74px 下会轻微重叠（美术静帧按 74 画的）")
+	# ---- C 手部贴合：ART-RESET-001 退役
+	# 量的是角色手部像素到车把的间隙；角色贴图已删，没有手部像素可量。
+	print("[C] 手部贴合：已退役（角色贴图于 ART-RESET-001 删除，无手部像素可量）")
 
 	# ---- D 货架层高与内宽
 	print("[D] 货架结构")
@@ -728,22 +570,17 @@ func _run_tests() -> void:
 		print("     第 %d 层：层板 y=%+.0f，放 32×32 后头顶余 %.0f px" % [i + 1, bottom, head_room])
 	fails += _ok("四层摆放后都留有头顶余量", ok_all)
 
-	# ---- F 镜像与绘制偏移
-	print("[F] 镜像 / 绘制偏移")
+	# ---- F 镜像与碰撞不变式（角色中轴/绘制偏移已随贴图退役）
+	print("[F] 镜像 / 碰撞不变式")
 	_player.teleport_to(400.0)
 	_player.set_facing(1)
-	var ax_r: float = _player.drawn_body_axis()
-	var off_r: Vector2 = _player.sprite_node().offset
+	var x0 := _player.global_position.x
 	_player.set_facing(-1)
-	var ax_l: float = _player.drawn_body_axis()
-	var off_l: Vector2 = _player.sprite_node().offset
-	fails += _ok("r03 身体中轴 右 %.1f / 左 %.1f（差 %.1f）· offset 右 %s / 左 %s" % [
-		ax_r, ax_l, absf(ax_r - ax_l), str(off_r), str(off_l)],
-		absf(ax_r - ax_l) < 0.51)
-	fails += _ok("镜像不碰碰撞盒：宽 %.0f 高 %.0f，仍以脚底为基线" % [
-		_player.collision_width(), _player.collision_height()],
-		_player.collision_width() == 28.0 and _player.collision_height() == 160.0)
 	_player.set_facing(1)
+	fails += _ok("镜像不碰碰撞盒：宽 %.0f 高 %.0f，仍以脚底为基线，世界 x 不变" % [
+		_player.collision_width(), _player.collision_height()],
+		_player.collision_width() == 28.0 and _player.collision_height() == 160.0
+		and absf(_player.global_position.x - x0) < 0.01)
 
 	# ---- G 交互与遮挡是否被加高影响
 	print("[G] 交互 / 遮挡")
@@ -814,17 +651,14 @@ func debug_draw(cv: CanvasItem) -> void:
 		cv.draw_rect(Rect2(_cart.global_position - CART_ANCHOR, Vector2(128, 112)),
 			Color(0.45, 0.85, 0.95, 0.28), false, 1.0)
 
-	var pb := _player.visible_bbox()
-	var pworld := Rect2(_player.global_position + pb.position, pb.size)
-	cv.draw_rect(pworld, Color(1.0, 0.72, 0.35, 0.95), false, 1.0)
-
+	# ART-RESET-001：角色没有贴图，不再画"可见框"；只画碰撞盒
 	var cr := _player.collision_rect()
 	var cworld := Rect2(_player.global_position + cr.position, cr.size)
 	cv.draw_rect(cworld, Color(1.0, 0.42, 0.38, 0.85), false, 1.0)
 
 	# 数值统一写成左下角图例，避免标签压在人身上
 	var lines := PackedStringArray([
-		"橙=可见 %.0f×%.0f　红=碰撞 %.0f×%.0f" % [pb.size.x, pb.size.y, cr.size.x, cr.size.y],
+		"红=角色碰撞 %.0f×%.0f（角色贴图已删，无可见框）" % [cr.size.x, cr.size.y],
 		"青=车可见 96×90（细线=画布 128×112，不是车长）",
 	])
 	var ly := VIEW.y - 62.0
@@ -874,11 +708,6 @@ func _label(cv: CanvasItem, x: float, y: float, s: String, size: int, c: Color) 
 
 
 # ---------------------------------------------------------------- 杂项
-
-func _player_frame_texture() -> Texture2D:
-	var t := _player.current_texture()
-	return t if t != null else CART_TEX
-
 
 ## 不透明像素的平均颜色。用来判断"这张图画的是水还是纸箱"，
 ## 尺寸、alpha、锚点都合格也查不出图形内容时，靠它兜底。

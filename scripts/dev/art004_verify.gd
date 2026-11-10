@@ -215,7 +215,6 @@ func _apply_state(key: String) -> void:
 	_cart.visible = false
 	_cart.set_load_state(_load)
 	_player.clear_input_override()
-	_player.freeze_frame(PlayerController.ANIM_IDLE, 0)
 
 	match key:
 		"empty":
@@ -266,7 +265,6 @@ func _build_behind() -> void:
 	_cart.place_at(480.0)
 	_player.teleport_to(480.0)
 	_player.set_facing(1)
-	_player.freeze_frame(PlayerController.ANIM_IDLE, 0)
 
 
 ## ⑤ 人物与前景护栏重叠：人物站在篮网正前方，腿应当被近侧篮网压住
@@ -277,7 +275,6 @@ func _build_overlap() -> void:
 	# 站位稍微偏一点，让"腿被篮网压住"最容易看清
 	_player.teleport_to(470.0)
 	_player.set_facing(1)
-	_player.freeze_frame(PlayerController.ANIM_IDLE, 0)
 
 
 ## ⑥ 朝左镜像：整层翻转
@@ -288,7 +285,6 @@ func _build_mirror() -> void:
 	# 站到车右边 → 绑定时 side=+1 → 车整层翻转
 	_player.teleport_to(480.0 + CART_SEP)
 	_cart.bind(_player)
-	_player.resume_animation()
 	_player.set_facing(-1)
 
 
@@ -299,7 +295,6 @@ func _build_push() -> void:
 	_cart.place_at(480.0)
 	_player.teleport_to(480.0 - CART_SEP)
 	_cart.bind(_player)
-	_player.resume_animation()
 	_player.set_input_override(1.0)
 	await _frames(24)
 	_player.clear_input_override()
@@ -313,7 +308,6 @@ func _build_wall_stop() -> void:
 	_cart.place_at(560.0)
 	_player.teleport_to(560.0 - CART_SEP)
 	_cart.bind(_player)
-	_player.resume_animation()
 	_player.set_input_override(1.0)
 	for i in 300:
 		await get_tree().physics_frame
@@ -412,89 +406,9 @@ func _text(x: float, y: float, s: String, size: int, c: Color) -> void:
 
 # ---------------------------------------------------------------- 量测
 
-## 纹理像素在某世界 y 带内的横向范围（左闭右开，含实际 offset / flip）
-func _band_x(tex: Texture2D, node_pos: Vector2, offset: Vector2, flip: bool,
-		y0: float, y1: float) -> Vector2:
-	var img := tex.get_image()
-	if img == null:
-		return Vector2.ZERO
-	var w := img.get_width()
-	var lo := 1 << 30
-	var hi := -(1 << 30)
-	for y in img.get_height():
-		var wy := node_pos.y + offset.y + float(y)
-		if wy + 1.0 <= y0 or wy >= y1:
-			continue
-		for x in w:
-			if img.get_pixel(x, y).a > 0.5:
-				var col := (w - 1 - x) if flip else x
-				var wx := int(node_pos.x + offset.x) + col
-				lo = mini(lo, wx)
-				hi = maxi(hi, wx + 1)
-	return Vector2(float(lo), float(hi)) if hi > lo else Vector2.ZERO
-
-
-## 角色"手"所在的行区间（纹理坐标）：取向前伸出最多的那几行
-func _hand_rows(tex: Texture2D) -> Vector2i:
-	var img := tex.get_image()
-	var used := img.get_used_rect()
-	var right := used.position.x + used.size.x
-	var lo := 1 << 30
-	var hi := -1
-	for y in range(used.position.y, used.position.y + used.size.y):
-		for x in range(right - 1, used.position.x - 1, -1):
-			if img.get_pixel(x, y).a > 0.5:
-				if x >= right - 5:
-					lo = mini(lo, y)
-					hi = maxi(hi, y)
-				break
-	if hi < 0:
-		return Vector2i(used.position.y, used.position.y + used.size.y)
-	return Vector2i(lo, hi)
-
-
-## 量手部与车把的贴合：返回 side / gap（正=有间隙，负=重叠）/ dy（手与车把顶端高度差）
-##
-## r03 的车把在 **Back 层**（后景结构），所以这里量的是 Back 层的横向范围，
-## 不是整张合成图——这和 r02 时代量整图是同一个物理位置（Back 的车把像素与 r02 完全相同）。
-func _measure_hand() -> Dictionary:
-	var tex := _player.current_texture()
-	var off := _player.sprite_node().offset
-	var flip := _player.sprite_node().flip_h
-	var rows := _hand_rows(tex)
-	var y0 := _player.global_position.y + off.y + float(rows.x)
-	var y1 := _player.global_position.y + off.y + float(rows.y + 1)
-
-	var char_band := _band_x(tex, _player.global_position, off, flip, y0, y1)
-	var cart_off := _cart.get_cart_offset()
-	var cart_flip := _cart.is_visual_flipped()
-	var cart_band := _band_x(CART_TEX_R03_BACK, _cart.global_position, cart_off, cart_flip, y0, y1)
-
-	var gap := 0.0
-	var hand_edge := 0.0
-	var cart_edge := 0.0
-	if _cart.side > 0:
-		# 玩家在车右侧：手在左，车把在右
-		hand_edge = char_band.x
-		cart_edge = cart_band.y
-		gap = hand_edge - cart_edge
-	else:
-		hand_edge = char_band.y
-		cart_edge = cart_band.x
-		gap = cart_edge - hand_edge
-
-	var cart_top := _top_row_y(CART_TEX_R03_BACK, cart_off.y, _cart.global_position.y)
-	var dy := y0 - cart_top
-	return {"side": _cart.side, "gap": gap, "dy": dy, "rows": rows,
-		"char_band": char_band, "cart_band": cart_band, "y0": y0, "y1": y1,
-		"cart_top": cart_top}
-
-
-func _top_row_y(tex: Texture2D, off_y: float, node_y: float) -> float:
-	var img := tex.get_image()
-	var used := img.get_used_rect()
-	return node_y + off_y + float(used.position.y)
-
+## ART-RESET-001：_measure_hand / _hand_rows / _band_x / _top_row_y 已随角色贴图退役。
+## 它们量的是「角色手部像素」到车把的间隙；没有角色像素就没有可量对象。
+## 接新动画时按新的帧画布重写，不要恢复这里的旧实现。
 
 # ---------------------------------------------------------------- 引擎内像素合成
 
@@ -617,35 +531,12 @@ func _run_tests() -> void:
 		_cart.cargo_full_visible() and not _cart.cargo_half_visible())
 	_cart.set_load_state(PushableCart.LOAD_EMPTY)
 
-	# ---- E 手部贴合：两侧各量一次，对比 80（逻辑）与 74（美术参考）
-	print("[E] 手部贴合（不改 side_offset，只换玩家站位来对比）")
-	for side in [1, -1]:
-		_cart.visible = true
-		_cart.set_load_state(PushableCart.LOAD_FULL)
-		_cart.place_at(480.0 - float(side) * 40.0)
-		_player.teleport_to(_cart.global_position.x + float(side) * CART_SEP)
-		_cart.bind(_player)
-		# 关键：解冻动画，扶车姿态才是 r03 单帧。冻在 idle 帧时手的位置和推车时不是一回事，
-		# 那样量出来的间隙没有意义（ART-003 的 _build_hand 同样先 resume 再测）。
-		_player.resume_animation()
-		await _frames(2)
-		var m := _measure_hand()
-		print("     side=%+d  逻辑 80px：手 %+.1f / 车把 %+.1f → 间隙 %+.1f px，垂直差 %+.1f px" % [
-			int(m["side"]), float(m["char_band"].y if side < 0 else m["char_band"].x),
-			float(m["cart_band"].x if side < 0 else m["cart_band"].y),
-			float(m["gap"]), float(m["dy"])])
-		fails += _ok("side=%+d 逻辑间距 80px → 间隙 %+.1f px（±8 内算贴合）" % [side, float(m["gap"])],
-			absf(float(m["gap"])) <= 8.0)
+	# ---- E 手部贴合：ART-RESET-001 退役
+	# 这一组量的是「角色手部像素」与车把的横向间隙。角色贴图已全部删除，
+	# 没有手部像素可量，原断言作废（不是通过，是退役）。接新动画后再恢复。
+	print("[E] 手部贴合：已退役（角色贴图于 ART-RESET-001 删除，无手部像素可量）")
 
-		# 美术参考 74：仅测量，不改逻辑
-		_player.teleport_to(_cart.global_position.x + float(side) * CART_SEP_ART)
-		var m74 := _measure_hand()
-		print("     side=%+d  美术参考 74px：间隙 %+.1f px（仅供对照，逻辑仍是 80）" % [
-			side, float(m74["gap"])])
-		_cart.unbind()
-	print("[E] 说明：80px 下间隙为正数=没穿模；74px 下会轻微重叠（美术静帧按 74 画的）")
-
-	# ---- F 镜像：各层必须一起翻，且坐标不变
+	# ---- F 镜像 / 分层对齐（角色中轴量测已随贴图退役，只保留车体分层与碰撞不变式）
 	print("[F] 镜像 / 分层对齐")
 	_cart.place_at(480.0)
 	_player.teleport_to(480.0 + CART_SEP)
@@ -653,15 +544,10 @@ func _run_tests() -> void:
 	await _frames(2)
 	var flipped := _cart.is_visual_flipped()
 	fails += _ok("玩家在车右侧 → 整层翻转（flip_h=true）", flipped)
-	# 翻转后车体可见范围必须左右对称地挪到镜像位置
 	var x_before := _player.global_position.x
 	var coll_before := _player.collision_width()
 	_player.set_facing(-1)
-	var ax_r: float = _player.drawn_body_axis()
 	_player.set_facing(1)
-	var ax_l: float = _player.drawn_body_axis()
-	fails += _ok("镜像后身体中轴 右 %.1f / 左 %.1f（差 %.1f px）" % [
-		ax_r, ax_l, absf(ax_r - ax_l)], absf(ax_r - ax_l) < 0.51)
 	fails += _ok("镜像只改绘制：碰撞盒宽 %.0f 不变，世界坐标 x 不变" % coll_before,
 		_player.collision_width() == coll_before
 		and absf(_player.global_position.x - x_before) < 0.01)
@@ -673,35 +559,16 @@ func _run_tests() -> void:
 	_cart.place_at(480.0)
 	_player.teleport_to(480.0)
 	_player.set_facing(1)
-	_player.freeze_frame(PlayerController.ANIM_IDLE, 0)
 	await _frames(2)
 	fails += _ok("近侧篮网 Front 常驻可见（不再依赖横向重叠才显示）",
 		_cart.front_layer_visible())
 	fails += _ok("车节点在人物之前入树（z=0 的 Back/Cargo 才能画在人物之后）",
 		_cart.layer_order_is_valid())
 
-	# 遮挡实测：站进车里时，人物与近侧篮网必须有**真实像素交叠**，
-	# 而且交叠处渲染出来的颜色必须是篮网的颜色（证明 Front 压在人物之前）。
-	var overlap := _find_front_player_overlap()
-	var has_overlap := not overlap.is_empty()
-	fails += _ok("站进车里时人物与近侧篮网存在像素交叠（交叠点 %d 个）" % int(overlap.size()),
-		has_overlap)
-	if has_overlap:
-		var wp: Vector2 = overlap[0][0]
-		var expected: Color = overlap[0][1]
-		await RenderingServer.frame_post_draw
-		var shot := get_viewport().get_texture().get_image()
-		var actual := shot.get_pixel(int(wp.x), int(wp.y))
-		var d := maxf(absf(actual.r - expected.r), maxf(absf(actual.g - expected.g),
-			absf(actual.b - expected.b)))
-		fails += _ok("交叠点 (%.0f,%.0f) 渲染色 = 篮网色（误差 %.3f，篮网=%.2f,%.2f,%.2f）" % [
-			wp.x, wp.y, d, expected.r, expected.g, expected.b],
-			d < 0.02, "实际=%.2f,%.2f,%.2f" % [actual.r, actual.g, actual.b])
-	# 走远后不应该再被车挡：前层始终可见，但人物与车不重叠就没有实际遮挡
-	_player.teleport_to(820.0)
-	await _frames(2)
-	fails += _ok("人物离开车体范围后不再与篮网交叠（不重叠）",
-		_find_front_player_overlap().is_empty())
+	# 遮挡实测：ART-RESET-001 退役
+	# 这一项要「人物不透明像素 ∩ 近侧篮网不透明像素」，角色贴图已删，交集恒为空。
+	# Front 常驻可见与车节点入树顺序仍在上方断言，图层顺序本身没被放松。
+	print("[G] 人物 × 篮网像素交叠：已退役（角色贴图于 ART-RESET-001 删除）")
 
 	# ---- H 交互回归
 	print("[H] 购物车交互回归")
@@ -883,9 +750,7 @@ func debug_draw(cv: CanvasItem) -> void:
 			_draw_tex_rect(cv, CART_TEX_R03_CARGO_FULL, _cart.global_position, off, flip,
 				Color(0.75, 0.60, 1.00, 0.85))
 
-	var pb := _player.visible_bbox()
-	var pworld := Rect2(_player.global_position + pb.position, pb.size)
-	cv.draw_rect(pworld, Color(1.0, 0.72, 0.35, 0.95), false, 1.0)
+	# ART-RESET-001：角色无贴图，不画可见框
 
 	var cr := _player.collision_rect()
 	var cworld := Rect2(_player.global_position + cr.position, cr.size)
@@ -893,7 +758,7 @@ func debug_draw(cv: CanvasItem) -> void:
 
 	# 数值统一写成左下角图例，避免标签压在人身上
 	var lines := PackedStringArray([
-		"橙=人物可见 %.0f×%.0f　红=碰撞 %.0f×%.0f" % [pb.size.x, pb.size.y, cr.size.x, cr.size.y],
+		"红=角色碰撞 %.0f×%.0f（角色贴图已删，无可见框）" % [cr.size.x, cr.size.y],
 		"青=车可见 96×90（细线=画布 128×112，不是车长）",
 		"绿=Back 层　橙红=Front 层（近侧篮网）",
 	])
@@ -971,56 +836,6 @@ func _cart_front_covers_point(p: Vector2) -> bool:
 	if flip:
 		lx = w - 1 - lx
 	return img.get_pixel(lx, ly).a > 0.5
-
-
-## 找出「人物不透明像素」与「近侧篮网不透明像素」的世界坐标交叠点。
-## 返回数组，每项是 [世界坐标, 篮网该点的颜色]；没有交叠则返回空数组。
-##
-## 这比"取一个点猜它有没有被盖住"可靠得多：交叠点由两张贴图的 alpha 实测得出，
-## 再用**渲染出来的画面颜色**验证那一格确实是篮网而不是人物——
-## 也就是说，这一项同时验证了「真的交叠」和「Front 真的压在人物之前」。
-func _find_front_player_overlap() -> Array:
-	var out: Array = []
-	var front_img := CART_TEX_R03_FRONT.get_image()
-	var cart_off := _cart.get_cart_offset()
-	var cart_flip := _cart.is_visual_flipped()
-
-	# 人物当前的可见轮廓（世界坐标矩形）
-	var pb := _player.visible_bbox()
-	var player_rect := Rect2(_player.global_position + pb.position, pb.size)
-	# 人物贴图里哪些像素不透明（考虑镜像）
-	var tex := _player.current_texture()
-	if tex == null:
-		return out
-	var pimg := tex.get_image()
-	var p_off := _player.sprite_node().offset
-	var p_flip := _player.sprite_node().flip_h
-	var pw := pimg.get_width()
-
-	for ty in front_img.get_height():
-		for tx in front_img.get_width():
-			if front_img.get_pixel(tx, ty).a <= 0.5:
-				continue
-			var col := tx
-			if cart_flip:
-				col = front_img.get_width() - 1 - tx
-			var wx := _cart.global_position.x + cart_off.x + float(col)
-			var wy := _cart.global_position.y + cart_off.y + float(ty)
-			if not player_rect.has_point(Vector2(wx, wy)):
-				continue
-			# 换算回人物贴图坐标，判断这一格人物本身是否不透明
-			var ptx := int(wx - _player.global_position.x - p_off.x)
-			var pty := int(wy - _player.global_position.y - p_off.y)
-			if p_flip:
-				ptx = pw - 1 - ptx
-			if ptx < 0 or pty < 0 or ptx >= pimg.get_width() or pty >= pimg.get_height():
-				continue
-			if pimg.get_pixel(ptx, pty).a <= 0.5:
-				continue
-			out.append([Vector2(wx, wy), front_img.get_pixel(tx, ty)])
-			if out.size() >= 64:
-				return out
-	return out
 
 
 ## 货物图是否与篮网（前景护栏）区域相交——必须相交才说明货物确实被网罩住

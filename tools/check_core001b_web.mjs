@@ -113,10 +113,12 @@ await sleep(900);
 await send('Input.dispatchKeyEvent', { type: 'keyUp', windowsVirtualKeyCode: 68, nativeVirtualKeyCode: 68, code: 'KeyD', key: 'd' });
 await sleep(300);
 all = logs();
+// ART-RESET-001：角色贴图已删除，PlayerController 不再输出 [ANIM] 日志。
+// 这里改为断言"确实没有动画在播"，而不是假装旧动画还在。
 const animLines = all.filter((l) => l.text.includes('[ANIM]')).map((l) => l.text);
-check('推车时切到扶车姿态（[ANIM] push_idle）',
-  animLines.some((t) => t.includes('push_idle')),
-  animLines.join(' | ').slice(0, 120));
+check('绑定推车后没有任何角色动画日志（旧动画已退役）',
+  animLines.length === 0,
+  animLines.join(' | ').slice(0, 120) || '无 [ANIM] 输出，符合预期');
 
 await pressE();
 await sleep(700);
@@ -130,9 +132,9 @@ await send('Input.dispatchKeyEvent', { type: 'keyUp', windowsVirtualKeyCode: 68,
 await sleep(300);
 all = logs();
 const animAll = all.filter((l) => l.text.includes('[ANIM]')).map((l) => l.text);
-check('停放后走路切回行走四帧（[ANIM] walk_right）',
-  animAll.some((t) => t.includes('walk_right')),
-  animAll.join(' | ').slice(0, 160));
+check('停放后走动仍无角色动画日志（行走渲染待新动画接入）',
+  animAll.length === 0,
+  animAll.join(' | ').slice(0, 160) || '无 [ANIM] 输出，符合预期');
 
 const errsA = errors();
 check('车流程控制台无 error', errsA.length === 0,

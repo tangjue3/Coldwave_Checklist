@@ -527,10 +527,9 @@ func _refresh_hud() -> void:
 		cart_txt = "车 %s @%.0f" % [String(_cart.state), cart_x]
 		if _cart.state == PushableCart.STATE_PUSHING:
 			cart_txt += " v=%.0f side=%+d 间距=%.0f" % [_cart.last_speed, _cart.side, _cart.side_offset]
-	var spr := _player.sprite_node()
-	_hud_state.text = "x=%d  vx=%.0f  朝向=%s  %s/%s 帧%d  ｜  %s  ｜  热点 %s" % [
+	_hud_state.text = "x=%d  vx=%.0f  朝向=%s  %s  (角色渲染为空)  ｜  %s  ｜  热点 %s" % [
 		int(_player.global_position.x), _player.velocity.x,
-		"右" if _player.facing > 0 else "左", String(_player.state), String(spr.animation), spr.frame,
+		"右" if _player.facing > 0 else "左", String(_player.state),
 		cart_txt, _target_text(),
 	]
 	_hud_note.text = "门/货架=背景层+Area2D 热点（不阻挡）；车 PARKED 无碰撞体、可走过，PUSHING 与角色成刚体组合 ｜ 推速 80 / 反向 40 / 行走 100 ｜ E 交互  F3 叠加层"
@@ -563,15 +562,17 @@ func _input(event: InputEvent) -> void:
 # ---------------------------------------------------------------- 量测
 
 func _measure() -> void:
-	var vis := _player.visible_bbox()
+	# ART-RESET-001：角色贴图已删，可见包围盒 / 身体中轴 / 绘制偏移全部无法量。
+	# 保留：碰撞盒、门净宽、车间距与速度、车体画布——这些与美术无关。
 	var coll := _player.collision_rect()
 	var net_w := DOOR_W - DOOR_JAMB * 2.0
 	var net_h := DOOR_H - DOOR_HEAD
 	print("")
 	print("========== CORE-001B 实机量测 ==========")
-	print("[CORE] 可见 %d×%d @(%.0f,%.0f)  碰撞 %d×%d  脚底误差 = %.1f" % [
-		int(vis.size.x), int(vis.size.y), vis.position.x, vis.position.y,
-		int(coll.size.x), int(coll.size.y), absf(vis.position.y + vis.size.y)])
+	print("[CORE] 角色渲染 = 空（ART-RESET-001 已删除旧贴图，等 AI 视频接入）")
+	print("[CORE] 碰撞 %d×%d @(%.0f,%.0f)  宽 %.0f 高 %.0f" % [
+		int(coll.size.x), int(coll.size.y), coll.position.x, coll.position.y,
+		_player.collision_width(), _player.collision_height()])
 	print("[CORE] 住宅门 净 %d×%d  净宽余量 %d（单侧 %d）  门内头顶余 %d" % [
 		int(net_w), int(net_h), int(net_w - coll.size.x), int((net_w - coll.size.x) * 0.5),
 		int(net_h - coll.size.y)])
@@ -581,28 +582,6 @@ func _measure() -> void:
 	print("[CORE] 购物车精灵 画布 %s、可见 %.0f×%.0f、锚点 %s；停放时无物理体（body 节点=%s）" % [
 		str(PushableCart.SPRITE_CANVAS), cart_box.size.x, cart_box.size.y,
 		str(PushableCart.SPRITE_ANCHOR), str(_cart.get_node_or_null("Body") != null)])
-	# 镜像偏移实测：翻转前后可见框中心必须重合
-	var x_before := _player.global_position.x
-	var coll_before := _player.collision_rect()
-	_player.set_facing(1)
-	var vr := _player.visible_bbox()
-	_player.set_facing(-1)
-	var vl := _player.visible_bbox()
-	_player.set_facing(1)
-	_flip_center_right = vr.position.x + vr.size.x * 0.5
-	_flip_center_left = vl.position.x + vl.size.x * 0.5
-	_flip_probe_done = true
-	var coll_after := _player.collision_rect()
-	_player.set_facing(1)
-	var axis_r := _player.drawn_body_axis()
-	_player.set_facing(-1)
-	var axis_l := _player.drawn_body_axis()
-	_player.set_facing(1)
-	print("[CORE] 自动对轴：当前帧身体中轴=%.1f → sprite.offset=%s；镜像前后中轴 右%.1f / 左%.1f，差 %.1f px" % [
-		_player.body_axis_of_current(), str(_player.sprite_node().offset),
-		axis_r, axis_l, absf(axis_r - axis_l)])
-	print("[CORE] 镜像补偿只作用于绘制：碰撞盒 %s → %s，节点 x %.1f → %.1f（必须完全不变）" % [
-		str(coll_before), str(coll_after), x_before, _player.global_position.x])
 	print("========================================")
 
 
@@ -909,40 +888,18 @@ func _run_tests() -> void:
 	await _frames(2)
 	fails += _ok("T7c 解绑后可自由后退 %.0f px（未被锁死）" % back, back > 20.0)
 
-	# ---- T8 镜像偏移 / 脚底 / 坐标不变
-	var vis := _player.visible_bbox()
-	fails += _ok("T8a 脚底误差 %.2f px" % absf(vis.position.y + vis.size.y),
-		absf(vis.position.y + vis.size.y) < 0.5)
+	# ---- T8 镜像 / 坐标不变（ART-RESET-001：可见框与身体中轴已随贴图退役）
 	var x_before := _player.global_position.x
 	var coll_before := _player.collision_width()
 	var coll_h_before := _player.collision_height()
-	# 包围盒中心不是有效不变式：跨步姿态本来就不对称（contactA 66 宽、pass 41 宽）。
-	# 镜像要守的是"身体中轴"，也就是头始终在同一条竖线上。
 	_player.set_facing(1)
-	var axis_r := _player.drawn_body_axis()
 	_player.set_facing(-1)
-	var axis_l := _player.drawn_body_axis()
-	fails += _ok("T8b 朝左镜像 → 绘制后的身体中轴 右 %.1f / 左 %.1f（差 %.1f，目标 %.1f）" % [
-		axis_r, axis_l, absf(axis_r - axis_l), PlayerController.TARGET_AXIS_X],
-		absf(axis_r - axis_l) < 0.51 and absf(axis_r - PlayerController.TARGET_AXIS_X) < 0.51)
-	# 待机帧左右对称，可以顺便核对包围盒确实完全镜像
-	_player.freeze_frame(PlayerController.ANIM_IDLE, 0)
 	_player.set_facing(1)
-	var vr := _player.visible_bbox()
-	_player.set_facing(-1)
-	var vl := _player.visible_bbox()
-	_player.set_facing(1)
-	_player.resume_animation()
-	var cr := vr.position.x + vr.size.x * 0.5
-	var cl := vl.position.x + vl.size.x * 0.5
-	fails += _ok("T8b2 待机帧镜像 → 包围盒中心 右 %.1f / 左 %.1f（差 %.1f）" % [cr, cl, absf(cr - cl)],
-		absf(cr - cl) < 0.51)
-	fails += _ok("T8c 镜像补偿不碰到碰撞盒与世界坐标",
+	fails += _ok("T8 镜像不碰碰撞盒与世界坐标", 
 		absf(_player.collision_width() - coll_before) < 0.01
 		and absf(_player.collision_height() - coll_h_before) < 0.01
 		and absf(_player.global_position.x - x_before) < 0.01,
 		"碰撞 %.0f×%.0f  x=%.1f" % [_player.collision_width(), _player.collision_height(), _player.global_position.x])
-	_player.set_facing(1)
 
 	# ---- T9 多热点重叠：稳定优先级
 	_cart.place_at(CART_CENTER)
@@ -1011,89 +968,16 @@ func _walk(x0: float, x1: float, max_frames: int, dir: float) -> Dictionary:
 	return {"start": start, "end": endpos, "passed": reached, "stall": best}
 
 
-# ---------------------------------------------------------------- ART-INTEGRATE-002 截图组
+# ---------------------------------------------------------------- ART-INTEGRATE-002 截图组（已退役）
 
-## 只产出"游戏视图"（关掉调试叠加层）的截图，另加一张带叠加层的对照。
-## 四帧行走刻意不推进位移：相机与背景完全一致，方便逐帧比对脚底与头部。
+## ART-RESET-001：_run_art002 整组删除。
+## 它拍的是「四帧行走 / 脚底与头部逐帧比对 / 推行姿态」，全部依赖已删除的角色贴图。
+## 保留 --art002 参数会走到空实现，避免老脚本静默跑出"成功"。
+
+
 func _run_art002() -> void:
-	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(SHOT_DIR))
-	print("")
-	print("========== ART-INTEGRATE-002 截图组 ==========")
-	print("[ART002] 纹理 %d×%d  动画 %s  帧数 %d  FPS %.1f" % [
-		int(_player.sprite_texture_size().x), int(_player.sprite_texture_size().y),
-		"idle+walk_right", _player.sprite_node().sprite_frames.get_frame_count(&"walk_right"),
-		_player.walk_fps])
+	print("[ART002] 已退役：角色贴图于 ART-RESET-001 删除，本截图组无内容可拍。")
 
-	# 截图组默认要"游戏视图"：先关掉调试叠加层，只在需要对照时临时打开
-	_overlay.show_overlay = false
-	await get_tree().process_frame
-
-	# ---- 1) 四帧行走（暖色超市，冻结姿态，机位不动）
-	_cart.place_at(CART_CENTER)
-	if _cart.state == PushableCart.STATE_PUSHING:
-		_cart.unbind()
-	_place(860.0)
-	await _frames(6)
-	for i in 4:
-		_player.freeze_frame(PlayerController.ANIM_WALK, i)
-		await _frames(2)
-		await RenderingServer.frame_post_draw
-		_capture("art002_walk_market_%02d.png" % i)
-		print("[ART002] 帧 %d  身体中轴=%.1f  sprite.offset=%s  可见框中心=%.1f" % [
-			i, _player.body_axis_of_current(), str(_player.sprite_node().offset),
-			_player.visible_bbox().position.x + _player.visible_bbox().size.x * 0.5])
-	# 带叠加层的一张，用来看碰撞盒与可见框随帧变化
-	_overlay.show_overlay = true
-	await get_tree().process_frame
-	await RenderingServer.frame_post_draw
-	_capture("art002_walk_overlay.png")
-	_overlay.show_overlay = false
-
-	# ---- 2) 冷色街景（真的在走，不是冻结帧）
-	_player.resume_animation()
-	_place(1830.0)
-	_player.set_input_override(1.0)
-	await _frames(26)
-	await RenderingServer.frame_post_draw
-	_capture("art002_walk_street.png")
-	_player.clear_input_override()
-	await _frames(20)
-
-	# ---- 3) 车停放：人物站在车左侧，看车长与身高的比例
-	_cart.place_at(CART_CENTER)
-	_place(CART_CENTER - 78.0)
-	_player.set_facing(1)
-	await _frames(6)
-	await RenderingServer.frame_post_draw
-	_capture("art002_cart_parked.png")
-
-	# ---- 4) 推行：绑定后走 20 帧
-	_sensor.request_interact()
-	_player.set_input_override(1.0)
-	await _frames(20)
-	await RenderingServer.frame_post_draw
-	_capture("art002_cart_pushing.png")
-	_player.clear_input_override()
-	await _frames(4)
-
-	# ---- 5) 站在车里（前景层生效）：验证单张图做两层遮挡是否够用
-	var park_ok := _cart.state == PushableCart.STATE_PARKED
-	if not park_ok:
-		_cart.unbind()
-	_cart.place_at(CART_CENTER)
-	_place(CART_CENTER)
-	await _frames(6)
-	await RenderingServer.frame_post_draw
-	_capture("art002_cart_overlap.png")
-
-	_overlay.show_overlay = true
-	print("[ART002] 截图完成，见 tests/screenshots/art002_*.png")
-	print("==============================================")
-	if _args.has("quit"):
-		get_tree().quit(0)
-
-
-# ---------------------------------------------------------------- 门切换测试
 
 func _run_door_test() -> void:
 	print("")

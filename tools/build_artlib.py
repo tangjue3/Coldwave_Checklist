@@ -59,23 +59,45 @@ MARK_TAGS = [
     ("不予通过", "审核状态 = 不予通过"),
 ]
 
-# ---- AI 视频转游戏动画：目标动作与参考图归属 ----
+# ---- AI 视频转游戏动画：目标动作、人物裁图与道具参考 ----
+# crops 里的键对应 美术设定集/01-角色/参考图/ART_CHAR_001_v02_ref_*.png
 REF_ACTIONS = [
-    ("普通行走", "walk", "朝右行走循环，主角单人", ["ART_CHAR_001"]),
-    ("推购物车", "push_walk", "朝右推行购物车，人物与车体同框", ["ART_CHAR_001", "ART_FURN_103"]),
-    ("搬箱", "carry_box", "朝右双手搬食品纸箱，负重步态", ["ART_CHAR_001", "ART_ITEM_102"]),
-    ("搬水", "carry_water", "朝右双手搬六瓶装饮用水", ["ART_CHAR_001", "ART_ITEM_101"]),
+    ("普通行走", "walk", "朝右行走循环，主角单人",
+     ["right", "front"], ["ART_CHAR_001"]),
+    ("推购物车", "push_walk", "朝右推行购物车，人物与车体同框",
+     ["right", "front"], ["ART_CHAR_001", "ART_FURN_103"]),
+    ("搬箱", "carry_box", "朝右双手搬食品纸箱，负重步态",
+     ["right", "front"], ["ART_CHAR_001", "ART_ITEM_102"]),
+    ("搬水", "carry_water", "朝右双手搬六瓶装饮用水",
+     ["right", "front"], ["ART_CHAR_001", "ART_ITEM_101"]),
 ]
 
-# 已确认尚未交付的动作（页面「动作缺口」页用，来源：README §四 + ART-RIG-001 报告）
+# 角色动作清单：ART-RESET-001 起旧 r01–r09 全部删除，全部动作回到「待重新制作」
+CHAR_ACTION_STATE = [
+    ("待机", "IDLE", "站立呼吸循环", "待重新制作"),
+    ("普通行走", "WALK", "朝右行走循环", "待重新制作"),
+    ("推购物车", "PUSH", "扶车行走，人物与车体同框", "待重新制作"),
+    ("反向拉车", "PULL", "拉车专用受力姿态", "未开始"),
+    ("搬运", "CARRY", "双手抱持重物行走（箱 / 水两种体积）", "未开始"),
+    ("转身", "TURN", "左右朝向切换的过渡帧", "未开始"),
+    ("朝左独立绘制", "LEFT", "朝左独立帧（当前无任何贴图）", "未开始"),
+]
+
+# 非角色缺口（角色项由 CHAR_ACTION_STATE 生成）
 ACTION_GAPS = [
-    ("反向拉车", "拉车专用动作，与推车方向相反的受力姿态", "ART_CHAR_001", "未交付"),
-    ("搬运", "双手抱持重物的行走循环，箱 / 水两种体积", "ART_CHAR_001", "未交付"),
-    ("转身", "左右朝向切换的过渡帧（当前为瞬时镜像）", "ART_CHAR_001", "未交付"),
-    ("朝左独立绘制", "朝左目前是水平镜像，未独立绘制", "ART_CHAR_001", "未交付"),
     ("车轮滚动", "购物车车轮滚动帧，当前车体静止滑行", "ART_FURN_103", "未交付"),
     ("正式 TileSet", "场景仍为概念整幅图，无可用 TileSet", "ART_SCENE_101", "未交付"),
 ]
+
+# 从 v02 裁取的视频参考图（不占素材 ID，见 参考图/README.md）
+CROP_DIR = "美术设定集/01-角色/参考图"
+CROP_LABELS = {
+    "face": ("面容特写", "对齐发型、五官与肤色"),
+    "front": ("正面全身", "对齐服装正面、包带走向与配色"),
+    "left": ("朝左全身", "对齐侧面轮廓与后脑发髻"),
+    "right": ("朝右全身", "**主要参考**：游戏内角色朝右，动作视频以这一张为准"),
+    "back": ("背面全身", "对齐背面发型、帽兜与包的位置"),
+}
 
 # v1.1 美术台账旧 ID → 新 ART_* ID（唯一来源，同时用于生成修订版文档）
 CHAR = {"01": "ART_CHAR_001", "02": "ART_CHAR_101", "03": "ART_CHAR_102",
@@ -401,6 +423,12 @@ aside{position:sticky;top:170px;align-self:start;max-height:calc(100vh - 190px);
 .refitem .s{font-size:11px;color:var(--muted);font-family:Consolas,monospace}
 .reflack{font-size:11.5px;color:#a1731f;background:#fbf4e6;border:1px solid #ebdcbe;
   border-radius:6px;padding:6px 9px}
+.reflabel{font-size:10.5px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;
+  margin-top:2px}
+.refitem.tall{flex-direction:column;align-items:flex-start;gap:6px}
+.refitem.tall img{width:auto;height:150px;min-width:0;background:var(--stage)}
+.refitem.tall .t{font-size:11.5px}
+.refstrip{display:flex;gap:14px;flex-wrap:wrap}
 /* 缺口表 */
 table.gaps{width:100%;border-collapse:collapse;font-size:12.5px;background:var(--card);
   border:1px solid var(--line);border-radius:10px;overflow:hidden}
@@ -461,7 +489,9 @@ footer{padding:0 30px 40px;color:var(--muted);font-size:11.5px;max-width:1720px;
     <div class="search"><input id="q" type="search" placeholder="搜索素材 ID / 名称 / 动作 / 说明 / 角色…" autocomplete="off"></div>
   </div>
   <div class="notice">本库仅供浏览与审核，已被 <code>.gdignore</code> 隔离，不是 Godot 运行时资源。
-    「技术通过」不等于「美术满意」——三条状态轴分开看。</div>
+    「技术通过」不等于「美术满意」——三条状态轴分开看。<br>
+    <strong>ART-RESET-001</strong>：许知夏旧运行时动画 r01–r09 已全部删除，角色渲染为空，
+    只剩 <code>v02</code> 外观基准与五张裁图；新动画等 AI 视频接入。</div>
   <div class="tabs" id="tabs"></div>
 </header>
 <div class="wrap">
@@ -519,7 +549,7 @@ footer{padding:0 30px 40px;color:var(--muted);font-size:11.5px;max-width:1720px;
 
   /* ------------------------------------------------ 顶部视图 tabs */
   function tabs(){
-    var vs=[['assets','素材'],['refs','AI 视频参考图'],['gaps','动作缺口']];
+    var vs=[['assets','素材'],['refs','AI 视频参考图'],['gaps','角色动作状态']];
     $('tabs').innerHTML=vs.map(function(v){
       return '<div class="tab '+(state.view===v[0]?'on':'')+'" data-v="'+v[0]+'">'+v[1]+'</div>'}).join('');
     Array.prototype.forEach.call($('tabs').children,function(el){
@@ -601,38 +631,85 @@ footer{padding:0 30px 40px;color:var(--muted);font-size:11.5px;max-width:1720px;
       el.onclick=function(){open(+el.dataset.i)}});
   }
 
-  /* ------------------------------------------------ 参考图专区 */
+  /* ------------------------------------------------ 视频参考图 */
+  function cropByKey(k){return (META.crops||[]).filter(function(c){return c.key===k})[0]}
   function renderRefs(){
+    var crops=META.crops||[];
     $('title').textContent='AI 视频参考图';
-    $('count').textContent='按动作聚合已登记素材　·　本区只选图，不生成任何视频';
+    $('count').textContent='人物参考全部来自 v02 原图无损裁取　·　本区只选图，不生成任何视频';
     $('hint').textContent='用户从 ChatGPT 拿到参考图与提示词，自己生成视频，再把视频交给开发 Agent。'
-      +'这里列出的每一张都是已登记素材，不拿无关图凑数。';
-    var html=REPS.map(function(r){
-      var items=r.ids.map(function(id){return DATA.filter(function(d){return d.key===id})[0]})
-        .filter(Boolean);
-      var body=items.map(function(d,i){
+      +'人物参考只有一套（v02 五视图裁图），道具参考来自已登记素材，不拿无关图凑数。';
+
+    var strip=crops.map(function(c){
+      return '<div class="refitem tall" data-href="'+esc(c.href)+'" data-label="'+esc(c.label)+'">'+
+        '<img src="'+esc(c.href)+'" alt="'+esc(c.label)+'"><div><div class="t">'+esc(c.label)+
+        '</div><div class="s">'+esc(c.size)+'</div></div></div>'}).join('');
+
+    var blocks=REPS.map(function(r){
+      var people=(r.crops||[]).map(function(k){
+        var c=cropByKey(k); if(!c)return '';
+        return '<div class="refitem tall" data-href="'+esc(c.href)+'" data-label="'+esc(c.label)+'">'+
+          '<img src="'+esc(c.href)+'" alt="'+esc(c.label)+'"><div><div class="t">'+esc(c.label)+
+          '</div><div class="s">'+esc(c.size)+'</div></div></div>'}).join('');
+      var props=r.ids.map(function(id){
+        var d=DATA.filter(function(x){return x.key===id})[0]; if(!d)return '';
         return '<div class="refitem" data-k="'+esc(d.key)+'"><img src="'+esc(d.thumb||'')+'" alt="'+
           esc(d.name)+'"><div><div class="t">'+esc(d.name)+'</div><div class="s">'+esc(d.id)+'@'+
           esc(d.version)+'</div></div></div>'}).join('');
-      var lack=r.missing.length?'<div class="reflack">还缺参考图：'+r.missing.map(esc).join('、')+'</div>':'';
+      var lack=(r.missing.length||r.cropMissing.length)
+        ? '<div class="reflack">还缺：'+r.cropMissing.concat(r.missing).map(esc).join('、')+'</div>':'';
       return '<div class="refcard"><div class="refhead"><h3>'+esc(r.act)+'　<code>'+
-        esc(r.slug)+'</code></h3><p>'+esc(r.desc)+'</p></div><div class="refbody">'+body+lack+'</div></div>';
+        esc(r.slug)+'</code></h3><p>'+esc(r.desc)+'</p></div><div class="refbody">'+
+        '<div class="reflabel">人物参考</div>'+people+
+        '<div class="reflabel">道具参考</div>'+(props||'<div class="reflack">该动作不需要道具</div>')+
+        lack+'</div></div>';
     }).join('');
-    $('view').innerHTML='<div class="refgrid">'+html+'</div>';
+
+    $('view').innerHTML=
+      '<div class="refcard" style="margin-bottom:16px"><div class="refhead"><h3>许知夏 · v02 唯一外观基准的五张裁图</h3>'+
+      '<p>全部由 ART_CHAR_001_v02 原图纯像素裁剪，未重绘、未调色、未去背景；不占素材 ID，不进运行时。</p></div>'+
+      '<div class="refbody"><div class="refstrip">'+strip+'</div></div></div>'+
+      '<div class="refgrid">'+blocks+'</div>';
+
     Array.prototype.forEach.call(document.querySelectorAll('.refitem'),function(el){
-      el.onclick=function(){var k=el.dataset.k;var i=DATA.findIndex(function(d){return d.key===k});
-        if(i>=0){shown=DATA;idx=i;showModal(DATA[i])}}});
+      el.onclick=function(){
+        var k=el.dataset.k;
+        if(k){var i=DATA.findIndex(function(d){return d.key===k});
+          if(i>=0){shown=DATA;idx=i;showModal(DATA[i])}return}
+        openRaw(el.dataset.href,el.dataset.label)}});
   }
 
-  /* ------------------------------------------------ 动作缺口 */
+  /* 裁图不进台账，灯箱单独开一个最简视图 */
+  function openRaw(href,label){
+    stopPlay();
+    $('bigvid').style.display='none';$('bigvid').removeAttribute('src');
+    $('big').style.display='block';$('big').src=href;$('big').alt=label;
+    $('ctrls').style.display='none';
+    $('detail').innerHTML='<h2>'+esc(label)+'</h2><div class="tagline">从 ART_CHAR_001_v02 原图无损裁取</div>'+
+      '<div class="block"><h3>文件</h3><ul class="filelist"><li><a href="'+esc(href)+'" target="_blank">'+
+      esc(href)+'</a></li></ul></div>'+
+      '<div class="warn">这是 AI 视频参考图，不是 Godot 运行时精灵。不要放进 assets/，也不要当作动画帧。</div>';
+    $('modal').classList.add('show');document.body.style.overflow='hidden';
+  }
+
+  /* ------------------------------------------------ 动作状态 / 缺口 */
   function renderGaps(){
-    $('title').textContent='动作缺口';
-    $('count').textContent='已确认但尚未交付的动作　·　'+GAPS.length+' 项';
-    $('hint').textContent='这些是开发与美术双方都认账的缺口，不是遗漏。收到对应视频后再逐项消掉。';
+    var cs=META.charActions||[];
+    $('title').textContent='角色动作状态';
+    $('count').textContent='旧 r01–r09 已全部删除　·　'+cs.length+' 个动作待重做';
+    $('hint').textContent='ART-RESET-001 起许知夏没有任何运行时动画。'
+      +'下表是真实状态：不是「尚未提交」，是「已删除、待重新制作」。收到 AI 视频后再逐项消掉。';
+    var badge=function(st){
+      var c=st==='待重新制作'?'#c9882f':(st==='未开始'?'#8a8f96':'#b0553f');
+      return '<span class="pill" style="color:'+c+';background:'+c+'22">'+esc(st)+'</span>'};
+    var charRows=cs.map(function(a){
+      return '<tr><td>'+esc(a.act)+'　<code>'+esc(a.slug)+'</code></td><td>'+esc(a.desc)+
+        '</td><td><code>ART_CHAR_001</code></td><td>'+badge(a.state)+'</td></tr>'}).join('');
+    var otherRows=GAPS.map(function(g){
+      return '<tr><td>'+esc(g[0])+'</td><td>'+esc(g[1])+'</td><td><code>'+esc(g[2])+
+        '</code></td><td>'+badge(g[3])+'</td></tr>'}).join('');
     $('view').innerHTML='<table class="gaps"><thead><tr><th>动作</th><th>说明</th>'+
-      '<th>归属素材</th><th>状态</th></tr></thead><tbody>'+
-      GAPS.map(function(g){return '<tr><td>'+esc(g[0])+'</td><td>'+esc(g[1])+'</td><td><code>'+
-        esc(g[2])+'</code></td><td>'+esc(g[3])+'</td></tr>'}).join('')+'</tbody></table>';
+      '<th>归属素材</th><th>状态</th></tr></thead><tbody>'+charRows+otherRows+'</tbody></table>';
   }
 
   function render(){
@@ -757,27 +834,66 @@ footer{padding:0 30px 40px;color:var(--muted);font-size:11.5px;max-width:1720px;
 """
 
 
-def build_ref_panels(data: list[dict]) -> list[dict]:
-    """把 REF_ACTIONS 与台账里的 参考用途 对齐，顺带报出缺哪些图。"""
+def scan_crops() -> list[dict]:
+    """扫 参考图/ 目录里的 v02 裁图。不占素材 ID，因此不进台账，由页面单独展示。"""
     out = []
-    for act, slug, desc, want_ids in REF_ACTIONS:
+    d = LIB / CROP_DIR
+    if not d.is_dir():
+        return out
+    order = ["right", "left", "front", "back", "face"]
+    found = {p.stem.rsplit("_", 1)[-1]: p for p in d.glob("ART_CHAR_001_v02_ref_*.png")}
+    for key in [k for k in order if k in found] + sorted(set(found) - set(order)):
+        p = found[key]
+        label, hint = CROP_LABELS.get(key, (key, ""))
+        try:
+            with Image.open(p) as im:
+                size = im.size
+        except Exception:
+            size = (0, 0)
+        out.append({
+            "key": key,
+            "label": label,
+            "hint": hint,
+            "href": f"{CROP_DIR}/{p.name}",
+            "thumb": f".thumbs/crop_{key}.jpg",
+            "size": f"{size[0]}×{size[1]}",
+        })
+    return out
+
+
+def build_ref_panels(data: list[dict], crops: list[dict]) -> list[dict]:
+    """把 REF_ACTIONS 与台账里的 参考用途 对齐，顺带报出缺哪些图。"""
+    have = {c["key"] for c in crops}
+    out = []
+    for act, slug, desc, crop_keys, want_ids in REF_ACTIONS:
         keys = [d["key"] for d in data if act in d["refFor"]]
         missing = [wid for wid in want_ids
                    if not any(k.startswith(wid + "@") for k in keys)]
-        out.append({"act": act, "slug": slug, "desc": desc, "ids": keys, "missing": missing})
+        out.append({
+            "act": act, "slug": slug, "desc": desc, "ids": keys,
+            "crops": [c["key"] for c in crops if c["key"] in crop_keys],
+            "cropMissing": [c for c in crop_keys if c not in have],
+            "missing": missing,
+        })
     return out
 
 
 def main() -> None:
     data = build_data()
     build_revised_ledger()
+    crops = scan_crops()
+    for c in crops:
+        make_thumb(LIB / c["href"], LIB / c["thumb"])
     meta = {
         "cats": CATEGORIES,
         "states": STATUSES,
         "acts": ACT_GROUPS,
         "tags": [{"name": n, "desc": d} for n, d in MARK_TAGS],
-        "refs": build_ref_panels(data),
+        "crops": crops,
+        "refs": build_ref_panels(data, crops),
         "gaps": ACTION_GAPS,
+        "charActions": [{"act": a, "slug": s_, "desc": d, "state": st}
+                        for a, s_, d, st in CHAR_ACTION_STATE],
     }
     payload = json.dumps(data, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
     meta_payload = json.dumps(meta, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
@@ -792,9 +908,10 @@ def main() -> None:
     n_frames = sum(len(d["frameHrefs"]) for d in data)
     print(f"资产 {len(data)} 条，缩略图 {sum(1 for d in data if d['thumb'])} 张，"
           f"序列帧 {n_frames} 张 / GIF {n_gif} 个")
+    print(f"v02 裁图 {len(crops)} 张：{', '.join(c['label'] for c in crops) or '（无）'}")
     for r in meta["refs"]:
         flag = f"（缺 {', '.join(r['missing'])}）" if r["missing"] else ""
-        print(f"  参考图 {r['act']}：{len(r['ids'])} 张 {flag}")
+        print(f"  参考图 {r['act']}：裁图 {len(r['crops'])} + 台账 {len(r['ids'])} {flag}")
     print(f"预览页：{HTML_PATH}  ({HTML_PATH.stat().st_size:,} 字节)")
     print(f"ID 修订版：{REVISED_PATH}")
 

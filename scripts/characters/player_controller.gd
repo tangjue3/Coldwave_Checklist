@@ -1,65 +1,32 @@
 class_name PlayerController
 extends CharacterBody2D
-## 角色移动底座（CORE-001A 建立 / CORE-001B 接推车 / ART-INTEGRATE-002 接行走动画）
-## ART-INTEGRATE-005 接 r04 推车四帧 / ART-INTEGRATE-005E 接 r09 扶车返工十六帧
+## 角色移动底座（CORE-001A 建立 / CORE-001B 接推车）
 ##
-## 适用范围：购物 + 建造的**横向叙事**游戏。
-## 本组件只做：水平移动 / 停下 / 朝向 / 碰撞 / 脚底接地 / 供相机跟随的锚点 / 播放待机与行走动画。
-## 明确不做：跳跃、重力、攻击、平台动作、转身与搬运动作（美术尚未交付）。
+## ART-RESET-001：许知夏旧运行时角色素材（r01–r09）**已全部删除**，
+## 本组件现在只保留与美术无关的功能层：水平移动 / 停下 / 朝向 / 碰撞 / 脚底接地 /
+## 外部接管（推车） / 交互锚点。**没有任何贴图与动画。**
 ##
-## 坐标约定（很重要）：
-##   - **节点原点 = 角色脚底**。纹理是 128×176、脚底在 (64,168)，所以 sprite 的
-##     offset 让像素 (64,168) 落在节点原点。
+## 美术状态：角色渲染暂时为空，这是明确的当前状态，不是遗漏。
+## 新外观动画要等用户按 `素材库/美术设定集/01-角色/参考图/` 的五张裁图生成 AI 视频，
+## 再由 VIDEO-INTEGRATE 任务拆帧接入。届时只加渲染层，不动这里的移动与碰撞。
+##
+## 坐标约定（仍然有效，将来接新帧必须遵守）：
+##   - **节点原点 = 角色脚底**。
+##   - 新的角色帧画布若沿用 128×176，脚底应落在 (64,168)；
+##     Sprite 节点已按 centered=false、offset=(-64,-168) 摆好，直接换 SpriteFrames 即可。
 ##   - 向上为负 y，地面线由导出属性 `ground_y` 显式给出，不依赖视口 y=416。
 ##   - 贴图固定 1:1：禁止用 scale、小数倍缩放或线性过滤去"修"尺寸。
-##
-## 绘制对齐（ART-INTEGRATE-002）：
-##   交付的四帧行走与 r01 静止帧**身体中轴不在同一列**（头中心 r01=63.5、r02 四帧=59.5），
-##   直接播会在 待机↔行走 切换时横跳 4px。这里不再硬编码某个补偿值，而是**自动量**每张帧的
-##   "身体中轴"（取头顶 32 行 alpha 包围盒中心，头不会随手脚摆动而移动），再反推 sprite.offset，
-##   让任何帧的身体中轴都落在节点原点左侧 0.5px（= r01 的原始观感）。
-##   这只改**绘制偏移**，不碰碰撞盒、不碰节点坐标：世界位置永远是唯一真相。
-##   朝左镜像的 1px 也由同一套计算覆盖（镜像后中轴跟着镜像，offset 自动反向补偿）。
 
 signal facing_changed(dir: int)
 signal state_changed(state: StringName)
 
 const STATE_IDLE := &"idle"
 const STATE_WALK := &"walk"
-const ANIM_IDLE := &"idle"
-const ANIM_WALK := &"walk_right"
-## ART-RUNTIME-003B：扶车静止姿态（r03 单帧）。
-const ANIM_PUSH := &"push_idle"
-## ART-RUNTIME-005：推车行走四帧（r04，待审核 / 引擎试用）。
-## 只在「绑定推车 + 向前实际移动」时播放；撞墙位移 0 或反向拉车都不播。
-const ANIM_PUSH_WALK := &"push_walk_right"
-## ART-ANIM-005E：r09 扶车返工（ART-APPROVE-005E 已批准运行时可用，正式默认）。
-## 静止 1 帧 + 推车行走 16 帧，10 FPS、loop，只在「绑定 + 向前实际移动」时播放。
-## 与 r03 / r04 动画并存，不删除旧资源；用 push_anim_variant 一键回退做 A/B。
-const ANIM_PUSH_R09 := &"r09_push_idle"
-const ANIM_PUSH_WALK_R09 := &"r09_push_walk_right"
-const PUSH_ANIM_R04 := &"r04"
-const PUSH_ANIM_R09 := &"r09"
-
-## 身体中轴的目标位置（相对节点原点）。r01 的原始画法就是 -0.5，保持不变以免改动既有观感。
-const TARGET_AXIS_X := -0.5
 
 ## 水平最大速度 px/s。160px 人物按 1.72m 折算 → 100px/s ≈ 1.08 m/s，接近正常步行。
 @export var move_speed: float = 100.0
 @export var accel: float = 900.0
 @export var decel: float = 1400.0
-
-## 行走动画帧率。交付说明建议 6–7 FPS 起测，这里做成导出项，方便不进编辑器就能调。
-@export var walk_fps: float = 7.0
-## 推车行走帧率（r04）。交付包建议 6 FPS 起测、7 FPS 对照；A/B 由验证场景切换。
-@export var push_walk_fps: float = 6.0
-## ART-INTEGRATE-005E：默认使用 r09 返工动作；切到 r04 可一键回退到上一版四帧。
-## 两个版本共用同一套 push_pose / push_walk_active 状态机，不另建动画状态机。
-@export var push_anim_variant: StringName = PUSH_ANIM_R09
-## r09 推车行走帧率：美术按 80px/s ÷ 10FPS = 8px/帧 绑定步距，不要为观感私改。
-@export var push_walk_r09_fps: float = 10.0
-## 手工微调绘制偏移（正常应为 0；只有在美术确认过某个固定补偿时才用它，别拿它盖住对轴问题）
-@export var draw_offset_bias := Vector2.ZERO
 
 ## 脚底接地的世界 y。没有重力/跳跃，用显式值而不是物理下落。
 @export var ground_y: float = 0.0
@@ -79,48 +46,42 @@ var state: StringName = STATE_IDLE
 var external_control: bool = false
 
 ## 扶车姿态开关。打开时由 PushableCart 在绑定 / 解绑时切换。
+## 目前没有扶车动画，这个开关只作为**状态标记**保留给交互与测试读取，
+## 不再驱动任何帧切换；接新动画时在这里接上。
 var push_pose: bool = false
-## 推车行走开关：绑定且**向前实际推行**时由 PushableCart 每帧驱动为 true。
-## 反向拉车与撞墙（实际位移 0）都保持 false → 继续播 push_idle 单帧（原有过渡，
-## 拉车脚步滑动问题保留现状，待美术后续决定是否补反向帧）。
+## 推车行走开关：绑定且向前实际推行时由 PushableCart 每帧驱动。
 var push_walk_active: bool = false
 
 var _override := 0.0
 var _has_override := false
-## 截图时冻结在某帧：冻结期间 _sync_animation 不抢回播放
-var _frozen := false
-var _base_offset_y := -168.0
-## 纹理 → 身体中轴 x 的缓存，避免每帧扫描像素
-var _axis_cache: Dictionary = {}
+var _no_visual_warned := false
 
 
 func _ready() -> void:
 	motion_mode = CharacterBody2D.MOTION_MODE_FLOATING  # 无重力、无平台
-	# 像素画固定 1:1，Nearest，禁止任何缩放修补
 	_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	_sprite.scale = Vector2.ONE
-	_base_offset_y = _sprite.offset.y
-	_apply_walk_fps()
-	_sprite.frame_changed.connect(_apply_visual_offset)
-	_sprite.animation = ANIM_IDLE
-	_sprite.play(ANIM_IDLE)
+	# ART-RESET-001：没有 SpriteFrames 就是没有美术，直接隐藏节点。
+	# 不加载任何旧人物贴图，也不留一张"占位图"假装角色还在。
+	if _sprite.sprite_frames == null:
+		_sprite.visible = false
+		_warn_no_visual()
 	set_facing(1)
-	_apply_visual_offset()
 	if snap_to_ground:
 		global_position.y = ground_y
 
 
-## 帧率写进 SpriteFrames 的副本，避免为了调一个数字去改资源文件
-func _apply_walk_fps() -> void:
-	var frames := _sprite.sprite_frames
-	if frames == null:
+## 当前是否真的有角色贴图。测试用它区分「功能通过」与「美术缺失」，不许把两者混为一谈。
+func has_visual() -> bool:
+	return _sprite != null and _sprite.sprite_frames != null \
+		and _sprite.sprite_frames.get_animation_names().size() > 0
+
+
+func _warn_no_visual() -> void:
+	if _no_visual_warned:
 		return
-	if frames.has_animation(ANIM_WALK):
-		frames.set_animation_speed(ANIM_WALK, walk_fps)
-	if frames.has_animation(ANIM_PUSH_WALK):
-		frames.set_animation_speed(ANIM_PUSH_WALK, push_walk_fps)
-	if frames.has_animation(ANIM_PUSH_WALK_R09):
-		frames.set_animation_speed(ANIM_PUSH_WALK_R09, push_walk_r09_fps)
+	_no_visual_warned = true
+	print("[PLAYER] 角色渲染为空：ART-RESET-001 已删除 r01–r09 旧素材，新动画待 AI 视频接入。")
 
 
 func _physics_process(delta: float) -> void:
@@ -157,106 +118,6 @@ func _update_state() -> void:
 	if next != state:
 		state = next
 		state_changed.emit(state)
-	_sync_animation()
-
-
-## 动画选择只有这一处：扶车姿态优先（实际推行 → 当前版本的推车行走；否则扶车静止），
-## 其次普通走/停。r04 / r09 共用同一套 push_pose + push_walk_active 判断，不另建状态机。
-func _sync_animation() -> void:
-	if _frozen:
-		return
-	var anim: StringName
-	if push_pose:
-		var frames := _sprite.sprite_frames
-		var has_frames := frames != null
-		var use_r09 := push_anim_variant == PUSH_ANIM_R09
-		var idle_anim := ANIM_PUSH_R09 if use_r09 else ANIM_PUSH
-		var walk_anim := ANIM_PUSH_WALK_R09 if use_r09 else ANIM_PUSH_WALK
-		if push_walk_active and has_frames and frames.has_animation(walk_anim):
-			anim = walk_anim
-		elif has_frames and frames.has_animation(idle_anim):
-			anim = idle_anim
-		else:
-			# 资源缺失时退回已验收的 r03 扶车静止帧，绝不让动画悬空
-			anim = ANIM_PUSH
-	elif state == STATE_WALK:
-		anim = ANIM_WALK
-	else:
-		anim = ANIM_IDLE
-	if _sprite.animation == anim and _sprite.is_playing():
-		return
-	_sprite.play(anim)
-	# 打一行日志：桌面端与 Web 端都靠它断言"动画真的切了"，因为画面在画布上读不到
-	print("[ANIM] %s 帧数=%d FPS=%.1f" % [
-		String(anim), _sprite.sprite_frames.get_frame_count(anim),
-		_sprite.sprite_frames.get_animation_speed(anim)])
-	# play() 之后当前帧立即是 0，先把偏移对齐，别等下一次 frame_changed
-	_apply_visual_offset()
-
-
-# ------------------------------------------------------------------ 绘制对齐
-
-## 应用到 sprite.offset：让当前帧的身体中轴落在 TARGET_AXIS_X。
-## 镜像时中轴在纹理里的位置跟着镜像，所以这里用两套公式，而不是简单加一个常数。
-func _apply_visual_offset() -> void:
-	var tex := current_texture()
-	if tex == null:
-		return
-	var axis := _body_axis(tex)
-	var w := float(tex.get_width())
-	var off_x := (axis - w + TARGET_AXIS_X) if _sprite.flip_h else (TARGET_AXIS_X - axis)
-	_sprite.offset = Vector2(off_x, _base_offset_y) + draw_offset_bias
-
-
-## 身体中轴：取头顶 32 行 alpha 包围盒的水平中心。
-## 头不会随手脚摆动而移动，比整体包围盒稳定（整体 bbox 会因跨步从 41px 变到 74px）。
-func _body_axis(tex: Texture2D) -> float:
-	var key := tex.get_instance_id()
-	if _axis_cache.has(key):
-		return float(_axis_cache[key])
-	var img := tex.get_image()
-	var axis := float(tex.get_width()) * 0.5
-	if img != null:
-		var used := img.get_used_rect()
-		var band_top := used.position.y
-		var band_h := mini(32, maxi(1, used.size.y))
-		var left := 1 << 30
-		var right := -1
-		for y in range(band_top, band_top + band_h):
-			for x in img.get_width():
-				if img.get_pixel(x, y).a > 0.5:
-					left = mini(left, x)
-					right = maxi(right, x)
-		if right >= left:
-			axis = (float(left) + float(right) + 1.0) * 0.5
-	_axis_cache[key] = axis
-	return axis
-
-
-func current_texture() -> Texture2D:
-	var frames := _sprite.sprite_frames
-	if frames == null or not frames.has_animation(_sprite.animation):
-		return null
-	var n := frames.get_frame_count(_sprite.animation)
-	if n <= 0:
-		return null
-	return frames.get_frame_texture(_sprite.animation, clampi(_sprite.frame, 0, n - 1))
-
-
-## 开发截图用：冻结在某个动画的某一帧，不推进
-func freeze_frame(anim: StringName, index: int) -> void:
-	if _sprite.sprite_frames == null or not _sprite.sprite_frames.has_animation(anim):
-		return
-	_frozen = true
-	_sprite.play(anim)
-	_sprite.pause()
-	_sprite.frame = clampi(index, 0, _sprite.sprite_frames.get_frame_count(anim) - 1)
-	_apply_visual_offset()
-
-
-func resume_animation() -> void:
-	_frozen = false
-	_sync_animation()
 
 
 # ------------------------------------------------------------------ 对外接口
@@ -277,35 +138,19 @@ func set_external_control(on: bool) -> void:
 		velocity = Vector2.ZERO
 
 
-## 扶车姿态开关（推车绑定/解绑时切）。
-## 绑定期间播 push_idle 还是 push_walk_right 由 push_walk_active 决定。
+## 扶车姿态开关（推车绑定/解绑时切）。当前只记状态，不切帧。
 func set_push_pose(on: bool) -> void:
 	if push_pose == on:
 		return
 	push_pose = on
 	if not on:
 		push_walk_active = false
-	_sync_animation()
 
 
 ## 推车行走开关：由 PushableCart 每帧驱动——向前实际移动 true，停住/拉车/撞墙 false。
+## 当前只记状态，不切帧；接新动画时由这里决定播哪一组。
 func set_push_moving(moving: bool) -> void:
-	if push_walk_active == moving:
-		return
 	push_walk_active = moving
-	_sync_animation()
-
-
-## 切换扶车动画版本（r09 默认 / r04 回退）。只换动画名，不碰任何状态与物理。
-func set_push_anim_variant(variant: StringName) -> void:
-	if variant != PUSH_ANIM_R09 and variant != PUSH_ANIM_R04:
-		push_warning("[ANIM] 未知扶车动画版本 %s，保持 %s" % [variant, push_anim_variant])
-		return
-	if push_anim_variant == variant:
-		return
-	push_anim_variant = variant
-	_apply_walk_fps()
-	_sync_animation()
 
 
 func is_pushing_pose() -> bool:
@@ -317,9 +162,8 @@ func set_facing(dir: int) -> void:
 	if d == facing and _sprite.flip_h == (d < 0):
 		return
 	facing = d
-	# 只有朝右的帧；朝左是临时镜像，仅供控制测试，不是正式左右动作。
+	# 目前没有贴图，flip_h 只作为将来镜像绘制的开关位保留，不影响碰撞与世界坐标。
 	_sprite.flip_h = d < 0
-	_apply_visual_offset()
 	facing_changed.emit(facing)
 
 
@@ -339,23 +183,7 @@ func teleport_to(x: float) -> void:
 	velocity = Vector2.ZERO
 
 
-# ------------------------------------------------------------------ 量尺寸
-
-## 可见包围盒（本地坐标，相对脚底原点）。从当前帧的 alpha 实测，不是写死的数。
-func visible_bbox() -> Rect2:
-	var tex := current_texture()
-	if tex == null:
-		return Rect2()
-	var img := tex.get_image()
-	if img == null:
-		return Rect2()
-	var used := img.get_used_rect()
-	var x := float(used.position.x)
-	# 朝左时贴图水平镜像，包围盒必须跟着镜像，否则叠加层会偏（画布左右不对称）
-	if _sprite.flip_h:
-		x = float(img.get_width() - used.position.x - used.size.x)
-	return Rect2(Vector2(x, float(used.position.y)) + _sprite.offset, Vector2(used.size))
-
+# ------------------------------------------------------------------ 量尺寸（只量碰撞）
 
 ## 测试用：临时改碰撞宽度，验证碰撞确实生效（不是靠贴图挡人）
 func set_collision_width(w: float) -> void:
@@ -380,32 +208,3 @@ func collision_rect() -> Rect2:
 	if shape == null:
 		return Rect2()
 	return Rect2(_collision.position - shape.size * 0.5, shape.size)
-
-
-func sprite_texture_size() -> Vector2:
-	var tex := current_texture()
-	return Vector2(tex.get_size()) if tex != null else Vector2.ZERO
-
-
-func sprite_draw_rect() -> Rect2:
-	return Rect2(_sprite.offset, sprite_texture_size())
-
-
-func sprite_node() -> AnimatedSprite2D:
-	return _sprite
-
-
-## 当前帧绘制后身体中轴落在节点原点的哪一侧（本地坐标）。
-## 镜像时纹理被翻转，中轴在纹理里的位置也跟着翻，所以这里按 flip 分别算。
-func drawn_body_axis() -> float:
-	var tex := current_texture()
-	if tex == null:
-		return 0.0
-	var axis := _body_axis(tex)
-	var local_axis := (float(tex.get_width()) - axis) if _sprite.flip_h else axis
-	return _sprite.offset.x + local_axis
-
-
-func body_axis_of_current() -> float:
-	var tex := current_texture()
-	return _body_axis(tex) if tex != null else 0.0
