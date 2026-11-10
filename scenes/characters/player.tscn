@@ -13,9 +13,10 @@ motion_mode = 1
 script = ExtResource("1_ctrl")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
-texture_filter = 1
+texture_filter = 2
 centered = false
-offset = Vector2(-64, -168)
+offset = Vector2(-256, -672)
+scale = Vector2(0.25, 0.25)
 sprite_frames = ExtResource("2_frames")
 animation = &"idle_right"
 

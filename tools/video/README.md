@@ -39,7 +39,8 @@ python tools/video/pipeline.py all   转存库/ART_CHAR_001_walk_right_source.mp
 ```
 frames_raw/    原始帧（带背景）
 frames_matte/  抠像后 RGBA
-frames_out/    128×176 / 脚底 (64,168) 的成品帧 ← 引擎读这个
+frames_out/    128×176 / 脚底 (64,168) 的候选帧 ← --dev-scene=video 体检读这个
+                （正式接入帧由 quality_002.py 输出 512×704 / 脚底 (256,672)）
 preview/       contact_sheet.png（一行 8 帧的接触表）+ loop.gif
 meta.json      参数与体检结论
 ```

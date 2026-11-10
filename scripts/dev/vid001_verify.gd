@@ -15,9 +15,15 @@ extends Node2D
 
 const VIEW := Vector2(960, 540)
 const GROUND_Y := 416.0
-const FRAME_W := 128
-const FRAME_H := 176
-const ANCHOR := Vector2(64, 168)
+# VIDEO-QUALITY-002：贴图 512×704（上一轮 128×176 的严格 4×），
+# 由 player.tscn 的 scale=0.25 缩回同样的显示大小。
+const TEX_W := 512
+const TEX_H := 704
+const ANCHOR := Vector2(256, 672)     # 贴图内的脚底锚点
+const ANCHOR_Y := 672
+const FOOT_TOL := 8                   # 4× 于上一轮的 ±2
+const ZOOM_W := 256                   # 放大镜：高清源 0.5× = 游戏显示尺寸的 2×
+const ZOOM_H := 352
 const SHOT_DIR := "res://tests/screenshots"
 const MOVIE_DIR := "res://tests/screenshots/vid001_movie"
 const PLAYER_SCENE := preload("res://scenes/characters/player.tscn")
@@ -72,16 +78,18 @@ func _ready() -> void:
 	add_child(_player)
 
 	_zoom_sprite = Sprite2D.new()
-	_zoom_sprite.name = "Zoom3x"
+	_zoom_sprite.name = "HDDetail"
 	_zoom_sprite.centered = false
-	_zoom_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	_zoom_sprite.scale = Vector2(2, 2)
+	_zoom_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+	_zoom_sprite.scale = Vector2(0.5, 0.5)
 	_zoom_sprite.position = Vector2(694.0, 58.0)
 	add_child(_zoom_sprite)
 
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(SHOT_DIR))
 	if _args.has("vid001_test"):
 		await _run_tests()
+	elif _args.has("vid001_hires"):
+		await _run_hires()
 	elif _args.has("vid001_tour"):
 		await _run_tour()
 	elif _args.has("vid001_movie"):
@@ -162,12 +170,12 @@ func _draw() -> void:
 			String(_player.state), String(_player.current_anim()), spr.frame,
 			_player.anim_frame_count(), _player.anim_fps(), _player.position.x,
 			"R" if _player.facing > 0 else "L", str(spr.flip_h)], 12, C_MUTED)
-	_text(20, 94, "move_speed=100 px/s   ground_y=416   frame 128x176   anchor (64,168)   Nearest 1:1",
+	_text(20, 94, "move_speed=100 px/s   ground_y=416   texture 512x704 @0.25   anchor (256,672)   Linear",
 		11, C_MUTED)
 
-	# 2x 放大镜框：384x352 是 960x540 视口里能完整装下、且不与地面线打架的最大倍率
-	draw_rect(Rect2(684, 48, FRAME_W * 2 + 20, FRAME_H * 2 + 20), C_TICK, false, 1.0)
-	_text(684, 40, "2x Nearest zoom (edge / feet inspection)", 12, C_MUTED)
+	# 放大镜框：高清源按 0.5 显示 → 256x352，等于游戏显示尺寸的 2×
+	draw_rect(Rect2(684, 48, ZOOM_W + 20, ZOOM_H + 20), C_TICK, false, 1.0)
+	_text(684, 40, "HD source 0.5x = 2x game size (detail check)", 12, C_MUTED)
 	if not _test_lines.is_empty():
 		var y: float = 120.0
 		for line in _test_lines:
@@ -237,7 +245,7 @@ func _run_tests() -> void:
 			if tex == null:
 				bad_size += 1
 				continue
-			if tex.get_size() != Vector2(FRAME_W, FRAME_H):
+			if tex.get_size() != Vector2(TEX_W, TEX_H):
 				bad_size += 1
 				continue
 			var img := tex.get_image()
@@ -253,7 +261,8 @@ func _run_tests() -> void:
 			for y in range(h):
 				var row_has := false
 				var base := y * stride
-				for px in range(w):
+				# 512×704×58 帧逐像素太慢，按 4 像素步长采样做质量断言
+				for px in range(0, w, 4):
 					var o := base + px * 4
 					if data[o + 3] < 10:
 						continue
@@ -266,10 +275,10 @@ func _run_tests() -> void:
 				if row_has:
 					bottom = y
 			foot_rows.append(bottom)
-			if absi(bottom - 168) > 2:
+			if absi(bottom - ANCHOR_Y) > FOOT_TOL:
 				bad_foot += 1
-	_ok(bad_size == 0, "全部 58 帧尺寸 128×176", "异常 %d" % bad_size)
-	_ok(bad_foot == 0, "全部帧脚底落在 y=168±2", "异常 %d，范围 %d–%d" % [
+	_ok(bad_size == 0, "全部 58 帧尺寸 512×704", "异常 %d" % bad_size)
+	_ok(bad_foot == 0, "全部帧脚底落在 y=672±8（等价 1x 的 ±2）", "异常 %d，范围 %d–%d" % [
 		bad_foot, foot_rows.min(), foot_rows.max()])
 	_ok(green_px == 0, "透明 PNG 里没有绿色残留像素", "%d px" % green_px)
 
@@ -346,6 +355,31 @@ func _finish() -> void:
 	_capture("vid001_test.png")
 	if _args.has("quit") or _args.has("vid001_test"):
 		get_tree().quit(1 if _fails > 0 else 0)
+
+
+# ---------------------------------------------------------------- 高 DPI 实机验证
+func _run_hires() -> void:
+	# 把窗口开到 1920×1080（960×540 的 2× 整数倍），用来验证
+	# stretch/mode=canvas_items 下高清贴图是否真的多出细节。
+	get_window().size = Vector2i(1920, 1080)
+	await _frames(8)
+	print("[VID001] hires window=%s viewport_tex=%s stretch=%s" % [
+		str(get_window().size), str(get_viewport().get_texture().get_size()),
+		"canvas_items" if ProjectSettings.get_setting("display/window/stretch/mode") == "canvas_items"
+		else "viewport"])
+	_player.set_input_override(1.0)
+	await _frames(40)
+	_caption = "hires 2x window: walk_right 36f / 24FPS"
+	queue_redraw()
+	await _frames(2)
+	_capture("vid001_hires_walk.png")
+	_player.set_input_override(0.0)
+	await _frames(100)
+	_caption = "hires 2x window: idle_right"
+	queue_redraw()
+	await _frames(2)
+	_capture("vid001_hires_idle.png")
+	get_tree().quit(0)
 
 
 # ---------------------------------------------------------------- 检查点截图

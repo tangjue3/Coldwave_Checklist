@@ -11,9 +11,14 @@ extends CharacterBody2D
 ## 美术总览正式状态。审核不通过时把 player.tscn 的 SpriteFrames 外链摘掉即可回退。
 ##
 ## 坐标约定（不变）：
-##   - 节点原点 = 角色脚底；帧画布 128×176，脚底落在 (64,168)。
-##   - Sprite：centered=false、offset=(-64,-168)、Nearest、1:1，禁止缩放。
-##   - 朝左用 flip_h 镜像，碰撞盒与世界坐标不变。
+##   - 节点原点 = 角色脚底；帧画布 **512×704**，脚底落在 **(256,672)**。
+##   - VIDEO-QUALITY-002 起贴图几何全部由 `player.tscn` 单一管理：
+##     `centered=false / offset=(-256,-672) / scale=(0.25,0.25)`，
+##     画面上仍是 128×176 的显示大小，脚底锚点仍落在世界 (0,0)。
+##   - 贴图用 **LINEAR**（texture_filter=2，由 player.tscn 设置）：512×704 缩小 4 倍时
+##     NEAREST 会抽样出锯齿，mipmap 又会让 1× 窗口明显变软（实测锐度掉 39%），
+##     LINEAR 是实测最优。只改角色这一个 CanvasItem，全局像素素材仍是 Nearest。
+##   - 禁止用 scale 去"修"角色的实际显示大小；要改就改贴图分辨率与 offset。
 
 signal facing_changed(dir: int)
 signal state_changed(state: StringName)
@@ -75,8 +80,8 @@ var _in_stop_transition := false
 
 func _ready() -> void:
 	motion_mode = CharacterBody2D.MOTION_MODE_FLOATING  # 无重力、无平台
-	_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	_sprite.scale = Vector2.ONE
+	# 贴图过滤 / scale / offset 全部由 player.tscn 配置（VIDEO-QUALITY-002 单一数据源）。
+	# 这里**不再覆盖**，否则两处不一致会把高清缩放悄悄改回 1:1。
 	if has_visual():
 		_sprite.visible = true
 		_sprite.animation_finished.connect(_on_animation_finished)

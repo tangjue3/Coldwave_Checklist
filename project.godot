@@ -23,7 +23,10 @@ window/size/viewport_width=960
 window/size/viewport_height=540
 window/size/resizable=true
 window/size/mode=0
-window/stretch/mode="viewport"
+; VIDEO-QUALITY-002：viewport 模式会把渲染目标钉死在 960×540 再整数放大，
+; 512×704 的角色贴图在 2x 窗口里仍只有 128×176 个采样点，高清完全白费。
+; 改 canvas_items：渲染分辨率随窗口提升，整数缩放保留，像素素材与 UI 逻辑尺寸不变。
+window/stretch/mode="canvas_items"
 window/stretch/aspect="keep"
 window/stretch/scale_mode="integer"
 window/vsync/vsync_mode=1

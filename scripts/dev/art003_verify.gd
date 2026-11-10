@@ -14,8 +14,8 @@ extends Node2D
 ## 明确不做：购物、结算、库存、存档、TileSet、动画生成。
 ##
 ## 命令行（写在 `--` 之后，须带 --dev-scene=art003）：
-##   --art003-tour               六个检查点各截「叠加层关 / 开」两张后退出
-##   --art003-state=hand_r|hand_l|shelves|compare|overview|mirror   只渲染一个检查点
+##   --art003-tour               四个检查点各截「叠加层关 / 开」两张后退出
+##   --art003-state=shelves|items|compare|overview   只渲染一个检查点
 ##   --art003-test               跑七组实机用例后退出（不截图）
 ##   --shot=name.png             单检查点截图
 ##   --quit                      完成后退出
@@ -64,7 +64,7 @@ const STATE_LABELS := {
 	"shelves": "① 四层空货架 + 32×32 上架商品 + 64×48 / 64×64 落地商品",
 	"items": "①b 商品归属核对：101 必须是蓝灰水、102 必须是棕色纸箱（64 与 32 两种尺寸）",
 	"compare": "② 旧车 r01（可见 96×74）与新车 r02（可见 96×90）对照",
-	"overview": "③ 综合实机：货架 / 商品 / 推车同屏（角色渲染为空）",
+	"overview": "③ 综合实机：货架 / 商品 / 推车同屏（vid001 候选动画）",
 }
 
 var _args: Dictionary = {}
@@ -79,7 +79,7 @@ var _hud: CanvasLayer
 ## 各检查点的实测数据，供叠加层与报告引用
 var _hand: Dictionary = {}
 var _shelf_info: Dictionary = {}
-var _state := "hand_r"
+var _state := "shelves"
 
 ## 用于对照的一台"旧版车"精灵（只在本场景里当尺子用）
 var _r01_ghost: Sprite2D
@@ -338,15 +338,6 @@ func _draw_height_ruler() -> void:
 ## 画面里的静态说明（不是调试叠加层，属于验证展板的一部分）
 func _draw_captions() -> void:
 	match _state:
-		"hand_r", "hand_l":
-			var gap: float = float(_hand.get("gap", 0.0))
-			var side: int = int(_hand.get("side", -1))
-			_text(24, 40, STATE_LABELS["hand_r" if side < 0 else "hand_l"], 15, C_INK)
-			_text(24, 62, "逻辑间距 %.0f px（冻结值）· 手部与车把水平间隙 %+.1f px %s" % [
-				CART_SEP, gap, "（贴合）" if absf(gap) <= 8.0 else "（需修）"], 12,
-				C_OK if absf(gap) <= 8.0 else C_BAD)
-			_text(24, 82, "垂直差 %+.1f px · 车可见 96×90 · 人可见 58×160（r03 扶车姿态）" % [
-				float(_hand.get("dy", 0.0))], 11, C_MUTED)
 		"shelves":
 			_text(24, 40, STATE_LABELS["shelves"], 15, C_INK)
 			_text(24, 62, "层高 %s px · 内宽 %d px · 32×32 上架 · 64×48 / 64×64 只能落地" % [
