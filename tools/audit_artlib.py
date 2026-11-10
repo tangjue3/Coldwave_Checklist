@@ -187,7 +187,13 @@ def main() -> int:
                          if (r.get("动画帧序列") or "").strip()}, key=len, reverse=True)
     # ART-RESET-001：四张内容错误图已彻底删除，这里不再留例外。
     KNOWN_LEGACY: set[str] = set()
-    orphans, legacies = [], []
+    # VIDEO-INTEGRATE-001：vid001 是**候选**动画，明确不进台账、不进白名单，
+    # 等用户与美术审核通过后才登记。审计不能把它当孤儿报错，但也不能无条件放过：
+    # 必须与候选批次的 meta.json 对得上，且文件名带 vid001 标记。
+    CANDIDATE_DIR = "assets/characters/"
+    CANDIDATE_META = ROOT / "assets" / "dev" / "video_candidates" / \
+        "VIDEO-INTEGRATE-001" / "meta.json"
+    orphans, legacies, candidates = [], [], []
     for p in sorted(ASSETS.rglob("*.png")):
         rp = p.resolve()
         if rp in covered:
@@ -200,11 +206,29 @@ def main() -> int:
         if rel in KNOWN_LEGACY:
             legacies.append(rel)
             continue
+        if rel.startswith(CANDIDATE_DIR) and "vid001" in p.name:
+            candidates.append(rel)
+            continue
         orphans.append(rel)
     for rel in orphans:
         fail(f"assets/ 内有台账无法归属的文件：{rel}")
     for rel in legacies:
         warn(f"assets/ 内遗留判死素材（建议下一轮经确认后清理）：{rel}")
+    if candidates:
+        if not CANDIDATE_META.is_file():
+            fail(f"发现 {len(candidates)} 张 vid001 候选帧，但找不到批次 meta.json：{CANDIDATE_META}")
+        else:
+            import json
+            meta = json.loads(CANDIDATE_META.read_text(encoding="utf-8"))
+            declared = int(meta.get("godot", {}).get("frames_copied", 0))
+            if declared != len(candidates):
+                fail(f"vid001 候选帧 {len(candidates)} 张，与 meta.json 声明的 {declared} 张不符")
+            elif meta.get("status", "").find("候选") < 0:
+                fail("vid001 批次 meta 没标注「候选」，转正流程必须先走美术审核")
+            else:
+                print(f"  [INFO] vid001 候选动画 {len(candidates)} 张："
+                      f"由 {CANDIDATE_META.relative_to(ROOT).as_posix()} 管理，"
+                      f"待美术审核，暂不写入台账 / 白名单 / 总览正式状态")
 
     # ---------------------------------------------------------------- 7. .thumbs 一致性
     if THUMBS.is_dir():

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/dev/vid001_verify.gd" id="1_vid001"]
+
+[node name="Vid001Verify" type="Node2D"]
+script = ExtResource("1_vid001")

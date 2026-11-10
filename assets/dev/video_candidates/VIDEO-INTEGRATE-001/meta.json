@@ -1,0 +1,175 @@
+{
+  "task": "VIDEO-INTEGRATE-001",
+  "status": "候选 / 待用户与美术审核（未标最终成品）",
+  "source": {
+    "path": "D:\\work\\bisai\\Hackathon\\GAME\\Coldfront_Checklist\\转存库\\Generating_pixel_art_walking_ani…_0afbba1d.mp4",
+    "width": 720,
+    "height": 1280,
+    "fps": 24,
+    "frames": 192,
+    "duration_s": 8.043,
+    "codec": "h264/yuv420p",
+    "green_screen_rgb": [
+      28,
+      199,
+      50
+    ]
+  },
+  "phases": [
+    {
+      "name": "起始站立",
+      "first": 1,
+      "last": 6
+    },
+    {
+      "name": "起步",
+      "first": 7,
+      "last": 12
+    },
+    {
+      "name": "稳定行走",
+      "first": 13,
+      "last": 137
+    },
+    {
+      "name": "减速收脚",
+      "first": 138,
+      "last": 156
+    },
+    {
+      "name": "站立待机",
+      "first": 157,
+      "last": 192
+    }
+  ],
+  "matte": {
+    "frames": 192,
+    "green_residual_gt40": 368,
+    "green_residual_gt20": 571051,
+    "semi_transparent": 450757,
+    "color_exact_frames": "192/192",
+    "alpha_min": 143029,
+    "alpha_max": 192042
+  },
+  "align": {
+    "scale": 0.14808,
+    "source_person_h": 1094,
+    "target_person_h": 162,
+    "whole_frame_resized": [
+      107,
+      190
+    ],
+    "offset": [
+      13,
+      -9
+    ],
+    "source_axis_x": 342.5,
+    "foot_rows": [
+      166,
+      168
+    ],
+    "visible_heights": [
+      158,
+      163
+    ],
+    "resample": "premultiplied alpha → LANCZOS4(2x) → AREA(1x) → 轻 unsharp"
+  },
+  "segments": {
+    "walk_right": {
+      "source_frames": [
+        28,
+        63
+      ],
+      "count": 36,
+      "fps": 24,
+      "duration_s": 1.5,
+      "loop_alpha_jump": 3.8038,
+      "dir": "assets/dev/video_candidates/VIDEO-INTEGRATE-001/frames_out"
+    },
+    "walk_to_idle": {
+      "source_frames": [
+        137,
+        157
+      ],
+      "count": 21,
+      "fps": 24,
+      "duration_s": 0.875,
+      "loop_alpha_jump": 11.7591,
+      "dir": "assets/dev/video_candidates/VIDEO-INTEGRATE-001/walk_to_idle/frames_out"
+    },
+    "idle_right": {
+      "source_frames": [
+        175,
+        175
+      ],
+      "count": 1,
+      "fps": 8,
+      "duration_s": 0.125,
+      "loop_alpha_jump": 0.0,
+      "dir": "assets/dev/video_candidates/VIDEO-INTEGRATE-001/idle_right/frames_out"
+    }
+  },
+  "preview": {
+    "previews": [
+      "walk_right.gif",
+      "walk_to_idle.gif",
+      "idle_right.gif",
+      "contact_walk_right.png",
+      "contact_walk_to_idle.png"
+    ],
+    "slip": {
+      "speed_px_s": 100.0,
+      "loop_period_s": 1.5,
+      "game_travel_per_loop_px": 150.0,
+      "support_foot_screen_span_px": 43.2,
+      "game_travel_per_frame_px": 4.17,
+      "note": "视频是原地跟拍（人物画面质心 std 4.3px）；角色在游戏中平移，支撑脚无法完全锁地。这里记录真实滑移量，不做假修复。",
+      "foot_screen_drift_per_frame_px": 2.28,
+      "net_slip_per_frame_px": 1.89
+    }
+  },
+  "godot": {
+    "spriteframes": "assets/characters/player_sprite_frames.tres",
+    "animations": {
+      "walk_right": {
+        "frames": 36,
+        "fps": 24,
+        "loop": true
+      },
+      "walk_to_idle": {
+        "frames": 21,
+        "fps": 24,
+        "loop": false
+      },
+      "idle_right": {
+        "frames": 1,
+        "fps": 8,
+        "loop": true
+      }
+    },
+    "frames_copied": 58,
+    "candidate_tag": "vid001（候选，未登记、未进白名单）"
+  },
+  "speed_policy": {
+    "walk": 100,
+    "push": 80,
+    "pull": 40,
+    "note": "ART-RESET-001 裁定；70px/s 的 RIG 推演作废"
+  },
+  "known_issues": [
+    "视频是原地跟拍：人物画面质心 std 4.3px，接入 100px/s 平移后支撑脚无法完全锁地",
+    "walk_to_idle 只在 walk 循环末帧附近相位衔接自然；循环中段松手会有可见姿态跳变",
+    "源视频为平滑赛璐璐风格，v02 基准为像素画风，缩到 128×176 后风格仍有差异",
+    "面容在 1× 游戏尺寸下仅约 10px 高，细节不可辨（见 compare_game_scale.png）"
+  ],
+  "loop_quality": {
+    "loop_inner_mean": 0.03583,
+    "loop_inner_max": 0.04998,
+    "seam_jump": 0.02387,
+    "seam_ratio": 0.67,
+    "stop_from_loop_end": 0.03022,
+    "stop_from_worst_phase": 0.19748,
+    "visible_h_std": 1.48,
+    "foot_y_std": 0.78
+  }
+}

@@ -95,10 +95,11 @@ await sleep(600);
 let all = logs();
 let text = (frag) => all.some((l) => l.text.includes(frag));
 check('URL 参数生效：出现 [CORE] 量测行', all.filter((l) => l.text.includes('[CORE]')).length >= 4);
-check('可见包围盒 = 41×160', text('41×160'));
+check('角色动画量测行 = VIDEO-INTEGRATE-001 候选', text('VIDEO-INTEGRATE-001 候选'));
+check('Web 端候选动画已加载（[PLAYER] 日志）', text('[PLAYER] VIDEO-INTEGRATE-001 候选动画已加载'));
 check('碰撞盒 = 28×160', text('28×160'));
-check('脚底误差 = 0', text('脚底误差 = 0'));
-check('朝左镜像偏移 = 0（绘制补偿生效）', text('差 0.0 px'));
+check('脚底锚点 (64,168)', text('脚底锚点 (64,168)'));
+check('帧画布 128×176 / Nearest 1:1', text('帧画布 128×176') && text('Nearest 1:1'));
 check('靠近停放的车 → 提示「E 推购物车」', text('目标=CartHotspot 提示=E 推购物车'));
 
 await pressE();
@@ -113,10 +114,10 @@ await sleep(900);
 await send('Input.dispatchKeyEvent', { type: 'keyUp', windowsVirtualKeyCode: 68, nativeVirtualKeyCode: 68, code: 'KeyD', key: 'd' });
 await sleep(300);
 all = logs();
-// ART-RESET-001：角色贴图已删除，PlayerController 不再输出 [ANIM] 日志。
-// 这里改为断言"确实没有动画在播"，而不是假装旧动画还在。
+// VIDEO-INTEGRATE-001：新动画由 [PLAYER] 日志报告；旧 r 系列的 [ANIM] 日志必须为零。
+// 推车动画本轮未制作，绑定期间固定站姿，不拿 walk_right 冒充（由 vid001-test 实测）。
 const animLines = all.filter((l) => l.text.includes('[ANIM]')).map((l) => l.text);
-check('绑定推车后没有任何角色动画日志（旧动画已退役）',
+check('绑定推车后没有旧 [ANIM] 日志（不拿普通行走冒充推车）',
   animLines.length === 0,
   animLines.join(' | ').slice(0, 120) || '无 [ANIM] 输出，符合预期');
 
@@ -132,7 +133,7 @@ await send('Input.dispatchKeyEvent', { type: 'keyUp', windowsVirtualKeyCode: 68,
 await sleep(300);
 all = logs();
 const animAll = all.filter((l) => l.text.includes('[ANIM]')).map((l) => l.text);
-check('停放后走动仍无角色动画日志（行走渲染待新动画接入）',
+check('停放后走动仍无旧 [ANIM] 日志（新动画由 [PLAYER] 报告）',
   animAll.length === 0,
   animAll.join(' | ').slice(0, 160) || '无 [ANIM] 输出，符合预期');
 

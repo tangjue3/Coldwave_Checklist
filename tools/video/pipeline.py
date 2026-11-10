@@ -23,7 +23,11 @@
 **每一步都只在 candidates 目录里写，绝不碰 assets/characters/ 与正式动画。**
 转正必须人工走 docs/AI视频转Godot动画接入规范.md §6 的流程。
 
-依赖：ffmpeg / ffprobe（PATH 里）、Pillow、numpy。
+依赖：ffmpeg / ffprobe（PATH 里）、Pillow、numpy、OpenCV。
+
+VIDEO-INTEGRATE-001 针对性改进（默认行为保持不变，selftest 仍走旧路径）：
+    matte --key-mode chroma   绿幕色度键 + despill + 去杂点（见 chroma.py）
+    align --resample quality  预乘 alpha 两阶段降采样 + 全序列统一中轴（高分辨率素材必用）
 """
 from __future__ import annotations
 
@@ -36,6 +40,11 @@ from pathlib import Path
 
 import numpy as np
 from PIL import Image
+
+try:
+    from chroma import chroma_key, premultiplied_resize
+except ImportError:  # 允许 `python -m tools.video.pipeline` 的调用方式
+    from .chroma import chroma_key, premultiplied_resize
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 CANDS = ROOT / "assets" / "dev" / "video_candidates"
@@ -191,24 +200,34 @@ def cmd_matte(args) -> int:
     bg = tuple(int(x) for x in args.key) if args.key and args.key != "auto" else estimate_bg(frames)
     tol = int(args.tolerance)
     soft = int(args.softness)
-    print(f"[INFO] 背景键色 = RGB{bg}，容差 {tol}，羽化 {soft}")
+    chroma_mode = getattr(args, "key_mode", "color") == "chroma"
+    print(f"[INFO] 背景键色 = RGB{bg}，容差 {tol}，羽化 {soft}，模式 = "
+          f"{'色度键 chroma（绿幕）' if chroma_mode else 'RGB 距离键'}")
+    if chroma_mode:
+        print("[INFO] 色度键按 G-max(R,B) 判定，带溢色抑制与孤立噪点清理；"
+              "人物核心颜色逐像素保持不变")
 
     kept = 0
     for i, p in enumerate(frames):
-        a = rgba(p).astype(np.int16)
-        diff = np.abs(a[:, :, :3] - np.array(bg, dtype=np.int16)).max(axis=2)
-        # 软阈值：diff<=tol 全透明，diff>=tol+soft 全不透明，中间线性过渡
-        alpha = np.clip((diff - tol) / max(1, soft), 0.0, 1.0)
-        alpha = (alpha * 255).astype(np.uint8)
-        rgb = np.array(Image.open(p).convert("RGB"), dtype=np.uint8)
-        out = np.dstack([rgb, alpha])
-        # 去边缘残留：完全透明像素的 RGB 清零，避免缩放时出现色边
-        out[alpha == 0, :3] = 0
+        if chroma_mode:
+            rgb = np.array(Image.open(p).convert("RGB"), dtype=np.uint8)
+            out = chroma_key(rgb)
+        else:
+            a = rgba(p).astype(np.int16)
+            diff = np.abs(a[:, :, :3] - np.array(bg, dtype=np.int16)).max(axis=2)
+            # 软阈值：diff<=tol 全透明，diff>=tol+soft 全不透明，中间线性过渡
+            alpha = np.clip((diff - tol) / max(1, soft), 0.0, 1.0)
+            alpha = (alpha * 255).astype(np.uint8)
+            rgb = np.array(Image.open(p).convert("RGB"), dtype=np.uint8)
+            out = np.dstack([rgb, alpha])
+            # 去边缘残留：完全透明像素的 RGB 清零，避免缩放时出现色边
+            out[alpha == 0, :3] = 0
         Image.fromarray(out, "RGBA").save(out_dir / p.name)
         kept += 1
 
     meta = load_meta(d)
-    meta["matte"] = {"key_rgb": list(bg), "tolerance": tol, "softness": soft, "frames": kept}
+    meta["matte"] = {"key_rgb": list(bg), "tolerance": tol, "softness": soft,
+                     "mode": "chroma" if chroma_mode else "color", "frames": kept}
     save_meta(d, meta)
     print(f"[OK] 抠像 {kept} 张 → {out_dir.relative_to(ROOT)}")
     return 0
@@ -297,6 +316,56 @@ def cmd_align(args) -> int:
         shutil.rmtree(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
 
+    quality = getattr(args, "resample", "nearest") == "quality"
+    if quality:
+        # ---- 高分辨率素材路径（VIDEO-INTEGRATE-001）----
+        # 逐帧 bbox 居中会把「走路时身体摆动」误当成整体位移，造成画面左右抖动。
+        # 这里对**整个序列共用同一个仿射变换**：统一缩放系数 + 统一偏移，
+        # 脚底锁死在 anchor.y，身体中轴锁死在 anchor.x。
+        arrs = [rgba(p) for p in frames]
+        boxes = [bbox_of(a) for a in arrs]
+        valid = [b for b in boxes if b]
+        H, W = arrs[0].shape[:2]
+        top = min(b[1] for b in valid)
+        bottom = max(b[3] for b in valid)
+        person_h = bottom - top + 1
+        scale = (ANCHOR[1] - 6) / person_h          # 头顶留 6px
+        nw, nh = max(1, round(W * scale)), max(1, round(H * scale))
+        # 身体中轴：全序列不透明像素 x 的中位数（比逐帧 bbox 中心稳得多）
+        centers = []
+        for a in arrs[:: max(1, len(arrs) // 24)]:
+            xs = np.nonzero(a[:, :, 3] > ALPHA_THRESHOLD)[1]
+            if len(xs):
+                centers.append(float(np.median(xs)))
+        axis = float(np.median(centers)) if centers else W / 2
+        ox = round(ANCHOR[0] - axis * scale)
+        oy = round(ANCHOR[1] - bottom * scale)
+        print(f"[INFO] quality 模式：统一 scale={scale:.5f}（人物 {person_h}px → "
+              f"{round(person_h * scale)}px），整帧缩到 {nw}×{nh}，偏移 ({ox},{oy})，"
+              f"身体中轴原图 x={axis:.0f}")
+
+        for p, a in zip(frames, arrs):
+            small = premultiplied_resize(a, (nw, nh))
+            canvas = np.zeros((FRAME_H, FRAME_W, 4), dtype=np.uint8)
+            # 统一贴：源 (sx,sy) → 画布 (sx+ox, sy+oy)
+            sx0, sy0 = max(0, -ox), max(0, -oy)
+            sx1 = min(nw, FRAME_W - ox)
+            sy1 = min(nh, FRAME_H - oy)
+            if sx1 > sx0 and sy1 > sy0:
+                canvas[sy0 + oy:sy1 + oy, sx0 + ox:sx1 + ox] = small[sy0:sy1, sx0:sx1]
+            Image.fromarray(canvas, "RGBA").save(out_dir / p.name)
+
+        meta = load_meta(d)
+        meta["align"] = {"canvas": [FRAME_W, FRAME_H], "anchor": list(ANCHOR),
+                         "rule": "quality：预乘 alpha 两阶段降采样 + 全序列统一变换",
+                         "scale": round(scale, 6), "source_axis_x": round(axis, 1),
+                         "offset": [ox, oy], "resized_whole_frame": [nw, nh]}
+        save_meta(d, meta)
+        print(f"[OK] 对齐 {len(png_list(out_dir))} 张 → {out_dir.relative_to(ROOT)}")
+        print(f"     画布 {FRAME_W}×{FRAME_H}，脚底锚点 {ANCHOR}（全序列同一变换）")
+        return 0
+
+    # ---- 原有路径：整数最近邻缩放 + 水平居中 + 脚底贴 anchor.y（selftest 用）----
     # 统一规则：整像素缩放（按最长边比例取整，不插值放大），水平居中到 anchor.x，
     # 脚底对齐到 anchor.y。**不做非整数缩放**，否则像素会糊。
     for p in frames:
@@ -419,16 +488,23 @@ def main(argv=None) -> int:
 
     p = sub.add_parser("matte"); common(p)
     p.add_argument("--key", default="auto", help="背景色 auto 或 r,g,b")
+    p.add_argument("--key-mode", default="color", choices=["color", "chroma"],
+                   help="chroma = 绿幕色度键 + despill（高分辨率绿幕视频必用）")
     p.add_argument("--tolerance", default=28)
     p.add_argument("--softness", default=24)
     p.set_defaults(func=cmd_matte)
 
     p = sub.add_parser("analyze"); common(p); p.set_defaults(func=cmd_analyze)
-    p = sub.add_parser("align"); common(p); p.set_defaults(func=cmd_align)
+    p = sub.add_parser("align"); common(p)
+    p.add_argument("--resample", default="nearest", choices=["nearest", "quality"],
+                   help="quality = 预乘 alpha 两阶段降采样 + 全序列统一变换")
+    p.set_defaults(func=cmd_align)
     p = sub.add_parser("build"); common(p); p.set_defaults(func=cmd_build)
 
     p = sub.add_parser("all"); p.add_argument("input"); common(p)
     p.add_argument("--key", default="auto")
+    p.add_argument("--key-mode", default="color", choices=["color", "chroma"])
+    p.add_argument("--resample", default="nearest", choices=["nearest", "quality"])
     p.add_argument("--tolerance", default=28)
     p.add_argument("--softness", default=24)
     p.set_defaults(func=cmd_all)

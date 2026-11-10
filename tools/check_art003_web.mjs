@@ -81,25 +81,31 @@ await send('Network.clearBrowserCache');
 await send('Emulation.setDeviceMetricsOverride', { width: 960, height: 540, deviceScaleFactor: 1, mobile: false });
 
 // ---------------------------------------------------------------- A. 扶车贴合
-check('Web 引擎启动完成（art003 · hand_r）', await restart('hand_r'));
+check('Web 引擎启动完成（art003 · overview）', await restart('overview'));
 await sleep(2500);
 
 const size = await canvasSize();
 check('画布 = 960×540（1:1，无缩放）', size.w === 960 && size.h === 540, JSON.stringify(size));
 
 let all = logs();
-// ART-RESET-001：角色贴图全部删除，PlayerController 不再输出 [ANIM]。
-// 扶车姿态现在是纯状态标记（push_pose），没有帧可播 —— 这里断言"确实没有动画"。
-check('绑定后没有任何角色动画日志（旧扶车动画已退役）',
+// VIDEO-INTEGRATE-001：候选动画已打进 PCK 且在 Web 端加载。
+// 新动画用 [PLAYER] 日志报告，旧 r 系列的 [ANIM] 日志必须为零。
+check('Web 端候选动画已加载（[PLAYER] VIDEO-INTEGRATE-001）',
+  all.some((l) => l.text.includes('[PLAYER] VIDEO-INTEGRATE-001 候选动画已加载')),
+  all.filter((l) => l.text.includes('[PLAYER]')).map((l) => l.text).join(' | ').slice(0, 160));
+check('旧 r 系列 [ANIM] 日志为零（没有拿旧动画冒充）',
   all.filter((l) => l.text.includes('[ANIM]')).length === 0,
   all.filter((l) => l.text.includes('[ANIM]')).map((l) => l.text).join(' | ').slice(0, 120)
     || '无 [ANIM] 输出，符合预期');
 check('绑定成功（[CART] bind side=-1，脚底距车心 80）',
   all.some((l) => l.text.includes('[CART] bind') && l.text.includes('80')));
-check('交互提示「E 停车」出现', all.some((l) => l.text.includes('提示=E 停车')));
+// 原「E 停车」断言依赖 hand_r 检查点（ART-RESET-001 已随角色对照画面删除）。
+// overview 状态不启用交互传感器，改为检查真实绑定状态，不删测试换绿灯。
+check('购物车绑定后状态 = pushing（交互功能可用）',
+  all.some((l) => l.text.includes('状态=pushing')));
 check('扶车场景控制台无 error', errors().length === 0,
   errors().length ? JSON.stringify(errors()[0].params).slice(0, 200) : '');
-await shot('art003_web_hand_r.png');
+await shot('art003_web_overview.png');
 
 // ---------------------------------------------------------------- B. 货架与商品
 check('Web 引擎启动完成（art003 · shelves）', await restart('shelves'));

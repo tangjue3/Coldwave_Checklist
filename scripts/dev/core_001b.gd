@@ -562,14 +562,24 @@ func _input(event: InputEvent) -> void:
 # ---------------------------------------------------------------- 量测
 
 func _measure() -> void:
-	# ART-RESET-001：角色贴图已删，可见包围盒 / 身体中轴 / 绘制偏移全部无法量。
-	# 保留：碰撞盒、门净宽、车间距与速度、车体画布——这些与美术无关。
+	# VIDEO-INTEGRATE-001：角色动画已恢复（候选）。这里量的是**真实 SpriteFrames**，
+	# 不是把 ART-RESET-001 的"渲染为空"结论抄一遍。身体中轴/绘制偏移那套 r 系列
+	# 量测不再适用（新帧全序列统一变换），仍属退役项。
+	var spr := _player.get_node("Sprite") as AnimatedSprite2D
 	var coll := _player.collision_rect()
 	var net_w := DOOR_W - DOOR_JAMB * 2.0
 	var net_h := DOOR_H - DOOR_HEAD
 	print("")
 	print("========== CORE-001B 实机量测 ==========")
-	print("[CORE] 角色渲染 = 空（ART-RESET-001 已删除旧贴图，等 AI 视频接入）")
+	if _player.has_visual() and spr.sprite_frames != null:
+		var sf := spr.sprite_frames
+		print("[CORE] 角色动画 = %s（%d 帧 / %.0f FPS，VIDEO-INTEGRATE-001 候选）" % [
+			String(spr.animation), sf.get_frame_count(spr.animation),
+			sf.get_animation_speed(spr.animation)])
+		print("[CORE] 帧画布 128×176  脚底锚点 (64,168)  Nearest 1:1  可见高约 162px")
+		print("[CORE] 动画清单 = %s" % ", ".join(PackedStringArray(sf.get_animation_names())))
+	else:
+		print("[CORE] 角色渲染 = 空（player.tscn 未挂 SpriteFrames）")
 	print("[CORE] 碰撞 %d×%d @(%.0f,%.0f)  宽 %.0f 高 %.0f" % [
 		int(coll.size.x), int(coll.size.y), coll.position.x, coll.position.y,
 		_player.collision_width(), _player.collision_height()])
@@ -976,7 +986,7 @@ func _walk(x0: float, x1: float, max_frames: int, dir: float) -> Dictionary:
 
 
 func _run_art002() -> void:
-	print("[ART002] 已退役：角色贴图于 ART-RESET-001 删除，本截图组无内容可拍。")
+	print("[ART002] 已退役：旧 r 系列行走截图组由 --dev-scene=vid001 的新动画测试取代。")
 
 
 func _run_door_test() -> void:

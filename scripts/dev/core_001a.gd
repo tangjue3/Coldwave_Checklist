@@ -475,16 +475,19 @@ func _input(event: InputEvent) -> void:
 # ---------------------------------------------------------------- 量测与日志
 
 func _measure_and_report() -> void:
-	# ART-RESET-001：角色贴图（r01–r09）已全部删除，这里不再量"可见包围盒 / alpha 档位"。
-	# 保留的部分全部与美术无关：碰撞盒、门净宽、通道通行余量。
-	# 旧的可见框量测属退役项，不要在这里恢复（没有贴图就没有可见框）。
+	# VIDEO-INTEGRATE-001：角色渲染已恢复，量测改成真实动画信息 + 碰撞与通行余量。
+	# 旧 r 系列的"可见包围盒 / alpha 档位"量测不恢复（新帧用全序列统一变换）。
 	var coll := _player.collision_rect()
 	var net_w := DOOR_W - DOOR_JAMB * 2.0
 	var net_h := DOOR_H - DOOR_HEAD
 
 	print("")
 	print("========== CORE-001A 实机量测 ==========")
-	print("[CORE] 角色渲染 = 空（ART-RESET-001 已删除旧贴图，等 AI 视频接入）")
+	if _player.has_visual():
+		print("[CORE] 角色动画 = %s（VIDEO-INTEGRATE-001 候选） 帧画布 128×176 锚点 (64,168)" %
+			String(_player.current_anim()))
+	else:
+		print("[CORE] 角色渲染 = 空（player.tscn 未挂 SpriteFrames）")
 	print("[CORE] 碰撞盒 = %d×%d @ (%d,%d)" % [
 		int(coll.size.x), int(coll.size.y), int(coll.position.x), int(coll.position.y)])
 	print("[CORE] 住宅门 净 %d×%d → 碰撞 %d 宽：左余 %d / 右余 %d；头顶余 %d" % [
