@@ -144,6 +144,7 @@ func _physics_process(delta: float) -> void:
 		if snap_to_ground:
 			global_position.y = ground_y
 		_update_state()
+		_enforce_push_anim()
 		return
 
 	var dir := input_axis()
@@ -164,13 +165,31 @@ func _physics_process(delta: float) -> void:
 		global_position.y = ground_y
 
 	_update_state()
+	_enforce_push_anim()
+
+
+## 兜底不变量：只要 push_pose 为真，当前动画就必须属于推车三段。
+## 任何路径（包括以后新增的）把普通动画播了出来，这一帧就纠正回去。
+## 与 _update_state() 里的守卫是双保险：守卫挡住已知路径，这里挡住未知路径。
+func _enforce_push_anim() -> void:
+	if not push_pose or not has_visual():
+		return
+	var cur := _sprite.animation
+	if cur == ANIM_PUSH_WALK or cur == ANIM_PUSH_IDLE or cur == ANIM_PUSH_STOP:
+		return
+	_apply_push_anim()
 
 
 func _update_state() -> void:
 	var next := STATE_WALK if absf(velocity.x) > 1.0 else STATE_IDLE
 	if next == state:
-		# 状态没变，但仍要处理「过渡播到一半又起步」这类帧级情况
-		if next == STATE_WALK and _in_stop_transition:
+		# 状态没变，但仍要处理「过渡播到一半又起步」这类帧级情况。
+		# ⚠️ 推车期间**绝不能**动动画（VIDEO-FIX-002A 的真实 bug）：
+		# 松手那一帧 PushableCart 先 set_push_moving(false) 起了 push_walk_to_idle、
+		# 把 _in_stop_transition 置真，而此时人物 velocity 还有 ~57（减速要几帧），
+		# state 仍是 walk —— 这条分支就会把过渡覆盖成 walk_right，
+		# 结果是「车在 PUSHING、人却垂手走路」。推车动画由 set_push_* 独占驱动。
+		if next == STATE_WALK and _in_stop_transition and not push_pose:
 			_play(ANIM_WALK)
 			_in_stop_transition = false
 		return

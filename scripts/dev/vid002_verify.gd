@@ -42,6 +42,13 @@ var _movie_t := 0.0
 var _movie_next := 0.0
 var _movie_end := 9.0
 
+## VIDEO-FIX-002A：逐帧一致性监视器。
+## 只要购物车处于 PUSHING（已绑定），人物就不许播普通 walk / stop / idle 动画。
+## 这不是抽查：每一帧都查，能抓到只持续 1 帧的覆盖错误。
+var _watch := false
+var _viol: Array[String] = []
+var _trans_hits := 0
+
 
 func _ready() -> void:
 	_parse_args()
@@ -77,6 +84,7 @@ func _ready() -> void:
 		await _run_tour()
 	elif _args.has("vid002_movie"):
 		_movie = true
+		_watch = true          # 录屏同时逐帧检查，出问题会打印 [VIOLATION]
 		DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(MOVIE_DIR))
 		_caption = "movie: real Godot push-cart state chain"
 	else:
@@ -96,6 +104,8 @@ func _parse_args() -> void:
 
 
 func _process(delta: float) -> void:
+	if _watch:
+		_poll_watch()
 	if not _movie:
 		return
 	_movie_t += delta
@@ -104,8 +114,30 @@ func _process(delta: float) -> void:
 		_movie_next += 1.0 / 20.0
 		_capture_frame()
 	if _movie_t >= _movie_end:
-		print("[VID002] movie frames=%d" % _movie_i)
+		print("[VID002] movie frames=%d  violations=%d" % [_movie_i, _viol.size()])
+		for line in _viol.slice(0, 5):
+			print("[VID002] [VIOLATION] " + line)
 		get_tree().quit(0)
+
+
+## 每帧比对「购物车绑定状态」与「人物当前动画」。
+func _poll_watch() -> void:
+	if _cart == null or _player == null:
+		return
+	var a := _player.current_anim()
+	if a == PlayerController.ANIM_PUSH_STOP:
+		_trans_hits += 1
+	if _cart.state != PushableCart.STATE_PUSHING:
+		return
+	if a == PlayerController.ANIM_WALK or a == PlayerController.ANIM_IDLE \
+			or a == PlayerController.ANIM_STOP:
+		var tag := "phys=%d anim=%s cart=%s pose=%s moving=%s vx=%.1f frame=%d" % [
+			Engine.get_physics_frames(), String(a), String(_cart.state),
+			str(_player.is_pushing_pose()), str(_player.push_walk_active),
+			_player.velocity.x, _player.anim_frame()]
+		_viol.append(tag)
+		if _viol.size() <= 8:
+			print("[VID002] [VIOLATION] " + tag)
 
 
 ## 真实状态链：全程只用 PushableCart.bind/unbind 与 PlayerController 的输入覆盖
@@ -314,6 +346,52 @@ func _run_tests() -> void:
 		String(_player.current_anim()))
 	_player.set_input_override(0.0)
 	await _frames(20)
+
+	# --- H2. VIDEO-FIX-002A 回归：绑定期间禁止播放普通动画 ---
+	# 原 bug 路径：松手瞬间 set_push_moving(false) 起了 push_walk_to_idle 并把
+	# _in_stop_transition 置真；此时人物 velocity 还没降到 1 以下，state 仍是 walk，
+	# _update_state() 的「过渡中又起步 → 回 walk_right」分支把它覆盖掉 → 车在 PUSHING、
+	# 人却在播 walk_right。这里把 walk 相位**确定性地**停在指定帧再松手，
+	# 保证每次都走到这条路径（原来靠运气，7/32 概率）。
+	_cart.place_at(500.0)
+	_player.teleport_to(420.0)
+	await _frames(2)
+	_ok(_cart.bind(_player), "回归用例：重新绑定到车左侧")
+	await _frames(4)
+	_watch = true
+	_trans_hits = 0
+	var phases: Array[int] = []
+	# 覆盖两类相位：14 属于 PUSH_STOP_OK_PHASES（该播过渡），5 / 27 不属于（该直接站稳）。
+	# 两条分支都必须留在扶车姿态，且都不许出现普通动画。
+	var targets: Array[int] = [14, 5, 27]
+	for it in range(targets.size()):
+		var target := targets[it]
+		_player.set_input_override(1.0)
+		var guard := 0
+		while guard < 180:
+			await _frames(1)
+			guard += 1
+			# 必须真的在播 push_walk_right 且走到目标相位，才算命中这条路径
+			if _player.current_anim() == PlayerController.ANIM_PUSH_WALK \
+					and spr.frame == target:
+				break
+		var ph := spr.frame
+		phases.append(ph)
+		_player.set_input_override(0.0)
+		await _frames(45)
+		var a2 := _player.current_anim()
+		_ok(ph == target, "第 %d 次停止确实停在目标相位 %d" % [it + 1, target], "实测 %d" % ph)
+		_ok(a2 == &"push_idle_right" or a2 == &"push_walk_to_idle",
+			"第 %d 次停止（walk 相位 %d）后仍是扶车姿态" % [it + 1, ph], String(a2))
+		_ok(absi((_player.global_position.x - _cart.global_position.x) + 80.0) < 0.5,
+			"第 %d 次停止后人与车仍为 80px（无相对滑动）" % [it + 1],
+			"Δ=%.2f" % ((_player.global_position.x - _cart.global_position.x) + 80.0))
+	_watch = false
+	_ok(_trans_hits > 0, "确实走到 push_walk_to_idle 过渡路径（用例有效）",
+		"过渡帧数=%d，相位=%s" % [_trans_hits, str(phases)])
+	_ok(_viol.is_empty(),
+		"绑定期间逐帧检查：没有任何一帧播 walk_right / walk_to_idle / idle_right",
+		"" if _viol.is_empty() else ("%d 帧违规，首帧 " % _viol.size()) + _viol[0])
 
 	# --- I. 解绑 → 普通行走 ---
 	var parked_x := _cart.global_position.x
