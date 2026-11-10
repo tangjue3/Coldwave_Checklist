@@ -179,3 +179,15 @@ python tools/video/pipeline.py all 转存库/<视频> --batch walk_right --actio
 体检全绿 → 交美术审核 → 批准后搬进 `assets/characters/`、写 SpriteFrames、
 在 `素材库/素材台账.csv` 新增 `rNN` 行、白名单显式加行、`state=正式使用`。
 **本轮到此停止，不开始新的角色动画制作，也不动 CORE-002。**
+
+---
+
+## 提交记录
+
+| 提交 | 内容 |
+|---|---|
+| `e7da982` | docs：交付报告、开发说明 §7.0/§7.4 改写、接入规范速度裁定、目录树、失效横幅 |
+| `f3a4543` | feat：删除 499 个旧角色相关文件、代码去美术化、测试断言退役、参考图裁取、台账与页面 |
+| （本行提交） | docs：回填提交哈希 |
+
+回退方式：`git checkout pre-ART-RESET-001`（指向重置前的工作区）。
