@@ -1,0 +1,70 @@
+{
+  "task": "VIDEO-QUALITY-002",
+  "status": "候选 / 待最终美术审核（台账、白名单、总览正式状态未改）",
+  "texture": {
+    "source_frames": 192,
+    "canvas": [
+      512,
+      704
+    ],
+    "anchor": [
+      256,
+      672
+    ],
+    "resized_whole_frame": [
+      428,
+      760
+    ],
+    "offset": [
+      52,
+      -36
+    ],
+    "foot_rows": [
+      666,
+      674
+    ],
+    "visible_heights": [
+      632,
+      650
+    ],
+    "green_residual_px": 0,
+    "rule": "从 720×1280 抠像帧重新采样，颜色外扩 + 预乘 alpha LANCZOS4→AREA；未使用任何已缩小的 128×176 PNG"
+  },
+  "godot": {
+    "frames": 58,
+    "animations": {
+      "walk_right": {
+        "frames": 36,
+        "fps": 24,
+        "loop": true
+      },
+      "walk_to_idle": {
+        "frames": 21,
+        "fps": 24,
+        "loop": false
+      },
+      "idle_right": {
+        "frames": 1,
+        "fps": 8,
+        "loop": true
+      }
+    },
+    "spriteframes": "assets/characters/player_sprite_frames.tres"
+  },
+  "transform": {
+    "sprite_scale": 0.25,
+    "sprite_offset": [
+      -256,
+      -672
+    ],
+    "display_size_unchanged": [
+      128,
+      176
+    ],
+    "anchor_unchanged_world": [
+      0,
+      0
+    ]
+  },
+  "source": "上一轮 .work/video_in/frames_matte/ 的 720×1280 抠像帧；未使用任何 128×176 成品帧放大，未生成新视频"
+}

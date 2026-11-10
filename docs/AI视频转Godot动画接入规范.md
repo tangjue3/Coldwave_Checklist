@@ -1,8 +1,13 @@
+> **VIDEO-QUALITY-002 更新**：接入贴图已升到 512×704，128×176 现在指**游戏内显示尺寸 /
+> 锚点换算基准**，不再是贴图文件分辨率。候选帧序列仍按 128×176 产出做体检，
+> 正式接入帧由 `tools/video/quality_002.py` 输出。其余工程约束不变。
+
 # AI 视频 → Godot 动画接入规范
 
 > 建立：2026-11-10 / TASK-ARTLIB-CLEAN-001
 > 适用：《寒潮清单》第一季角色动作（步行为主）
-> 状态：**规范 + 工具骨架已就位；尚无任何真实视频走过这条链路。**
+> 状态：**链路已实跑通**（VIDEO-INTEGRATE-001 完成真实视频拆帧接入，
+> VIDEO-QUALITY-002 完成 512×704 高清优化）；资源仍是候选，等最终美术审核转正。
 
 ---
 
@@ -25,7 +30,7 @@
 |---|---|---|
 | 引擎 | Godot 4.7.2 stable，GDScript，GL Compatibility | `project.godot` |
 | 游戏视口 | 960×540，整数倍缩放 | `project.godot` / `WindowFit` |
-| 角色帧画布 | **128×176** | `scripts/characters/player_controller.gd` 头部注释 |
+| 角色帧画布 | **游戏内显示 128×176**；VIDEO-QUALITY-002 起贴图文件为 **512×704 @ scale 0.25**，脚底贴图内 (256,672) → 世界 (0,0) | `scenes/characters/player.tscn`（几何单一数据源） |
 | 脚底锚点 | **(64, 168)** | 同上；`sprite.offset` 让该像素落在节点原点 |
 | 纹理过滤 | Nearest（无平滑） | 贴图导入参数；新贴图必须 `fix_alpha_border=false` |
 | 普通行走速度 | **100 px/s** | `PlayerController.move_speed = 100.0` |
