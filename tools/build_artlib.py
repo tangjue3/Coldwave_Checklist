@@ -72,15 +72,33 @@ REF_ACTIONS = [
      ["right", "front"], ["ART_CHAR_001", "ART_ITEM_101"]),
 ]
 
-# 角色动作清单：ART-RESET-001 起旧 r01–r09 全部删除，全部动作回到「待重新制作」
+# 角色动作清单：VIDEO-FINALIZE-001 正式登记后的真实状态。
+# limits 列必须如实写未修复问题；状态「正式使用」只表示游戏里在用，不表示问题已解决。
 CHAR_ACTION_STATE = [
-    ("待机", "IDLE", "站立呼吸循环", "待重新制作"),
-    ("普通行走", "WALK", "朝右行走循环", "待重新制作"),
-    ("推购物车", "PUSH", "扶车行走，人物与车体同框", "待重新制作"),
-    ("反向拉车", "PULL", "拉车专用受力姿态", "未开始"),
-    ("搬运", "CARRY", "双手抱持重物行走（箱 / 水两种体积）", "未开始"),
-    ("转身", "TURN", "左右朝向切换的过渡帧", "未开始"),
-    ("朝左独立绘制", "LEFT", "朝左独立帧（当前无任何贴图）", "未开始"),
+    ("待机", "IDLE", "idle_right · r12 · 1 帧 / 8 FPS（视频后段冻结，单帧）",
+     "正式使用", "单帧待机，无呼吸循环"),
+    ("普通行走", "WALK", "walk_right · r10 · 36 帧 / 24 FPS · 512×704",
+     "正式使用", "脚底滑动约 1.89 px/帧（未修复）"),
+    ("停止过渡", "STOP", "walk_to_idle · r11 · 21 帧 / 24 FPS / 0.875 s",
+     "正式使用", "仅约 19% 的 walk 相位能自然衔接（未修复）"),
+    ("推购物车", "PUSH", "扶车行走，人物与车体同框",
+     "待重新制作", "推车动画未制作；绑定时固定站姿，不拿行走冒充"),
+    ("反向拉车", "PULL", "拉车专用受力姿态", "未开始", ""),
+    ("搬运", "CARRY", "双手抱持重物行走（箱 / 水两种体积）", "未开始", ""),
+    ("转身", "TURN", "左右朝向切换的过渡帧", "未开始", ""),
+    ("朝左独立绘制", "LEFT", "朝左独立帧（当前仅有 flip_h 镜像）", "未开始",
+     "朝左是镜像，无独立绘制帧"),
+]
+
+# 页面级「已知限制（未修复）」汇总：转正后仍必须原样展示，不得被「认可」标签掩盖
+KNOWN_LIMITS = [
+    "脚底滑动约 1.89 px/帧：源视频是原地跟拍（人物画面质心 std 4.3 px），"
+    "接入 100 px/s 平移后支撑脚无法锁地；24 FPS 全帧播放已是最优，问题未修复。",
+    "停止过渡相位覆盖不全：视频只提供一次减速过程，仅 7/36 个 walk 相位（约 19%）"
+    "能自然接上 walk_to_idle；其余相位松手直接站稳，没有强行拼接。问题未修复。",
+    "朝左只有 flip_h 镜像，没有独立绘制的左向帧；推车动画本轮未制作。",
+    "角色为平滑赛璐璐风，与场景像素素材仍有风格差异；1× 窗口下角色仅约 162 物理像素高，"
+    "面容细节受 960×540 视口上限约束。",
 ]
 
 # 非角色缺口（角色项由 CHAR_ACTION_STATE 生成）
@@ -304,6 +322,7 @@ def build_data() -> list[dict]:
             "visual": (r.get("视觉评价") or "").strip(),
             "useState": (r.get("使用状态") or "").strip(),
             "archived": (r.get("归档标记") or "").strip(),
+            "knownLimits": (r.get("已知限制") or "").strip(),
             "refFor": ref_for,
             "tags": tags_of(r),
             "frameGlob": frame_glob,
@@ -435,6 +454,14 @@ table.gaps{width:100%;border-collapse:collapse;font-size:12.5px;background:var(-
 table.gaps th,table.gaps td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line)}
 table.gaps th{background:#f0eee8;font-size:11.5px;letter-spacing:.06em;color:#5c626a}
 table.gaps td:first-child{font-weight:600}
+.limitbox{border:1px solid #d9a24a;background:#fdf6e8;border-radius:8px;padding:10px 12px}
+.limitbox h3{color:#8a5a12}
+.limitbox p{color:#6b4a17;font-size:12.5px;line-height:1.7}
+.limitsum{margin-top:18px;border:1px solid #d9a24a;background:#fdf6e8;border-radius:8px;
+  padding:12px 16px;color:#6b4a17;font-size:12.5px;line-height:1.8}
+.limitsum h3{margin:0 0 6px;font-size:13px;color:#8a5a12}
+.limitsum li{margin:2px 0}
+td.lim{color:#8a5a12;font-size:11.5px;max-width:300px}
 /* 灯箱 */
 #modal{position:fixed;inset:0;z-index:50;background:rgba(20,23,27,.88);display:none;
   align-items:center;justify-content:center;padding:24px}
@@ -490,8 +517,9 @@ footer{padding:0 30px 40px;color:var(--muted);font-size:11.5px;max-width:1720px;
   </div>
   <div class="notice">本库仅供浏览与审核，已被 <code>.gdignore</code> 隔离，不是 Godot 运行时资源。
     「技术通过」不等于「美术满意」——三条状态轴分开看。<br>
-    <strong>ART-RESET-001</strong>：许知夏旧运行时动画 r01–r09 已全部删除，角色渲染为空，
-    只剩 <code>v02</code> 外观基准与五张裁图；新动画等 AI 视频接入。</div>
+    <strong>VIDEO-FINALIZE-001</strong>：许知夏 <code>r10 / r11 / r12</code> 三段 512×704
+    高清动画已正式登记（运行时可用 / 视觉认可 / 正式使用），<code>v02</code> 仍是唯一外观基准。
+    <strong>脚底滑动与停止过渡相位限制仍未修复</strong>，见「角色动作状态」页与每条详情。</div>
   <div class="tabs" id="tabs"></div>
 </header>
 <div class="wrap">
@@ -532,7 +560,7 @@ footer{padding:0 30px 40px;color:var(--muted);font-size:11.5px;max-width:1720px;
 (function(){
   var DATA=JSON.parse(document.getElementById('asset-data').textContent);
   var META=JSON.parse(document.getElementById('meta-data').textContent);
-  var CATS=META.cats, STATES=META.states, ACTS=META.acts, TAGS=META.tags, REPS=META.refs, GAPS=META.gaps;
+  var CATS=META.cats, STATES=META.states, ACTS=META.acts, TAGS=META.tags, REPS=META.refs, GAPS=META.gaps, LIMITS=META.knownLimits||[];
   var COLORS={'概念草案':'#9aa3ad','待审核':'#c99a45','已通过设定审核':'#5b8f77',
     '正式素材制作中':'#5a83ad','运行时可用':'#3f8f5b','不予通过':'#b0553f','已弃用':'#b06a6a'};
   var VIS={'认可':'#3f8f5b','待优化':'#c9882f','未评价':'#8a8f96','不适用':'#b3b8bd'};
@@ -695,21 +723,26 @@ footer{padding:0 30px 40px;color:var(--muted);font-size:11.5px;max-width:1720px;
   /* ------------------------------------------------ 动作状态 / 缺口 */
   function renderGaps(){
     var cs=META.charActions||[];
+    var live=cs.filter(function(x){return x.state==='正式使用'}).length;
     $('title').textContent='角色动作状态';
-    $('count').textContent='旧 r01–r09 已全部删除　·　'+cs.length+' 个动作待重做';
-    $('hint').textContent='ART-RESET-001 起许知夏没有任何运行时动画。'
-      +'下表是真实状态：不是「尚未提交」，是「已删除、待重新制作」。收到 AI 视频后再逐项消掉。';
+    $('count').textContent='VIDEO-FINALIZE-001 正式登记 r10 / r11 / r12　·　'+live+' 个动作在用';
+    $('hint').textContent='三段 512×704 高清动画已由用户确认画质并正式登记。'
+      +'「正式使用」只表示游戏里在用，不等于遗留问题已修复；下表与右侧「已知限制」列如实列出未解决项。';
     var badge=function(st){
-      var c=st==='待重新制作'?'#c9882f':(st==='未开始'?'#8a8f96':'#b0553f');
+      var c=st==='正式使用'?'#3f8f5b':(st==='待重新制作'?'#c9882f':'#8a8f96');
       return '<span class="pill" style="color:'+c+';background:'+c+'22">'+esc(st)+'</span>'};
     var charRows=cs.map(function(a){
       return '<tr><td>'+esc(a.act)+'　<code>'+esc(a.slug)+'</code></td><td>'+esc(a.desc)+
-        '</td><td><code>ART_CHAR_001</code></td><td>'+badge(a.state)+'</td></tr>'}).join('');
+        '</td><td><code>ART_CHAR_001</code></td><td>'+badge(a.state)+'</td><td class="lim">'+
+        esc(a.limits||'—')+'</td></tr>'}).join('');
     var otherRows=GAPS.map(function(g){
       return '<tr><td>'+esc(g[0])+'</td><td>'+esc(g[1])+'</td><td><code>'+esc(g[2])+
-        '</code></td><td>'+badge(g[3])+'</td></tr>'}).join('');
+        '</code></td><td>'+badge(g[3])+'</td><td class="lim">—</td></tr>'}).join('');
+    var sum='<div class="limitsum"><h3>已知限制（未修复，不以「认可 / 正式使用」掩盖）</h3><ul>'+
+      LIMITS.map(function(t){return '<li>'+esc(t)+'</li>'}).join('')+'</ul></div>';
     $('view').innerHTML='<table class="gaps"><thead><tr><th>动作</th><th>说明</th>'+
-      '<th>归属素材</th><th>状态</th></tr></thead><tbody>'+charRows+otherRows+'</tbody></table>';
+      '<th>归属素材</th><th>状态</th><th>已知限制</th></tr></thead><tbody>'+
+      charRows+otherRows+'</tbody></table>'+sum;
   }
 
   function render(){
@@ -743,6 +776,10 @@ footer{padding:0 30px 40px;color:var(--muted);font-size:11.5px;max-width:1720px;
     }
 
     html+='<div class="block"><h3>版权 / 授权</h3><p>'+esc(d.license)+'</p></div>';
+    if(d.knownLimits){
+      html+='<div class="block limitbox"><h3>已知限制（未修复）</h3><p>'+
+        esc(d.knownLimits)+'</p></div>';
+    }
     html+='<div class="block"><h3>制作与修改说明</h3><p>'+esc(d.notes)+'</p></div>';
 
     var files='<li>库内副本：'+(d.localHref?'<a href="'+esc(d.localHref)+'" target="_blank">'+
@@ -892,8 +929,9 @@ def main() -> None:
         "crops": crops,
         "refs": build_ref_panels(data, crops),
         "gaps": ACTION_GAPS,
-        "charActions": [{"act": a, "slug": s_, "desc": d, "state": st}
-                        for a, s_, d, st in CHAR_ACTION_STATE],
+        "charActions": [{"act": a, "slug": s_, "desc": d, "state": st, "limits": lim}
+                        for a, s_, d, st, lim in CHAR_ACTION_STATE],
+        "knownLimits": KNOWN_LIMITS,
     }
     payload = json.dumps(data, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
     meta_payload = json.dumps(meta, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")

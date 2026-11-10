@@ -1,6 +1,6 @@
 {
   "task": "VIDEO-INTEGRATE-001",
-  "status": "候选 / 待用户与美术审核（未标最终成品）",
+  "status": "历史候选记录 / 已于 VIDEO-FINALIZE-001 正式转正",
   "source": {
     "path": "D:\\work\\bisai\\Hackathon\\GAME\\Coldfront_Checklist\\转存库\\Generating_pixel_art_walking_ani…_0afbba1d.mp4",
     "width": 720,
@@ -171,5 +171,14 @@
     "stop_from_worst_phase": 0.19748,
     "visible_h_std": 1.48,
     "foot_y_std": 0.78
+  },
+  "finalized": {
+    "task": "VIDEO-FINALIZE-001",
+    "versions": {
+      "walk_right": "ART_CHAR_001@r10",
+      "walk_to_idle": "ART_CHAR_001@r11",
+      "idle_right": "ART_CHAR_001@r12"
+    },
+    "note": "此目录仅保留 128x176 候选帧供 --dev-scene=video 体检与历史追溯；正式运行时资源在 assets/characters/，登记以素材台账.csv 为准。脚底滑动与停止过渡相位限制仍未修复。"
   }
 }

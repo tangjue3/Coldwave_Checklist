@@ -66,14 +66,15 @@ const brokenImgs = await evalJs(
 check('缩略图全部加载', brokenImgs.length === 0, brokenImgs.join(',') || '全部 complete');
 check('分类列表 = 7 项（全部 + 6 类）', await evalJs("document.querySelectorAll('#nav li').length") === 7);
 check('v02 状态为「已通过设定审核」', DATA.some((d) => d.id === 'ART_CHAR_001' && d.version === 'v02' && d.status === '已通过设定审核'));
-// ART-RESET-001：v01 与 r01–r09 全部删除，角色只剩 v02 一条
-check('角色只剩 v02 一条（v01 / r01 / r02 / r03 / r04 / r09 均已删除）',
-  DATA.filter((d) => d.id === 'ART_CHAR_001').length === 1
-  && DATA.some((d) => d.id === 'ART_CHAR_001' && d.version === 'v02'),
-  DATA.filter((d) => d.id === 'ART_CHAR_001').map((d) => d.version).join(','));
-check('全库没有任何 ART_CHAR_001 的 r 系列运行时条目',
-  DATA.every((d) => !(d.id === 'ART_CHAR_001' && /^r\d/.test(d.version))),
-  DATA.filter((d) => d.id === 'ART_CHAR_001').map((d) => d.version).join(',') || '无 r 系列');
+// VIDEO-FINALIZE-001：v02 外观基准 + r10/r11/r12 三段正式动画，共 4 条。
+// 旧 r01–r09 已删除，只登记 r10 起的新版本。
+const charVersions = DATA.filter((d) => d.id === 'ART_CHAR_001').map((d) => d.version);
+check('角色 = v02 外观基准 + r10/r11/r12 三段正式动画，共 4 条',
+  charVersions.length === 4 && ['v02','r10','r11','r12'].every((v) => charVersions.includes(v)),
+  charVersions.join(','));
+check('旧 r01–r09 没有复活（只登记 r10 及以后）',
+  charVersions.filter((v) => /^r\d/.test(v)).every((v) => Number(v.slice(1)) >= 10),
+  charVersions.join(','));
 check('安全屋双状态并存（v01-base / v01-upgraded）',
   ['v01-base', 'v01-upgraded'].every((v) => DATA.some((d) => d.id === 'ART_SCENE_102' && d.version === v)));
 check('场景 101 / 102 / 103 已归档',
@@ -110,9 +111,12 @@ check('「运行时可用」资质：路径有效 + 文件存在 + 非概念阶�
   usable.length ? `${usable.length} 条，不合格 ${unqualified.map((d) => d.id).join(',') || '无'}` : '0 条');
 // CORE-001B 起允许极少数条目进入「运行时可用」。白名单写死在这里，
 // 任何新增都必须在代码里显式加一条，防止概念图被误标成可运行资源。
-// ART-RESET-001：角色 r01–r09 已从工程删除，白名单只剩道具/设施 11 条。
-// 新角色动画接入时必须在这里显式加行，否则断言会拦下。
+// VIDEO-FINALIZE-001：三段 512×704 高清动画已由用户确认画质并正式登记。
+// 新增白名单必须显式加行，否则断言会拦下。共 14 条。
 const APPROVED_RUNTIME = [
+  { id: 'ART_CHAR_001', version: 'r10' },   // walk_right 36f / 24FPS
+  { id: 'ART_CHAR_001', version: 'r11' },   // walk_to_idle 21f / 24FPS
+  { id: 'ART_CHAR_001', version: 'r12' },   // idle_right 1f / 8FPS
   { id: 'ART_FURN_103', version: 'r01' },   // 旧购物车，保留为回滚版本（ART-INTEGRATE-003 批准）
   { id: 'ART_FURN_103', version: 'r02' },   // 加高车把购物车（ART-FIX-003C 批准）
   { id: 'ART_FURN_101', version: 'r01' },   // 四层空货架（ART-FIX-003C 批准）
@@ -139,7 +143,7 @@ check('r03 四件分件全部在运行时白名单内',
   R03_PARTS.every((v) => APPROVED_RUNTIME.some((a) => a.id === 'ART_FURN_103' && a.version === v)));
 const unexpectedRuntime = usable.filter((d) =>
   !APPROVED_RUNTIME.some((a) => a.id === d.id && a.version === d.version));
-check('「运行时可用」仅限已批准白名单（车 r01–r03 + 货架 r01 + 商品 r02/r02-shelf，共 11 条）',
+check('「运行时可用」仅限已批准白名单（角色 r10–r12 + 车 r01–r03 + 货架 r01 + 商品 r02/r02-shelf，共 14 条）',
   unexpectedRuntime.length === 0,
   `${usable.length} 条，越权 ${unexpectedRuntime.map((d) => d.id + '@' + d.version).join(',') || '无'}`);
 check('概念素材仍全部保持非运行时状态',
@@ -220,7 +224,7 @@ await evalJs("document.querySelector('#close').click()");
 const ACTS = ['外观设定', '待机', '普通行走', '推购物车', '反向拉车', '搬运', '其他动作', '不适用'];
 const missFields = DATA.filter((d) => !d.act || !d.visual || !d.useState || !Array.isArray(d.tags));
 check('CLEAN-001 整理列齐全（动作分组 / 视觉评价 / 使用状态 / 标记）',
-  missFields.length === 0, missFields.map((d) => d.id + '@' + d.version).join(',') || '39 条齐全');
+  missFields.length === 0, missFields.map((d) => d.id + '@' + d.version).join(',') || `${DATA.length} 条齐全`);
 check('动作分组取值合法',
   DATA.every((d) => ACTS.includes(d.act)),
   [...new Set(DATA.map((d) => d.act))].join(','));
@@ -231,24 +235,45 @@ check('使用状态取值合法',
   DATA.every((d) => ['正式使用', '回退保留', '未使用'].includes(d.useState)),
   [...new Set(DATA.map((d) => d.useState))].join(','));
 
-// ---- ART-RESET-001：角色没有任何运行时动画，页面必须如实说明
+// ---- VIDEO-FINALIZE-001：三段动画正式登记，且遗留限制原样保留
 const charRows = DATA.filter((d) => d.id === 'ART_CHAR_001');
-check('角色唯一行是 v02，且不是运行时可用（无运行时路径）',
-  charRows.length === 1 && charRows[0].version === 'v02'
-  && charRows[0].status !== '运行时可用' && !(charRows[0].runtimePath || '').trim(),
-  charRows.map((d) => d.version + ':' + d.status).join(','));
-check('全库不存在任何角色动画帧序列（frameHrefs 全空）',
-  DATA.filter((d) => d.cat === '角色').every((d) => (d.frameHrefs || []).length === 0));
+const finalRows = charRows.filter((d) => ['r10','r11','r12'].includes(d.version));
+check('v02 仍是设定基准、不是运行时资源',
+  charRows.some((d) => d.version === 'v02' && d.status === '已通过设定审核'
+    && !(d.runtimePath || '').trim()));
+check('r10/r11/r12 三轴状态 = 运行时可用 / 认可 / 正式使用',
+  finalRows.length === 3 && finalRows.every((d) =>
+    d.status === '运行时可用' && d.visual === '认可' && d.useState === '正式使用'
+    && (d.runtimePath || '').trim()),
+  finalRows.map((d) => d.version + ':' + d.status).join(','));
+check('三段动画帧数 36 / 21 / 1、FPS 24 / 24 / 8',
+  ['r10','r11','r12'].every((v) => {
+    const d = finalRows.find((x) => x.version === v);
+    return d && d.anim && d.anim.frames &&
+      Number(d.anim.frames) === ({r10:36,r11:21,r12:1})[v] &&
+      Number(d.anim.fps) === ({r10:24,r11:24,r12:8})[v];
+  }), finalRows.map((d) => d.version + ':' + (d.anim?.frames || '?')).join(','));
+check('每条正式动画都带非空「已知限制」，未把问题标成已修复',
+  finalRows.every((d) => (d.knownLimits || '').length > 10),
+  finalRows.map((d) => d.version + ':' + (d.knownLimits || '').slice(0, 18)).join(' | '));
+check('脚底滑动与停止过渡相位限制在台账里如实保留',
+  finalRows.some((d) => d.version === 'r10' && d.knownLimits.includes('1.89') && d.knownLimits.includes('未修复'))
+  && finalRows.some((d) => d.version === 'r11' && d.knownLimits.includes('19%') && d.knownLimits.includes('未修复')));
 const crops = await evalJs("JSON.stringify(JSON.parse(document.getElementById('meta-data').textContent).crops.map(c=>c.key))");
 const cropKeys = JSON.parse(crops);
 check('v02 裁图 5 张齐全（right / left / front / back / face）',
   ['right', 'left', 'front', 'back', 'face'].every((k) => cropKeys.includes(k)),
   cropKeys.join(','));
 const charActions = JSON.parse(await evalJs("JSON.stringify(JSON.parse(document.getElementById('meta-data').textContent).charActions)"));
-check('角色动作清单把待机/行走/推车标为「待重新制作」',
-  ['待机', '普通行走', '推购物车'].every((a) =>
-    charActions.some((x) => x.act === a && x.state === '待重新制作')),
+check('动作清单：待机 / 普通行走 / 停止过渡 = 正式使用，推购物车仍待重新制作',
+  ['待机','普通行走','停止过渡'].every((a) => charActions.some((x) => x.act === a && x.state === '正式使用'))
+  && charActions.some((x) => x.act === '推购物车' && x.state === '待重新制作'),
   charActions.map((x) => x.act + ':' + x.state).join(','));
+check('动作清单的已知限制列不是空的（未掩盖遗留问题）',
+  ['普通行走','停止过渡'].every((a) => {
+    const x = charActions.find((y) => y.act === a);
+    return x && (x.limits || '').includes('未修复');
+  }));
 
 // ---- 归档条目不得有运行时路径，且必须打上「历史归档」标记
 const archived = DATA.filter((d) => d.archived === '是');
@@ -261,11 +286,16 @@ const badUse = DATA.filter((d) => d.useState === '正式使用' && d.status !== 
 check('「正式使用」的条目都是运行时可用', badUse.length === 0,
   badUse.map((d) => d.id + '@' + d.version).join(',') || '无越权');
 
-// ---- 序列帧已全部随旧动画删除
+// ---- VIDEO-FINALIZE-001：三段正式帧序列可播放，GIF 2 个
 const frameRows = DATA.filter((d) => (d.frameHrefs || []).length);
-check('台账里没有任何帧序列（旧动画已删）', frameRows.length === 0,
-  frameRows.map((d) => d.id + '@' + d.version).join(',') || '0 组');
-check('没有残留的预览 GIF', DATA.filter((d) => d.gif).length === 0);
+check('帧序列 = r10(36) / r11(21) / r12(1) 共 58 张',
+  frameRows.length === 3
+  && ({r10:36,r11:21,r12:1})[frameRows[0]?.version] === frameRows[0]?.frameHrefs.length
+  && frameRows.reduce((n, d) => n + d.frameHrefs.length, 0) === 58,
+  frameRows.map((d) => d.version + ':' + d.frameHrefs.length).join(','));
+check('walk_right 与 walk_to_idle 各生成 1 个预览 GIF',
+  DATA.filter((d) => d.gif).length === 2,
+  DATA.filter((d) => d.gif).map((d) => d.version).join(','));
 
 // ---- 参考图：四个动作都有已登记参考图，且不含未登记素材
 const refActions = ['普通行走', '推购物车', '搬箱', '搬水'];
@@ -284,18 +314,18 @@ check('四个动作都挂上了 v02 裁图（人物参考不再依赖旧动画�
 check('角色动作导航 = 8 项（全部 + 7 门类）',
   await evalJs("document.querySelectorAll('#actnav li').length") === 8);
 
-// ---- UI：点动作「推购物车」→ 0 条（旧动画已删，这是正确结果）
+// ---- UI：点动作「推购物车」→ 0 条（推车动画本轮未制作，这是正确结果）
 await evalJs("[...document.querySelectorAll('#actnav li')].find(li=>li.dataset.a==='推购物车').click()");
 const pushCount = DATA.filter((d) => d.act === '推购物车' && d.cat === '角色').length;
-check(`动作筛选「推购物车」→ ${pushCount} 项（应为 0，旧动画已删）`,
+check(`动作筛选「推购物车」→ ${pushCount} 项（应为 0，推车动画未制作）`,
   pushCount === 0 && await evalJs("document.querySelectorAll('.card').length") === pushCount);
 await evalJs("document.querySelector('#actnav li').click();document.querySelector('#nav li').click()");
 
-// ---- UI：v02 灯箱（唯一版本，不应出现版本对照条）
+// ---- UI：v02 灯箱（同 ID 现在有 v02 + r10/r11/r12 共 4 个版本）
 const v02Idx = DATA.findIndex((d) => d.id === 'ART_CHAR_001' && d.version === 'v02');
 await evalJs(`document.querySelectorAll('.card')[${v02Idx}].click()`);
-check('v02 灯箱不再出现版本对照（同 ID 只剩 1 个版本）',
-  await evalJs("document.querySelectorAll('#detail .vitem').length") === 0);
+check('v02 灯箱出现 4 个版本对照（设定基准 + 三段正式动画）',
+  await evalJs("document.querySelectorAll('#detail .vitem').length") === 4);
 check('v02 灯箱提示不是可运行 Sprite', await evalJs("document.querySelector('#detail').innerText.includes('不是可运行角色动画')"));
 await evalJs("document.querySelector('#close').click()");
 
@@ -308,14 +338,26 @@ check('参考图页展示 5 张 v02 裁图',
 check('参考图页不误用素材卡片 class（不干扰卡片计数）',
   await evalJs("document.querySelectorAll('.refcard .card').length") === 0);
 await evalJs("[...document.querySelectorAll('#tabs .tab')].find(t=>t.dataset.v==='gaps').click()");
-check('角色动作状态页 = 7 个动作 + 2 个非角色缺口 = 9 行',
-  await evalJs("document.querySelectorAll('table.gaps tbody tr').length") === 9);
+check('角色动作状态页 = 8 个动作 + 2 个非角色缺口 = 10 行',
+  await evalJs("document.querySelectorAll('table.gaps tbody tr').length") === 10);
+check('动作状态页显式展示「已知限制（未修复）」汇总，含脚底滑动与 19% 相位',
+  await evalJs("document.querySelector('.limitsum')?.innerText.includes('1.89')")
+  && await evalJs("document.querySelector('.limitsum')?.innerText.includes('19%')")
+  && await evalJs("document.querySelector('.limitsum')?.innerText.includes('未修复')"));
+check('正式动画详情里有已知限制高亮块',
+  (() => { const d = DATA.find((x) => x.version === 'r10'); return !!d && d.knownLimits.length > 10; })());
 await evalJs("[...document.querySelectorAll('#tabs .tab')].find(t=>t.dataset.v==='assets').click()");
 
 // ---- UI：状态标记多选筛选
+await evalJs("[...document.querySelectorAll('#chips .chip')].find(c=>c.dataset.t==='当前游戏使用中').click()");
+const liveCount = DATA.filter((d) => d.tags.includes('当前游戏使用中')).length;
+check(`标记筛选「当前游戏使用中」→ ${liveCount} 项（含 3 条角色动画）`,
+  await evalJs("document.querySelectorAll('.card').length") === liveCount && liveCount >= 12);
+await evalJs("[...document.querySelectorAll('#chips .chip')].find(c=>c.dataset.t==='当前游戏使用中').click()");
+
 await evalJs("[...document.querySelectorAll('#chips .chip')].find(c=>c.dataset.t==='视觉质量待优化').click()");
 const visualCount = DATA.filter((d) => d.tags.includes('视觉质量待优化')).length;
-check(`标记筛选「视觉质量待优化」→ ${visualCount} 项`,
+check(`标记筛选「视觉质量待优化」→ ${visualCount} 项（3 条角色动画已认可，不应命中）`,
   await evalJs("document.querySelectorAll('.card').length") === visualCount);
 await evalJs("[...document.querySelectorAll('#chips .chip')].find(c=>c.dataset.t==='视觉质量待优化').click()");
 
