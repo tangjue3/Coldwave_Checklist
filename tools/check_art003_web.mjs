@@ -90,9 +90,14 @@ check('画布 = 960×540（1:1，无缩放）', size.w === 960 && size.h === 540
 let all = logs();
 // VIDEO-INTEGRATE-001：候选动画已打进 PCK 且在 Web 端加载。
 // 新动画用 [PLAYER] 日志报告，旧 r 系列的 [ANIM] 日志必须为零。
-check('Web 端候选动画已加载（[PLAYER] VIDEO-INTEGRATE-001）',
-  all.some((l) => l.text.includes('[PLAYER] VIDEO-INTEGRATE-001 候选动画已加载')),
-  all.filter((l) => l.text.includes('[PLAYER]')).map((l) => l.text).join(' | ').slice(0, 160));
+// VIDEO-INTEGRATE-002：启动日志改为列出全部 6 段动画，并单独报告推车候选可用性。
+check('Web 端 r10–r12 + 推车候选动画已加载（[PLAYER] 日志）',
+  all.some((l) => l.text.includes('[PLAYER] r10–r12 普通行走 + vid002 推车候选动画已加载')),
+  all.filter((l) => l.text.includes('[PLAYER]')).map((l) => l.text).join(' | ').slice(0, 200));
+check('Web 端推车候选三段确实挂载（不是拿普通行走冒充）',
+  all.some((l) => l.text.includes('push_walk_right') && l.text.includes('push_idle_right')
+    && l.text.includes('push_walk_to_idle')),
+  all.filter((l) => l.text.includes('[PLAYER]')).map((l) => l.text).join(' | ').slice(0, 200));
 check('旧 r 系列 [ANIM] 日志为零（没有拿旧动画冒充）',
   all.filter((l) => l.text.includes('[ANIM]')).length === 0,
   all.filter((l) => l.text.includes('[ANIM]')).map((l) => l.text).join(' | ').slice(0, 120)

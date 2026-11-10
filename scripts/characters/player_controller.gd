@@ -3,12 +3,15 @@ extends CharacterBody2D
 ## 角色移动底座（CORE-001A 建立 / CORE-001B 接推车 / VIDEO-INTEGRATE-001 接动画）
 ##
 ## ART-RESET-001 删掉了 r01–r09 全部旧贴图，本组件一度只保留功能层。
-## VIDEO-INTEGRATE-001 重新接上**候选**动画层（vid001，来自用户生成的 AI 视频）：
+## VIDEO-INTEGRATE-001 接上普通行走动画（r10/r11/r12，已正式登记）：
 ##   idle_right（1 帧） / walk_right（36 帧 24FPS） / walk_to_idle（21 帧 24FPS）
+## VIDEO-INTEGRATE-002 追加推车动画（**候选**，来自用户第二条 AI 视频）：
+##   push_idle_right（1 帧） / push_walk_right（32 帧 24FPS） / push_walk_to_idle（17 帧 24FPS）
 ## 只加渲染与动画切换，**移动 / 碰撞 / 脚底接地 / 推车接管 / 交互接口一律不动**。
 ##
-## ⚠️ 这批资源是**候选，待用户与美术审核**，尚未进素材台账 / 运行时白名单 /
-## 美术总览正式状态。审核不通过时把 player.tscn 的 SpriteFrames 外链摘掉即可回退。
+## ⚠️ 推车三段仍是**候选，待用户视觉审核**，未进素材台账 / 运行时白名单 /
+## 美术总览正式状态。购物车本体始终由 PushableCart 用 ART_FURN_103 r03 分层资源渲染，
+## 人物贴图里**不含任何车体像素**，也没有第二辆车。
 ##
 ## 坐标约定（不变）：
 ##   - 节点原点 = 角色脚底；帧画布 **512×704**，脚底落在 **(256,672)**。
@@ -30,6 +33,17 @@ const STATE_WALK := &"walk"
 const ANIM_IDLE := &"idle_right"
 const ANIM_WALK := &"walk_right"
 const ANIM_STOP := &"walk_to_idle"
+
+# ---- VIDEO-INTEGRATE-002：推车三段（候选） ----
+const ANIM_PUSH_IDLE := &"push_idle_right"
+const ANIM_PUSH_WALK := &"push_walk_right"
+const ANIM_PUSH_STOP := &"push_walk_to_idle"
+## 推车循环 f23–f54 共 32 帧 / 24FPS（两个完整步态周期，闭合差 0.00936）。
+const PUSH_WALK_FRAME_COUNT := 32
+## 与推车减速段首帧 f73 姿态差 ≤ 1.5× 循环内帧间均值的相位
+## （tools/video/integrate_002.py 实测 7/32 = 21.9%）。
+## 其它相位松手时视频没有对应减速段，不强行拼接，直接站稳。
+const PUSH_STOP_OK_PHASES: Array[int] = [0, 1, 14, 15, 16, 30, 31]
 
 ## 这两个常量由 tools/video/integrate_001.py 对真实视频逐帧量测得出：
 ## 让 walk 循环窗口取 f28..f63，使末帧 f63 与减速段起点 f137 姿态差 0.0302
@@ -65,7 +79,7 @@ var state: StringName = STATE_IDLE
 var external_control: bool = false
 
 ## 扶车姿态开关。打开时由 PushableCart 在绑定 / 解绑时切换。
-## **本轮没有推车动画**：这个开关只驱动「固定站姿」，绝不拿 walk_right 冒充推车动作。
+## VIDEO-INTEGRATE-002 起切到专用推车动画，不再拿 walk_right 冒充推车动作。
 var push_pose: bool = false
 ## 推车行走开关：绑定且向前实际推行时由 PushableCart 每帧驱动。
 var push_walk_active: bool = false
@@ -86,8 +100,12 @@ func _ready() -> void:
 		_sprite.visible = true
 		_sprite.animation_finished.connect(_on_animation_finished)
 		_play(ANIM_IDLE)
-		print("[PLAYER] VIDEO-INTEGRATE-001 候选动画已加载：%s（待美术审核）" %
+		print("[PLAYER] r10–r12 普通行走 + vid002 推车候选动画已加载：%s" %
 			", ".join(PackedStringArray(_sprite.sprite_frames.get_animation_names())))
+		if push_anim_available():
+			print("[PLAYER] VIDEO-INTEGRATE-002 推车动画可用（候选 / 待美术审核）")
+		else:
+			print("[PLAYER] VIDEO-INTEGRATE-002 推车动画缺失：推车状态将回退固定站姿")
 	else:
 		_sprite.visible = false
 		_warn_no_visual()
@@ -100,6 +118,16 @@ func _ready() -> void:
 func has_visual() -> bool:
 	return _sprite != null and _sprite.sprite_frames != null \
 		and _sprite.sprite_frames.get_animation_names().size() > 0
+
+
+## 推车三段是否齐备。缺任一段就回退固定站姿，绝不拿普通行走冒充推车。
+func push_anim_available() -> bool:
+	if not has_visual():
+		return false
+	var sf := _sprite.sprite_frames
+	return sf.has_animation(ANIM_PUSH_IDLE) \
+		and sf.has_animation(ANIM_PUSH_WALK) \
+		and sf.has_animation(ANIM_PUSH_STOP)
 
 
 func _warn_no_visual() -> void:
@@ -150,16 +178,21 @@ func _update_state() -> void:
 	_prev_state = state
 	state = next
 	state_changed.emit(state)
+	# 推车期间动画由 set_push_pose / set_push_moving 独占驱动，
+	# 避免与 PushableCart 每帧调用的时序竞争导致过渡被打断。
+	if push_pose:
+		return
 	_apply_anim_for_state()
 
 
 func _apply_anim_for_state() -> void:
 	if not has_visual():
 		return
-	# 推车动画尚未制作：绑定期间固定站姿，不拿普通行走冒充扶车/推车。
+	# ---- 推车状态：只用专用推车三段，绝不拿普通行走冒充 ----
+	# PushableCart 在 bind() 里 set_push_pose(true)，在 _physics_process 里
+	# 每帧 set_push_moving(pushing and 实际位移>1)。两条独立通道。
 	if push_pose:
-		_in_stop_transition = false
-		_play(ANIM_IDLE)
+		_apply_push_anim()
 		return
 	if state == STATE_WALK:
 		_in_stop_transition = false
@@ -174,6 +207,26 @@ func _apply_anim_for_state() -> void:
 		_play(ANIM_IDLE)
 
 
+## 推车动画切换（仅供 _apply_anim_for_state 兜底；正常路径由两个 set_* 接口驱动）。
+func _apply_push_anim() -> void:
+	if _in_stop_transition and _sprite.animation == ANIM_PUSH_STOP:
+		return                       # 过渡播放中不打断
+	_in_stop_transition = false
+	if not push_anim_available():
+		_play(ANIM_IDLE)
+		return
+	_play(ANIM_PUSH_WALK if push_walk_active else ANIM_PUSH_IDLE)
+
+
+func _can_play_push_stop_transition() -> bool:
+	if not push_anim_available():
+		return false
+	if not stop_phase_align:
+		return true
+	var f := _sprite.frame
+	return f >= 0 and f < PUSH_WALK_FRAME_COUNT and PUSH_STOP_OK_PHASES.has(f)
+
+
 ## 是否允许播停止过渡。相位集合来自视频逐帧量测，见 STOP_OK_PHASES 注释。
 func _can_play_stop_transition() -> bool:
 	if not _sprite.sprite_frames.has_animation(ANIM_STOP):
@@ -185,9 +238,13 @@ func _can_play_stop_transition() -> bool:
 
 
 func _on_animation_finished() -> void:
-	if _sprite.animation == ANIM_STOP:
-		_in_stop_transition = false
-		_play(ANIM_IDLE)
+	match _sprite.animation:
+		ANIM_STOP:
+			_in_stop_transition = false
+			_play(ANIM_IDLE)
+		ANIM_PUSH_STOP:
+			_in_stop_transition = false
+			_play(ANIM_PUSH_IDLE if push_pose else ANIM_IDLE)
 
 
 func _play(anim: StringName) -> void:
@@ -219,21 +276,40 @@ func set_external_control(on: bool) -> void:
 		velocity = Vector2.ZERO
 
 
-## 扶车姿态开关（推车绑定/解绑时切）。本轮只把动画固定为站姿，不切推车帧。
+## 扶车姿态开关（PushableCart 在 bind/unbind 时切）。
+## 进入：立刻播扶车待机；离开：回到普通待机/行走，绝不残留推车帧。
 func set_push_pose(on: bool) -> void:
 	if push_pose == on:
 		return
 	push_pose = on
+	_in_stop_transition = false
 	if not on:
 		push_walk_active = false
 	if has_visual():
-		_in_stop_transition = false
-		_play(ANIM_IDLE)
+		if on and not push_anim_available():
+			# 候选未挂载：固定站姿，不拿 walk_right 冒充推车
+			_play(ANIM_IDLE)
+		else:
+			_play(ANIM_PUSH_IDLE if on else (ANIM_WALK if state == STATE_WALK else ANIM_IDLE))
 
 
-## 推车行走开关：由 PushableCart 每帧驱动。本轮不驱动任何帧（没有推车动画）。
+## 推车行走开关：PushableCart 每帧驱动。只在**值变化**时切帧，避免每帧重置播放。
+## 松开方向键时先看当前 walk 相位能否自然接上视频减速段，能则播过渡，否则直接站稳。
 func set_push_moving(moving: bool) -> void:
+	if push_walk_active == moving:
+		return
 	push_walk_active = moving
+	if not has_visual() or not push_pose or not push_anim_available():
+		return
+	if moving:
+		_in_stop_transition = false
+		_play(ANIM_PUSH_WALK)
+	elif _can_play_push_stop_transition():
+		_in_stop_transition = true
+		_play(ANIM_PUSH_STOP)
+	else:
+		_in_stop_transition = false
+		_play(ANIM_PUSH_IDLE)
 
 
 func is_pushing_pose() -> bool:

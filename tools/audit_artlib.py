@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import csv
 import glob
+import json
 import re
 import sys
 from pathlib import Path
@@ -191,7 +192,9 @@ def main() -> int:
     # 不再是「候选」。assets/characters/ 的帧由台账三行的 动画帧序列 覆盖。
     # 这里额外做一次正式登记的帧数闭环校验：台账声明 = 运行时帧 = 素材库副本。
     FINAL_SEGS = {"r10": 36, "r11": 21, "r12": 1}
-    char_frames = sorted((ROOT / "assets" / "characters").glob("*.png"))
+    # 只统计正式登记帧；vid002_cand_* 是未转正的候选，见下方单独校验
+    char_frames = sorted(p for p in (ROOT / "assets" / "characters").glob("*.png")
+                         if "vid002_cand_" not in p.name)
     declared = sum(int(r.get("动画帧数") or 0) for r in rows
                    if r.get("素材ID") == "ART_CHAR_001" and r.get("当前版本") in FINAL_SEGS)
     if len(char_frames) != declared or declared != sum(FINAL_SEGS.values()):
@@ -205,6 +208,27 @@ def main() -> int:
     print(f"  [INFO] 正式登记 r10/r11/r12：assets {len(char_frames)} 张 = "
           f"台账 {declared} 张 = 素材库副本 {sum(FINAL_SEGS.values())} 张；"
           f"已知限制 3 条均保留")
+
+    # VIDEO-INTEGRATE-002：50 张推车帧是**候选**，不进台账 / 白名单 / 总览正式状态。
+    # 只做可追溯性校验：必须有候选 meta.json，且三段帧数与 SpriteFrames 声明一致。
+    cand_frames = sorted((ROOT / "assets" / "characters").glob(
+        "ART_CHAR_001_vid002_cand_*.png"))
+    cand_meta = ROOT / "assets" / "dev" / "video_candidates" / "VIDEO-INTEGRATE-002" / "meta.json"
+    if cand_frames:
+        if not cand_meta.is_file():
+            fail(f"发现 {len(cand_frames)} 张推车候选帧，但缺少可追溯的 meta.json")
+        else:
+            cm = json.loads(cand_meta.read_text(encoding="utf-8"))
+            anims = cm.get("godot", {}).get("animations", {})
+            want = {"push_walk_right": 32, "push_walk_to_idle": 17, "push_idle_right": 1}
+            if len(cand_frames) != sum(want.values()):
+                fail(f"推车候选帧 {len(cand_frames)} 张，约定 {sum(want.values())} 张")
+            for name, n in want.items():
+                got = anims.get(name, {}).get("frames", -1)
+                if got != n:
+                    fail(f"候选 {name} 帧数 {got}，约定 {n}")
+            print(f"  [INFO] VIDEO-INTEGRATE-002 推车候选 {len(cand_frames)} 张："
+                  f"未进台账 / 白名单 / 总览正式状态，meta.json 可追溯，待美术审核")
 
     # ---------------------------------------------------------------- 7. .thumbs 一致性
     if THUMBS.is_dir():

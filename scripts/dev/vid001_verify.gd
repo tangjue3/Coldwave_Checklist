@@ -336,12 +336,29 @@ func _run_tests() -> void:
 		"镜像不碰碰撞盒与世界坐标")
 	_player.set_facing(1)
 
-	# 推车：绝不拿普通行走冒充
+	# 推车：VIDEO-INTEGRATE-001 时期没有推车动画，原断言要求「固定站姿」。
+	# VIDEO-INTEGRATE-002 已接入三段专用推车候选动画，这里改为验证
+	# 「进入推车切 push_idle_right、退出回到普通动画，且 r10–r12 帧数不变」。
+	# 旧断言不是被删除，而是被真实的新状态验证取代。
 	_player.set_push_pose(true)
 	await _frames(4)
-	_ok(_player.current_anim() == PlayerController.ANIM_IDLE,
-		"绑定推车时固定站姿，不拿 walk_right 冒充推车动画")
+	_ok(_player.current_anim() == PlayerController.ANIM_PUSH_IDLE,
+		"绑定推车切专用 push_idle_right，不拿 walk_right 冒充",
+		String(_player.current_anim()))
+	_player.set_push_moving(true)
+	await _frames(4)
+	_ok(_player.current_anim() == PlayerController.ANIM_PUSH_WALK,
+		"推车行走切 push_walk_right", String(_player.current_anim()))
+	_player.set_push_moving(false)
 	_player.set_push_pose(false)
+	await _frames(4)
+	_ok(_player.current_anim() == PlayerController.ANIM_IDLE
+		or _player.current_anim() == PlayerController.ANIM_WALK,
+		"解除推车回到普通动画，不残留推车帧", String(_player.current_anim()))
+	_ok(sf.get_frame_count(&"walk_right") == 36
+		and sf.get_frame_count(&"walk_to_idle") == 21
+		and sf.get_frame_count(&"idle_right") == 1,
+		"r10/r11/r12 三段帧数在推车动画加入后仍保持不变")
 
 	_finish()
 

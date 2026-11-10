@@ -96,7 +96,10 @@ let all = logs();
 let text = (frag) => all.some((l) => l.text.includes(frag));
 check('URL 参数生效：出现 [CORE] 量测行', all.filter((l) => l.text.includes('[CORE]')).length >= 4);
 check('角色动画量测行 = VIDEO-INTEGRATE-001 候选', text('VIDEO-INTEGRATE-001 候选'));
-check('Web 端候选动画已加载（[PLAYER] 日志）', text('[PLAYER] VIDEO-INTEGRATE-001 候选动画已加载'));
+check('Web 端 r10–r12 + 推车候选动画已加载（[PLAYER] 日志）',
+  text('[PLAYER] r10–r12 普通行走 + vid002 推车候选动画已加载'));
+check('Web 端推车候选三段确实挂载',
+  text('push_walk_right') && text('push_idle_right') && text('push_walk_to_idle'));
 check('碰撞盒 = 28×160', text('28×160'));
 check('脚底锚点 (64,168)', text('脚底锚点 (64,168)'));
 check('帧画布 128×176 / Nearest 1:1', text('帧画布 128×176') && text('Nearest 1:1'));

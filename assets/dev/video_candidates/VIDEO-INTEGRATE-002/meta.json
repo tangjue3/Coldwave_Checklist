@@ -1,0 +1,158 @@
+{
+  "task": "VIDEO-INTEGRATE-002",
+  "status": "候选 / 待用户视觉审核（台账、白名单、美术总览正式状态未改）",
+  "source_video": "转存库/Character_pushing_shopping_cart_…_e2be2167.mp4",
+  "source_params": {
+    "size": [
+      1280,
+      720
+    ],
+    "fps": 24,
+    "frames": 96,
+    "duration_s": 4.032,
+    "greenscreen": "RGB(37,198,62)"
+  },
+  "separation": {
+    "method": "逐帧检测手-端盖接触点；手部带按颜色分离保留完整手指，其余用切线+连通域",
+    "cart_residue_px": 0,
+    "person_bbox_height": [
+      600,
+      612
+    ],
+    "cut_drift_px": 155,
+    "note": "游戏购物车继续使用 ART_FURN_103 r03 四件分层；视频购物车完全不进入游戏"
+  },
+  "texture": {
+    "source_frames": 96,
+    "canvas": [
+      512,
+      704
+    ],
+    "anchor": [
+      256,
+      672
+    ],
+    "scale": 1.06,
+    "foot_src_y": 670,
+    "torso_dst_x": 268,
+    "drift_compensation": "逐帧按 9 帧中值躯干轨迹平移，消除视频整组右移 109px，保留步态摆动",
+    "foot_rows": [
+      669,
+      676
+    ],
+    "visible_heights": [
+      637,
+      652
+    ],
+    "green_residual_px": 0,
+    "rule": "从 1280×720 原始视频的纯人物抠像帧直接生成 512×704；未使用任何 128×176 低清帧，未生成新视频，未重绘人物"
+  },
+  "phases": {
+    "loop_first": 23,
+    "loop_len": 32,
+    "loop_closure": 0.00936,
+    "inner_mean": 0.02319,
+    "stop_ok_phases": [
+      0,
+      1,
+      14,
+      15,
+      16,
+      30,
+      31
+    ],
+    "stop_phase_ratio": 0.219,
+    "period_frames": 16,
+    "period_s": 0.667,
+    "video_phases": {
+      "start_idle": "f1-6",
+      "start_walk": "f7-12",
+      "steady_push": "f13-72",
+      "decelerate": "f73-88",
+      "frozen_idle": "f89-96"
+    }
+  },
+  "godot": {
+    "animations": {
+      "walk_right": {
+        "frames": 36,
+        "fps": 24,
+        "loop": true
+      },
+      "walk_to_idle": {
+        "frames": 21,
+        "fps": 24,
+        "loop": false
+      },
+      "idle_right": {
+        "frames": 1,
+        "fps": 8,
+        "loop": true
+      },
+      "push_walk_right": {
+        "frames": 32,
+        "fps": 24,
+        "loop": true
+      },
+      "push_walk_to_idle": {
+        "frames": 17,
+        "fps": 24,
+        "loop": false
+      },
+      "push_idle_right": {
+        "frames": 1,
+        "fps": 8,
+        "loop": true
+      }
+    },
+    "total_frames": 108,
+    "existing_preserved": 58,
+    "new_frames": 50,
+    "spriteframes": "assets/characters/player_sprite_frames.tres"
+  },
+  "previews": {
+    "gifs": {
+      "push_walk_right": "转存库\\VIDEO-INTEGRATE-002\\push_walk_right.gif",
+      "push_walk_to_idle": "转存库\\VIDEO-INTEGRATE-002\\push_walk_to_idle.gif"
+    },
+    "segments": {
+      "push_walk_right": 32,
+      "push_walk_to_idle": 17,
+      "push_idle_right": 1
+    }
+  },
+  "godot_geometry": {
+    "sprite_scale": 0.25,
+    "sprite_offset": [
+      -256,
+      -672
+    ],
+    "side_offset": 80,
+    "cart_anchor": [
+      64,
+      104
+    ],
+    "handle_world_rel_player": [
+      32,
+      56
+    ],
+    "handle_world_y": [
+      -90,
+      -84
+    ],
+    "layer_order": [
+      "Back z0",
+      "Cargo z0",
+      "Player",
+      "Front z1"
+    ],
+    "texture_filter": "LINEAR (2), no mipmap",
+    "stretch_mode": "canvas_items"
+  },
+  "speed_policy": {
+    "walk": 100,
+    "push": 80,
+    "pull": 40,
+    "unchanged": true
+  }
+}
