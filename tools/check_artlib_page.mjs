@@ -223,6 +223,116 @@ fs.mkdirSync(path.dirname(SHOT), { recursive: true });
 fs.writeFileSync(SHOT, Buffer.from(shot.result.data, 'base64'));
 console.log('截图：', SHOT);
 
+// ==========================================================================
+// TASK-ARTLIB-CLEAN-001 新增：三条状态轴 / 动作分组 / 参考图 / 版本对照 / 序列帧
+// ==========================================================================
+await evalJs("document.querySelector('#close').click()");
+
+// ---- 数据层：整理列是否齐全、枚举是否合法
+const ACTS = ['外观设定', '待机', '普通行走', '推购物车', '反向拉车', '搬运', '其他动作', '不适用'];
+const missFields = DATA.filter((d) => !d.act || !d.visual || !d.useState || !Array.isArray(d.tags));
+check('CLEAN-001 整理列齐全（动作分组 / 视觉评价 / 使用状态 / 标记）',
+  missFields.length === 0, missFields.map((d) => d.id + '@' + d.version).join(',') || '39 条齐全');
+check('动作分组取值合法',
+  DATA.every((d) => ACTS.includes(d.act)),
+  [...new Set(DATA.map((d) => d.act))].join(','));
+check('视觉评价取值合法',
+  DATA.every((d) => ['认可', '待优化', '未评价', '不适用'].includes(d.visual)),
+  [...new Set(DATA.map((d) => d.visual))].join(','));
+check('使用状态取值合法',
+  DATA.every((d) => ['正式使用', '回退保留', '未使用'].includes(d.useState)),
+  [...new Set(DATA.map((d) => d.useState))].join(','));
+
+// ---- 核心需求：技术通过 ≠ 美术满意。r09 必须同时命中三个互不冲突的标记
+const r09v2 = DATA.find((d) => d.id === 'ART_CHAR_001' && d.version === 'r09');
+const needTags = ['已通过技术验收', '当前游戏使用中', '视觉质量待优化'];
+check('r09 同时具备「技术通过 + 正在用 + 视觉待优化」三个标记',
+  !!r09v2 && needTags.every((t) => r09v2.tags.includes(t)),
+  r09v2 ? r09v2.tags.join('+') : '缺失');
+check('r09 保留技术验收记录（审核状态仍为运行时可用）', r09v2?.status === '运行时可用', r09v2?.status);
+check('r09 视觉评价为待优化', r09v2?.visual === '待优化', r09v2?.visual);
+
+// ---- 归档条目不得有运行时路径，且必须打上「历史归档」标记
+const archived = DATA.filter((d) => d.archived === '是');
+check('归档条目全部带「历史归档」标记且无运行时路径',
+  archived.length > 0 && archived.every((d) => d.tags.includes('历史归档') && !(d.runtimePath || '').trim()),
+  `${archived.length} 条：${archived.map((d) => d.id + '@' + d.version).join(',')}`);
+
+// ---- 使用状态与审核状态的一致性
+const badUse = DATA.filter((d) => d.useState === '正式使用' && d.status !== '运行时可用');
+check('「正式使用」的条目都是运行时可用', badUse.length === 0,
+  badUse.map((d) => d.id + '@' + d.version).join(',') || '无越权');
+
+// ---- 序列帧：帧文件真实存在，帧数与台账一致
+const frameRows = DATA.filter((d) => (d.frameHrefs || []).length);
+const missingFrames = frameRows.flatMap((d) => d.frameHrefs.filter((h) => !fs.existsSync(path.join(ROOT, '素材库', h))));
+check('序列帧文件全部存在', missingFrames.length === 0,
+  `${frameRows.length} 组 / ${frameRows.reduce((a, d) => a + d.frameHrefs.length, 0)} 帧，缺失 ${missingFrames.join(',') || '无'}`);
+const r09frames = DATA.find((d) => d.id === 'ART_CHAR_001' && d.version === 'r09');
+const r02frames = DATA.find((d) => d.id === 'ART_CHAR_001' && d.version === 'r02');
+const r04frames = DATA.find((d) => d.id === 'ART_CHAR_001' && d.version === 'r04');
+check('帧数与台账一致：r02 = 4 / r04 = 4 / r09 = 16',
+  r02frames?.frameHrefs.length === 4 && r04frames?.frameHrefs.length === 4 && r09frames?.frameHrefs.length === 16,
+  `${r02frames?.frameHrefs.length} / ${r04frames?.frameHrefs.length} / ${r09frames?.frameHrefs.length}`);
+const gifs = DATA.filter((d) => d.gif);
+const badGifs = gifs.filter((d) => !fs.existsSync(path.join(ROOT, '素材库', d.gif)));
+check('多帧条目都生成了预览 GIF 且文件存在', gifs.length === 3 && badGifs.length === 0,
+  `${gifs.length} 个：${gifs.map((d) => d.version).join(',')} 缺失 ${badGifs.length}`);
+
+// ---- 参考图：四个动作都有已登记参考图，且不含未登记素材
+const refActions = ['普通行走', '推购物车', '搬箱', '搬水'];
+const refKeys = new Set(DATA.flatMap((d) => d.refFor));
+check('AI 视频参考图覆盖四个动作', refActions.every((a) => refKeys.has(a)), [...refKeys].join(','));
+const refUnknown = [...refKeys].filter((k) => !DATA.some((d) => d.refFor.includes(k)));
+check('参考图全部来自已登记素材', refUnknown.length === 0, refUnknown.join(',') || '全部已登记');
+const refNoThumb = DATA.filter((d) => d.refFor.length && !d.thumb);
+check('参考图条目都有缩略图', refNoThumb.length === 0, refNoThumb.map((d) => d.id).join(',') || '全部有图');
+
+// ---- UI：动作导航 8 项
+check('角色动作导航 = 8 项（全部 + 7 门类）',
+  await evalJs("document.querySelectorAll('#actnav li').length") === 8);
+
+// ---- UI：点动作「推购物车」只剩 2 条
+await evalJs("[...document.querySelectorAll('#actnav li')].find(li=>li.dataset.a==='推购物车').click()");
+const pushCount = DATA.filter((d) => d.act === '推购物车' && d.cat === '角色').length;
+check(`动作筛选「推购物车」→ ${pushCount} 项`,
+  await evalJs("document.querySelectorAll('.card').length") === pushCount);
+await evalJs("document.querySelector('#actnav li').click();document.querySelector('#nav li').click()");
+
+// ---- UI：r09 灯箱里版本对照完整 + 序列帧播放器可播放
+const r09Index = DATA.findIndex((d) => d.id === 'ART_CHAR_001' && d.version === 'r09');
+await evalJs(`document.querySelectorAll('.card')[${r09Index}].click()`);
+const sibCount = DATA.filter((d) => d.id === 'ART_CHAR_001').length;
+check(`灯箱「版本对照」列出同 ID 全部 ${sibCount} 个版本`,
+  await evalJs("document.querySelectorAll('#detail .vitem').length") === sibCount);
+const before = await evalJs("document.querySelector('#big').getAttribute('src')");
+await evalJs("document.querySelector('#play').click()");
+await sleep(350);
+const after = await evalJs("document.querySelector('#big').getAttribute('src')");
+check('序列帧播放器会切换帧', !!before && !!after && before !== after, `${before} → ${after}`);
+await evalJs("document.querySelector('#play').click();document.querySelector('#close').click()");
+
+// ---- UI：参考图页 4 张卡片
+await evalJs("[...document.querySelectorAll('#tabs .tab')].find(t=>t.dataset.v==='refs').click()");
+check('参考图页渲染 4 个动作卡片',
+  await evalJs("document.querySelectorAll('.refcard').length") === 4);
+check('参考图页不误用素材卡片 class（不干扰卡片计数）',
+  await evalJs("document.querySelectorAll('.refcard .card').length") === 0);
+await evalJs("[...document.querySelectorAll('#tabs .tab')].find(t=>t.dataset.v==='gaps').click()");
+check('动作缺口页渲染 6 行',
+  await evalJs("document.querySelectorAll('table.gaps tbody tr').length") === 6);
+await evalJs("[...document.querySelectorAll('#tabs .tab')].find(t=>t.dataset.v==='assets').click()");
+
+// ---- UI：状态标记多选筛选
+await evalJs("[...document.querySelectorAll('#chips .chip')].find(c=>c.dataset.t==='视觉质量待优化').click()");
+const visualCount = DATA.filter((d) => d.tags.includes('视觉质量待优化')).length;
+check(`标记筛选「视觉质量待优化」→ ${visualCount} 项`,
+  await evalJs("document.querySelectorAll('.card').length") === visualCount);
+await evalJs("[...document.querySelectorAll('#chips .chip')].find(c=>c.dataset.t==='视觉质量待优化').click()");
+
+const shot2 = await send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: false });
+fs.writeFileSync(`${ROOT}/tests/screenshots/artlib_refs.png`, Buffer.from(shot2.result.data, 'base64'));
+
 const failed = results.filter((r) => !r.ok);
 console.log(`\n结果：${results.length - failed.length}/${results.length} 通过`);
 ws.close();
