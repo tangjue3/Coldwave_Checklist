@@ -2,6 +2,12 @@
 > 锚点换算基准**，不再是贴图文件分辨率。候选帧序列仍按 128×176 产出做体检，
 > 正式接入帧由 `tools/video/quality_002.py` 输出。其余工程约束不变。
 
+> **VIDEO-INTEGRATE-002 补充**：第二条视频（推购物车，横版 1280×720）已实跑通：
+> 先用 `tools/video/segment_002.py` 把人物与视频里的购物车分开（游戏车体继续用正式
+> r03 资源），再由 `tools/video/integrate_002.py` 输出 512×704 高清帧与三段动画。
+> 本链路为**候选**，未走正式认可；详见 `docs/VIDEO-INTEGRATE-002_交付报告.md`。
+
+
 # AI 视频 → Godot 动画接入规范
 
 > 建立：2026-11-10 / TASK-ARTLIB-CLEAN-001
