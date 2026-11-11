@@ -57,6 +57,8 @@ var _btn_debug: Button
 var _btn_minimap: Button
 var _minimap: WhiteboxMinimapStrip
 var _toast_timer: float = 0.0
+var _world_labels: Array[CanvasItem] = []
+var _env_debug_nodes: Array[CanvasItem] = []
 
 
 func _ready() -> void:
@@ -87,6 +89,8 @@ func _ready() -> void:
 
 
 func _ensure_hierarchy() -> void:
+	_world_labels.clear()
+	_env_debug_nodes.clear()
 	# 立即移除并释放预设空子节点，保证标准节点命名无重名后缀
 	for child in get_children():
 		remove_child(child)
@@ -165,7 +169,8 @@ func _build_background() -> void:
 	if is_outdoor:
 		var skyline := Node2D.new()
 		skyline.name = "DistantSkyline"
-		skyline.set_meta("art_slot", "ART_BG_SKYLINE_S1")
+		skyline.set_meta("art_slot", "SLOT_BG_SKYLINE_S1")
+		skyline.set_meta("registry_id", "ART_SCENE_103 (已用:暴雪街道远景分层)")
 		_bg_root.add_child(skyline)
 
 		var sx := 64.0
@@ -215,7 +220,9 @@ func _build_environment() -> void:
 	# 32px 地面砖缝刻度
 	var ticks := Node2D.new()
 	ticks.name = "GroundTileTicks"
+	ticks.visible = not clean_screenshot_mode
 	_env_root.add_child(ticks)
+	_env_debug_nodes.append(ticks)
 	var tx := 0.0
 	while tx <= width:
 		var is_major := is_zero_approx(fmod(tx, 320.0))
@@ -240,7 +247,9 @@ func _build_environment() -> void:
 		marker.size = Vector2(4.0, 340.0)
 		marker.color = Color(0.92, 0.76, 0.38, 0.35)
 		marker.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		marker.visible = not clean_screenshot_mode
 		_env_root.add_child(marker)
+		_env_debug_nodes.append(marker)
 
 		var seg_lbl := _make_world_label(
 			"【%s】 (%.0f ~ %.0f px)  %s" % [stitle, sx0, sx1, ssum],
@@ -319,6 +328,7 @@ func _build_buildings() -> void:
 		bnode.name = "Building_" + bid
 		bnode.position = Vector2(bx, base_y)
 		bnode.set_meta("art_slot", art_slot)
+		bnode.set_meta("registry_id", String(b.get("registry_id", "")))
 		bnode.set_meta("doc_code", doc_code)
 		bnode.set_meta("footprint_rect", Rect2(bx, base_y - bh, bw, bh))
 		_buildings_root.add_child(bnode)
@@ -592,7 +602,7 @@ func _build_door_visual(d: Dictionary) -> void:
 	var dnode := Node2D.new()
 	dnode.name = "DoorVisual_" + did
 	dnode.position = Vector2(dx, base_y)
-	dnode.set_meta("art_slot", "ART_DOOR_" + did.to_upper())
+	dnode.set_meta("art_slot", "SLOT_DOOR_" + did.to_upper())
 	_buildings_root.add_child(dnode)
 
 	# 门外框 (96×192 或 192×224)
@@ -679,7 +689,7 @@ func _build_stair_visual(st: Dictionary) -> void:
 
 	var snode := Node2D.new()
 	snode.name = "StairVisual_" + String(st.get("id", "stair"))
-	snode.set_meta("art_slot", "ART_STAIR_VERTICAL")
+	snode.set_meta("art_slot", "SLOT_STAIR_" + String(st.get("id", "stair")).to_upper())
 	_buildings_root.add_child(snode)
 
 	# 楼梯井背景框
@@ -737,7 +747,8 @@ func _build_props_and_shelves() -> void:
 		var snode := Node2D.new()
 		snode.name = "Shelf_" + sh_id
 		snode.position = Vector2(sh_x, base_y)
-		snode.set_meta("art_slot", "ART_FURN_101")
+		snode.set_meta("art_slot", "SLOT_SHELF_" + sh_id.to_upper())
+		snode.set_meta("registry_id", "ART_FURN_101")
 		_props_root.add_child(snode)
 
 		var sp := Sprite2D.new()
@@ -802,7 +813,7 @@ func _build_single_prop(p: Dictionary) -> void:
 	var pnode := Node2D.new()
 	pnode.name = "Prop_" + pid
 	pnode.position = Vector2(px, base_y)
-	pnode.set_meta("art_slot", "ART_PROP_" + pid.to_upper())
+	pnode.set_meta("art_slot", "SLOT_PROP_" + pid.to_upper())
 	_props_root.add_child(pnode)
 
 	var body := ColorRect.new()
@@ -1034,7 +1045,7 @@ func _setup_camera() -> void:
 	_camera.smoothing = 8.0
 	_camera.limit_left = 0
 	_camera.limit_right = int(maxf(width, 960.0))
-	_camera.limit_top = -220
+	_camera.limit_top = -360
 	_camera.limit_bottom = 540
 	_camera.make_current()
 	_camera.snap_to_target()
@@ -1219,6 +1230,8 @@ func _make_world_label(txt: String, pos: Vector2, fsize: int, col: Color) -> Lab
 	lbl.add_theme_constant_override("shadow_offset_x", 1)
 	lbl.add_theme_constant_override("shadow_offset_y", 1)
 	lbl.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	lbl.visible = not clean_screenshot_mode
+	_world_labels.append(lbl)
 	return lbl
 
 
@@ -1294,14 +1307,14 @@ func set_free_camera(enabled: bool) -> void:
 		var width: float = float(spec.get("width", 1920.0))
 		_camera.follow_enabled = not enabled
 		if enabled:
-			_camera.limit_left = -960
-			_camera.limit_right = int(width) + 960
-			_camera.limit_top = -640
-			_camera.limit_bottom = 960
+			_camera.limit_left = -1920
+			_camera.limit_right = int(width) + 1920
+			_camera.limit_top = -1080
+			_camera.limit_bottom = 1080
 		else:
 			_camera.limit_left = 0
 			_camera.limit_right = int(maxf(width, 960.0))
-			_camera.limit_top = -220
+			_camera.limit_top = -360
 			_camera.limit_bottom = 540
 			_camera.snap_to_target()
 	if _btn_cam_mode != null:
@@ -1315,7 +1328,7 @@ func pan_camera_by(delta_pos: Vector2) -> void:
 	if _camera != null:
 		var width: float = float(spec.get("width", 1920.0))
 		_camera.global_position.x = clampf(_camera.global_position.x + delta_pos.x, 240.0, maxf(width - 240.0, 480.0))
-		_camera.global_position.y = clampf(_camera.global_position.y + delta_pos.y, -80.0, 340.0)
+		_camera.global_position.y = clampf(_camera.global_position.y + delta_pos.y, -180.0, 340.0)
 
 
 func set_camera_zoom_Factor(z: float) -> void:
@@ -1335,7 +1348,7 @@ func _toggle_camera_zoom() -> void:
 func set_debug_guides_visible(vis: bool) -> void:
 	debug_guides_visible = vis
 	if _debug_overlay != null:
-		_debug_overlay.visible = vis
+		_debug_overlay.visible = vis and not clean_screenshot_mode
 		_debug_overlay.queue_redraw()
 	if _btn_debug != null:
 		_btn_debug.text = "[F3] 比例/边界线:开" if vis else "[F3] 比例/边界线:关"
@@ -1347,6 +1360,19 @@ func set_clean_mode(clean: bool) -> void:
 		_ui_layer.visible = not clean
 	if _sensor != null:
 		_sensor.visible = not clean
+	if _debug_overlay != null:
+		_debug_overlay.visible = debug_guides_visible and not clean
+	for lbl in _world_labels:
+		if is_instance_valid(lbl):
+			lbl.visible = not clean
+	for node in _env_debug_nodes:
+		if is_instance_valid(node):
+			node.visible = not clean
+
+
+func set_actors_visible(vis: bool) -> void:
+	if _actors_root != null:
+		_actors_root.visible = vis
 
 
 func set_minimap_visible(vis: bool) -> void:
@@ -1430,7 +1456,7 @@ func _check_cli_automation() -> void:
 		var kv := a.substr(2).split("=", true, 1)
 		args[kv[0].replace("-", "_")] = kv[1] if kv.size() > 1 else true
 
-	if args.has("scene002_tour") or args.has("scene002_test"):
+	if args.has("scene002_tour") or args.has("scene002_test") or args.has("scene003_tour"):
 		var runner_script := load("res://scripts/dev/scene002_runner.gd")
 		if runner_script != null:
 			var runner: Node = runner_script.new()

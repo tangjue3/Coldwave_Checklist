@@ -183,7 +183,8 @@ static func _spec_outdoor_street() -> Dictionary:
 				"roof_color": Color(0.22, 0.25, 0.27, 1.0),
 				"accent_color": Color(0.52, 0.58, 0.62, 1.0),
 				"roof_style": "flat_vent",
-				"art_slot": "ART_SCENE_EXT_C_EQUIP_BAY",
+				"art_slot": "SLOT_EXT_B01_EQUIP_BAY",
+				"registry_id": "ART_SCENE_107 (预留:安全设备区)",
 				"windows": [
 					{"x": 496.0, "y_off": 112.0, "w": 96.0, "h": 64.0, "kind": "louver", "label": "外墙通风格栅"},
 				],
@@ -203,7 +204,8 @@ static func _spec_outdoor_street() -> Dictionary:
 				"roof_color": Color(0.27, 0.23, 0.22, 1.0),
 				"accent_color": Color(0.83, 0.64, 0.42, 1.0),
 				"roof_style": "pitched_antenna",
-				"art_slot": "ART_SCENE_EXT_AB_SAFEHOUSE",
+				"art_slot": "SLOT_EXT_B02_SAFEHOUSE",
+				"registry_id": "ART_SCENE_102 (已用:安全屋概念) + ART_SCENE_103 (已用:街道概念)",
 				"windows": [
 					{"x": 704.0, "y_off": 96.0, "w": 96.0, "h": 80.0, "kind": "warm_plant", "label": "1F窗(绿植/暖光)"},
 					{"x": 1248.0, "y_off": 96.0, "w": 112.0, "h": 80.0, "kind": "warm", "label": "1F起居窗"},
@@ -226,7 +228,8 @@ static func _spec_outdoor_street() -> Dictionary:
 				"roof_color": Color(0.25, 0.27, 0.30, 1.0),
 				"accent_color": Color(0.76, 0.71, 0.62, 1.0),
 				"roof_style": "low_wall",
-				"art_slot": "ART_SCENE_EXT_FW_NOTICE_MENG",
+				"art_slot": "SLOT_EXT_B03_NOTICE_MENG",
+				"registry_id": "ART_SCENE_103 (已用:街道概念) + ART_SCENE_105 (预留:街角与路牌)",
 				"windows": [
 					{"x": 1952.0, "y_off": 88.0, "w": 192.0, "h": 96.0, "kind": "board", "label": "社区主公告板"},
 					{"x": 2272.0, "y_off": 208.0, "w": 88.0, "h": 64.0, "kind": "cold", "label": "W 住处窗"},
@@ -247,7 +250,8 @@ static func _spec_outdoor_street() -> Dictionary:
 				"roof_color": Color(0.26, 0.29, 0.33, 1.0),
 				"accent_color": Color(0.68, 0.74, 0.80, 1.0),
 				"roof_style": "apartment_awning",
-				"art_slot": "ART_SCENE_EXT_FT_APARTMENT",
+				"art_slot": "SLOT_EXT_B04_APARTMENT",
+				"registry_id": "ART_SCENE_103 (已用:街道概念，待自 ART_SCENE_113 起立项独立立面)",
 				"windows": [
 					{"x": 2656.0, "y_off": 96.0, "w": 112.0, "h": 80.0, "kind": "warm", "label": "1F 王秀琴家窗"},
 					{"x": 3200.0, "y_off": 96.0, "w": 112.0, "h": 80.0, "kind": "cold", "label": "1F 邻户窗"},
@@ -271,7 +275,8 @@ static func _spec_outdoor_street() -> Dictionary:
 				"roof_color": Color(0.22, 0.26, 0.29, 1.0),
 				"accent_color": Color(0.56, 0.67, 0.72, 1.0),
 				"roof_style": "shutter_shop",
-				"art_slot": "ART_SCENE_EXT_Q_REPAIR",
+				"art_slot": "SLOT_EXT_B05_REPAIR_CORNER",
+				"registry_id": "ART_SCENE_103 (已用:街道概念，待自 ART_SCENE_113 起立项维修角)",
 				"windows": [
 					{"x": 3680.0, "y_off": 96.0, "w": 96.0, "h": 80.0, "kind": "shutter", "label": "工具展示窗"},
 				],
@@ -291,7 +296,8 @@ static func _spec_outdoor_street() -> Dictionary:
 				"roof_color": Color(0.20, 0.24, 0.29, 1.0),
 				"accent_color": Color(0.85, 0.68, 0.42, 1.0),
 				"roof_style": "booth",
-				"art_slot": "ART_SCENE_EXT_FR_GUARDBOOTH",
+				"art_slot": "SLOT_EXT_B06_GUARD_BOOTH",
+				"registry_id": "ART_SCENE_103 (已用:老小区入口与街道概念)",
 				"windows": [
 					{"x": 4192.0, "y_off": 96.0, "w": 128.0, "h": 88.0, "kind": "warm", "label": "门岗值班小窗"},
 					{"x": 4352.0, "y_off": 104.0, "w": 64.0, "h": 64.0, "kind": "board", "label": "求助纸条夹"},
@@ -312,7 +318,8 @@ static func _spec_outdoor_street() -> Dictionary:
 				"roof_color": Color(0.21, 0.26, 0.30, 1.0),
 				"accent_color": Color(0.72, 0.78, 0.84, 1.0),
 				"roof_style": "canopy",
-				"art_slot": "ART_SCENE_EXT_O_BUSSTOP",
+				"art_slot": "SLOT_EXT_B07_BUS_STOP",
+				"registry_id": "ART_SCENE_103 (已用:街道概念) + ART_SCENE_105 (预留:街角与路牌)",
 				"windows": [
 					{"x": 4672.0, "y_off": 80.0, "w": 160.0, "h": 112.0, "kind": "board", "label": "候车亭信息板"},
 				],
@@ -333,7 +340,8 @@ static func _spec_outdoor_street() -> Dictionary:
 				"roof_color": Color(0.26, 0.24, 0.22, 1.0),
 				"accent_color": Color(0.84, 0.64, 0.42, 1.0),
 				"roof_style": "shop_sign",
-				"art_slot": "ART_SCENE_EXT_J_CONVENIENCE",
+				"art_slot": "SLOT_EXT_B08_CONVENIENCE",
+				"registry_id": "ART_SCENE_103 (已用:街道店铺概念，待自 ART_SCENE_113 起立项便利店)",
 				"windows": [
 					{"x": 5664.0, "y_off": 88.0, "w": 192.0, "h": 104.0, "kind": "warm", "label": "便利店橱窗(可换卷帘)"},
 					{"x": 5440.0, "y_off": 320.0, "w": 128.0, "h": 80.0, "kind": "warm_2f", "label": "2F 唐母房间窗"},
@@ -354,7 +362,8 @@ static func _spec_outdoor_street() -> Dictionary:
 				"roof_color": Color(0.24, 0.29, 0.27, 1.0),
 				"accent_color": Color(0.60, 0.78, 0.68, 1.0),
 				"roof_style": "shop_sign",
-				"art_slot": "ART_SCENE_EXT_N_PHARMACY",
+				"art_slot": "SLOT_EXT_B09_PHARMACY",
+				"registry_id": "ART_SCENE_103 (已用:街道店铺概念，待自 ART_SCENE_113 起立项药店)",
 				"windows": [
 					{"x": 6144.0, "y_off": 96.0, "w": 160.0, "h": 96.0, "kind": "warm", "label": "药店左橱窗"},
 					{"x": 6528.0, "y_off": 96.0, "w": 160.0, "h": 96.0, "kind": "board", "label": "营业告示与右橱窗"},
@@ -375,7 +384,8 @@ static func _spec_outdoor_street() -> Dictionary:
 				"roof_color": Color(0.28, 0.22, 0.18, 1.0),
 				"accent_color": Color(0.90, 0.66, 0.38, 1.0),
 				"roof_style": "supermarket_fascia",
-				"art_slot": "ART_SCENE_101_EXT_SUPERMARKET",
+				"art_slot": "SLOT_EXT_B10_SUPERMARKET",
+				"registry_id": "ART_SCENE_101 (已用:灾前超市概念)",
 				"windows": [
 					{"x": 7008.0, "y_off": 96.0, "w": 320.0, "h": 112.0, "kind": "warm", "label": "超市左侧展示窗"},
 					{"x": 7744.0, "y_off": 96.0, "w": 320.0, "h": 112.0, "kind": "warm", "label": "超市右侧促销与限购告示窗"},
@@ -396,7 +406,8 @@ static func _spec_outdoor_street() -> Dictionary:
 				"roof_color": Color(0.23, 0.26, 0.23, 1.0),
 				"accent_color": Color(0.78, 0.65, 0.44, 1.0),
 				"roof_style": "shop_sign",
-				"art_slot": "ART_SCENE_112_EXT_HARDWARE",
+				"art_slot": "SLOT_EXT_B11_HARDWARE",
+				"registry_id": "ART_SCENE_112 (预留:五金/家电店)",
 				"windows": [
 					{"x": 8416.0, "y_off": 96.0, "w": 224.0, "h": 96.0, "kind": "warm", "label": "工具与门窗样板橱窗"},
 					{"x": 8928.0, "y_off": 96.0, "w": 288.0, "h": 112.0, "kind": "shutter", "label": "取暖器展示与大件出货卷帘"},
@@ -417,7 +428,8 @@ static func _spec_outdoor_street() -> Dictionary:
 				"roof_color": Color(0.20, 0.23, 0.27, 1.0),
 				"accent_color": Color(0.86, 0.56, 0.38, 1.0),
 				"roof_style": "gantry",
-				"art_slot": "ART_SCENE_EXT_U_CHECKPOINT",
+				"art_slot": "SLOT_EXT_B12_CHECKPOINT",
+				"registry_id": "ART_SCENE_103 (已用:街道概念) + ART_SCENE_105 (预留:街角与路牌)",
 				"windows": [
 					{"x": 9600.0, "y_off": 80.0, "w": 224.0, "h": 80.0, "kind": "board", "label": "道路管制公告牌"},
 				],
@@ -438,7 +450,8 @@ static func _spec_outdoor_street() -> Dictionary:
 				"roof_color": Color(0.22, 0.24, 0.27, 1.0),
 				"accent_color": Color(0.74, 0.62, 0.42, 1.0),
 				"roof_style": "industrial_warehouse",
-				"art_slot": "ART_SCENE_104_EXT_WAREHOUSE",
+				"art_slot": "SLOT_EXT_B13_WAREHOUSE",
+				"registry_id": "ART_SCENE_104 (预留:批发仓库)",
 				"windows": [
 					{"x": 11200.0, "y_off": 240.0, "w": 256.0, "h": 64.0, "kind": "louver", "label": "高窗采光带 A"},
 					{"x": 11584.0, "y_off": 240.0, "w": 256.0, "h": 64.0, "kind": "louver", "label": "高窗采光带 B"},
@@ -459,7 +472,8 @@ static func _spec_outdoor_street() -> Dictionary:
 				"roof_color": Color(0.20, 0.24, 0.28, 1.0),
 				"accent_color": Color(0.68, 0.74, 0.80, 1.0),
 				"roof_style": "canopy",
-				"art_slot": "ART_SCENE_EXT_L_LOGISTICS",
+				"art_slot": "SLOT_EXT_B14_LOGISTICS",
+				"registry_id": "待立项 (自 ART_SCENE_113 起顺延，注:109受保护为电台/手机特写)",
 				"windows": [
 					{"x": 13760.0, "y_off": 96.0, "w": 256.0, "h": 96.0, "kind": "board", "label": "大件订单牌与交接窗"},
 				],
@@ -700,7 +714,8 @@ static func _spec_shelter() -> Dictionary:
 				"roof_color": Color(0.24, 0.19, 0.16, 1.0),
 				"accent_color": Color(0.86, 0.66, 0.42, 1.0),
 				"roof_style": "interior_room",
-				"art_slot": "ART_SCENE_102_1F_INTERIOR",
+				"art_slot": "SLOT_INT_SHELTER_1F",
+				"registry_id": "ART_SCENE_102 (已用:v01-base/v01-upgraded 概念) + ART_SCENE_111 (预留:暴雪窗外)",
 				"windows": [
 					{"x": 832.0, "y_off": 96.0, "w": 160.0, "h": 96.0, "kind": "window_m", "label": "1F 窗外远景 M + 外婆绿植窗台"},
 					{"x": 2112.0, "y_off": 96.0, "w": 160.0, "h": 96.0, "kind": "window_m", "label": "1F 生活区保温窗"},
@@ -721,7 +736,8 @@ static func _spec_shelter() -> Dictionary:
 				"roof_color": Color(0.20, 0.17, 0.15, 1.0),
 				"accent_color": Color(0.74, 0.60, 0.44, 1.0),
 				"roof_style": "attic_roof",
-				"art_slot": "ART_SCENE_102_2F_INTERIOR",
+				"art_slot": "SLOT_INT_SHELTER_2F",
+				"registry_id": "ART_SCENE_106 (预留:小楼楼上旧房间) + ART_SCENE_111 (预留:暴雪窗外)",
 				"windows": [
 					{"x": 640.0, "y_off": 80.0, "w": 160.0, "h": 88.0, "kind": "window_m", "label": "2F 备用室窗(M远景)"},
 					{"x": 1312.0, "y_off": 80.0, "w": 192.0, "h": 88.0, "kind": "window_m", "label": "2F 朝街观察窗(可见屋顶天线M)"},
@@ -838,7 +854,8 @@ static func _spec_equipment_room() -> Dictionary:
 				"roof_color": Color(0.19, 0.22, 0.25, 1.0),
 				"accent_color": Color(0.62, 0.72, 0.78, 1.0),
 				"roof_style": "interior_room",
-				"art_slot": "ART_SCENE_INT_C_EQUIP",
+				"art_slot": "SLOT_INT_EQUIP_ROOM",
+				"registry_id": "ART_SCENE_107 (预留:安全设备区)",
 				"windows": [
 					{"x": 512.0, "y_off": 96.0, "w": 224.0, "h": 96.0, "kind": "louver", "label": "外墙独立通风格栅"},
 				],
@@ -919,7 +936,8 @@ static func _spec_apartment_hallway() -> Dictionary:
 				"roof_color": Color(0.20, 0.23, 0.26, 1.0),
 				"accent_color": Color(0.66, 0.72, 0.78, 1.0),
 				"roof_style": "interior_room",
-				"art_slot": "ART_SCENE_INT_G_HALL_1F",
+				"art_slot": "SLOT_INT_HALL_1F",
+				"registry_id": "ART_SCENE_108 (预留:门外楼道)",
 				"windows": [
 					{"x": 928.0, "y_off": 96.0, "w": 192.0, "h": 96.0, "kind": "cold", "label": "1F 楼道采光窗"},
 				],
@@ -939,7 +957,8 @@ static func _spec_apartment_hallway() -> Dictionary:
 				"roof_color": Color(0.19, 0.21, 0.24, 1.0),
 				"accent_color": Color(0.78, 0.66, 0.48, 1.0),
 				"roof_style": "interior_room",
-				"art_slot": "ART_SCENE_INT_G_HALL_2F",
+				"art_slot": "SLOT_INT_HALL_2F",
+				"registry_id": "ART_SCENE_108 (预留:门外楼道)",
 				"windows": [
 					{"x": 928.0, "y_off": 80.0, "w": 192.0, "h": 88.0, "kind": "cold", "label": "2F 楼道采光窗"},
 				],
@@ -1093,7 +1112,8 @@ static func _spec_zhao_home() -> Dictionary:
 				"roof_color": Color(0.24, 0.20, 0.18, 1.0),
 				"accent_color": Color(0.80, 0.66, 0.46, 1.0),
 				"roof_style": "interior_room",
-				"art_slot": "ART_SCENE_INT_P_ZHAO",
+				"art_slot": "SLOT_INT_ZHAO_HOME",
+				"registry_id": "待立项 (自 ART_SCENE_113 起顺延·赵阿姨与小满家内景)",
 				"windows": [
 					{"x": 1536.0, "y_off": 88.0, "w": 192.0, "h": 96.0, "kind": "warm", "label": "临街窗(可与街道隔窗呼应)"},
 				],
@@ -1173,7 +1193,8 @@ static func _spec_repair_corner() -> Dictionary:
 				"roof_color": Color(0.19, 0.22, 0.25, 1.0),
 				"accent_color": Color(0.64, 0.74, 0.78, 1.0),
 				"roof_style": "interior_room",
-				"art_slot": "ART_SCENE_INT_Q_REPAIR",
+				"art_slot": "SLOT_INT_REPAIR_CORNER",
+				"registry_id": "待立项 (自 ART_SCENE_113 起顺延·陈叔维修角内景)",
 				"windows": [
 					{"x": 544.0, "y_off": 88.0, "w": 256.0, "h": 96.0, "kind": "board", "label": "电工工具挂板墙"},
 				],
@@ -1252,7 +1273,8 @@ static func _spec_convenience_store() -> Dictionary:
 				"roof_color": Color(0.24, 0.20, 0.17, 1.0),
 				"accent_color": Color(0.88, 0.68, 0.42, 1.0),
 				"roof_style": "interior_room",
-				"art_slot": "ART_SCENE_INT_J_CONVENIENCE",
+				"art_slot": "SLOT_INT_CONVENIENCE",
+				"registry_id": "待立项 (自 ART_SCENE_113 起顺延·唐宁便利店内景)",
 				"windows": [
 					{"x": 448.0, "y_off": 88.0, "w": 224.0, "h": 96.0, "kind": "warm", "label": "临街橱窗(可叠卷帘)"},
 				],
@@ -1346,7 +1368,8 @@ static func _spec_pharmacy() -> Dictionary:
 				"roof_color": Color(0.20, 0.24, 0.23, 1.0),
 				"accent_color": Color(0.62, 0.80, 0.72, 1.0),
 				"roof_style": "interior_room",
-				"art_slot": "ART_SCENE_INT_N_PHARMACY",
+				"art_slot": "SLOT_INT_PHARMACY",
+				"registry_id": "待立项 (自 ART_SCENE_113 起顺延·社区药店内景)",
 				"windows": [
 					{"x": 480.0, "y_off": 88.0, "w": 224.0, "h": 96.0, "kind": "warm", "label": "生活化药店橱窗"},
 				],
@@ -1428,7 +1451,8 @@ static func _spec_supermarket() -> Dictionary:
 				"roof_color": Color(0.25, 0.19, 0.14, 1.0),
 				"accent_color": Color(0.92, 0.68, 0.36, 1.0),
 				"roof_style": "supermarket_interior",
-				"art_slot": "ART_SCENE_101_INT_SUPERMARKET",
+				"art_slot": "SLOT_INT_SUPERMARKET",
+				"registry_id": "ART_SCENE_101 (已用:v01 灾前超市横版概念)",
 				"windows": [
 					{"x": 640.0, "y_off": 96.0, "w": 256.0, "h": 96.0, "kind": "warm", "label": "超市临街采光窗"},
 					{"x": 3456.0, "y_off": 112.0, "w": 192.0, "h": 80.0, "kind": "board", "label": "S 临时批发预约告示牌"},
@@ -1548,7 +1572,8 @@ static func _spec_hardware_store() -> Dictionary:
 				"roof_color": Color(0.21, 0.24, 0.21, 1.0),
 				"accent_color": Color(0.84, 0.66, 0.40, 1.0),
 				"roof_style": "interior_room",
-				"art_slot": "ART_SCENE_112_INT_HARDWARE",
+				"art_slot": "SLOT_INT_HARDWARE",
+				"registry_id": "ART_SCENE_112 (预留:五金/家电店)",
 				"windows": [
 					{"x": 864.0, "y_off": 96.0, "w": 384.0, "h": 96.0, "kind": "board", "label": "五金工具挂墙陈列板"},
 				],
@@ -1645,7 +1670,8 @@ static func _spec_wholesale_warehouse() -> Dictionary:
 				"roof_color": Color(0.19, 0.21, 0.24, 1.0),
 				"accent_color": Color(0.80, 0.64, 0.40, 1.0),
 				"roof_style": "industrial_warehouse",
-				"art_slot": "ART_SCENE_104_INT_WAREHOUSE",
+				"art_slot": "SLOT_INT_WAREHOUSE",
+				"registry_id": "ART_SCENE_104 (预留:批发仓库)",
 				"windows": [
 					{"x": 1408.0, "y_off": 224.0, "w": 320.0, "h": 64.0, "kind": "louver", "label": "仓库高侧采光窗 A"},
 					{"x": 2880.0, "y_off": 224.0, "w": 320.0, "h": 64.0, "kind": "louver", "label": "仓库高侧采光窗 B"},
@@ -1746,7 +1772,8 @@ static func _spec_logistics_hub() -> Dictionary:
 				"roof_color": Color(0.20, 0.23, 0.27, 1.0),
 				"accent_color": Color(0.72, 0.78, 0.86, 1.0),
 				"roof_style": "canopy",
-				"art_slot": "ART_SCENE_INT_L_LOGISTICS",
+				"art_slot": "SLOT_INT_LOGISTICS",
+				"registry_id": "待立项 (自 ART_SCENE_113 起顺延·物流中转点，注:109受保护为电台特写)",
 				"windows": [
 					{"x": 2208.0, "y_off": 96.0, "w": 256.0, "h": 96.0, "kind": "board", "label": "订单牌位与工作人员交接窗口"},
 				],
@@ -1827,7 +1854,8 @@ static func _spec_past_corridor() -> Dictionary:
 				"roof_color": Color(0.10, 0.14, 0.20, 1.0),
 				"accent_color": Color(0.82, 0.36, 0.34, 1.0),
 				"roof_style": "interior_room",
-				"art_slot": "ART_SCENE_INT_G0_PAST_CORRIDOR",
+				"art_slot": "SLOT_INT_PAST_CORRIDOR",
+				"registry_id": "ART_SCENE_108 (预留:门外楼道·前世冰封走廊变体)",
 				"windows": [
 					{"x": 640.0, "y_off": 88.0, "w": 224.0, "h": 96.0, "kind": "cold", "label": "结霜走廊窗(窗外暴雪)"},
 				],

@@ -7,6 +7,7 @@ extends Node
 ##   --dev-scene=outdoor_street --scene002-tour --quit
 
 const SHOT_DIR := "res://tests/screenshots/scene002"
+const SHOT003_DIR := "res://tests/screenshots/scene003"
 
 var _args: Dictionary = {}
 var _failures: int = 0
@@ -15,13 +16,18 @@ var _pass_count: int = 0
 
 func start(args: Dictionary) -> void:
 	_args = args
-	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(SHOT_DIR))
+	if _args.has("scene002_test") or _args.has("scene002_tour"):
+		DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(SHOT_DIR))
+	if _args.has("scene003_tour"):
+		DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(SHOT003_DIR))
 	await _wait_frames(6)
 
 	if _args.has("scene002_test"):
 		await _run_verification_suite()
 	if _args.has("scene002_tour"):
 		await _run_screenshot_tour()
+	if _args.has("scene003_tour"):
+		await _run_scene003_tour()
 
 	if _args.has("quit"):
 		get_tree().quit(0 if _failures == 0 else 1)
@@ -594,3 +600,299 @@ func _run_screenshot_tour() -> void:
 	await _save_viewport_png("03_scale_05_indoor_supermarket_shelves_aisle_192.png")
 
 	print("==================== TASK-SCENE-002 截图巡检完成 ====================")
+
+
+# ==============================================================================
+# 三、TASK-SCENE-003 正式美术参考干净截图套件 (--scene003-tour)
+# ==============================================================================
+func _save_scene003_png(rel_name: String, scene_key: StringName, cam_center: Vector2, zoom_val: float = 1.0) -> Image:
+	await _wait_frames(3)
+	await RenderingServer.frame_post_draw
+	var full_path := "%s/%s" % [SHOT003_DIR, rel_name]
+	var img := get_viewport().get_texture().get_image()
+	var err := img.save_png(full_path)
+	print("[SCENE003-SHOT] file=%s | key=%s | cam=(%.0f, %.0f) | zoom=%.2fx | size=%dx%d | err=%d" % [
+		rel_name,
+		scene_key,
+		cam_center.x,
+		cam_center.y,
+		zoom_val,
+		img.get_width(),
+		img.get_height(),
+		err,
+	])
+	return img
+
+
+func _capture_cam_1x(w: WhiteboxWorld, cam_x: float, cam_y: float) -> Image:
+	w.get_camera().global_position = Vector2(cam_x, cam_y)
+	await _wait_frames(3)
+	await RenderingServer.frame_post_draw
+	return get_viewport().get_texture().get_image()
+
+
+func _stitch_scene_1x(
+	w: WhiteboxWorld,
+	width_px: int,
+	two_floors: bool,
+	player_x: float,
+	player_floor: int,
+	rel_name: String
+) -> Image:
+	w.set_clean_mode(true)
+	w.set_debug_guides_visible(false)
+	w.set_free_camera(true)
+	w.set_camera_zoom_Factor(1.0)
+
+	var p := w.get_player()
+	if p != null:
+		p.ground_y = Season1Layout.GROUND_Y if player_floor == 1 else Season1Layout.FLOOR2_Y
+		p.teleport_to(player_x)
+		p.set_facing(1)
+
+	var out_h := 720 if two_floors else 540
+	var canvas := Image.create(width_px, out_h, false, Image.FORMAT_RGBA8)
+	var x0 := 0
+	var cam_list: PackedStringArray = []
+	while x0 < width_px:
+		var rem_w := width_px - x0
+		var copy_w := mini(960, rem_w)
+		var cam_x := float(x0 + 480) if rem_w >= 960 else float(width_px - 480)
+		var src_x := 0 if rem_w >= 960 else (960 - rem_w)
+
+		if two_floors:
+			# 上层视口 cam_y=90 覆盖世界 Y=[-180..360]，截取顶部 180px (Y=[-180..0])
+			var img_top := await _capture_cam_1x(w, cam_x, 90.0)
+			canvas.blit_rect(img_top, Rect2i(src_x, 0, copy_w, 180), Vector2i(x0, 0))
+			# 下层视口 cam_y=270 覆盖世界 Y=[0..540]，截取完整 540px
+			var img_bot := await _capture_cam_1x(w, cam_x, 270.0)
+			canvas.blit_rect(img_bot, Rect2i(src_x, 0, copy_w, 540), Vector2i(x0, 180))
+			cam_list.append("(%.0f,90)&(%.0f,270)" % [cam_x, cam_x])
+		else:
+			var img_1f := await _capture_cam_1x(w, cam_x, 270.0)
+			canvas.blit_rect(img_1f, Rect2i(src_x, 0, copy_w, 540), Vector2i(x0, 0))
+			cam_list.append("(%.0f,270)" % cam_x)
+
+		x0 += 960
+
+	var full_path := "%s/%s" % [SHOT003_DIR, rel_name]
+	var err := canvas.save_png(full_path)
+	print("[SCENE003-SHOT] file=%s | key=%s | cams=[%s] | zoom=1.00x (1:1 stitch) | size=%dx%d | err=%d" % [
+		rel_name,
+		w.location_key,
+		", ".join(cam_list),
+		canvas.get_width(),
+		canvas.get_height(),
+		err,
+	])
+	return canvas
+
+
+func _take_native_shot(
+	w: WhiteboxWorld,
+	rel_name: String,
+	cam_x: float,
+	cam_y: float,
+	player_x: float,
+	player_floor: int = 1
+) -> void:
+	w.set_clean_mode(true)
+	w.set_debug_guides_visible(false)
+	w.set_free_camera(true)
+	w.set_camera_zoom_Factor(1.0)
+	var p := w.get_player()
+	if p != null:
+		p.ground_y = Season1Layout.GROUND_Y if player_floor == 1 else Season1Layout.FLOOR2_Y
+		p.teleport_to(player_x)
+		p.set_facing(1)
+	w.get_camera().global_position = Vector2(cam_x, cam_y)
+	await _save_scene003_png(rel_name, w.location_key, Vector2(cam_x, cam_y), 1.0)
+
+
+func _run_scene003_tour() -> void:
+	print("")
+	print("==================== TASK-SCENE-003 正式美术参考截图生成开始 ====================")
+
+	# ------------------------------------------------------------------
+	# 1. 室外地图逐段连续 960×540 截图 (01_outdoor_seg01..16) & 完整室外长街白盒总览 (00_*)
+	# ------------------------------------------------------------------
+	var w := await _goto_and_wait(&"outdoor_street", &"spawn_home_gate")
+	w.set_clean_mode(true)
+	w.set_debug_guides_visible(false)
+	w.set_free_camera(true)
+	w.set_camera_zoom_Factor(1.0)
+
+	# 将主角固定在第一屏安全屋窗前 (x=768, y=416)，避开 960px 拼缝，全街唯一出现一次做比例锚点
+	var p := w.get_player()
+	p.ground_y = Season1Layout.GROUND_Y
+	p.teleport_to(768.0)
+	p.set_facing(1)
+
+	var seg_imgs_180: Array[Image] = []
+	var seg_imgs_top: Array[Image] = []
+	var seg_imgs_bot: Array[Image] = []
+
+	for i in range(16):
+		var x_start := i * 960
+		var x_end := (i + 1) * 960
+		var cam_x := float(x_start + 480)
+		var cam_y := 180.0
+		w.get_camera().global_position = Vector2(cam_x, cam_y)
+		var seg_file := "01_outdoor_seg%02d_x%05d_%05d.png" % [i + 1, x_start, x_end]
+		var seg_img := await _save_scene003_png(seg_file, &"outdoor_street", Vector2(cam_x, cam_y), 1.0)
+		seg_imgs_180.append(seg_img)
+
+		# 同时采集 Y=[-180..540] 双层纵向带，用于生成不裁切屋顶天线/遮棚的 1:1 三段总览
+		var top_img := await _capture_cam_1x(w, cam_x, 90.0)
+		var bot_img := await _capture_cam_1x(w, cam_x, 270.0)
+		seg_imgs_top.append(top_img)
+		seg_imgs_bot.append(bot_img)
+
+	# 00-A: 16 张连续分段 1:1 原生直接拼合长卷 (15360 × 540, zoom=1.0x, 0 缩放 0 模糊)
+	var full_strip_1x := Image.create(15360, 540, false, Image.FORMAT_RGBA8)
+	for i in range(16):
+		full_strip_1x.blit_rect(seg_imgs_180[i], Rect2i(0, 0, 960, 540), Vector2i(i * 960, 0))
+	var path_strip_1x := "%s/00_outdoor_overview_full_strip_1x.png" % SHOT003_DIR
+	full_strip_1x.save_png(path_strip_1x)
+	print("[SCENE003-SHOT] file=00_outdoor_overview_full_strip_1x.png | key=outdoor_street | cam=(480..14880, 180) | zoom=1.00x | size=15360x540")
+
+	# 00-B: 整数 0.5x Nearest 邻近采样长卷 (7680 × 270，保持硬边像素无双线性模糊)
+	var strip_half: Image = full_strip_1x.duplicate()
+	strip_half.resize(7680, 270, Image.INTERPOLATE_NEAREST)
+	var path_strip_half := "%s/00_outdoor_overview_strip_half_nearest.png" % SHOT003_DIR
+	strip_half.save_png(path_strip_half)
+	print("[SCENE003-SHOT] file=00_outdoor_overview_strip_half_nearest.png | key=outdoor_street | cam=(480..14880, 180) | zoom=0.50x(Nearest) | size=7680x270")
+
+	# 00-C: 三段叠排 1:1 原生高清总览图 (5120 × 2160，每段 5120×720 完整覆盖 Y=-180..540，0 缩放 0 模糊)
+	var full_720 := Image.create(15360, 720, false, Image.FORMAT_RGBA8)
+	for i in range(16):
+		full_720.blit_rect(seg_imgs_top[i], Rect2i(0, 0, 960, 180), Vector2i(i * 960, 0))
+		full_720.blit_rect(seg_imgs_bot[i], Rect2i(0, 0, 960, 540), Vector2i(i * 960, 180))
+	var three_seg_1x := Image.create(5120, 2160, false, Image.FORMAT_RGBA8)
+	for row_i in range(3):
+		three_seg_1x.blit_rect(full_720, Rect2i(row_i * 5120, 0, 5120, 720), Vector2i(0, row_i * 720))
+	var path_3seg := "%s/00_outdoor_overview_3segments_1x.png" % SHOT003_DIR
+	three_seg_1x.save_png(path_3seg)
+	print("[SCENE003-SHOT] file=00_outdoor_overview_3segments_1x.png | key=outdoor_street | cam=(0..15360, Y=-180..540) | zoom=1.00x | size=5120x2160")
+
+	# ------------------------------------------------------------------
+	# 2. 所有室内场景完整结构图 (02_indoor_full_01..12, 1.0x 原生 1:1 拼接)
+	#    & 6. 安全屋两层完整剖面图 (05_shelter_2floors_cross_section_1x.png)
+	# ------------------------------------------------------------------
+	w = await _goto_and_wait(&"shelter", &"spawn_bed")
+	var shelter_cross := await _stitch_scene_1x(w, 3200, true, 1376.0, 1, "02_indoor_full_01_shelter_3200x720.png")
+	var path_shelter_sec := "%s/05_shelter_2floors_cross_section_1x.png" % SHOT003_DIR
+	shelter_cross.save_png(path_shelter_sec)
+	print("[SCENE003-SHOT] file=05_shelter_2floors_cross_section_1x.png | key=shelter | cams=[(480..2720, 90&270)] | zoom=1.00x | size=3200x720")
+
+	w = await _goto_and_wait(&"equipment_room", &"spawn_entrance")
+	await _stitch_scene_1x(w, 1920, false, 640.0, 1, "02_indoor_full_02_equipment_room_1920x540.png")
+
+	w = await _goto_and_wait(&"apartment_hallway", &"spawn_unit_door")
+	await _stitch_scene_1x(w, 2400, true, 608.0, 1, "02_indoor_full_03_apartment_hallway_2400x720.png")
+
+	w = await _goto_and_wait(&"zhao_home", &"spawn_entrance")
+	await _stitch_scene_1x(w, 1920, false, 608.0, 1, "02_indoor_full_04_zhao_home_1920x540.png")
+
+	w = await _goto_and_wait(&"repair_corner", &"spawn_entrance")
+	await _stitch_scene_1x(w, 1920, false, 640.0, 1, "02_indoor_full_05_repair_corner_1920x540.png")
+
+	w = await _goto_and_wait(&"convenience_store", &"spawn_entrance")
+	await _stitch_scene_1x(w, 2400, false, 640.0, 1, "02_indoor_full_06_convenience_store_2400x540.png")
+
+	w = await _goto_and_wait(&"pharmacy", &"spawn_entrance")
+	await _stitch_scene_1x(w, 1920, false, 640.0, 1, "02_indoor_full_07_pharmacy_1920x540.png")
+
+	w = await _goto_and_wait(&"supermarket", &"spawn_entrance")
+	await _stitch_scene_1x(w, 5760, false, 640.0, 1, "02_indoor_full_08_supermarket_5760x540.png")
+
+	w = await _goto_and_wait(&"hardware_store", &"spawn_entrance")
+	await _stitch_scene_1x(w, 4320, false, 640.0, 1, "02_indoor_full_09_hardware_store_4320x540.png")
+
+	w = await _goto_and_wait(&"wholesale_warehouse", &"spawn_entrance")
+	await _stitch_scene_1x(w, 5120, false, 640.0, 1, "02_indoor_full_10_wholesale_warehouse_5120x540.png")
+
+	w = await _goto_and_wait(&"logistics_hub", &"spawn_entrance")
+	await _stitch_scene_1x(w, 2880, false, 640.0, 1, "02_indoor_full_11_logistics_hub_2880x540.png")
+
+	w = await _goto_and_wait(&"past_corridor", &"spawn_corridor_left")
+	await _stitch_scene_1x(w, 1920, false, 640.0, 1, "02_indoor_full_12_past_corridor_1920x540.png")
+
+	# ------------------------------------------------------------------
+	# 3. 重要房间的 960×540 原生游戏截图 (03_native_*, zoom=1.0x)
+	# ------------------------------------------------------------------
+	w = await _goto_and_wait(&"shelter", &"spawn_bed")
+	await _take_native_shot(w, "03_native_01_shelter_1F_bed_desk.png", 608.0, 270.0, 608.0, 1)
+	await _take_native_shot(w, "03_native_02_shelter_1F_shelves_kitchen.png", 1600.0, 270.0, 1600.0, 1)
+	await _take_native_shot(w, "03_native_03_shelter_1F_stairs_entrance.png", 2560.0, 270.0, 2560.0, 1)
+	await _take_native_shot(w, "03_native_04_shelter_2F_spare_window.png", 960.0, -18.0, 960.0, 2)
+	await _take_native_shot(w, "03_native_05_shelter_2F_storage_stairs.png", 2080.0, -18.0, 2080.0, 2)
+
+	w = await _goto_and_wait(&"equipment_room", &"spawn_entrance")
+	await _take_native_shot(w, "03_native_06_equipment_room_vent_gen.png", 640.0, 270.0, 640.0, 1)
+	await _take_native_shot(w, "03_native_07_equipment_room_gen_breaker.png", 1280.0, 270.0, 1280.0, 1)
+
+	w = await _goto_and_wait(&"apartment_hallway", &"spawn_unit_door")
+	await _take_native_shot(w, "03_native_08_apartment_hallway_1F.png", 608.0, 270.0, 608.0, 1)
+	await _take_native_shot(w, "03_native_09_apartment_hallway_2F_zhao_door.png", 1408.0, -18.0, 1408.0, 2)
+
+	w = await _goto_and_wait(&"zhao_home", &"spawn_entrance")
+	await _take_native_shot(w, "03_native_10_zhao_home_table_bed.png", 960.0, 270.0, 960.0, 1)
+
+	w = await _goto_and_wait(&"repair_corner", &"spawn_entrance")
+	await _take_native_shot(w, "03_native_11_repair_corner_workbench.png", 960.0, 270.0, 960.0, 1)
+
+	w = await _goto_and_wait(&"convenience_store", &"spawn_entrance")
+	await _take_native_shot(w, "03_native_12_convenience_store_shelves_cooler.png", 800.0, 270.0, 800.0, 1)
+	await _take_native_shot(w, "03_native_13_convenience_store_counter_backdoor.png", 1664.0, 270.0, 1664.0, 1)
+
+	w = await _goto_and_wait(&"pharmacy", &"spawn_entrance")
+	await _take_native_shot(w, "03_native_14_pharmacy_shelf_counter.png", 1024.0, 270.0, 1024.0, 1)
+
+	w = await _goto_and_wait(&"supermarket", &"spawn_entrance")
+	await _take_native_shot(w, "03_native_15_supermarket_entry_cart.png", 768.0, 270.0, 688.0, 1)
+	await _take_native_shot(w, "03_native_16_supermarket_shelves_aisle.png", 1728.0, 270.0, 1728.0, 1)
+	await _take_native_shot(w, "03_native_17_supermarket_S_reserve_zone.png", 3680.0, 270.0, 3680.0, 1)
+	await _take_native_shot(w, "03_native_18_supermarket_coolers_checkout.png", 5024.0, 270.0, 5024.0, 1)
+
+	w = await _goto_and_wait(&"hardware_store", &"spawn_entrance")
+	await _take_native_shot(w, "03_native_19_hardware_store_tools_seal.png", 1440.0, 270.0, 1440.0, 1)
+	await _take_native_shot(w, "03_native_20_hardware_store_heater_checkout.png", 3136.0, 270.0, 3136.0, 1)
+
+	w = await _goto_and_wait(&"wholesale_warehouse", &"spawn_entrance")
+	await _take_native_shot(w, "03_native_21_warehouse_entry_shelves.png", 1440.0, 270.0, 1440.0, 1)
+	await _take_native_shot(w, "03_native_22_warehouse_order_dock.png", 4160.0, 270.0, 4160.0, 1)
+
+	w = await _goto_and_wait(&"logistics_hub", &"spawn_entrance")
+	await _take_native_shot(w, "03_native_23_logistics_hub_canopy_window.png", 1824.0, 270.0, 1824.0, 1)
+
+	w = await _goto_and_wait(&"past_corridor", &"spawn_corridor_left")
+	await _take_native_shot(w, "03_native_24_past_corridor_locked_door.png", 1024.0, 270.0, 1024.0, 1)
+
+	# ------------------------------------------------------------------
+	# 4. 角色与建筑比例对照图 (04_scale_*, 960×540, zoom=1.0x, 干净无字无网格)
+	# ------------------------------------------------------------------
+	w = await _goto_and_wait(&"outdoor_street", &"spawn_home_gate")
+	await _take_native_shot(w, "04_scale_01_outdoor_safehouse_door_96x192.png", 912.0, 180.0, 912.0, 1)
+	await _take_native_shot(w, "04_scale_02_outdoor_apartment_facade_512h.png", 3008.0, 180.0, 3008.0, 1)
+	await _take_native_shot(w, "04_scale_03_outdoor_supermarket_wide_door_192x224.png", 7552.0, 240.0, 7552.0, 1)
+
+	w = await _goto_and_wait(&"shelter", &"spawn_front_door")
+	await _take_native_shot(w, "04_scale_04_indoor_shelter_1F_2F_stairs_door.png", 2496.0, 180.0, 2496.0, 1)
+
+	w = await _goto_and_wait(&"supermarket", &"spawn_entrance")
+	w.set_clean_mode(true)
+	w.set_debug_guides_visible(false)
+	w.set_free_camera(true)
+	w.set_camera_zoom_Factor(1.0)
+	if w.get_carts().size() > 0:
+		var cart := w.get_carts()[0]
+		cart.place_at(1336.0)
+	w.get_player().ground_y = Season1Layout.GROUND_Y
+	w.get_player().teleport_to(1256.0)
+	w.get_player().set_facing(1)
+	w.get_camera().global_position = Vector2(1296.0, 270.0)
+	await _save_scene003_png("04_scale_05_indoor_supermarket_player_cart_shelves_aisle192.png", &"supermarket", Vector2(1296.0, 270.0), 1.0)
+
+	print("==================== TASK-SCENE-003 正式美术参考截图生成完成 ====================")
+
