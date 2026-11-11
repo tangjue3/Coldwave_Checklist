@@ -25,8 +25,19 @@ extends Node
 
 const PATHS: Dictionary = {
 	&"menu": "res://scenes/menu/main_menu.tscn",
+	&"outdoor_street": "res://scenes/world/outdoor_street.tscn",
 	&"supermarket": "res://scenes/world/supermarket.tscn",
 	&"shelter": "res://scenes/world/shelter.tscn",
+	&"equipment_room": "res://scenes/world/equipment_room.tscn",
+	&"apartment_hallway": "res://scenes/world/apartment_hallway.tscn",
+	&"past_corridor": "res://scenes/world/past_corridor.tscn",
+	&"zhao_home": "res://scenes/world/zhao_home.tscn",
+	&"repair_corner": "res://scenes/world/repair_corner.tscn",
+	&"convenience_store": "res://scenes/world/convenience_store.tscn",
+	&"pharmacy": "res://scenes/world/pharmacy.tscn",
+	&"hardware_store": "res://scenes/world/hardware_store.tscn",
+	&"wholesale_warehouse": "res://scenes/world/wholesale_warehouse.tscn",
+	&"logistics_hub": "res://scenes/world/logistics_hub.tscn",
 	&"smoke": "res://scenes/dev/test_scene.tscn",
 	&"scale": "res://scenes/dev/scale_test.tscn",
 	&"core001a": "res://scenes/dev/core_001a.tscn",
@@ -47,6 +58,9 @@ const SHOT_DIR := "res://tests/screenshots"
 ## 本次启动解析出的开发参数（命令行 + Web URL）。开发场景通过它读取 --core-state 之类的值，
 ## 因为 Web 端没有命令行，参数只能由本单例从 query string 注入。
 var dev_args: Dictionary = {}
+
+## 跨场景门切换时的目标落点 ID（TASK-SCENE-002：进入室内/返回室外时定位到对应门旁）
+var pending_spawn_id: StringName = &""
 
 ## 成功切换次数。CORE-001B 用它断言「连按 E 不会重复加载」。
 var change_count: int = 0
@@ -158,8 +172,8 @@ func _start_dev_scene(key: StringName, args: Dictionary) -> void:
 	for i in 5:
 		await get_tree().process_frame
 
-	# smoke / scale 场景自带检查、截图与退出逻辑，避免重复截图 / 抢先退出
-	if SELF_MANAGED.has(key):
+	# smoke / scale 场景及 scene002 巡检/测试自带检查、截图与退出逻辑，避免重复截图 / 抢先退出
+	if SELF_MANAGED.has(key) or args.has("scene002_tour") or args.has("scene002_test"):
 		return
 
 	await RenderingServer.frame_post_draw

@@ -15,6 +15,8 @@ signal transition_requested(target_scene: StringName)
 
 ## SceneRouter 登记过的场景 key（shelter / supermarket / menu …），空表示未接线
 @export var target_scene: StringName = &""
+## 目标场景内的落点/出生点标识（TASK-SCENE-002：实现室内外门一一对应返回）
+@export var target_spawn_id: StringName = &""
 ## false = 装饰门：只作为背景，不参与交互
 @export var interactive: bool = true
 ## 日志用的人类可读名，不影响逻辑
@@ -40,7 +42,9 @@ func accepts(actor: Node2D) -> bool:
 
 
 func prompt_text() -> String:
-	return "E 进入"
+	if prompt_subject == "":
+		return "E 进入"
+	return "E 进入 %s" % prompt_subject
 
 
 func target_path() -> String:
@@ -52,9 +56,11 @@ func target_path() -> String:
 func _do_interact(actor: Node2D) -> void:
 	# 先关掉自己，再切场景：SceneRouter.goto 是延迟切换，同一帧再按一次 E 会二次触发
 	enabled = false
-	print("[DOOR] 触发 %s → %s（%s）actor_x=%.0f" % [
+	if target_spawn_id != &"":
+		SceneRouter.pending_spawn_id = target_spawn_id
+	print("[DOOR] 触发 %s → %s（%s, spawn=%s）actor_x=%.0f" % [
 		door_label if door_label != "" else String(name), target_scene,
-		target_path(), actor.global_position.x])
+		target_path(), target_spawn_id, actor.global_position.x])
 	transition_requested.emit(target_scene)
 	last_error = SceneRouter.goto(target_scene)
 	print("[DOOR] goto err=%d change_count=%d" % [last_error, SceneRouter.change_count])

@@ -1,0 +1,24 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/whitebox_world.gd" id="1_world"]
+
+[node name="OutdoorStreet" type="Node2D"]
+script = ExtResource("1_world")
+location_key = &"outdoor_street"
+location_display_name = "第一季室外主地图 · 临江市梧桐里长街"
+
+[node name="Background" type="Node2D" parent="."]
+
+[node name="Environment" type="Node2D" parent="."]
+
+[node name="Buildings" type="Node2D" parent="."]
+
+[node name="Props" type="Node2D" parent="."]
+
+[node name="Actors" type="Node2D" parent="."]
+
+[node name="InteractionAreas" type="Node2D" parent="."]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="UI" type="CanvasLayer" parent="."]

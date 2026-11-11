@@ -109,13 +109,13 @@ visible = false
 offset_left = 630.0
 offset_top = 150.0
 offset_right = 930.0
-offset_bottom = 430.0
+offset_bottom = 478.0
 
 [node name="Box" type="VBoxContainer" parent="DevPanel"]
 offset_left = 14.0
 offset_top = 12.0
 offset_right = 286.0
-offset_bottom = 268.0
+offset_bottom = 316.0
 theme_override_constants/separation = 8
 
 [node name="Caption" type="Label" parent="DevPanel/Box"]
@@ -129,19 +129,25 @@ text = "开发测试入口（仅工程验证）"
 custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
 theme_override_font_sizes/font_size = 14
-text = "超市空场景"
+text = "超市白盒场景 (H/S)"
 
 [node name="Shelter" type="Button" parent="DevPanel/Box"]
 custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
 theme_override_font_sizes/font_size = 14
-text = "安全屋空场景"
+text = "安全屋双层白盒 (A/B)"
 
 [node name="Smoke" type="Button" parent="DevPanel/Box"]
 custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
 theme_override_font_sizes/font_size = 14
 text = "启动自检（Smoke Test）"
+
+[node name="OutdoorStreet" type="Button" parent="DevPanel/Box"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "第一季长街白盒总览 (15360px)"
 
 [node name="Close" type="Button" parent="DevPanel/Box"]
 custom_minimum_size = Vector2(0, 36)
