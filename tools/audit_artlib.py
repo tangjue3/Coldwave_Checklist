@@ -38,6 +38,11 @@ USAGE = ["正式使用", "回退保留", "未使用"]
 DERIVED_DIRS = ["验收对照", "参考图"]
 # assets/ 下不参与台账的目录：rig001 是技术原型，reference 是外部参考图
 ASSET_EXEMPT = ["assets/dev/", "assets/reference/"]
+# 运行时条目正常都要求真 alpha（防「白底冒充透明」）。
+# 这里是明确按设计就该满幅不透明的整屏底图，不适用该规则，逐条显式列出。
+OPAQUE_BY_DESIGN = {
+    "ART_UI_004@r01",  # 主菜单整屏背景 1672×941
+}
 
 failures: list[str] = []
 warnings: list[str] = []
@@ -118,9 +123,12 @@ def main() -> int:
             want = parse_size(r.get("尺寸") or "")
             if want and size != want:
                 fail(f"尺寸与台账不符：{sid}@{ver} 台账 {want[0]}×{want[1]}，实际 {size[0]}×{size[1]}")
-            # 概念整幅图本来就是不透明的；只有「要进游戏」的条目才必须有真 alpha
+            # 概念整幅图本来就是不透明的；只有「要进游戏」的条目才必须有真 alpha。
+            # 例外：整屏铺满的背景图（如主菜单底图）按设计就是满幅不透明，
+            # 透明通道没有意义，单列白名单放行，其余运行时条目仍强制真 alpha。
             if mode not in ("RGBA", "LA", "P"):
-                if (r.get("审核状态") or "").strip() == "运行时可用":
+                if (r.get("审核状态") or "").strip() == "运行时可用" \
+                        and f"{sid}@{ver}" not in OPAQUE_BY_DESIGN:
                     fail(f"运行时条目缺少透明通道：{sid}@{ver} → {rel}（mode={mode}）")
 
         if (r.get("对应运行时资源路径") or "").strip():

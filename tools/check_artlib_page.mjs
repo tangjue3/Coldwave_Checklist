@@ -115,7 +115,7 @@ check('「运行时可用」资质：路径有效 + 文件存在 + 非概念阶�
 // CORE-001B 起允许极少数条目进入「运行时可用」。白名单写死在这里，
 // 任何新增都必须在代码里显式加一条，防止概念图被误标成可运行资源。
 // VIDEO-FINALIZE-001：三段 512×704 高清动画已由用户确认画质并正式登记。
-// 新增白名单必须显式加行，否则断言会拦下。共 14 条。
+// 新增白名单必须显式加行，否则断言会拦下。共 15 条。
 const APPROVED_RUNTIME = [
   { id: 'ART_CHAR_001', version: 'r10' },   // walk_right 36f / 24FPS
   { id: 'ART_CHAR_001', version: 'r11' },   // walk_to_idle 21f / 24FPS
@@ -134,6 +134,9 @@ const APPROVED_RUNTIME = [
   { id: 'ART_FURN_103', version: 'r03-front' },
   { id: 'ART_FURN_103', version: 'r03-half' },
   { id: 'ART_FURN_103', version: 'r03-full' },
+  // TASK-UI-003：主菜单背景经用户（美术总监）指示接入 scenes/menu/main_menu.tscn，
+  // 运行时副本在 assets/ui/menu/，是本库第一条界面类运行时资源。
+  { id: 'ART_UI_004', version: 'r01' },
 ];
 // ART-INTEGRATE-005 阶段1：r03 四件已获批，断言从「必须待审核」改为
 // 「四件都必须是运行时可用且已进白名单」，保留质量保护但不拦批准结果。
@@ -146,7 +149,7 @@ check('r03 四件分件全部在运行时白名单内',
   R03_PARTS.every((v) => APPROVED_RUNTIME.some((a) => a.id === 'ART_FURN_103' && a.version === v)));
 const unexpectedRuntime = usable.filter((d) =>
   !APPROVED_RUNTIME.some((a) => a.id === d.id && a.version === d.version));
-check('「运行时可用」仅限已批准白名单（角色 r10–r12 + 车 r01–r03 + 货架 r01 + 商品 r02/r02-shelf，共 14 条）',
+check('「运行时可用」仅限已批准白名单（角色 r10–r12 + 车 r01–r03 + 货架 r01 + 商品 r02/r02-shelf + 主菜单背景 r01，共 15 条）',
   unexpectedRuntime.length === 0,
   `${usable.length} 条，越权 ${unexpectedRuntime.map((d) => d.id + '@' + d.version).join(',') || '无'}`);
 check('概念素材仍全部保持非运行时状态',

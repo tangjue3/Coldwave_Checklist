@@ -1,6 +1,72 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=9 format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/main_menu.gd" id="1_menu"]
+[ext_resource type="Texture2D" uid="uid://cqv5klopelj1j" path="res://assets/ui/menu/menu_bg_1672x941.png" id="2_bg"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_none"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hover"]
+bg_color = Color(0.941176, 0.662745, 0.294118, 0.055)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.941176, 0.662745, 0.294118, 0.85)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pressed"]
+bg_color = Color(0.941176, 0.662745, 0.294118, 0.16)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.968627, 0.72549, 0.352941, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_focus"]
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.952941, 0.784314, 0.454902, 0.9)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_devpanel"]
+content_margin_left = 12.0
+content_margin_top = 10.0
+content_margin_right = 12.0
+content_margin_bottom = 10.0
+bg_color = Color(0.070588, 0.078431, 0.086275, 0.92)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.941176, 0.662745, 0.294118, 0.55)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hint"]
+content_margin_left = 8.0
+content_margin_top = 3.0
+content_margin_right = 8.0
+content_margin_bottom = 3.0
+bg_color = Color(0.039216, 0.043137, 0.047059, 0.62)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
 
 [node name="MainMenu" type="Control"]
 anchors_preset = 15
@@ -10,113 +76,111 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_menu")
 
-[node name="Background" type="ColorRect" parent="."]
+[node name="Background" type="TextureRect" parent="."]
+texture_filter = 4
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.105882, 0.121569, 0.133333, 1)
+texture = ExtResource("2_bg")
+expand_mode = 1
+stretch_mode = 0
 
-[node name="Title" type="Label" parent="."]
-offset_left = 0.0
-offset_top = 58.0
-offset_right = 960.0
-offset_bottom = 122.0
-theme_override_colors/font_color = Color(0.952941, 0.878431, 0.717647, 1)
-theme_override_font_sizes/font_size = 42
-text = "寒潮清单"
-horizontal_alignment = 1
-vertical_alignment = 1
+[node name="Buttons" type="Control" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 
-[node name="Subtitle" type="Label" parent="."]
-offset_left = 0.0
-offset_top = 124.0
-offset_right = 960.0
-offset_bottom = 150.0
-theme_override_colors/font_color = Color(0.596078, 0.647059, 0.701961, 1)
-theme_override_font_sizes/font_size = 13
-text = "COLDFRONT CHECKLIST   ·   第一季   ·   PREP-003 工程框架"
-horizontal_alignment = 1
+[node name="NewGame" type="Button" parent="Buttons"]
+offset_left = 666.0
+offset_top = 233.0
+offset_right = 885.0
+offset_bottom = 267.0
+focus_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxFlat_focus")
+theme_override_styles/hover = SubResource("StyleBoxFlat_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_pressed")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_none")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_none")
 
-[node name="Accent" type="ColorRect" parent="."]
-offset_left = 370.0
-offset_top = 158.0
-offset_right = 590.0
-offset_bottom = 160.0
-color = Color(0.941176, 0.662745, 0.294118, 1)
-
-[node name="MenuBox" type="VBoxContainer" parent="."]
-offset_left = 350.0
-offset_top = 190.0
-offset_right = 610.0
-offset_bottom = 452.0
-theme_override_constants/separation = 9
-
-[node name="NewGame" type="Button" parent="MenuBox"]
-custom_minimum_size = Vector2(0, 40)
-layout_mode = 2
-theme_override_font_sizes/font_size = 16
-text = "新游戏"
-
-[node name="Continue" type="Button" parent="MenuBox"]
-custom_minimum_size = Vector2(0, 40)
-layout_mode = 2
-theme_override_font_sizes/font_size = 16
+[node name="Continue" type="Button" parent="Buttons"]
+offset_left = 666.0
+offset_top = 277.0
+offset_right = 885.0
+offset_bottom = 311.0
+focus_mode = 2
 disabled = true
-text = "继续游戏（存档未实现）"
+theme_override_styles/focus = SubResource("StyleBoxEmpty_none")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_none")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_none")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_none")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_none")
 
-[node name="Settings" type="Button" parent="MenuBox"]
-custom_minimum_size = Vector2(0, 40)
-layout_mode = 2
-theme_override_font_sizes/font_size = 16
-text = "设置"
+[node name="Settings" type="Button" parent="Buttons"]
+offset_left = 666.0
+offset_top = 322.0
+offset_right = 885.0
+offset_bottom = 355.0
+focus_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxFlat_focus")
+theme_override_styles/hover = SubResource("StyleBoxFlat_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_pressed")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_none")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_none")
 
-[node name="DevTest" type="Button" parent="MenuBox"]
-custom_minimum_size = Vector2(0, 40)
-layout_mode = 2
-theme_override_font_sizes/font_size = 16
-text = "开发测试入口"
+[node name="DevTest" type="Button" parent="Buttons"]
+offset_left = 666.0
+offset_top = 365.0
+offset_right = 885.0
+offset_bottom = 398.0
+focus_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxFlat_focus")
+theme_override_styles/hover = SubResource("StyleBoxFlat_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_pressed")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_none")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_none")
 
-[node name="Quit" type="Button" parent="MenuBox"]
-custom_minimum_size = Vector2(0, 40)
-layout_mode = 2
-theme_override_font_sizes/font_size = 16
-text = "退出"
+[node name="Quit" type="Button" parent="Buttons"]
+offset_left = 666.0
+offset_top = 408.0
+offset_right = 885.0
+offset_bottom = 442.0
+focus_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxFlat_focus")
+theme_override_styles/hover = SubResource("StyleBoxFlat_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_pressed")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_none")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_none")
 
 [node name="Hint" type="Label" parent="."]
-offset_left = 40.0
-offset_top = 462.0
-offset_right = 920.0
-offset_bottom = 490.0
-theme_override_colors/font_color = Color(0.941176, 0.662745, 0.294118, 1)
+offset_left = 24.0
+offset_top = 494.0
+offset_right = 640.0
+offset_bottom = 522.0
+theme_override_colors/font_color = Color(0.960784, 0.784314, 0.423529, 1)
 theme_override_font_sizes/font_size = 13
+theme_override_styles/normal = SubResource("StyleBoxFlat_hint")
 text = ""
-horizontal_alignment = 1
-
-[node name="Footer" type="Label" parent="."]
-offset_left = 40.0
-offset_top = 502.0
-offset_right = 920.0
-offset_bottom = 526.0
-theme_override_colors/font_color = Color(0.5, 0.55, 0.6, 1)
-theme_override_font_sizes/font_size = 11
-text = "Godot 4.7.2   ·   960×540 整数倍缩放   ·   正式玩法未开发"
-horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="DevPanel" type="Panel" parent="."]
 visible = false
-offset_left = 630.0
-offset_top = 150.0
-offset_right = 930.0
-offset_bottom = 478.0
+offset_left = 16.0
+offset_top = 96.0
+offset_right = 300.0
+offset_bottom = 346.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_devpanel")
 
 [node name="Box" type="VBoxContainer" parent="DevPanel"]
-offset_left = 14.0
-offset_top = 12.0
-offset_right = 286.0
-offset_bottom = 316.0
-theme_override_constants/separation = 8
+offset_left = 12.0
+offset_top = 10.0
+offset_right = 272.0
+offset_bottom = 240.0
+theme_override_constants/separation = 6
 
 [node name="Caption" type="Label" parent="DevPanel/Box"]
 custom_minimum_size = Vector2(0, 26)
@@ -126,31 +190,31 @@ theme_override_font_sizes/font_size = 14
 text = "开发测试入口（仅工程验证）"
 
 [node name="Supermarket" type="Button" parent="DevPanel/Box"]
-custom_minimum_size = Vector2(0, 36)
+custom_minimum_size = Vector2(0, 34)
 layout_mode = 2
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 13
 text = "超市白盒场景 (H/S)"
 
 [node name="Shelter" type="Button" parent="DevPanel/Box"]
-custom_minimum_size = Vector2(0, 36)
+custom_minimum_size = Vector2(0, 34)
 layout_mode = 2
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 13
 text = "安全屋双层白盒 (A/B)"
 
 [node name="Smoke" type="Button" parent="DevPanel/Box"]
-custom_minimum_size = Vector2(0, 36)
+custom_minimum_size = Vector2(0, 34)
 layout_mode = 2
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 13
 text = "启动自检（Smoke Test）"
 
 [node name="Season1Map" type="Button" parent="DevPanel/Box"]
-custom_minimum_size = Vector2(0, 36)
+custom_minimum_size = Vector2(0, 34)
 layout_mode = 2
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 13
 text = "第一季完整地图（可行走）"
 
 [node name="Close" type="Button" parent="DevPanel/Box"]
-custom_minimum_size = Vector2(0, 36)
+custom_minimum_size = Vector2(0, 34)
 layout_mode = 2
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 13
 text = "关闭"
