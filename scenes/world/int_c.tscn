@@ -1,54 +1,53 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene format=3 uid="uid://bh8oepmfk5pxd"]
 
-[ext_resource type="Script" path="res://scripts/world/interior_room.gd" id="1_room"]
+[ext_resource type="Script" uid="uid://ktrkhpb4tn7u" path="res://scripts/world/interior_room.gd" id="1_room"]
 [ext_resource type="Texture2D" uid="uid://dtodkfs5s3uux" path="res://assets/scenes/season1/C_INT_630x344_v01.png" id="2_art"]
 [ext_resource type="PackedScene" path="res://scenes/characters/player.tscn" id="3_player"]
-[ext_resource type="Script" path="res://scripts/interaction/interaction_sensor.gd" id="4_sensor"]
-[ext_resource type="Script" path="res://scripts/interaction/door_interactable.gd" id="5_door"]
-[ext_resource type="Script" path="res://scripts/characters/follow_camera.gd" id="6_cam"]
+[ext_resource type="Script" uid="uid://dhontlh7rhxoq" path="res://scripts/interaction/interaction_sensor.gd" id="4_sensor"]
+[ext_resource type="Script" uid="uid://6w3awj85hds" path="res://scripts/interaction/door_interactable.gd" id="5_door"]
+[ext_resource type="Script" uid="uid://c2m8bmvfd25p" path="res://scripts/characters/follow_camera.gd" id="6_cam"]
 
 [sub_resource type="RectangleShape2D" id="Shape_door"]
-size = Vector2(140, 220)
+size = Vector2(75, 164.5)
 
-[node name="IntC" type="Node2D"]
+[node name="IntC" type="Node2D" unique_id=222573978]
 script = ExtResource("1_room")
 location_key = &"int_c"
 display_name = "C · 外置设备区 内部"
-world_width = 814
-spawn_x = 160
-ceiling_y = -430
 
-[node name="00_Art" type="Sprite2D" parent="."]
+[node name="00_Art" type="Sprite2D" parent="." unique_id=473879095]
 texture_filter = 4
-position = Vector2(0, -404.3)
-scale = Vector2(0.48303, 0.48303)
+position = Vector2(-30, -431.99997)
+scale = Vector2(0.49994093, 0.5142588)
 texture = ExtResource("2_art")
 centered = false
 
-[node name="Actors" type="Node2D" parent="."]
+[node name="Actors" type="Node2D" parent="." unique_id=597553688]
 
-[node name="Player" parent="Actors" instance=ExtResource("3_player")]
+[node name="Player" parent="Actors" unique_id=1262235584 instance=ExtResource("3_player")]
 z_index = 5
-position = Vector2(160, 0)
+position = Vector2(75, -22)
 
-[node name="Interaction" type="Node2D" parent="."]
+[node name="Interaction" type="Node2D" parent="." unique_id=1409873406]
 
-[node name="InteractionSensor" type="Node2D" parent="Interaction"]
+[node name="InteractionSensor" type="Node2D" parent="Interaction" unique_id=1246695029]
 z_index = 20
 script = ExtResource("4_sensor")
 actor_path = NodePath("../../Actors/Player")
 
-[node name="Door_To_Street" type="Area2D" parent="Interaction"]
+[node name="Door_To_Street" type="Area2D" parent="Interaction" unique_id=984359253]
 position = Vector2(116, -115)
 script = ExtResource("5_door")
 target_scene = &"season1_map"
 target_spawn_id = &"door_C"
 door_label = "梧桐里长街"
 
-[node name="Hit" type="CollisionShape2D" parent="Interaction/Door_To_Street"]
+[node name="Hit" type="CollisionShape2D" parent="Interaction/Door_To_Street" unique_id=1744649077]
+visible = false
+position = Vector2(-23, -3)
 shape = SubResource("Shape_door")
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1743137522]
 position = Vector2(130, -270)
 script = ExtResource("6_cam")
 target_path = NodePath("../Actors/Player")

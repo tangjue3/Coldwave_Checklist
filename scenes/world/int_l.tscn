@@ -1,0 +1,55 @@
+[gd_scene format=3 uid="uid://cxvi0dbtsig12"]
+
+[ext_resource type="Script" uid="uid://ktrkhpb4tn7u" path="res://scripts/world/interior_room.gd" id="1_room"]
+[ext_resource type="Texture2D" uid="uid://b7a31dwtf3dkh" path="res://assets/scenes/season1/L_INT_1800x505_v01.png" id="2_art"]
+[ext_resource type="PackedScene" path="res://scenes/characters/player.tscn" id="3_player"]
+[ext_resource type="Script" uid="uid://dhontlh7rhxoq" path="res://scripts/interaction/interaction_sensor.gd" id="4_sensor"]
+[ext_resource type="Script" uid="uid://6w3awj85hds" path="res://scripts/interaction/door_interactable.gd" id="5_door"]
+[ext_resource type="Script" uid="uid://c2m8bmvfd25p" path="res://scripts/characters/follow_camera.gd" id="6_cam"]
+
+[sub_resource type="RectangleShape2D" id="Shape_door"]
+size = Vector2(120, 202)
+
+[node name="IntL" type="Node2D" unique_id=979399308]
+script = ExtResource("1_room")
+location_key = &"int_l"
+display_name = "L · 物流中转 内部"
+world_width = 1800
+spawn_x = 324.0
+ceiling_y = -600.0
+
+[node name="00_Art" type="Sprite2D" parent="." unique_id=1724092250]
+texture_filter = 4
+position = Vector2(-9.999999, -571)
+scale = Vector2(0.8697053, 0.90469575)
+texture = ExtResource("2_art")
+centered = false
+
+[node name="Actors" type="Node2D" parent="." unique_id=657475766]
+
+[node name="Player" parent="Actors" unique_id=655439380 instance=ExtResource("3_player")]
+z_index = 5
+position = Vector2(1741, -31)
+
+[node name="Interaction" type="Node2D" parent="." unique_id=236189921]
+
+[node name="InteractionSensor" type="Node2D" parent="Interaction" unique_id=1170975487]
+z_index = 20
+script = ExtResource("4_sensor")
+actor_path = NodePath("../../Actors/Player")
+
+[node name="Door_To_Street" type="Area2D" parent="Interaction" unique_id=204113846]
+position = Vector2(324, -100)
+script = ExtResource("5_door")
+target_scene = &"season1_map"
+target_spawn_id = &"door_L"
+door_label = "梧桐里长街"
+
+[node name="Hit" type="CollisionShape2D" parent="Interaction/Door_To_Street" unique_id=1640015530]
+position = Vector2(1411, -31)
+shape = SubResource("Shape_door")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1794200331]
+position = Vector2(900, -300)
+script = ExtResource("6_cam")
+target_path = NodePath("../Actors/Player")

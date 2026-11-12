@@ -1,0 +1,55 @@
+[gd_scene format=3 uid="uid://cwtttkdptwyiv"]
+
+[ext_resource type="Script" uid="uid://ktrkhpb4tn7u" path="res://scripts/world/interior_room.gd" id="1_room"]
+[ext_resource type="Texture2D" uid="uid://dhrvppeo45wvn" path="res://assets/scenes/season1/FW_INT_720x680_v01.png" id="2_art"]
+[ext_resource type="PackedScene" path="res://scenes/characters/player.tscn" id="3_player"]
+[ext_resource type="Script" uid="uid://dhontlh7rhxoq" path="res://scripts/interaction/interaction_sensor.gd" id="4_sensor"]
+[ext_resource type="Script" uid="uid://6w3awj85hds" path="res://scripts/interaction/door_interactable.gd" id="5_door"]
+[ext_resource type="Script" uid="uid://c2m8bmvfd25p" path="res://scripts/characters/follow_camera.gd" id="6_cam"]
+
+[sub_resource type="RectangleShape2D" id="Shape_door"]
+size = Vector2(92.5, 207)
+
+[node name="IntFW" type="Node2D" unique_id=276984005]
+script = ExtResource("1_room")
+location_key = &"int_fw"
+display_name = "F/W · 公告栏与孟雨薇住处 内部（小铺 + 住处）"
+world_width = 720
+spawn_x = 129.6
+ceiling_y = -405.2
+
+[node name="00_Art" type="Sprite2D" parent="." unique_id=1658725907]
+texture_filter = 4
+position = Vector2(0, -685)
+scale = Vector2(0.7410286, 0.7279653)
+texture = ExtResource("2_art")
+centered = false
+
+[node name="Actors" type="Node2D" parent="." unique_id=962044194]
+
+[node name="Player" parent="Actors" unique_id=56020213 instance=ExtResource("3_player")]
+z_index = 5
+position = Vector2(315, -43)
+
+[node name="Interaction" type="Node2D" parent="." unique_id=2074937315]
+
+[node name="InteractionSensor" type="Node2D" parent="Interaction" unique_id=324948687]
+z_index = 20
+script = ExtResource("4_sensor")
+actor_path = NodePath("../../Actors/Player")
+
+[node name="Door_To_Street" type="Area2D" parent="Interaction" unique_id=447676207]
+position = Vector2(129.6, -100)
+script = ExtResource("5_door")
+target_scene = &"season1_map"
+target_spawn_id = &"door_FW"
+door_label = "梧桐里长街"
+
+[node name="Hit" type="CollisionShape2D" parent="Interaction/Door_To_Street" unique_id=2003232457]
+position = Vector2(185.4, -51)
+shape = SubResource("Shape_door")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=227505525]
+position = Vector2(360, -202.6)
+script = ExtResource("6_cam")
+target_path = NodePath("../Actors/Player")

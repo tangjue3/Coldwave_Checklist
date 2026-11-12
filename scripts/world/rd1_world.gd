@@ -35,15 +35,29 @@ func _ready() -> void:
 		location_key, world_width, _player.global_position.x if _player else -1.0])
 
 
+
+## 从室内返回时，各扇门在街道上的落点 x
+const DOOR_SPAWN := {
+	&"door_C": 1173.0, &"door_A": 2050.0,
+	&"door_FW": 3745.0,
+	&"door_FT": 5552.0,
+	&"door_Q": 8266.0,
+	&"door_J": 11168.0,
+	&"door_N": 12343.0,
+	&"door_H": 13765.0,
+	&"door_I": 15580.0,
+	&"door_K": 18976.0,
+	&"door_L": 21494.0,
+	&"door_B2": 7180.0,
+}
+
 func _apply_spawn() -> void:
 	if _player == null:
 		return
 	# 从室内返回：按 pending_spawn_id 落到对应那扇门口
 	var back: StringName = SceneRouter.pending_spawn_id
-	if back == &"door_A":
-		spawn_x = 2050.0
-	elif back == &"door_C":
-		spawn_x = 1173.0
+	if DOOR_SPAWN.has(back):
+		spawn_x = DOOR_SPAWN[back]
 	SceneRouter.pending_spawn_id = &""
 	_player.set("ground_y", spawn_y)
 	_player.call("teleport_to", spawn_x)
