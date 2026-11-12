@@ -22,6 +22,7 @@
 [ext_resource type="Texture2D" uid="uid://cqfifesqn5l5t" path="res://assets/scenes/season1/L_EXT_1800x505_v01.png" id="20_3jb0q"]
 [ext_resource type="PackedScene" path="res://scenes/characters/player.tscn" id="21_qlio8"]
 [ext_resource type="Script" uid="uid://dhontlh7rhxoq" path="res://scripts/interaction/interaction_sensor.gd" id="23_fali8"]
+[ext_resource type="Script" uid="uid://6w3awj85hds" path="res://scripts/interaction/door_interactable.gd" id="23_fali8_door"]
 [ext_resource type="Script" uid="uid://c2m8bmvfd25p" path="res://scripts/characters/follow_camera.gd" id="24_dnnc3"]
 [ext_resource type="Texture2D" uid="uid://b8kp67e0r8xr6" path="res://assets/scenes/season1/BG_天空_4096x1200_v02.png" id="25_bgsky"]
 [ext_resource type="Texture2D" uid="uid://b6cjdyn50lrmp" path="res://assets/scenes/season1/BG_远景城市_4096x900_v02.png" id="26_bgcity"]
@@ -37,16 +38,15 @@
 [ext_resource type="Texture2D" uid="uid://8qyori7dnc2c" path="res://assets/scenes/season1/消防栓_34x70_v01.png" id="41_fhyd"]
 [ext_resource type="Texture2D" uid="uid://bml4j8ubqw0xs" path="res://assets/scenes/season1/报刊亭_180x200_v01.png" id="42_fkiosk"]
 [ext_resource type="Texture2D" uid="uid://buhhsq0re6ebg" path="res://assets/scenes/season1/自行车_150x100_v01.png" id="43_fbike"]
-[ext_resource type="Script" path="res://scripts/interaction/door_interactable.gd" id="23_fali8_door"]
 
 [sub_resource type="RectangleShape2D" id="Shape_door_c"]
-size = Vector2(120, 160)
+size = Vector2(99, 199)
 
 [sub_resource type="RectangleShape2D" id="Shape_door_a"]
-size = Vector2(150, 200)
+size = Vector2(117, 258)
 
 [sub_resource type="RectangleShape2D" id="Shape_door_std"]
-size = Vector2(140, 200)
+size = Vector2(95, 205.53516)
 
 [node name="Season1Map" type="Node2D" unique_id=213745772]
 script = ExtResource("1_bmolc")
@@ -983,7 +983,7 @@ centered = false
 [node name="Rail_02" type="Sprite2D" parent="04_Fill/Rails" unique_id=337730391]
 z_index = 3
 texture_filter = 4
-position = Vector2(5034.8, -177.1)
+position = Vector2(5849, -175)
 scale = Vector2(1.362, 1.362)
 texture = ExtResource("38_frail")
 centered = false
@@ -1161,124 +1161,124 @@ z_index = 20
 script = ExtResource("23_fali8")
 actor_path = NodePath("../../Actors/Player")
 
-[node name="Door_IntC" type="Area2D" parent="Interaction"]
+[node name="Door_IntC" type="Area2D" parent="Interaction" unique_id=284020550]
 position = Vector2(1173, -80)
 script = ExtResource("23_fali8_door")
 target_scene = &"int_c"
-target_spawn_id = &""
 door_label = "C 设备区"
 
-[node name="Hit" type="CollisionShape2D" parent="Interaction/Door_IntC"]
+[node name="Hit" type="CollisionShape2D" parent="Interaction/Door_IntC" unique_id=289252144]
+position = Vector2(10.5, -19.5)
 shape = SubResource("Shape_door_c")
 
-[node name="Door_IntA" type="Area2D" parent="Interaction"]
+[node name="Door_IntA" type="Area2D" parent="Interaction" unique_id=481275654]
 position = Vector2(2050, -100)
 script = ExtResource("23_fali8_door")
 target_scene = &"int_a"
-target_spawn_id = &""
 door_label = "A/B 外婆小楼"
 
-[node name="Hit" type="CollisionShape2D" parent="Interaction/Door_IntA"]
+[node name="Hit" type="CollisionShape2D" parent="Interaction/Door_IntA" unique_id=1799899488]
+position = Vector2(327.5, -27)
 shape = SubResource("Shape_door_a")
 
-[node name="Door_IntFW" type="Area2D" parent="Interaction"]
+[node name="Door_IntFW" type="Area2D" parent="Interaction" unique_id=1146717477]
 position = Vector2(3745, -100)
 script = ExtResource("23_fali8_door")
 target_scene = &"int_fw"
-target_spawn_id = &""
 door_label = "F/W 公告栏住处"
 
-[node name="Hit" type="CollisionShape2D" parent="Interaction/Door_IntFW"]
+[node name="Hit" type="CollisionShape2D" parent="Interaction/Door_IntFW" unique_id=1150209584]
+position = Vector2(61.5, -52)
 shape = SubResource("Shape_door_std")
 
-[node name="Door_IntFT" type="Area2D" parent="Interaction"]
+[node name="Door_IntFT" type="Area2D" parent="Interaction" unique_id=840484242]
 position = Vector2(5552, -100)
 script = ExtResource("23_fali8_door")
 target_scene = &"int_ft"
-target_spawn_id = &""
 door_label = "F/T 梧桐里居民楼"
 
-[node name="Hit" type="CollisionShape2D" parent="Interaction/Door_IntFT"]
+[node name="Hit" type="CollisionShape2D" parent="Interaction/Door_IntFT" unique_id=1589539902]
+position = Vector2(-246, -50)
 shape = SubResource("Shape_door_std")
 
-[node name="Door_IntQ" type="Area2D" parent="Interaction"]
+[node name="Door_IntQ" type="Area2D" parent="Interaction" unique_id=926428913]
 position = Vector2(8266, -100)
 script = ExtResource("23_fali8_door")
 target_scene = &"int_q"
-target_spawn_id = &""
 door_label = "Q 陈叔维修角"
 
-[node name="Hit" type="CollisionShape2D" parent="Interaction/Door_IntQ"]
+[node name="Hit" type="CollisionShape2D" parent="Interaction/Door_IntQ" unique_id=7728441]
+position = Vector2(-6.9375, -31.875)
 shape = SubResource("Shape_door_std")
 
-[node name="Door_IntJ" type="Area2D" parent="Interaction"]
+[node name="Door_IntJ" type="Area2D" parent="Interaction" unique_id=2084207129]
 position = Vector2(11168, -100)
 script = ExtResource("23_fali8_door")
 target_scene = &"int_j"
-target_spawn_id = &""
 door_label = "J 唐宁便利店"
 
-[node name="Hit" type="CollisionShape2D" parent="Interaction/Door_IntJ"]
+[node name="Hit" type="CollisionShape2D" parent="Interaction/Door_IntJ" unique_id=1467034741]
+position = Vector2(-1, -12.71875)
 shape = SubResource("Shape_door_std")
 
-[node name="Door_IntN" type="Area2D" parent="Interaction"]
+[node name="Door_IntN" type="Area2D" parent="Interaction" unique_id=3331989]
 position = Vector2(12343, -100)
 script = ExtResource("23_fali8_door")
 target_scene = &"int_n"
-target_spawn_id = &""
 door_label = "N 社区药店"
 
-[node name="Hit" type="CollisionShape2D" parent="Interaction/Door_IntN"]
+[node name="Hit" type="CollisionShape2D" parent="Interaction/Door_IntN" unique_id=961125551]
+position = Vector2(-187.75, -15.859375)
 shape = SubResource("Shape_door_std")
 
-[node name="Door_IntH" type="Area2D" parent="Interaction"]
+[node name="Door_IntH" type="Area2D" parent="Interaction" unique_id=1218757343]
 position = Vector2(13765, -100)
 script = ExtResource("23_fali8_door")
 target_scene = &"int_h"
-target_spawn_id = &""
 door_label = "H 灾前超市"
 
-[node name="Hit" type="CollisionShape2D" parent="Interaction/Door_IntH"]
+[node name="Hit" type="CollisionShape2D" parent="Interaction/Door_IntH" unique_id=230073113]
+position = Vector2(2.125, 9.0703125)
 shape = SubResource("Shape_door_std")
 
-[node name="Door_IntI" type="Area2D" parent="Interaction"]
+[node name="Door_IntI" type="Area2D" parent="Interaction" unique_id=734810039]
 position = Vector2(15580, -100)
 script = ExtResource("23_fali8_door")
 target_scene = &"int_i"
-target_spawn_id = &""
 door_label = "I 五金家电店"
 
-[node name="Hit" type="CollisionShape2D" parent="Interaction/Door_IntI"]
+[node name="Hit" type="CollisionShape2D" parent="Interaction/Door_IntI" unique_id=206968222]
+position = Vector2(28, -16.464844)
 shape = SubResource("Shape_door_std")
 
-[node name="Door_IntK" type="Area2D" parent="Interaction"]
+[node name="Door_IntK" type="Area2D" parent="Interaction" unique_id=164603271]
 position = Vector2(18976, -100)
 script = ExtResource("23_fali8_door")
 target_scene = &"int_k"
-target_spawn_id = &""
 door_label = "K 独立批发仓"
 
-[node name="Hit" type="CollisionShape2D" parent="Interaction/Door_IntK"]
+[node name="Hit" type="CollisionShape2D" parent="Interaction/Door_IntK" unique_id=768234184]
+position = Vector2(-1092, 11)
 shape = SubResource("Shape_door_std")
 
-[node name="Door_IntL" type="Area2D" parent="Interaction"]
+[node name="Door_IntL" type="Area2D" parent="Interaction" unique_id=55187758]
 position = Vector2(21494, -100)
 script = ExtResource("23_fali8_door")
 target_scene = &"int_l"
-target_spawn_id = &""
 door_label = "L 物流中转"
 
-[node name="Hit" type="CollisionShape2D" parent="Interaction/Door_IntL"]
+[node name="Hit" type="CollisionShape2D" parent="Interaction/Door_IntL" unique_id=382591699]
+position = Vector2(758, -5)
 shape = SubResource("Shape_door_std")
 
-[node name="Door_IntB2" type="Area2D" parent="Interaction"]
+[node name="Door_IntB2" type="Area2D" parent="Interaction" unique_id=449714514]
 position = Vector2(7180, -100)
 script = ExtResource("23_fali8_door")
 target_scene = &"int_b2"
-target_spawn_id = &""
 door_label = "楼2 居民楼2单元"
 
-[node name="Hit" type="CollisionShape2D" parent="Interaction/Door_IntB2"]
+[node name="Hit" type="CollisionShape2D" parent="Interaction/Door_IntB2" unique_id=596564000]
+position = Vector2(-581.875, -51.75)
 shape = SubResource("Shape_door_std")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1025474903]

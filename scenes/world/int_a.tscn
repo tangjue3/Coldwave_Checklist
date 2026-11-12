@@ -42,8 +42,7 @@ target_spawn_id = &"door_A"
 door_label = "梧桐里长街"
 
 [node name="Hit" type="CollisionShape2D" parent="Interaction/Door_To_Street" unique_id=1558990138]
-visible = false
-position = Vector2(-14, -6)
+position = Vector2(81, -29)
 shape = SubResource("Shape_door")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1252388209]
