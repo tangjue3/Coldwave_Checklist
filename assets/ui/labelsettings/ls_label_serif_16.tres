@@ -1,0 +1,13 @@
+[gd_resource type="LabelSettings" load_steps=2 format=3]
+
+[ext_resource type="FontVariation" path="res://assets/ui/fonts/variations/serif_w400.tres" id="1_f"]
+
+[resource]
+font = ExtResource("1_f")
+font_size = 16
+font_color = Color(0.949, 0.910, 0.839, 1)
+outline_size = 2
+outline_color = Color(0.071, 0.063, 0.047, 0.45)
+shadow_size = 1
+shadow_color = Color(0, 0, 0, 0.3)
+shadow_offset = Vector2(0, 1)

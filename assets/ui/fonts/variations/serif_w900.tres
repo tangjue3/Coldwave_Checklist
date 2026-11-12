@@ -1,0 +1,6 @@
+[gd_resource type="FontVariation" format=3]
+
+[ext_resource type="FontFile" path="res://assets/ui/fonts/NotoSerifSC-Black.ttf" id="1_fi3qa"]
+
+[resource]
+base_font = ExtResource("1_fi3qa")
