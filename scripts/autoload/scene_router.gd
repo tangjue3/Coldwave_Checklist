@@ -8,7 +8,7 @@ extends Node
 ##     让自检场景在正式入口改为主菜单后仍可独立运行与截图。
 ##
 ## 命令行参数写在 `--` 之后：
-##   --dev-scene=menu|supermarket|shelter|smoke|scale|core001a|core001b|art003|art004|video|vid001|vid002
+##   --dev-scene=menu|supermarket|shelter|smoke|scale|core001a|core001b|art003|art004|video|vid001|vid002|season1_map|int_a|int_c
 ##   --scene-tour          依次切换 菜单→超市→安全屋→菜单 并逐场景截图
 ##   --shot=name.png       指定截图文件名（smoke / scale 场景自己截图）
 ##   --quit                完成后退出
@@ -38,6 +38,11 @@ const PATHS: Dictionary = {
 	&"hardware_store": "res://scenes/world/hardware_store.tscn",
 	&"wholesale_warehouse": "res://scenes/world/wholesale_warehouse.tscn",
 	&"logistics_hub": "res://scenes/world/logistics_hub.tscn",
+	# 第一季完整地图（单文件，布局白模）；独立 key，不替换上一版白盒
+	&"season1_map": "res://scenes/world/season1_map.tscn",
+	# 第一季室内场景（由室外门热点进入，室内门热点返回）
+	&"int_a": "res://scenes/world/int_a.tscn",
+	&"int_c": "res://scenes/world/int_c.tscn",
 	&"smoke": "res://scenes/dev/test_scene.tscn",
 	&"scale": "res://scenes/dev/scale_test.tscn",
 	&"core001a": "res://scenes/dev/core_001a.tscn",

@@ -1,0 +1,1259 @@
+[gd_scene format=3 uid="uid://hu8whm720b3l"]
+
+[ext_resource type="Script" uid="uid://2o46u1calw1u" path="res://scripts/world/rd1_world.gd" id="1_eidc2"]
+[ext_resource type="PackedScene" path="res://scenes/characters/player.tscn" id="2_0bg4e"]
+[ext_resource type="Script" uid="uid://dhontlh7rhxoq" path="res://scripts/interaction/interaction_sensor.gd" id="4_06ghc"]
+[ext_resource type="Script" uid="uid://6w3awj85hds" path="res://scripts/interaction/door_interactable.gd" id="5_50vas"]
+[ext_resource type="Script" uid="uid://bs7vt0j074jlk" path="res://scripts/interaction/stair_interactable.gd" id="6_b71jm"]
+[ext_resource type="Script" uid="uid://c2m8bmvfd25p" path="res://scripts/characters/follow_camera.gd" id="7_lmy78"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_e25na"]
+size = Vector2(170, 230)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4x66b"]
+size = Vector2(120, 200)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jbij2"]
+size = Vector2(120, 200)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_g04cv"]
+size = Vector2(120, 200)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_t5vpw"]
+size = Vector2(120, 200)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_d0v7x"]
+size = Vector2(120, 200)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7a1p1"]
+size = Vector2(120, 200)
+
+[node name="RD1_apartment_hallway" type="Node2D" unique_id=1713810409]
+script = ExtResource("1_eidc2")
+location_key = &"rd1_apartment_hallway"
+location_display_name = "RD1 · F/T 梧桐里居民楼（横截面，宽 1400 / 4 层）"
+
+[node name="00_Outside" type="Node2D" parent="." unique_id=1086230055]
+
+[node name="ColdOutside" type="Polygon2D" parent="00_Outside" unique_id=1659204861]
+z_index = -10
+position = Vector2(-480, -760)
+color = Color(0.34, 0.39, 0.44, 1)
+polygon = PackedVector2Array(0, 0, 2360, 0, 2360, 1176, 0, 1176)
+
+[node name="01_Structure" type="Node2D" parent="." unique_id=569343255]
+
+[node name="SectionMass" type="Polygon2D" parent="01_Structure" unique_id=581084112]
+z_index = -10
+color = Color(0.42, 0.49, 0.54, 0.28)
+polygon = PackedVector2Array(0, 0, 1400, 0, 1400, 416, 0, 416)
+
+[node name="Roof" type="Polygon2D" parent="01_Structure" unique_id=1698914501]
+z_index = -10
+position = Vector2(-16, 40)
+color = Color(0.29, 0.32, 0.34, 1)
+polygon = PackedVector2Array(0, 0, 76, -40, 1356, -40, 1432, 0)
+
+[node name="Title" type="Label" parent="01_Structure" unique_id=1185455824]
+z_index = -1
+offset_top = -52.0
+offset_right = 1400.0
+offset_bottom = -20.0
+theme_override_colors/font_color = Color(0.96, 0.94, 0.87, 1)
+theme_override_font_sizes/font_size = 18
+text = "F/T 梧桐里居民楼"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Sub" type="Label" parent="01_Structure" unique_id=1194492672]
+z_index = -1
+offset_top = -24.0
+offset_right = 1400.0
+offset_bottom = 2.0
+theme_override_colors/font_color = Color(0.82, 0.85, 0.84, 1)
+theme_override_font_sizes/font_size = 12
+text = "横截面 · 宽 1400 × 总高 960 · 4 层 · 层高 218 · 楼板 16"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="GroundLine" type="Line2D" parent="01_Structure" unique_id=1163057556]
+z_index = -9
+position = Vector2(0, 416)
+points = PackedVector2Array(0, 0, 1400, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="01_Floor1" type="Node2D" parent="." unique_id=545236465]
+
+[node name="Slab" type="Polygon2D" parent="01_Floor1" unique_id=1811371573]
+z_index = -8
+position = Vector2(0, 400)
+color = Color(0.25, 0.27, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 1400, 0, 1400, 16, 0, 16)
+
+[node name="SlabTop" type="Line2D" parent="01_Floor1" unique_id=2095887635]
+z_index = -9
+position = Vector2(0, 400)
+points = PackedVector2Array(0, 0, 1400, 0)
+width = 2.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="FloorTop" type="Line2D" parent="01_Floor1" unique_id=157218947]
+z_index = -9
+position = Vector2(0, 416)
+points = PackedVector2Array(0, 0, 1400, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="FloorTag" type="Label" parent="01_Floor1" unique_id=949107773]
+z_index = -1
+offset_left = 10.0
+offset_top = 206.0
+offset_right = 230.0
+offset_bottom = 232.0
+theme_override_colors/font_color = Color(0.82, 0.85, 0.84, 1)
+theme_override_font_sizes/font_size = 12
+text = "1F  y=416"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="R1_00" type="Node2D" parent="01_Floor1" unique_id=946412380]
+
+[node name="Block" type="Polygon2D" parent="01_Floor1/R1_00" unique_id=471029337]
+z_index = -10
+position = Vector2(0, 198)
+color = Color(0.42, 0.48, 0.53, 1)
+polygon = PackedVector2Array(0, 0, 280, 0, 280, 218, 0, 218)
+
+[node name="Outline" type="Line2D" parent="01_Floor1/R1_00" unique_id=240610026]
+z_index = -9
+position = Vector2(0, 198)
+points = PackedVector2Array(0, 0, 280, 0, 280, 218, 0, 218, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Name" type="Label" parent="01_Floor1/R1_00" unique_id=2080025663]
+z_index = -1
+offset_left = 4.0
+offset_top = 218.0
+offset_right = 276.0
+offset_bottom = 249.0
+theme_override_colors/font_color = Color(0.96, 0.94, 0.87, 1)
+theme_override_font_sizes/font_size = 17
+text = "① 单元门厅"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Furniture" type="Polygon2D" parent="01_Floor1/R1_00" unique_id=754598451]
+z_index = -8
+position = Vector2(28, 324)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 190, 0, 190, 60, 0, 60)
+
+[node name="Furniture_Edge" type="Line2D" parent="01_Floor1/R1_00" unique_id=308330515]
+z_index = -9
+position = Vector2(28, 324)
+points = PackedVector2Array(0, 0, 190, 0, 190, 60, 0, 60, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="R1_01" type="Node2D" parent="01_Floor1" unique_id=1812779802]
+
+[node name="Block" type="Polygon2D" parent="01_Floor1/R1_01" unique_id=508110429]
+z_index = -10
+position = Vector2(280, 198)
+color = Color(0.44, 0.51, 0.45, 1)
+polygon = PackedVector2Array(0, 0, 280, 0, 280, 218, 0, 218)
+
+[node name="Outline" type="Line2D" parent="01_Floor1/R1_01" unique_id=636462908]
+z_index = -9
+position = Vector2(280, 198)
+points = PackedVector2Array(0, 0, 280, 0, 280, 218, 0, 218, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Name" type="Label" parent="01_Floor1/R1_01" unique_id=1113966176]
+z_index = -1
+offset_left = 284.0
+offset_top = 218.0
+offset_right = 556.0
+offset_bottom = 249.0
+theme_override_colors/font_color = Color(0.96, 0.94, 0.87, 1)
+theme_override_font_sizes/font_size = 17
+text = "② 楼梯间"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Step0" type="Polygon2D" parent="01_Floor1/R1_01" unique_id=460708118]
+z_index = -8
+position = Vector2(300, 394.2)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 22, 0, 22, 21.8, 0, 21.8)
+
+[node name="Step1" type="Polygon2D" parent="01_Floor1/R1_01" unique_id=1684190388]
+z_index = -8
+position = Vector2(322, 372.4)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 22, 0, 22, 21.8, 0, 21.8)
+
+[node name="Step2" type="Polygon2D" parent="01_Floor1/R1_01" unique_id=888671055]
+z_index = -8
+position = Vector2(344, 350.6)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 22, 0, 22, 21.8, 0, 21.8)
+
+[node name="Step3" type="Polygon2D" parent="01_Floor1/R1_01" unique_id=1722579177]
+z_index = -8
+position = Vector2(366, 328.8)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 22, 0, 22, 21.8, 0, 21.8)
+
+[node name="Step4" type="Polygon2D" parent="01_Floor1/R1_01" unique_id=1411528814]
+z_index = -8
+position = Vector2(388, 307)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 22, 0, 22, 21.8, 0, 21.8)
+
+[node name="Step5" type="Polygon2D" parent="01_Floor1/R1_01" unique_id=1351302461]
+z_index = -8
+position = Vector2(410, 285.2)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 22, 0, 22, 21.8, 0, 21.8)
+
+[node name="Step6" type="Polygon2D" parent="01_Floor1/R1_01" unique_id=436564460]
+z_index = -8
+position = Vector2(432, 263.4)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 22, 0, 22, 21.8, 0, 21.8)
+
+[node name="Step7" type="Polygon2D" parent="01_Floor1/R1_01" unique_id=2051517414]
+z_index = -8
+position = Vector2(454, 241.6)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 22, 0, 22, 21.8, 0, 21.8)
+
+[node name="Step8" type="Polygon2D" parent="01_Floor1/R1_01" unique_id=1550266439]
+z_index = -8
+position = Vector2(476, 219.8)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 22, 0, 22, 21.8, 0, 21.8)
+
+[node name="Step9" type="Polygon2D" parent="01_Floor1/R1_01" unique_id=1454150564]
+z_index = -8
+position = Vector2(498, 198)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 22, 0, 22, 21.8, 0, 21.8)
+
+[node name="R1_02" type="Node2D" parent="01_Floor1" unique_id=2131215078]
+
+[node name="Block" type="Polygon2D" parent="01_Floor1/R1_02" unique_id=2140205419]
+z_index = -10
+position = Vector2(560, 198)
+color = Color(0.54, 0.48, 0.4, 1)
+polygon = PackedVector2Array(0, 0, 280, 0, 280, 218, 0, 218)
+
+[node name="Outline" type="Line2D" parent="01_Floor1/R1_02" unique_id=1180981814]
+z_index = -9
+position = Vector2(560, 198)
+points = PackedVector2Array(0, 0, 280, 0, 280, 218, 0, 218, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Name" type="Label" parent="01_Floor1/R1_02" unique_id=1880101568]
+z_index = -1
+offset_left = 564.0
+offset_top = 218.0
+offset_right = 836.0
+offset_bottom = 249.0
+theme_override_colors/font_color = Color(0.96, 0.94, 0.87, 1)
+theme_override_font_sizes/font_size = 17
+text = "③ 信箱 / 公告"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Furniture" type="Polygon2D" parent="01_Floor1/R1_02" unique_id=1192060789]
+z_index = -8
+position = Vector2(588, 324)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 190, 0, 190, 60, 0, 60)
+
+[node name="Furniture_Edge" type="Line2D" parent="01_Floor1/R1_02" unique_id=2032615169]
+z_index = -9
+position = Vector2(588, 324)
+points = PackedVector2Array(0, 0, 190, 0, 190, 60, 0, 60, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="R1_03" type="Node2D" parent="01_Floor1" unique_id=1174271032]
+
+[node name="Block" type="Polygon2D" parent="01_Floor1/R1_03" unique_id=232435017]
+z_index = -10
+position = Vector2(840, 198)
+color = Color(0.6, 0.56, 0.46, 1)
+polygon = PackedVector2Array(0, 0, 280, 0, 280, 218, 0, 218)
+
+[node name="Outline" type="Line2D" parent="01_Floor1/R1_03" unique_id=741859475]
+z_index = -9
+position = Vector2(840, 198)
+points = PackedVector2Array(0, 0, 280, 0, 280, 218, 0, 218, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Name" type="Label" parent="01_Floor1/R1_03" unique_id=1858384158]
+z_index = -1
+offset_left = 844.0
+offset_top = 218.0
+offset_right = 1116.0
+offset_bottom = 249.0
+theme_override_colors/font_color = Color(0.96, 0.94, 0.87, 1)
+theme_override_font_sizes/font_size = 17
+text = "④ 楼道窗"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Furniture" type="Polygon2D" parent="01_Floor1/R1_03" unique_id=1383892203]
+z_index = -8
+position = Vector2(868, 324)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 190, 0, 190, 60, 0, 60)
+
+[node name="Furniture_Edge" type="Line2D" parent="01_Floor1/R1_03" unique_id=1273497506]
+z_index = -9
+position = Vector2(868, 324)
+points = PackedVector2Array(0, 0, 190, 0, 190, 60, 0, 60, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="R1_04" type="Node2D" parent="01_Floor1" unique_id=1245011535]
+
+[node name="Block" type="Polygon2D" parent="01_Floor1/R1_04" unique_id=995249880]
+z_index = -10
+position = Vector2(1120, 198)
+color = Color(0.48, 0.45, 0.53, 1)
+polygon = PackedVector2Array(0, 0, 280, 0, 280, 218, 0, 218)
+
+[node name="Outline" type="Line2D" parent="01_Floor1/R1_04" unique_id=2139825081]
+z_index = -9
+position = Vector2(1120, 198)
+points = PackedVector2Array(0, 0, 280, 0, 280, 218, 0, 218, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Name" type="Label" parent="01_Floor1/R1_04" unique_id=524689344]
+z_index = -1
+offset_left = 1124.0
+offset_top = 218.0
+offset_right = 1396.0
+offset_bottom = 249.0
+theme_override_colors/font_color = Color(0.96, 0.94, 0.87, 1)
+theme_override_font_sizes/font_size = 17
+text = "⑤ 住户门"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Furniture" type="Polygon2D" parent="01_Floor1/R1_04" unique_id=313883216]
+z_index = -8
+position = Vector2(1148, 324)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 190, 0, 190, 60, 0, 60)
+
+[node name="Furniture_Edge" type="Line2D" parent="01_Floor1/R1_04" unique_id=1675098498]
+z_index = -9
+position = Vector2(1148, 324)
+points = PackedVector2Array(0, 0, 190, 0, 190, 60, 0, 60, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="DoorOpening" type="Polygon2D" parent="01_Floor1" unique_id=2072023983]
+z_index = -8
+position = Vector2(652, 224)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 96, 0, 96, 192, 0, 192)
+
+[node name="DoorOpening_Edge" type="Line2D" parent="01_Floor1" unique_id=1108682349]
+z_index = -9
+position = Vector2(652, 224)
+points = PackedVector2Array(0, 0, 96, 0, 96, 192, 0, 192, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="DoorTag" type="Label" parent="01_Floor1" unique_id=960768464]
+z_index = -1
+offset_left = 620.0
+offset_top = 202.0
+offset_right = 780.0
+offset_bottom = 227.0
+theme_override_colors/font_color = Color(0.96, 0.94, 0.87, 1)
+theme_override_font_sizes/font_size = 11
+text = "入口 96×192"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Window_L" type="Polygon2D" parent="01_Floor1" unique_id=780445968]
+z_index = -8
+position = Vector2(308, 245.96)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 88, 0, 88, 91.56, 0, 91.56)
+
+[node name="Window_L_Edge" type="Line2D" parent="01_Floor1" unique_id=886877372]
+z_index = -9
+position = Vector2(308, 245.96)
+points = PackedVector2Array(0, 0, 88, 0, 88, 91.55998, 0, 91.55998, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Window_R" type="Polygon2D" parent="01_Floor1" unique_id=1383249968]
+z_index = -8
+position = Vector2(1004, 245.96)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 88, 0, 88, 91.56, 0, 91.56)
+
+[node name="Window_R_Edge" type="Line2D" parent="01_Floor1" unique_id=507684619]
+z_index = -9
+position = Vector2(1004, 245.96)
+points = PackedVector2Array(0, 0, 88, 0, 88, 91.55998, 0, 91.55998, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="02_Floor2" type="Node2D" parent="." unique_id=1610532713]
+
+[node name="Slab" type="Polygon2D" parent="02_Floor2" unique_id=543789317]
+z_index = -8
+position = Vector2(0, 166)
+color = Color(0.25, 0.27, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 1400, 0, 1400, 16, 0, 16)
+
+[node name="SlabTop" type="Line2D" parent="02_Floor2" unique_id=166522690]
+z_index = -9
+position = Vector2(0, 166)
+points = PackedVector2Array(0, 0, 1400, 0)
+width = 2.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="FloorTop" type="Line2D" parent="02_Floor2" unique_id=774933514]
+z_index = -9
+position = Vector2(0, 182)
+points = PackedVector2Array(0, 0, 1400, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="FloorTag" type="Label" parent="02_Floor2" unique_id=1065229811]
+z_index = -1
+offset_left = 10.0
+offset_top = -28.0
+offset_right = 230.0
+offset_bottom = -2.0
+theme_override_colors/font_color = Color(0.82, 0.85, 0.84, 1)
+theme_override_font_sizes/font_size = 12
+text = "2F  y=182"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="R2_00" type="Node2D" parent="02_Floor2" unique_id=865225679]
+
+[node name="Block" type="Polygon2D" parent="02_Floor2/R2_00" unique_id=79075729]
+z_index = -10
+position = Vector2(0, -36)
+color = Color(0.3256, 0.3848, 0.39960003, 1)
+polygon = PackedVector2Array(0, 0, 280, 0, 280, 218, 0, 218)
+
+[node name="Outline" type="Line2D" parent="02_Floor2/R2_00" unique_id=1549826935]
+z_index = -9
+position = Vector2(0, -36)
+points = PackedVector2Array(0, 0, 280, 0, 280, 218, 0, 218, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Name" type="Label" parent="02_Floor2/R2_00" unique_id=349091172]
+z_index = -1
+offset_left = 4.0
+offset_top = -16.0
+offset_right = 276.0
+offset_bottom = 15.0
+theme_override_colors/font_color = Color(0.96, 0.94, 0.87, 1)
+theme_override_font_sizes/font_size = 17
+text = "① 楼梯口"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Step0" type="Polygon2D" parent="02_Floor2/R2_00" unique_id=467618516]
+z_index = -8
+position = Vector2(20, 160.2)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 22, 0, 22, 21.8, 0, 21.8)
+
+[node name="Step1" type="Polygon2D" parent="02_Floor2/R2_00" unique_id=997001364]
+z_index = -8
+position = Vector2(42, 138.4)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 22, 0, 22, 21.8, 0, 21.8)
+
+[node name="Step2" type="Polygon2D" parent="02_Floor2/R2_00" unique_id=1336913567]
+z_index = -8
+position = Vector2(64, 116.6)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 22, 0, 22, 21.8, 0, 21.8)
+
+[node name="Step3" type="Polygon2D" parent="02_Floor2/R2_00" unique_id=280920397]
+z_index = -8
+position = Vector2(86, 94.8)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 22, 0, 22, 21.8, 0, 21.8)
+
+[node name="Step4" type="Polygon2D" parent="02_Floor2/R2_00" unique_id=26472422]
+z_index = -8
+position = Vector2(108, 73)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 22, 0, 22, 21.8, 0, 21.8)
+
+[node name="Step5" type="Polygon2D" parent="02_Floor2/R2_00" unique_id=1015314521]
+z_index = -8
+position = Vector2(130, 51.2)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 22, 0, 22, 21.8, 0, 21.8)
+
+[node name="Step6" type="Polygon2D" parent="02_Floor2/R2_00" unique_id=2035950833]
+z_index = -8
+position = Vector2(152, 29.4)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 22, 0, 22, 21.8, 0, 21.8)
+
+[node name="Step7" type="Polygon2D" parent="02_Floor2/R2_00" unique_id=1573927095]
+z_index = -8
+position = Vector2(174, 7.6)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 22, 0, 22, 21.8, 0, 21.8)
+
+[node name="Step8" type="Polygon2D" parent="02_Floor2/R2_00" unique_id=1354475124]
+z_index = -8
+position = Vector2(196, -14.2)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 22, 0, 22, 21.8, 0, 21.8)
+
+[node name="Step9" type="Polygon2D" parent="02_Floor2/R2_00" unique_id=886932551]
+z_index = -8
+position = Vector2(218, -36)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 22, 0, 22, 21.8, 0, 21.8)
+
+[node name="R2_01" type="Node2D" parent="02_Floor2" unique_id=1728948429]
+
+[node name="Block" type="Polygon2D" parent="02_Floor2/R2_01" unique_id=657213263]
+z_index = -10
+position = Vector2(280, -36)
+color = Color(0.3848, 0.3404, 0.3552, 1)
+polygon = PackedVector2Array(0, 0, 280, 0, 280, 218, 0, 218)
+
+[node name="Outline" type="Line2D" parent="02_Floor2/R2_01" unique_id=428158290]
+z_index = -9
+position = Vector2(280, -36)
+points = PackedVector2Array(0, 0, 280, 0, 280, 218, 0, 218, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Name" type="Label" parent="02_Floor2/R2_01" unique_id=2145349310]
+z_index = -1
+offset_left = 284.0
+offset_top = -16.0
+offset_right = 556.0
+offset_bottom = 15.0
+theme_override_colors/font_color = Color(0.96, 0.94, 0.87, 1)
+theme_override_font_sizes/font_size = 17
+text = "② 公共走廊"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Furniture" type="Polygon2D" parent="02_Floor2/R2_01" unique_id=439960397]
+z_index = -8
+position = Vector2(308, 90)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 190, 0, 190, 60, 0, 60)
+
+[node name="Furniture_Edge" type="Line2D" parent="02_Floor2/R2_01" unique_id=228218264]
+z_index = -9
+position = Vector2(308, 90)
+points = PackedVector2Array(0, 0, 190, 0, 190, 60, 0, 60, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="R2_02" type="Node2D" parent="02_Floor2" unique_id=59665477]
+
+[node name="Block" type="Polygon2D" parent="02_Floor2/R2_02" unique_id=620066045]
+z_index = -10
+position = Vector2(560, -36)
+color = Color(0.3404, 0.37, 0.3256, 1)
+polygon = PackedVector2Array(0, 0, 280, 0, 280, 218, 0, 218)
+
+[node name="Outline" type="Line2D" parent="02_Floor2/R2_02" unique_id=261772810]
+z_index = -9
+position = Vector2(560, -36)
+points = PackedVector2Array(0, 0, 280, 0, 280, 218, 0, 218, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Name" type="Label" parent="02_Floor2/R2_02" unique_id=2108511871]
+z_index = -1
+offset_left = 564.0
+offset_top = -16.0
+offset_right = 836.0
+offset_bottom = 15.0
+theme_override_colors/font_color = Color(0.96, 0.94, 0.87, 1)
+theme_override_font_sizes/font_size = 17
+text = "③ 201 赵阿姨家门"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Furniture" type="Polygon2D" parent="02_Floor2/R2_02" unique_id=1169707088]
+z_index = -8
+position = Vector2(588, 90)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 190, 0, 190, 60, 0, 60)
+
+[node name="Furniture_Edge" type="Line2D" parent="02_Floor2/R2_02" unique_id=1596948272]
+z_index = -9
+position = Vector2(588, 90)
+points = PackedVector2Array(0, 0, 190, 0, 190, 60, 0, 60, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="R2_03" type="Node2D" parent="02_Floor2" unique_id=1088412306]
+
+[node name="Block" type="Polygon2D" parent="02_Floor2/R2_03" unique_id=1671909098]
+z_index = -10
+position = Vector2(840, -36)
+color = Color(0.3108, 0.3552, 0.3922, 1)
+polygon = PackedVector2Array(0, 0, 280, 0, 280, 218, 0, 218)
+
+[node name="Outline" type="Line2D" parent="02_Floor2/R2_03" unique_id=1017155277]
+z_index = -9
+position = Vector2(840, -36)
+points = PackedVector2Array(0, 0, 280, 0, 280, 218, 0, 218, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Name" type="Label" parent="02_Floor2/R2_03" unique_id=297884832]
+z_index = -1
+offset_left = 844.0
+offset_top = -16.0
+offset_right = 1116.0
+offset_bottom = 15.0
+theme_override_colors/font_color = Color(0.96, 0.94, 0.87, 1)
+theme_override_font_sizes/font_size = 17
+text = "④ 楼道窗"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Furniture" type="Polygon2D" parent="02_Floor2/R2_03" unique_id=309800828]
+z_index = -8
+position = Vector2(868, 90)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 190, 0, 190, 60, 0, 60)
+
+[node name="Furniture_Edge" type="Line2D" parent="02_Floor2/R2_03" unique_id=1532883283]
+z_index = -9
+position = Vector2(868, 90)
+points = PackedVector2Array(0, 0, 190, 0, 190, 60, 0, 60, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="R2_04" type="Node2D" parent="02_Floor2" unique_id=1864129361]
+
+[node name="Block" type="Polygon2D" parent="02_Floor2/R2_04" unique_id=1420451985]
+z_index = -10
+position = Vector2(1120, -36)
+color = Color(0.3256, 0.37739998, 0.333, 1)
+polygon = PackedVector2Array(0, 0, 280, 0, 280, 218, 0, 218)
+
+[node name="Outline" type="Line2D" parent="02_Floor2/R2_04" unique_id=1481248614]
+z_index = -9
+position = Vector2(1120, -36)
+points = PackedVector2Array(0, 0, 280, 0, 280, 218, 0, 218, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Name" type="Label" parent="02_Floor2/R2_04" unique_id=262213241]
+z_index = -1
+offset_left = 1124.0
+offset_top = -16.0
+offset_right = 1396.0
+offset_bottom = 15.0
+theme_override_colors/font_color = Color(0.96, 0.94, 0.87, 1)
+theme_override_font_sizes/font_size = 17
+text = "⑤ 尽端"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Furniture" type="Polygon2D" parent="02_Floor2/R2_04" unique_id=1974700301]
+z_index = -8
+position = Vector2(1148, 90)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 190, 0, 190, 60, 0, 60)
+
+[node name="Furniture_Edge" type="Line2D" parent="02_Floor2/R2_04" unique_id=2135114625]
+z_index = -9
+position = Vector2(1148, 90)
+points = PackedVector2Array(0, 0, 190, 0, 190, 60, 0, 60, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Window_L" type="Polygon2D" parent="02_Floor2" unique_id=1148952001]
+z_index = -8
+position = Vector2(308, 11.96)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 88, 0, 88, 91.56, 0, 91.56)
+
+[node name="Window_L_Edge" type="Line2D" parent="02_Floor2" unique_id=1935518902]
+z_index = -9
+position = Vector2(308, 11.96)
+points = PackedVector2Array(0, 0, 88, 0, 88, 91.56, 0, 91.56, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Window_R" type="Polygon2D" parent="02_Floor2" unique_id=838577255]
+z_index = -8
+position = Vector2(1004, 11.96)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 88, 0, 88, 91.56, 0, 91.56)
+
+[node name="Window_R_Edge" type="Line2D" parent="02_Floor2" unique_id=1949543092]
+z_index = -9
+position = Vector2(1004, 11.96)
+points = PackedVector2Array(0, 0, 88, 0, 88, 91.56, 0, 91.56, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="03_Floor3" type="Node2D" parent="." unique_id=803467950]
+
+[node name="Slab" type="Polygon2D" parent="03_Floor3" unique_id=874054575]
+z_index = -8
+position = Vector2(0, -68)
+color = Color(0.25, 0.27, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 1400, 0, 1400, 16, 0, 16)
+
+[node name="SlabTop" type="Line2D" parent="03_Floor3" unique_id=630742935]
+z_index = -9
+position = Vector2(0, -68)
+points = PackedVector2Array(0, 0, 1400, 0)
+width = 2.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="FloorTop" type="Line2D" parent="03_Floor3" unique_id=2076029468]
+z_index = -9
+position = Vector2(0, -52)
+points = PackedVector2Array(0, 0, 1400, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="FloorTag" type="Label" parent="03_Floor3" unique_id=1323439634]
+z_index = -1
+offset_left = 10.0
+offset_top = -262.0
+offset_right = 230.0
+offset_bottom = -236.0
+theme_override_colors/font_color = Color(0.82, 0.85, 0.84, 1)
+theme_override_font_sizes/font_size = 12
+text = "3F  y=-52"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="R3_00" type="Node2D" parent="03_Floor3" unique_id=1841562320]
+
+[node name="Block" type="Polygon2D" parent="03_Floor3/R3_00" unique_id=1339635540]
+z_index = -10
+position = Vector2(0, -270)
+color = Color(0.39960003, 0.3552, 0.296, 1)
+polygon = PackedVector2Array(0, 0, 466.66666, 0, 466.66666, 218, 0, 218)
+
+[node name="Outline" type="Line2D" parent="03_Floor3/R3_00" unique_id=1174145763]
+z_index = -9
+position = Vector2(0, -270)
+points = PackedVector2Array(0, 0, 466.66666, 0, 466.66666, 218, 0, 218, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Name" type="Label" parent="03_Floor3/R3_00" unique_id=1724448092]
+z_index = -1
+offset_left = 4.0
+offset_top = -250.0
+offset_right = 462.66666
+offset_bottom = -217.0
+theme_override_colors/font_color = Color(0.96, 0.94, 0.87, 1)
+theme_override_font_sizes/font_size = 19
+text = "3F 住户层"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Furniture" type="Polygon2D" parent="03_Floor3/R3_00" unique_id=1054255715]
+z_index = -8
+position = Vector2(28, -144)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 190, 0, 190, 60, 0, 60)
+
+[node name="Furniture_Edge" type="Line2D" parent="03_Floor3/R3_00" unique_id=974515056]
+z_index = -9
+position = Vector2(28, -144)
+points = PackedVector2Array(0, 0, 190, 0, 190, 60, 0, 60, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="R3_01" type="Node2D" parent="03_Floor3" unique_id=2106869568]
+
+[node name="Block" type="Polygon2D" parent="03_Floor3/R3_01" unique_id=703184482]
+z_index = -10
+position = Vector2(466.66666, -270)
+color = Color(0.444, 0.4144, 0.3404, 1)
+polygon = PackedVector2Array(0, 0, 466.66666, 0, 466.66666, 218, 0, 218)
+
+[node name="Outline" type="Line2D" parent="03_Floor3/R3_01" unique_id=1406569573]
+z_index = -9
+position = Vector2(466.66666, -270)
+points = PackedVector2Array(0, 0, 466.66666, 0, 466.66666, 218, 0, 218, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Name" type="Label" parent="03_Floor3/R3_01" unique_id=239251827]
+z_index = -1
+offset_left = 470.66666
+offset_top = -250.0
+offset_right = 929.3333
+offset_bottom = -217.0
+theme_override_colors/font_color = Color(0.96, 0.94, 0.87, 1)
+theme_override_font_sizes/font_size = 19
+text = "3F 走廊"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Furniture" type="Polygon2D" parent="03_Floor3/R3_01" unique_id=349270062]
+z_index = -8
+position = Vector2(494.66666, -144)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 190, 0, 190, 60, 0, 60)
+
+[node name="Furniture_Edge" type="Line2D" parent="03_Floor3/R3_01" unique_id=420598887]
+z_index = -9
+position = Vector2(494.66666, -144)
+points = PackedVector2Array(0, 0, 190.00003, 0, 190.00003, 60, 0, 60, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="R3_02" type="Node2D" parent="03_Floor3" unique_id=1425007671]
+
+[node name="Block" type="Polygon2D" parent="03_Floor3/R3_02" unique_id=1735949311]
+z_index = -10
+position = Vector2(933.3333, -270)
+color = Color(0.3552, 0.333, 0.3922, 1)
+polygon = PackedVector2Array(0, 0, 466.66666, 0, 466.66666, 218, 0, 218)
+
+[node name="Outline" type="Line2D" parent="03_Floor3/R3_02" unique_id=867776230]
+z_index = -9
+position = Vector2(933.3333, -270)
+points = PackedVector2Array(0, 0, 466.6667, 0, 466.6667, 218, 0, 218, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Name" type="Label" parent="03_Floor3/R3_02" unique_id=1227455428]
+z_index = -1
+offset_left = 937.3333
+offset_top = -250.0
+offset_right = 1396.0
+offset_bottom = -217.0
+theme_override_colors/font_color = Color(0.96, 0.94, 0.87, 1)
+theme_override_font_sizes/font_size = 19
+text = "3F 窗"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Furniture" type="Polygon2D" parent="03_Floor3/R3_02" unique_id=1476744669]
+z_index = -8
+position = Vector2(961.3333, -144)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 190, 0, 190, 60, 0, 60)
+
+[node name="Furniture_Edge" type="Line2D" parent="03_Floor3/R3_02" unique_id=634177092]
+z_index = -9
+position = Vector2(961.3333, -144)
+points = PackedVector2Array(0, 0, 190.00006, 0, 190.00006, 60, 0, 60, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Window_L" type="Polygon2D" parent="03_Floor3" unique_id=645534089]
+z_index = -8
+position = Vector2(308, -222.04)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 88, 0, 88, 91.56, 0, 91.56)
+
+[node name="Window_L_Edge" type="Line2D" parent="03_Floor3" unique_id=792468096]
+z_index = -9
+position = Vector2(308, -222.04)
+points = PackedVector2Array(0, 0, 88, 0, 88, 91.56, 0, 91.56, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Window_R" type="Polygon2D" parent="03_Floor3" unique_id=383186374]
+z_index = -8
+position = Vector2(1004, -222.04)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 88, 0, 88, 91.56, 0, 91.56)
+
+[node name="Window_R_Edge" type="Line2D" parent="03_Floor3" unique_id=2135959000]
+z_index = -9
+position = Vector2(1004, -222.04)
+points = PackedVector2Array(0, 0, 88, 0, 88, 91.56, 0, 91.56, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="04_Floor4" type="Node2D" parent="." unique_id=76098241]
+
+[node name="FloorTop" type="Line2D" parent="04_Floor4" unique_id=1982452423]
+z_index = -9
+position = Vector2(0, -286)
+points = PackedVector2Array(0, 0, 1400, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="FloorTag" type="Label" parent="04_Floor4" unique_id=1327806077]
+z_index = -1
+offset_left = 10.0
+offset_top = -496.0
+offset_right = 230.0
+offset_bottom = -470.0
+theme_override_colors/font_color = Color(0.82, 0.85, 0.84, 1)
+theme_override_font_sizes/font_size = 12
+text = "4F  y=-286"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="R4_00" type="Node2D" parent="04_Floor4" unique_id=1542036690]
+
+[node name="Block" type="Polygon2D" parent="04_Floor4/R4_00" unique_id=458969047]
+z_index = -10
+position = Vector2(0, -504)
+color = Color(0.3256, 0.3848, 0.39960003, 1)
+polygon = PackedVector2Array(0, 0, 466.66666, 0, 466.66666, 218, 0, 218)
+
+[node name="Outline" type="Line2D" parent="04_Floor4/R4_00" unique_id=497399832]
+z_index = -9
+position = Vector2(0, -504)
+points = PackedVector2Array(0, 0, 466.66666, 0, 466.66666, 218, 0, 218, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Name" type="Label" parent="04_Floor4/R4_00" unique_id=243290182]
+z_index = -1
+offset_left = 4.0
+offset_top = -484.0
+offset_right = 462.66666
+offset_bottom = -451.0
+theme_override_colors/font_color = Color(0.96, 0.94, 0.87, 1)
+theme_override_font_sizes/font_size = 19
+text = "4F 住户层"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Furniture" type="Polygon2D" parent="04_Floor4/R4_00" unique_id=438069846]
+z_index = -8
+position = Vector2(28, -378)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 190, 0, 190, 60, 0, 60)
+
+[node name="Furniture_Edge" type="Line2D" parent="04_Floor4/R4_00" unique_id=1397513024]
+z_index = -9
+position = Vector2(28, -378)
+points = PackedVector2Array(0, 0, 190, 0, 190, 60, 0, 60, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="R4_01" type="Node2D" parent="04_Floor4" unique_id=1305102257]
+
+[node name="Block" type="Polygon2D" parent="04_Floor4/R4_01" unique_id=1593849779]
+z_index = -10
+position = Vector2(466.66666, -504)
+color = Color(0.3848, 0.3404, 0.3552, 1)
+polygon = PackedVector2Array(0, 0, 466.66666, 0, 466.66666, 218, 0, 218)
+
+[node name="Outline" type="Line2D" parent="04_Floor4/R4_01" unique_id=581803982]
+z_index = -9
+position = Vector2(466.66666, -504)
+points = PackedVector2Array(0, 0, 466.66666, 0, 466.66666, 218, 0, 218, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Name" type="Label" parent="04_Floor4/R4_01" unique_id=1603735771]
+z_index = -1
+offset_left = 470.66666
+offset_top = -484.0
+offset_right = 929.3333
+offset_bottom = -451.0
+theme_override_colors/font_color = Color(0.96, 0.94, 0.87, 1)
+theme_override_font_sizes/font_size = 19
+text = "4F 走廊"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Furniture" type="Polygon2D" parent="04_Floor4/R4_01" unique_id=2095390949]
+z_index = -8
+position = Vector2(494.66666, -378)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 190, 0, 190, 60, 0, 60)
+
+[node name="Furniture_Edge" type="Line2D" parent="04_Floor4/R4_01" unique_id=642338278]
+z_index = -9
+position = Vector2(494.66666, -378)
+points = PackedVector2Array(0, 0, 190.00003, 0, 190.00003, 60, 0, 60, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="R4_02" type="Node2D" parent="04_Floor4" unique_id=2042250959]
+
+[node name="Block" type="Polygon2D" parent="04_Floor4/R4_02" unique_id=790579912]
+z_index = -10
+position = Vector2(933.3333, -504)
+color = Color(0.3404, 0.37, 0.3256, 1)
+polygon = PackedVector2Array(0, 0, 466.66666, 0, 466.66666, 218, 0, 218)
+
+[node name="Outline" type="Line2D" parent="04_Floor4/R4_02" unique_id=1092000131]
+z_index = -9
+position = Vector2(933.3333, -504)
+points = PackedVector2Array(0, 0, 466.6667, 0, 466.6667, 218, 0, 218, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Name" type="Label" parent="04_Floor4/R4_02" unique_id=862105677]
+z_index = -1
+offset_left = 937.3333
+offset_top = -484.0
+offset_right = 1396.0
+offset_bottom = -451.0
+theme_override_colors/font_color = Color(0.96, 0.94, 0.87, 1)
+theme_override_font_sizes/font_size = 19
+text = "4F 窗"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Furniture" type="Polygon2D" parent="04_Floor4/R4_02" unique_id=947721722]
+z_index = -8
+position = Vector2(961.3333, -378)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 190, 0, 190, 60, 0, 60)
+
+[node name="Furniture_Edge" type="Line2D" parent="04_Floor4/R4_02" unique_id=274413122]
+z_index = -9
+position = Vector2(961.3333, -378)
+points = PackedVector2Array(0, 0, 190.00006, 0, 190.00006, 60, 0, 60, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Window_L" type="Polygon2D" parent="04_Floor4" unique_id=1040518629]
+z_index = -8
+position = Vector2(308, -456.04)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 88, 0, 88, 91.56, 0, 91.56)
+
+[node name="Window_L_Edge" type="Line2D" parent="04_Floor4" unique_id=652644509]
+z_index = -9
+position = Vector2(308, -456.04)
+points = PackedVector2Array(0, 0, 88, 0, 88, 91.56, 0, 91.56, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Window_R" type="Polygon2D" parent="04_Floor4" unique_id=1490052643]
+z_index = -8
+position = Vector2(1004, -456.04)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 88, 0, 88, 91.56, 0, 91.56)
+
+[node name="Window_R_Edge" type="Line2D" parent="04_Floor4" unique_id=1519712009]
+z_index = -9
+position = Vector2(1004, -456.04)
+points = PackedVector2Array(0, 0, 88, 0, 88, 91.56, 0, 91.56, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Actors" type="Node2D" parent="." unique_id=1513105367]
+
+[node name="Player" parent="Actors" unique_id=2092312414 instance=ExtResource("2_0bg4e")]
+z_index = 5
+
+[node name="Interaction" type="Node2D" parent="." unique_id=1804054941]
+
+[node name="InteractionSensor" type="Node2D" parent="Interaction" unique_id=1197802257]
+z_index = 20
+script = ExtResource("4_06ghc")
+actor_path = NodePath("../../Actors/Player")
+
+[node name="Door_To_Street" type="Area2D" parent="Interaction" unique_id=544432894]
+position = Vector2(700, 320)
+script = ExtResource("5_50vas")
+target_scene = &"rd1_street"
+target_spawn_id = &"gate_4580"
+door_label = "apartment_hallway"
+prompt_subject = "第一季长街"
+
+[node name="Shape" type="CollisionShape2D" parent="Interaction/Door_To_Street" unique_id=673941936]
+shape = SubResource("RectangleShape2D_e25na")
+
+[node name="Stair_1F_to_2F" type="Area2D" parent="Interaction" unique_id=1232339220]
+position = Vector2(868, 291)
+script = ExtResource("6_b71jm")
+target_x = 868.0
+target_ground_y = 182.0
+
+[node name="Shape" type="CollisionShape2D" parent="Interaction/Stair_1F_to_2F" unique_id=786202848]
+shape = SubResource("RectangleShape2D_4x66b")
+
+[node name="Stair_2F_to_1F" type="Area2D" parent="Interaction" unique_id=401566294]
+position = Vector2(868, 73)
+script = ExtResource("6_b71jm")
+from_floor = 2
+to_floor = 1
+target_x = 868.0
+target_ground_y = 416.0
+
+[node name="Shape" type="CollisionShape2D" parent="Interaction/Stair_2F_to_1F" unique_id=1259302754]
+shape = SubResource("RectangleShape2D_jbij2")
+
+[node name="Stair_2F_to_3F" type="Area2D" parent="Interaction" unique_id=678489561]
+position = Vector2(868, 57)
+script = ExtResource("6_b71jm")
+from_floor = 2
+to_floor = 3
+target_x = 868.0
+target_ground_y = -52.0
+
+[node name="Shape" type="CollisionShape2D" parent="Interaction/Stair_2F_to_3F" unique_id=1745233217]
+shape = SubResource("RectangleShape2D_g04cv")
+
+[node name="Stair_3F_to_2F" type="Area2D" parent="Interaction" unique_id=1501294964]
+position = Vector2(868, -161)
+script = ExtResource("6_b71jm")
+from_floor = 3
+target_x = 868.0
+target_ground_y = 182.0
+
+[node name="Shape" type="CollisionShape2D" parent="Interaction/Stair_3F_to_2F" unique_id=461620293]
+shape = SubResource("RectangleShape2D_t5vpw")
+
+[node name="Stair_3F_to_4F" type="Area2D" parent="Interaction" unique_id=1114949077]
+position = Vector2(868, -177)
+script = ExtResource("6_b71jm")
+from_floor = 3
+to_floor = 4
+target_x = 868.0
+target_ground_y = -286.0
+
+[node name="Shape" type="CollisionShape2D" parent="Interaction/Stair_3F_to_4F" unique_id=985937387]
+shape = SubResource("RectangleShape2D_d0v7x")
+
+[node name="Stair_4F_to_3F" type="Area2D" parent="Interaction" unique_id=1343034062]
+position = Vector2(868, -395)
+script = ExtResource("6_b71jm")
+from_floor = 4
+to_floor = 3
+target_x = 868.0
+target_ground_y = -52.0
+
+[node name="Shape" type="CollisionShape2D" parent="Interaction/Stair_4F_to_3F" unique_id=1221009852]
+shape = SubResource("RectangleShape2D_7a1p1")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=801317926]
+limit_left = -480
+limit_top = -900
+limit_right = 1880
+limit_bottom = 760
+script = ExtResource("7_lmy78")
+target_path = NodePath("../Actors/Player")
+look_offset = Vector2(0, -200)
+dead_zone = Vector2(56, 48)
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=899360042]
+
+[node name="DebugGuides" type="Node2D" parent="." unique_id=1185141311]
+visible = false
+
+[node name="GridV_0" type="Line2D" parent="DebugGuides" unique_id=549077272]
+z_index = 60
+position = Vector2(0, -620)
+points = PackedVector2Array(0, 0, 0, 1180)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridV_320" type="Line2D" parent="DebugGuides" unique_id=838611728]
+z_index = 60
+position = Vector2(320, -620)
+points = PackedVector2Array(0, 0, 0, 1180)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridV_640" type="Line2D" parent="DebugGuides" unique_id=113903223]
+z_index = 60
+position = Vector2(640, -620)
+points = PackedVector2Array(0, 0, 0, 1180)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridV_960" type="Line2D" parent="DebugGuides" unique_id=2030803426]
+z_index = 60
+position = Vector2(960, -620)
+points = PackedVector2Array(0, 0, 0, 1180)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridV_1280" type="Line2D" parent="DebugGuides" unique_id=1841590052]
+z_index = 60
+position = Vector2(1280, -620)
+points = PackedVector2Array(0, 0, 0, 1180)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridH_-128" type="Line2D" parent="DebugGuides" unique_id=2037624976]
+z_index = 60
+position = Vector2(0, -128)
+points = PackedVector2Array(0, 0, 1400, 0)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridH_0" type="Line2D" parent="DebugGuides" unique_id=1466903962]
+z_index = 60
+points = PackedVector2Array(0, 0, 1400, 0)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridH_128" type="Line2D" parent="DebugGuides" unique_id=942194561]
+z_index = 60
+position = Vector2(0, 128)
+points = PackedVector2Array(0, 0, 1400, 0)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridH_256" type="Line2D" parent="DebugGuides" unique_id=824868570]
+z_index = 60
+position = Vector2(0, 256)
+points = PackedVector2Array(0, 0, 1400, 0)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridH_416" type="Line2D" parent="DebugGuides" unique_id=1063285592]
+z_index = 60
+position = Vector2(0, 416)
+points = PackedVector2Array(0, 0, 1400, 0)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="Scale160" type="Line2D" parent="DebugGuides" unique_id=152134794]
+z_index = 61
+position = Vector2(790, 416)
+points = PackedVector2Array(0, 0, 0, -160)
+width = 2.0
+default_color = Color(0.98, 0.42, 0.32, 0.85)
+
+[node name="ScaleLabel" type="Label" parent="DebugGuides" unique_id=1142203412]
+z_index = -1
+offset_left = 730.0
+offset_top = 228.0
+offset_right = 870.0
+offset_bottom = 254.0
+theme_override_colors/font_color = Color(0.98, 0.42, 0.32, 1)
+theme_override_font_sizes/font_size = 12
+text = "160px 人物"
+horizontal_alignment = 1
+autowrap_mode = 3

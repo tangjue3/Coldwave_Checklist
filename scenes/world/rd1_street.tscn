@@ -1,0 +1,2131 @@
+[gd_scene format=3 uid="uid://bxd5n3rhodsjy"]
+
+[ext_resource type="Script" uid="uid://2o46u1calw1u" path="res://scripts/world/rd1_world.gd" id="1_oorte"]
+[ext_resource type="PackedScene" path="res://scenes/characters/player.tscn" id="2_501dt"]
+[ext_resource type="Script" uid="uid://dhontlh7rhxoq" path="res://scripts/interaction/interaction_sensor.gd" id="4_52ci3"]
+[ext_resource type="Script" uid="uid://c2m8bmvfd25p" path="res://scripts/characters/follow_camera.gd" id="5_s51s7"]
+
+[node name="RD1Street" type="Node2D" unique_id=1463676215]
+script = ExtResource("1_oorte")
+location_display_name = "RD1 · 第一季完整长街布局白模"
+
+[node name="00_Background" type="Node2D" parent="." unique_id=2030389666]
+
+[node name="Sky" type="Polygon2D" parent="00_Background" unique_id=1896276701]
+z_index = -10
+position = Vector2(-480, -760)
+color = Color(0.34, 0.39, 0.44, 1)
+polygon = PackedVector2Array(0, 0, 17340, 0, 17340, 1176, 0, 1176)
+
+[node name="SkyHorizon" type="Polygon2D" parent="00_Background" unique_id=1986324532]
+z_index = -10
+position = Vector2(-480, 240)
+color = Color(0.47, 0.51, 0.53, 1)
+polygon = PackedVector2Array(0, 0, 17340, 0, 17340, 176, 0, 176)
+
+[node name="FarMass_0" type="Polygon2D" parent="00_Background" unique_id=1064430580]
+z_index = -10
+position = Vector2(-400, 152)
+color = Color(0.28, 0.33, 0.37, 1)
+polygon = PackedVector2Array(0, 0, 1200, 0, 1200, 264, 0, 264)
+
+[node name="FarMass_1" type="Polygon2D" parent="00_Background" unique_id=1503181525]
+z_index = -10
+position = Vector2(1120, 152)
+color = Color(0.28, 0.33, 0.37, 1)
+polygon = PackedVector2Array(0, 0, 1200, 0, 1200, 264, 0, 264)
+
+[node name="FarMass_2" type="Polygon2D" parent="00_Background" unique_id=512867080]
+z_index = -10
+position = Vector2(2640, 152)
+color = Color(0.28, 0.33, 0.37, 1)
+polygon = PackedVector2Array(0, 0, 1200, 0, 1200, 264, 0, 264)
+
+[node name="FarMass_3" type="Polygon2D" parent="00_Background" unique_id=1858154514]
+z_index = -10
+position = Vector2(4160, 152)
+color = Color(0.28, 0.33, 0.37, 1)
+polygon = PackedVector2Array(0, 0, 1200, 0, 1200, 264, 0, 264)
+
+[node name="FarMass_4" type="Polygon2D" parent="00_Background" unique_id=1288580671]
+z_index = -10
+position = Vector2(5680, 152)
+color = Color(0.28, 0.33, 0.37, 1)
+polygon = PackedVector2Array(0, 0, 1200, 0, 1200, 264, 0, 264)
+
+[node name="FarMass_5" type="Polygon2D" parent="00_Background" unique_id=465053933]
+z_index = -10
+position = Vector2(7200, 152)
+color = Color(0.28, 0.33, 0.37, 1)
+polygon = PackedVector2Array(0, 0, 1200, 0, 1200, 264, 0, 264)
+
+[node name="FarMass_6" type="Polygon2D" parent="00_Background" unique_id=1457260419]
+z_index = -10
+position = Vector2(8720, 152)
+color = Color(0.28, 0.33, 0.37, 1)
+polygon = PackedVector2Array(0, 0, 1200, 0, 1200, 264, 0, 264)
+
+[node name="FarMass_7" type="Polygon2D" parent="00_Background" unique_id=2028758920]
+z_index = -10
+position = Vector2(10240, 152)
+color = Color(0.28, 0.33, 0.37, 1)
+polygon = PackedVector2Array(0, 0, 1200, 0, 1200, 264, 0, 264)
+
+[node name="FarMass_8" type="Polygon2D" parent="00_Background" unique_id=2090863853]
+z_index = -10
+position = Vector2(11760, 152)
+color = Color(0.28, 0.33, 0.37, 1)
+polygon = PackedVector2Array(0, 0, 1200, 0, 1200, 264, 0, 264)
+
+[node name="FarMass_9" type="Polygon2D" parent="00_Background" unique_id=1647019438]
+z_index = -10
+position = Vector2(13280, 152)
+color = Color(0.28, 0.33, 0.37, 1)
+polygon = PackedVector2Array(0, 0, 1200, 0, 1200, 264, 0, 264)
+
+[node name="FarMass_10" type="Polygon2D" parent="00_Background" unique_id=991933361]
+z_index = -10
+position = Vector2(14800, 152)
+color = Color(0.28, 0.33, 0.37, 1)
+polygon = PackedVector2Array(0, 0, 1200, 0, 1200, 264, 0, 264)
+
+[node name="FarMass_11" type="Polygon2D" parent="00_Background" unique_id=2023216558]
+z_index = -10
+position = Vector2(16320, 152)
+color = Color(0.28, 0.33, 0.37, 1)
+polygon = PackedVector2Array(0, 0, 1200, 0, 1200, 264, 0, 264)
+
+[node name="01_Ground" type="Node2D" parent="." unique_id=1352341233]
+
+[node name="Road" type="Polygon2D" parent="01_Ground" unique_id=747552310]
+z_index = -10
+position = Vector2(-480, 416)
+color = Color(0.24, 0.27, 0.3, 1)
+polygon = PackedVector2Array(0, 0, 17340, 0, 17340, 124, 0, 124)
+
+[node name="Walkway" type="Polygon2D" parent="01_Ground" unique_id=2045389066]
+z_index = -10
+position = Vector2(-480, 392)
+color = Color(0.35, 0.38, 0.39, 1)
+polygon = PackedVector2Array(0, 0, 17340, 0, 17340, 24, 0, 24)
+
+[node name="GroundLine" type="Line2D" parent="01_Ground" unique_id=1982151868]
+z_index = -9
+position = Vector2(-480, 416)
+points = PackedVector2Array(0, 0, 17340, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="02_Buildings" type="Node2D" parent="." unique_id=896609929]
+
+[node name="00_lane0" type="Node2D" parent="02_Buildings" unique_id=604311467]
+
+[node name="01_b01" type="Node2D" parent="02_Buildings" unique_id=648601764]
+
+[node name="Mass" type="Polygon2D" parent="02_Buildings/01_b01" unique_id=330897948]
+z_index = -10
+position = Vector2(480, 128)
+color = Color(0.45, 0.51, 0.48, 1)
+polygon = PackedVector2Array(0, 0, 560, 0, 560, 288, 0, 288)
+
+[node name="Outline" type="Line2D" parent="02_Buildings/01_b01" unique_id=1902933172]
+z_index = -9
+position = Vector2(480, 128)
+points = PackedVector2Array(0, 0, 560, 0, 560, 288, 0, 288, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Roof" type="Polygon2D" parent="02_Buildings/01_b01" unique_id=68932271]
+z_index = -10
+position = Vector2(464, 168)
+color = Color(0.29, 0.32, 0.34, 1)
+polygon = PackedVector2Array(0, 0, 76, -40, 516, -40, 592, 0)
+
+[node name="Title" type="Label" parent="02_Buildings/01_b01" unique_id=1482560871]
+z_index = -1
+offset_left = 480.0
+offset_top = 182.0
+offset_right = 1040.0
+offset_bottom = 214.0
+theme_override_colors/font_color = Color(0.96, 0.94, 0.87, 1)
+theme_override_font_sizes/font_size = 18
+text = "C 外置独立设备区"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Sub" type="Label" parent="02_Buildings/01_b01" unique_id=1122759060]
+z_index = -1
+offset_left = 480.0
+offset_top = 210.0
+offset_right = 1040.0
+offset_bottom = 236.0
+theme_override_colors/font_color = Color(0.82, 0.85, 0.84, 1)
+theme_override_font_sizes/font_size = 12
+text = "独立单层 · 与生活空间隔离通风"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Door" type="Polygon2D" parent="02_Buildings/01_b01" unique_id=2030834431]
+z_index = -8
+position = Vector2(712, 224)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 96, 0, 96, 192, 0, 192)
+
+[node name="Door_Edge" type="Line2D" parent="02_Buildings/01_b01" unique_id=1971910974]
+z_index = -9
+position = Vector2(712, 224)
+points = PackedVector2Array(0, 0, 96, 0, 96, 192, 0, 192, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="DoorTag" type="Label" parent="02_Buildings/01_b01" unique_id=6876259]
+z_index = -1
+offset_left = 700.0
+offset_top = 202.0
+offset_right = 820.0
+offset_bottom = 228.0
+theme_override_colors/font_color = Color(0.96, 0.94, 0.87, 1)
+theme_override_font_sizes/font_size = 12
+text = "入口"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Window_0_L" type="Polygon2D" parent="02_Buildings/01_b01" unique_id=1450788921]
+z_index = -8
+position = Vector2(603.2, 242.4)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 88, 0, 88, 96, 0, 96)
+
+[node name="Window_0_L_Edge" type="Line2D" parent="02_Buildings/01_b01" unique_id=699635116]
+z_index = -9
+position = Vector2(603.2, 242.4)
+points = PackedVector2Array(0, 0, 88, 0, 88, 96, 0, 96, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Window_0_R" type="Polygon2D" parent="02_Buildings/01_b01" unique_id=1351751885]
+z_index = -8
+position = Vector2(828.8, 242.4)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 88, 0, 88, 96, 0, 96)
+
+[node name="Window_0_R_Edge" type="Line2D" parent="02_Buildings/01_b01" unique_id=414487309]
+z_index = -9
+position = Vector2(828.8, 242.4)
+points = PackedVector2Array(0, 0, 88, 0, 88, 96, 0, 96, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="02_lane1" type="Node2D" parent="02_Buildings" unique_id=2036842149]
+
+[node name="03_b02" type="Node2D" parent="02_Buildings" unique_id=1194548515]
+
+[node name="Mass" type="Polygon2D" parent="02_Buildings/03_b02" unique_id=161597986]
+z_index = -10
+position = Vector2(1200, -216)
+color = Color(0.48, 0.54, 0.58, 1)
+polygon = PackedVector2Array(0, 0, 1400, 0, 1400, 632, 0, 632)
+
+[node name="Outline" type="Line2D" parent="02_Buildings/03_b02" unique_id=2097641240]
+z_index = -9
+position = Vector2(1200, -216)
+points = PackedVector2Array(0, 0, 1400, 0, 1400, 632, 0, 632, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="FloorLine_1" type="Line2D" parent="02_Buildings/03_b02" unique_id=600241994]
+z_index = -9
+position = Vector2(1200, 128)
+points = PackedVector2Array(0, 0, 1400, 0)
+width = 2.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="FloorTag_1" type="Label" parent="02_Buildings/03_b02" unique_id=367638472]
+z_index = -1
+offset_left = 1208.0
+offset_top = 104.0
+offset_right = 1298.0
+offset_bottom = 129.0
+theme_override_colors/font_color = Color(0.82, 0.85, 0.84, 1)
+theme_override_font_sizes/font_size = 11
+text = "1F"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Roof" type="Polygon2D" parent="02_Buildings/03_b02" unique_id=279783999]
+z_index = -10
+position = Vector2(1184, -176)
+color = Color(0.29, 0.32, 0.34, 1)
+polygon = PackedVector2Array(0, 0, 76, -40, 1356, -40, 1432, 0)
+
+[node name="Title" type="Label" parent="02_Buildings/03_b02" unique_id=289807373]
+z_index = -1
+offset_left = 1200.0
+offset_top = -162.0
+offset_right = 2600.0
+offset_bottom = -130.0
+theme_override_colors/font_color = Color(0.96, 0.94, 0.87, 1)
+theme_override_font_sizes/font_size = 18
+text = "A/B 外婆旧两层小楼 · 安全屋"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Sub" type="Label" parent="02_Buildings/03_b02" unique_id=716392268]
+z_index = -1
+offset_left = 1200.0
+offset_top = -134.0
+offset_right = 2600.0
+offset_bottom = -108.0
+theme_override_colors/font_color = Color(0.82, 0.85, 0.84, 1)
+theme_override_font_sizes/font_size = 12
+text = "D 正门巷口 · 收货位 · 1F 生活区 / 2F 旧储物间"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Door" type="Polygon2D" parent="02_Buildings/03_b02" unique_id=1279524309]
+z_index = -8
+position = Vector2(1852, 224)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 96, 0, 96, 192, 0, 192)
+
+[node name="Door_Edge" type="Line2D" parent="02_Buildings/03_b02" unique_id=1517426004]
+z_index = -9
+position = Vector2(1852, 224)
+points = PackedVector2Array(0, 0, 96, 0, 96, 192, 0, 192, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="DoorTag" type="Label" parent="02_Buildings/03_b02" unique_id=906397958]
+z_index = -1
+offset_left = 1840.0
+offset_top = 202.0
+offset_right = 1960.0
+offset_bottom = 228.0
+theme_override_colors/font_color = Color(0.96, 0.94, 0.87, 1)
+theme_override_font_sizes/font_size = 12
+text = "入口"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Window_0_L" type="Polygon2D" parent="02_Buildings/03_b02" unique_id=1942283871]
+z_index = -8
+position = Vector2(1508, -89.6)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 88, 0, 88, 96, 0, 96)
+
+[node name="Window_0_L_Edge" type="Line2D" parent="02_Buildings/03_b02" unique_id=1693674957]
+z_index = -9
+position = Vector2(1508, -89.6)
+points = PackedVector2Array(0, 0, 88, 0, 88, 96, 0, 96, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Window_0_R" type="Polygon2D" parent="02_Buildings/03_b02" unique_id=1961797339]
+z_index = -8
+position = Vector2(2204, -89.6)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 88, 0, 88, 96, 0, 96)
+
+[node name="Window_0_R_Edge" type="Line2D" parent="02_Buildings/03_b02" unique_id=2119178227]
+z_index = -9
+position = Vector2(2204, -89.6)
+points = PackedVector2Array(0, 0, 88, 0, 88, 96, 0, 96, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Window_1_L" type="Polygon2D" parent="02_Buildings/03_b02" unique_id=392186474]
+z_index = -8
+position = Vector2(1508, 214.4)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 88, 0, 88, 96, 0, 96)
+
+[node name="Window_1_L_Edge" type="Line2D" parent="02_Buildings/03_b02" unique_id=949053066]
+z_index = -9
+position = Vector2(1508, 214.4)
+points = PackedVector2Array(0, 0, 88, 0, 88, 96, 0, 96, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Window_1_R" type="Polygon2D" parent="02_Buildings/03_b02" unique_id=878358722]
+z_index = -8
+position = Vector2(2204, 214.4)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 88, 0, 88, 96, 0, 96)
+
+[node name="Window_1_R_Edge" type="Line2D" parent="02_Buildings/03_b02" unique_id=48895952]
+z_index = -9
+position = Vector2(2204, 214.4)
+points = PackedVector2Array(0, 0, 88, 0, 88, 96, 0, 96, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="04_lane2" type="Node2D" parent="02_Buildings" unique_id=703414242]
+
+[node name="05_b03" type="Node2D" parent="02_Buildings" unique_id=1164082805]
+
+[node name="Mass" type="Polygon2D" parent="02_Buildings/05_b03" unique_id=310877022]
+z_index = -10
+position = Vector2(3080, -64)
+color = Color(0.45, 0.51, 0.48, 1)
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 480, 0, 480)
+
+[node name="Outline" type="Line2D" parent="02_Buildings/05_b03" unique_id=178856713]
+z_index = -9
+position = Vector2(3080, -64)
+points = PackedVector2Array(0, 0, 640, 0, 640, 480, 0, 480, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="FloorLine_1" type="Line2D" parent="02_Buildings/05_b03" unique_id=75374058]
+z_index = -9
+position = Vector2(3080, 204)
+points = PackedVector2Array(0, 0, 640, 0)
+width = 2.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="FloorTag_1" type="Label" parent="02_Buildings/05_b03" unique_id=1100532600]
+z_index = -1
+offset_left = 3088.0
+offset_top = 180.0
+offset_right = 3178.0
+offset_bottom = 205.0
+theme_override_colors/font_color = Color(0.82, 0.85, 0.84, 1)
+theme_override_font_sizes/font_size = 11
+text = "1F"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Roof" type="Polygon2D" parent="02_Buildings/05_b03" unique_id=1516815658]
+z_index = -10
+position = Vector2(3064, -24)
+color = Color(0.29, 0.32, 0.34, 1)
+polygon = PackedVector2Array(0, 0, 76, -40, 596, -40, 672, 0)
+
+[node name="Title" type="Label" parent="02_Buildings/05_b03" unique_id=1720393085]
+z_index = -1
+offset_left = 3080.0
+offset_top = -10.0
+offset_right = 3720.0
+offset_bottom = 22.0
+theme_override_colors/font_color = Color(0.96, 0.94, 0.87, 1)
+theme_override_font_sizes/font_size = 18
+text = "F 社区主公告栏 · W 孟雨薇住处"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Sub" type="Label" parent="02_Buildings/05_b03" unique_id=1844590560]
+z_index = -1
+offset_left = 3080.0
+offset_top = 18.0
+offset_right = 3720.0
+offset_bottom = 44.0
+theme_override_colors/font_color = Color(0.82, 0.85, 0.84, 1)
+theme_override_font_sizes/font_size = 12
+text = "公告栏始终在居民楼门左侧"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Window_0_L" type="Polygon2D" parent="02_Buildings/05_b03" unique_id=1864647421]
+z_index = -8
+position = Vector2(3220.8, 39.6)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 88, 0, 88, 84.8, 0, 84.8)
+
+[node name="Window_0_L_Edge" type="Line2D" parent="02_Buildings/05_b03" unique_id=1777796867]
+z_index = -9
+position = Vector2(3220.8, 39.6)
+points = PackedVector2Array(0, 0, 88, 0, 88, 84.8, 0, 84.8, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Window_0_R" type="Polygon2D" parent="02_Buildings/05_b03" unique_id=2120573966]
+z_index = -8
+position = Vector2(3491.2, 39.6)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 88, 0, 88, 84.8, 0, 84.8)
+
+[node name="Window_0_R_Edge" type="Line2D" parent="02_Buildings/05_b03" unique_id=787735736]
+z_index = -9
+position = Vector2(3491.2, 39.6)
+points = PackedVector2Array(0, 0, 88, 0, 88, 84.8, 0, 84.8, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Window_1_L" type="Polygon2D" parent="02_Buildings/05_b03" unique_id=662658848]
+z_index = -8
+position = Vector2(3220.8, 267.6)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 88, 0, 88, 84.8, 0, 84.8)
+
+[node name="Window_1_L_Edge" type="Line2D" parent="02_Buildings/05_b03" unique_id=1542114312]
+z_index = -9
+position = Vector2(3220.8, 267.6)
+points = PackedVector2Array(0, 0, 88, 0, 88, 84.79999, 0, 84.79999, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Window_1_R" type="Polygon2D" parent="02_Buildings/05_b03" unique_id=1971943563]
+z_index = -8
+position = Vector2(3491.2, 267.6)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 88, 0, 88, 84.8, 0, 84.8)
+
+[node name="Window_1_R_Edge" type="Line2D" parent="02_Buildings/05_b03" unique_id=2113348288]
+z_index = -9
+position = Vector2(3491.2, 267.6)
+points = PackedVector2Array(0, 0, 88, 0, 88, 84.79999, 0, 84.79999, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="06_lane3" type="Node2D" parent="02_Buildings" unique_id=971871700]
+
+[node name="07_b04" type="Node2D" parent="02_Buildings" unique_id=530132897]
+
+[node name="Mass" type="Polygon2D" parent="02_Buildings/07_b04" unique_id=80042136]
+z_index = -10
+position = Vector2(3880, -544)
+color = Color(0.42, 0.49, 0.54, 1)
+polygon = PackedVector2Array(0, 0, 1400, 0, 1400, 960, 0, 960)
+
+[node name="Outline" type="Line2D" parent="02_Buildings/07_b04" unique_id=270874709]
+z_index = -9
+position = Vector2(3880, -544)
+points = PackedVector2Array(0, 0, 1400, 0, 1400, 960, 0, 960, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="FloorLine_1" type="Line2D" parent="02_Buildings/07_b04" unique_id=322642438]
+z_index = -9
+position = Vector2(3880, -270)
+points = PackedVector2Array(0, 0, 1400, 0)
+width = 2.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="FloorTag_1" type="Label" parent="02_Buildings/07_b04" unique_id=1539921201]
+z_index = -1
+offset_left = 3888.0
+offset_top = -294.0
+offset_right = 3978.0
+offset_bottom = -269.0
+theme_override_colors/font_color = Color(0.82, 0.85, 0.84, 1)
+theme_override_font_sizes/font_size = 11
+text = "3F"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="FloorLine_2" type="Line2D" parent="02_Buildings/07_b04" unique_id=533136649]
+z_index = -9
+position = Vector2(3880, -36)
+points = PackedVector2Array(0, 0, 1400, 0)
+width = 2.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="FloorTag_2" type="Label" parent="02_Buildings/07_b04" unique_id=2097371069]
+z_index = -1
+offset_left = 3888.0
+offset_top = -60.0
+offset_right = 3978.0
+offset_bottom = -35.0
+theme_override_colors/font_color = Color(0.82, 0.85, 0.84, 1)
+theme_override_font_sizes/font_size = 11
+text = "2F"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="FloorLine_3" type="Line2D" parent="02_Buildings/07_b04" unique_id=803288520]
+z_index = -9
+position = Vector2(3880, 198)
+points = PackedVector2Array(0, 0, 1400, 0)
+width = 2.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="FloorTag_3" type="Label" parent="02_Buildings/07_b04" unique_id=715455552]
+z_index = -1
+offset_left = 3888.0
+offset_top = 174.0
+offset_right = 3978.0
+offset_bottom = 199.0
+theme_override_colors/font_color = Color(0.82, 0.85, 0.84, 1)
+theme_override_font_sizes/font_size = 11
+text = "1F"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Roof" type="Polygon2D" parent="02_Buildings/07_b04" unique_id=1100537161]
+z_index = -10
+position = Vector2(3864, -504)
+color = Color(0.29, 0.32, 0.34, 1)
+polygon = PackedVector2Array(0, 0, 76, -40, 1356, -40, 1432, 0)
+
+[node name="Title" type="Label" parent="02_Buildings/07_b04" unique_id=748153701]
+z_index = -1
+offset_left = 3880.0
+offset_top = -490.0
+offset_right = 5280.0
+offset_bottom = -458.0
+theme_override_colors/font_color = Color(0.96, 0.94, 0.87, 1)
+theme_override_font_sizes/font_size = 18
+text = "F/T 梧桐里居民楼"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Sub" type="Label" parent="02_Buildings/07_b04" unique_id=35128175]
+z_index = -1
+offset_left = 3880.0
+offset_top = -462.0
+offset_right = 5280.0
+offset_bottom = -436.0
+theme_override_colors/font_color = Color(0.82, 0.85, 0.84, 1)
+theme_override_font_sizes/font_size = 12
+text = "单元门 → 公共楼道 1F/2F → 201 赵阿姨家 · 遮棚屋顶"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Door" type="Polygon2D" parent="02_Buildings/07_b04" unique_id=975089098]
+z_index = -8
+position = Vector2(4532, 224)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 96, 0, 96, 192, 0, 192)
+
+[node name="Door_Edge" type="Line2D" parent="02_Buildings/07_b04" unique_id=1627370358]
+z_index = -9
+position = Vector2(4532, 224)
+points = PackedVector2Array(0, 0, 96, 0, 96, 192, 0, 192, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="DoorTag" type="Label" parent="02_Buildings/07_b04" unique_id=331684191]
+z_index = -1
+offset_left = 4520.0
+offset_top = 202.0
+offset_right = 4640.0
+offset_bottom = 228.0
+theme_override_colors/font_color = Color(0.96, 0.94, 0.87, 1)
+theme_override_font_sizes/font_size = 12
+text = "入口"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Window_0_L" type="Polygon2D" parent="02_Buildings/07_b04" unique_id=1951477673]
+z_index = -8
+position = Vector2(4188, -438.6)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 88, 0, 88, 87.2, 0, 87.2)
+
+[node name="Window_0_L_Edge" type="Line2D" parent="02_Buildings/07_b04" unique_id=898204363]
+z_index = -9
+position = Vector2(4188, -438.6)
+points = PackedVector2Array(0, 0, 88, 0, 88, 87.20001, 0, 87.20001, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Window_0_R" type="Polygon2D" parent="02_Buildings/07_b04" unique_id=739555356]
+z_index = -8
+position = Vector2(4884, -438.6)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 88, 0, 88, 87.2, 0, 87.2)
+
+[node name="Window_0_R_Edge" type="Line2D" parent="02_Buildings/07_b04" unique_id=1169951248]
+z_index = -9
+position = Vector2(4884, -438.6)
+points = PackedVector2Array(0, 0, 88, 0, 88, 87.20001, 0, 87.20001, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Window_1_L" type="Polygon2D" parent="02_Buildings/07_b04" unique_id=1415524480]
+z_index = -8
+position = Vector2(4188, -204.6)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 88, 0, 88, 87.2, 0, 87.2)
+
+[node name="Window_1_L_Edge" type="Line2D" parent="02_Buildings/07_b04" unique_id=1544131577]
+z_index = -9
+position = Vector2(4188, -204.6)
+points = PackedVector2Array(0, 0, 88, 0, 88, 87.200005, 0, 87.200005, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Window_1_R" type="Polygon2D" parent="02_Buildings/07_b04" unique_id=612920114]
+z_index = -8
+position = Vector2(4884, -204.6)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 88, 0, 88, 87.2, 0, 87.2)
+
+[node name="Window_1_R_Edge" type="Line2D" parent="02_Buildings/07_b04" unique_id=139846692]
+z_index = -9
+position = Vector2(4884, -204.6)
+points = PackedVector2Array(0, 0, 88, 0, 88, 87.200005, 0, 87.200005, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Window_2_L" type="Polygon2D" parent="02_Buildings/07_b04" unique_id=911926888]
+z_index = -8
+position = Vector2(4188, 29.4)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 88, 0, 88, 87.2, 0, 87.2)
+
+[node name="Window_2_L_Edge" type="Line2D" parent="02_Buildings/07_b04" unique_id=1069639607]
+z_index = -9
+position = Vector2(4188, 29.4)
+points = PackedVector2Array(0, 0, 88, 0, 88, 87.2, 0, 87.2, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Window_2_R" type="Polygon2D" parent="02_Buildings/07_b04" unique_id=686119299]
+z_index = -8
+position = Vector2(4884, 29.4)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 88, 0, 88, 87.2, 0, 87.2)
+
+[node name="Window_2_R_Edge" type="Line2D" parent="02_Buildings/07_b04" unique_id=1736006130]
+z_index = -9
+position = Vector2(4884, 29.4)
+points = PackedVector2Array(0, 0, 88, 0, 88, 87.2, 0, 87.2, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Window_3_L" type="Polygon2D" parent="02_Buildings/07_b04" unique_id=1379744380]
+z_index = -8
+position = Vector2(4188, 263.4)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 88, 0, 88, 87.2, 0, 87.2)
+
+[node name="Window_3_L_Edge" type="Line2D" parent="02_Buildings/07_b04" unique_id=757613073]
+z_index = -9
+position = Vector2(4188, 263.4)
+points = PackedVector2Array(0, 0, 88, 0, 88, 87.20001, 0, 87.20001, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Window_3_R" type="Polygon2D" parent="02_Buildings/07_b04" unique_id=1329337675]
+z_index = -8
+position = Vector2(4884, 263.4)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 88, 0, 88, 87.2, 0, 87.2)
+
+[node name="Window_3_R_Edge" type="Line2D" parent="02_Buildings/07_b04" unique_id=488381011]
+z_index = -9
+position = Vector2(4884, 263.4)
+points = PackedVector2Array(0, 0, 88, 0, 88, 87.20001, 0, 87.20001, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="08_b05" type="Node2D" parent="02_Buildings" unique_id=668840356]
+
+[node name="Mass" type="Polygon2D" parent="02_Buildings/08_b05" unique_id=933197048]
+z_index = -10
+position = Vector2(5280, 128)
+color = Color(0.53, 0.5, 0.43, 1)
+polygon = PackedVector2Array(0, 0, 480, 0, 480, 288, 0, 288)
+
+[node name="Outline" type="Line2D" parent="02_Buildings/08_b05" unique_id=1002421738]
+z_index = -9
+position = Vector2(5280, 128)
+points = PackedVector2Array(0, 0, 480, 0, 480, 288, 0, 288, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Roof" type="Polygon2D" parent="02_Buildings/08_b05" unique_id=1067932318]
+z_index = -10
+position = Vector2(5264, 168)
+color = Color(0.29, 0.32, 0.34, 1)
+polygon = PackedVector2Array(0, 0, 76, -40, 436, -40, 512, 0)
+
+[node name="Title" type="Label" parent="02_Buildings/08_b05" unique_id=857323851]
+z_index = -1
+offset_left = 5280.0
+offset_top = 182.0
+offset_right = 5760.0
+offset_bottom = 214.0
+theme_override_colors/font_color = Color(0.96, 0.94, 0.87, 1)
+theme_override_font_sizes/font_size = 18
+text = "Q 陈叔维修角"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Sub" type="Label" parent="02_Buildings/08_b05" unique_id=564613320]
+z_index = -1
+offset_left = 5280.0
+offset_top = 210.0
+offset_right = 5760.0
+offset_bottom = 236.0
+theme_override_colors/font_color = Color(0.82, 0.85, 0.84, 1)
+theme_override_font_sizes/font_size = 12
+text = "卷帘门 · 工具挂板 · 工作台"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Door" type="Polygon2D" parent="02_Buildings/08_b05" unique_id=1443922343]
+z_index = -8
+position = Vector2(5472, 224)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 96, 0, 96, 192, 0, 192)
+
+[node name="Door_Edge" type="Line2D" parent="02_Buildings/08_b05" unique_id=410661276]
+z_index = -9
+position = Vector2(5472, 224)
+points = PackedVector2Array(0, 0, 96, 0, 96, 192, 0, 192, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="DoorTag" type="Label" parent="02_Buildings/08_b05" unique_id=444562620]
+z_index = -1
+offset_left = 5460.0
+offset_top = 202.0
+offset_right = 5580.0
+offset_bottom = 228.0
+theme_override_colors/font_color = Color(0.96, 0.94, 0.87, 1)
+theme_override_font_sizes/font_size = 12
+text = "入口"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Window_0_L" type="Polygon2D" parent="02_Buildings/08_b05" unique_id=1382179708]
+z_index = -8
+position = Vector2(5385.6, 242.4)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 88, 0, 88, 96, 0, 96)
+
+[node name="Window_0_L_Edge" type="Line2D" parent="02_Buildings/08_b05" unique_id=2004630888]
+z_index = -9
+position = Vector2(5385.6, 242.4)
+points = PackedVector2Array(0, 0, 88, 0, 88, 96, 0, 96, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Window_0_R" type="Polygon2D" parent="02_Buildings/08_b05" unique_id=942409864]
+z_index = -8
+position = Vector2(5566.4, 242.4)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 88, 0, 88, 96, 0, 96)
+
+[node name="Window_0_R_Edge" type="Line2D" parent="02_Buildings/08_b05" unique_id=2078375034]
+z_index = -9
+position = Vector2(5566.4, 242.4)
+points = PackedVector2Array(0, 0, 88, 0, 88, 96, 0, 96, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="09_b06" type="Node2D" parent="02_Buildings" unique_id=533222920]
+
+[node name="Mass" type="Polygon2D" parent="02_Buildings/09_b06" unique_id=1506154096]
+z_index = -10
+position = Vector2(5760, 160)
+color = Color(0.45, 0.51, 0.48, 1)
+polygon = PackedVector2Array(0, 0, 480, 0, 480, 256, 0, 256)
+
+[node name="Outline" type="Line2D" parent="02_Buildings/09_b06" unique_id=2033305635]
+z_index = -9
+position = Vector2(5760, 160)
+points = PackedVector2Array(0, 0, 480, 0, 480, 256, 0, 256, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Roof" type="Polygon2D" parent="02_Buildings/09_b06" unique_id=212490790]
+z_index = -10
+position = Vector2(5744, 200)
+color = Color(0.29, 0.32, 0.34, 1)
+polygon = PackedVector2Array(0, 0, 76, -40, 436, -40, 512, 0)
+
+[node name="Title" type="Label" parent="02_Buildings/09_b06" unique_id=2071357361]
+z_index = -1
+offset_left = 5760.0
+offset_top = 214.0
+offset_right = 6240.0
+offset_bottom = 246.0
+theme_override_colors/font_color = Color(0.96, 0.94, 0.87, 1)
+theme_override_font_sizes/font_size = 18
+text = "R 物业门岗 / 临时交换点"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Sub" type="Label" parent="02_Buildings/09_b06" unique_id=696911041]
+z_index = -1
+offset_left = 5760.0
+offset_top = 242.0
+offset_right = 6240.0
+offset_bottom = 268.0
+theme_override_colors/font_color = Color(0.82, 0.85, 0.84, 1)
+theme_override_font_sizes/font_size = 12
+text = "信息 · 求助 · 点名"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Window_0_L" type="Polygon2D" parent="02_Buildings/09_b06" unique_id=1196644910]
+z_index = -8
+position = Vector2(5865.6, 264.8)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 88, 0, 88, 86.4, 0, 86.4)
+
+[node name="Window_0_L_Edge" type="Line2D" parent="02_Buildings/09_b06" unique_id=1989163738]
+z_index = -9
+position = Vector2(5865.6, 264.8)
+points = PackedVector2Array(0, 0, 88, 0, 88, 86.400024, 0, 86.400024, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Window_0_R" type="Polygon2D" parent="02_Buildings/09_b06" unique_id=1465820158]
+z_index = -8
+position = Vector2(6046.4, 264.8)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 88, 0, 88, 86.4, 0, 86.4)
+
+[node name="Window_0_R_Edge" type="Line2D" parent="02_Buildings/09_b06" unique_id=774129141]
+z_index = -9
+position = Vector2(6046.4, 264.8)
+points = PackedVector2Array(0, 0, 88, 0, 88, 86.400024, 0, 86.400024, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="10_b07" type="Node2D" parent="02_Buildings" unique_id=1874363758]
+
+[node name="Mass" type="Polygon2D" parent="02_Buildings/10_b07" unique_id=1534713017]
+z_index = -10
+position = Vector2(6240, 192)
+color = Color(0.45, 0.51, 0.48, 1)
+polygon = PackedVector2Array(0, 0, 560, 0, 560, 224, 0, 224)
+
+[node name="Outline" type="Line2D" parent="02_Buildings/10_b07" unique_id=351093868]
+z_index = -9
+position = Vector2(6240, 192)
+points = PackedVector2Array(0, 0, 560, 0, 560, 224, 0, 224, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Roof" type="Polygon2D" parent="02_Buildings/10_b07" unique_id=343249238]
+z_index = -10
+position = Vector2(6224, 232)
+color = Color(0.29, 0.32, 0.34, 1)
+polygon = PackedVector2Array(0, 0, 76, -40, 516, -40, 592, 0)
+
+[node name="Title" type="Label" parent="02_Buildings/10_b07" unique_id=1110980467]
+z_index = -1
+offset_left = 6240.0
+offset_top = 246.0
+offset_right = 6800.0
+offset_bottom = 278.0
+theme_override_colors/font_color = Color(0.96, 0.94, 0.87, 1)
+theme_override_font_sizes/font_size = 18
+text = "O 公交站与街角"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Sub" type="Label" parent="02_Buildings/10_b07" unique_id=1923596015]
+z_index = -1
+offset_left = 6240.0
+offset_top = 274.0
+offset_right = 6800.0
+offset_bottom = 300.0
+theme_override_colors/font_color = Color(0.82, 0.85, 0.84, 1)
+theme_override_font_sizes/font_size = 12
+text = "第一 / 二段交界"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="11_b08" type="Node2D" parent="02_Buildings" unique_id=1092719338]
+
+[node name="Mass" type="Polygon2D" parent="02_Buildings/11_b08" unique_id=804904358]
+z_index = -10
+position = Vector2(6800, -96)
+color = Color(0.53, 0.5, 0.43, 1)
+polygon = PackedVector2Array(0, 0, 900, 0, 900, 512, 0, 512)
+
+[node name="Outline" type="Line2D" parent="02_Buildings/11_b08" unique_id=991620796]
+z_index = -9
+position = Vector2(6800, -96)
+points = PackedVector2Array(0, 0, 900, 0, 900, 512, 0, 512, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="FloorLine_1" type="Line2D" parent="02_Buildings/11_b08" unique_id=699043811]
+z_index = -9
+position = Vector2(6800, 188)
+points = PackedVector2Array(0, 0, 900, 0)
+width = 2.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="FloorTag_1" type="Label" parent="02_Buildings/11_b08" unique_id=707378930]
+z_index = -1
+offset_left = 6808.0
+offset_top = 164.0
+offset_right = 6898.0
+offset_bottom = 189.0
+theme_override_colors/font_color = Color(0.82, 0.85, 0.84, 1)
+theme_override_font_sizes/font_size = 11
+text = "1F"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Roof" type="Polygon2D" parent="02_Buildings/11_b08" unique_id=502287619]
+z_index = -10
+position = Vector2(6784, -56)
+color = Color(0.29, 0.32, 0.34, 1)
+polygon = PackedVector2Array(0, 0, 76, -40, 856, -40, 932, 0)
+
+[node name="Title" type="Label" parent="02_Buildings/11_b08" unique_id=1732834049]
+z_index = -1
+offset_left = 6800.0
+offset_top = -42.0
+offset_right = 7700.0
+offset_bottom = -10.0
+theme_override_colors/font_color = Color(0.96, 0.94, 0.87, 1)
+theme_override_font_sizes/font_size = 18
+text = "J 唐宁的街角便利店"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Sub" type="Label" parent="02_Buildings/11_b08" unique_id=974906993]
+z_index = -1
+offset_left = 6800.0
+offset_top = -14.0
+offset_right = 7700.0
+offset_bottom = 12.0
+theme_override_colors/font_color = Color(0.82, 0.85, 0.84, 1)
+theme_override_font_sizes/font_size = 12
+text = "货架 · 冷柜 · 收银台 · 2F 唐母窗"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Door" type="Polygon2D" parent="02_Buildings/11_b08" unique_id=1750469291]
+z_index = -8
+position = Vector2(7202, 224)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 96, 0, 96, 192, 0, 192)
+
+[node name="Door_Edge" type="Line2D" parent="02_Buildings/11_b08" unique_id=1139132681]
+z_index = -9
+position = Vector2(7202, 224)
+points = PackedVector2Array(0, 0, 96, 0, 96, 192, 0, 192, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="DoorTag" type="Label" parent="02_Buildings/11_b08" unique_id=1413869936]
+z_index = -1
+offset_left = 7190.0
+offset_top = 202.0
+offset_right = 7310.0
+offset_bottom = 228.0
+theme_override_colors/font_color = Color(0.96, 0.94, 0.87, 1)
+theme_override_font_sizes/font_size = 12
+text = "入口"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Window_0_L" type="Polygon2D" parent="02_Buildings/11_b08" unique_id=1412564130]
+z_index = -8
+position = Vector2(6998, 12.4)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 88, 0, 88, 91.2, 0, 91.2)
+
+[node name="Window_0_L_Edge" type="Line2D" parent="02_Buildings/11_b08" unique_id=798881824]
+z_index = -9
+position = Vector2(6998, 12.4)
+points = PackedVector2Array(0, 0, 88, 0, 88, 91.2, 0, 91.2, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Window_0_R" type="Polygon2D" parent="02_Buildings/11_b08" unique_id=1156436980]
+z_index = -8
+position = Vector2(7414, 12.4)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 88, 0, 88, 91.2, 0, 91.2)
+
+[node name="Window_0_R_Edge" type="Line2D" parent="02_Buildings/11_b08" unique_id=124250250]
+z_index = -9
+position = Vector2(7414, 12.4)
+points = PackedVector2Array(0, 0, 88, 0, 88, 91.2, 0, 91.2, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Window_1_L" type="Polygon2D" parent="02_Buildings/11_b08" unique_id=1629486979]
+z_index = -8
+position = Vector2(6998, 256.4)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 88, 0, 88, 91.2, 0, 91.2)
+
+[node name="Window_1_L_Edge" type="Line2D" parent="02_Buildings/11_b08" unique_id=1640524891]
+z_index = -9
+position = Vector2(6998, 256.4)
+points = PackedVector2Array(0, 0, 88, 0, 88, 91.20001, 0, 91.20001, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Window_1_R" type="Polygon2D" parent="02_Buildings/11_b08" unique_id=2032064683]
+z_index = -8
+position = Vector2(7414, 256.4)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 88, 0, 88, 91.2, 0, 91.2)
+
+[node name="Window_1_R_Edge" type="Line2D" parent="02_Buildings/11_b08" unique_id=1117393668]
+z_index = -9
+position = Vector2(7414, 256.4)
+points = PackedVector2Array(0, 0, 88, 0, 88, 91.20001, 0, 91.20001, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="12_b09" type="Node2D" parent="02_Buildings" unique_id=880478445]
+
+[node name="Mass" type="Polygon2D" parent="02_Buildings/12_b09" unique_id=537501945]
+z_index = -10
+position = Vector2(7700, 96)
+color = Color(0.53, 0.5, 0.43, 1)
+polygon = PackedVector2Array(0, 0, 800, 0, 800, 320, 0, 320)
+
+[node name="Outline" type="Line2D" parent="02_Buildings/12_b09" unique_id=978286433]
+z_index = -9
+position = Vector2(7700, 96)
+points = PackedVector2Array(0, 0, 800, 0, 800, 320, 0, 320, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Roof" type="Polygon2D" parent="02_Buildings/12_b09" unique_id=1870907923]
+z_index = -10
+position = Vector2(7684, 136)
+color = Color(0.29, 0.32, 0.34, 1)
+polygon = PackedVector2Array(0, 0, 76, -40, 756, -40, 832, 0)
+
+[node name="Title" type="Label" parent="02_Buildings/12_b09" unique_id=2077324265]
+z_index = -1
+offset_left = 7700.0
+offset_top = 150.0
+offset_right = 8500.0
+offset_bottom = 182.0
+theme_override_colors/font_color = Color(0.96, 0.94, 0.87, 1)
+theme_override_font_sizes/font_size = 18
+text = "N 社区药店"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Sub" type="Label" parent="02_Buildings/12_b09" unique_id=406227845]
+z_index = -1
+offset_left = 7700.0
+offset_top = 178.0
+offset_right = 8500.0
+offset_bottom = 204.0
+theme_override_colors/font_color = Color(0.82, 0.85, 0.84, 1)
+theme_override_font_sizes/font_size = 12
+text = "等候位 · 非处方陈列 · 药师台"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Door" type="Polygon2D" parent="02_Buildings/12_b09" unique_id=1329627272]
+z_index = -8
+position = Vector2(8052, 224)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 96, 0, 96, 192, 0, 192)
+
+[node name="Door_Edge" type="Line2D" parent="02_Buildings/12_b09" unique_id=1351948973]
+z_index = -9
+position = Vector2(8052, 224)
+points = PackedVector2Array(0, 0, 96, 0, 96, 192, 0, 192, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="DoorTag" type="Label" parent="02_Buildings/12_b09" unique_id=385567759]
+z_index = -1
+offset_left = 8040.0
+offset_top = 202.0
+offset_right = 8160.0
+offset_bottom = 228.0
+theme_override_colors/font_color = Color(0.96, 0.94, 0.87, 1)
+theme_override_font_sizes/font_size = 12
+text = "入口"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Window_0_L" type="Polygon2D" parent="02_Buildings/12_b09" unique_id=2048487378]
+z_index = -8
+position = Vector2(7876, 220)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 88, 0, 88, 96, 0, 96)
+
+[node name="Window_0_L_Edge" type="Line2D" parent="02_Buildings/12_b09" unique_id=550208676]
+z_index = -9
+position = Vector2(7876, 220)
+points = PackedVector2Array(0, 0, 88, 0, 88, 96, 0, 96, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Window_0_R" type="Polygon2D" parent="02_Buildings/12_b09" unique_id=1588124226]
+z_index = -8
+position = Vector2(8236, 220)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 88, 0, 88, 96, 0, 96)
+
+[node name="Window_0_R_Edge" type="Line2D" parent="02_Buildings/12_b09" unique_id=868565767]
+z_index = -9
+position = Vector2(8236, 220)
+points = PackedVector2Array(0, 0, 88, 0, 88, 96, 0, 96, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="13_b10" type="Node2D" parent="02_Buildings" unique_id=263425758]
+
+[node name="Mass" type="Polygon2D" parent="02_Buildings/13_b10" unique_id=1368746319]
+z_index = -10
+position = Vector2(8500, 32)
+color = Color(0.49, 0.47, 0.41, 1)
+polygon = PackedVector2Array(0, 0, 1600, 0, 1600, 384, 0, 384)
+
+[node name="Outline" type="Line2D" parent="02_Buildings/13_b10" unique_id=1090541391]
+z_index = -9
+position = Vector2(8500, 32)
+points = PackedVector2Array(0, 0, 1600, 0, 1600, 384, 0, 384, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Roof" type="Polygon2D" parent="02_Buildings/13_b10" unique_id=1624978586]
+z_index = -10
+position = Vector2(8484, 72)
+color = Color(0.29, 0.32, 0.34, 1)
+polygon = PackedVector2Array(0, 0, 76, -40, 1556, -40, 1632, 0)
+
+[node name="Title" type="Label" parent="02_Buildings/13_b10" unique_id=1503542227]
+z_index = -1
+offset_left = 8500.0
+offset_top = 86.0
+offset_right = 10100.0
+offset_bottom = 118.0
+theme_override_colors/font_color = Color(0.96, 0.94, 0.87, 1)
+theme_override_font_sizes/font_size = 18
+text = "H 灾前连锁超市"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Sub" type="Label" parent="02_Buildings/13_b10" unique_id=1876867506]
+z_index = -1
+offset_left = 8500.0
+offset_top = 114.0
+offset_right = 10100.0
+offset_bottom = 140.0
+theme_override_colors/font_color = Color(0.82, 0.85, 0.84, 1)
+theme_override_font_sizes/font_size = 12
+text = "入口推车 → 饮水食品 → S 临时批发预约 → 冷柜 → 收银"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Door" type="Polygon2D" parent="02_Buildings/13_b10" unique_id=780188199]
+z_index = -8
+position = Vector2(9204, 192)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 192, 0, 192, 224, 0, 224)
+
+[node name="Door_Edge" type="Line2D" parent="02_Buildings/13_b10" unique_id=1230176815]
+z_index = -9
+position = Vector2(9204, 192)
+points = PackedVector2Array(0, 0, 192, 0, 192, 224, 0, 224, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="DoorTag" type="Label" parent="02_Buildings/13_b10" unique_id=1629306466]
+z_index = -1
+offset_left = 9240.0
+offset_top = 170.0
+offset_right = 9360.0
+offset_bottom = 196.0
+theme_override_colors/font_color = Color(0.96, 0.94, 0.87, 1)
+theme_override_font_sizes/font_size = 12
+text = "入口"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Window_0_L" type="Polygon2D" parent="02_Buildings/13_b10" unique_id=638545624]
+z_index = -8
+position = Vector2(8852, 175.2)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 88, 0, 88, 96, 0, 96)
+
+[node name="Window_0_L_Edge" type="Line2D" parent="02_Buildings/13_b10" unique_id=340129809]
+z_index = -9
+position = Vector2(8852, 175.2)
+points = PackedVector2Array(0, 0, 88, 0, 88, 96.000015, 0, 96.000015, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Window_0_R" type="Polygon2D" parent="02_Buildings/13_b10" unique_id=1045899136]
+z_index = -8
+position = Vector2(9660, 175.2)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 88, 0, 88, 96, 0, 96)
+
+[node name="Window_0_R_Edge" type="Line2D" parent="02_Buildings/13_b10" unique_id=1043272974]
+z_index = -9
+position = Vector2(9660, 175.2)
+points = PackedVector2Array(0, 0, 88, 0, 88, 96.000015, 0, 96.000015, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="14_b11" type="Node2D" parent="02_Buildings" unique_id=310566806]
+
+[node name="Mass" type="Polygon2D" parent="02_Buildings/14_b11" unique_id=1963403787]
+z_index = -10
+position = Vector2(10100, 64)
+color = Color(0.53, 0.5, 0.43, 1)
+polygon = PackedVector2Array(0, 0, 1200, 0, 1200, 352, 0, 352)
+
+[node name="Outline" type="Line2D" parent="02_Buildings/14_b11" unique_id=1033909850]
+z_index = -9
+position = Vector2(10100, 64)
+points = PackedVector2Array(0, 0, 1200, 0, 1200, 352, 0, 352, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Roof" type="Polygon2D" parent="02_Buildings/14_b11" unique_id=1826372907]
+z_index = -10
+position = Vector2(10084, 104)
+color = Color(0.29, 0.32, 0.34, 1)
+polygon = PackedVector2Array(0, 0, 76, -40, 1156, -40, 1232, 0)
+
+[node name="Title" type="Label" parent="02_Buildings/14_b11" unique_id=2135016189]
+z_index = -1
+offset_left = 10100.0
+offset_top = 118.0
+offset_right = 11300.0
+offset_bottom = 150.0
+theme_override_colors/font_color = Color(0.96, 0.94, 0.87, 1)
+theme_override_font_sizes/font_size = 18
+text = "I 五金 / 家电店"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Sub" type="Label" parent="02_Buildings/14_b11" unique_id=861052076]
+z_index = -1
+offset_left = 10100.0
+offset_top = 146.0
+offset_right = 11300.0
+offset_bottom = 172.0
+theme_override_colors/font_color = Color(0.82, 0.85, 0.84, 1)
+theme_override_font_sizes/font_size = 12
+text = "工具墙 · 门窗密封 · 取暖发电设备 · 装货口"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Door" type="Polygon2D" parent="02_Buildings/14_b11" unique_id=1436416015]
+z_index = -8
+position = Vector2(10652, 224)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 96, 0, 96, 192, 0, 192)
+
+[node name="Door_Edge" type="Line2D" parent="02_Buildings/14_b11" unique_id=1717093937]
+z_index = -9
+position = Vector2(10652, 224)
+points = PackedVector2Array(0, 0, 96, 0, 96, 192, 0, 192, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="DoorTag" type="Label" parent="02_Buildings/14_b11" unique_id=515272766]
+z_index = -1
+offset_left = 10640.0
+offset_top = 202.0
+offset_right = 10760.0
+offset_bottom = 228.0
+theme_override_colors/font_color = Color(0.96, 0.94, 0.87, 1)
+theme_override_font_sizes/font_size = 12
+text = "入口"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Window_0_L" type="Polygon2D" parent="02_Buildings/14_b11" unique_id=1426035829]
+z_index = -8
+position = Vector2(10364, 197.6)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 88, 0, 88, 96, 0, 96)
+
+[node name="Window_0_L_Edge" type="Line2D" parent="02_Buildings/14_b11" unique_id=223491809]
+z_index = -9
+position = Vector2(10364, 197.6)
+points = PackedVector2Array(0, 0, 88, 0, 88, 96, 0, 96, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Window_0_R" type="Polygon2D" parent="02_Buildings/14_b11" unique_id=198494366]
+z_index = -8
+position = Vector2(10948, 197.6)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 88, 0, 88, 96, 0, 96)
+
+[node name="Window_0_R_Edge" type="Line2D" parent="02_Buildings/14_b11" unique_id=553510499]
+z_index = -9
+position = Vector2(10948, 197.6)
+points = PackedVector2Array(0, 0, 88, 0, 88, 96, 0, 96, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="15_b12" type="Node2D" parent="02_Buildings" unique_id=1110114019]
+
+[node name="Mass" type="Polygon2D" parent="02_Buildings/15_b12" unique_id=1854527403]
+z_index = -10
+position = Vector2(11300, 160)
+color = Color(0.45, 0.51, 0.48, 1)
+polygon = PackedVector2Array(0, 0, 800, 0, 800, 256, 0, 256)
+
+[node name="Outline" type="Line2D" parent="02_Buildings/15_b12" unique_id=1296853434]
+z_index = -9
+position = Vector2(11300, 160)
+points = PackedVector2Array(0, 0, 800, 0, 800, 256, 0, 256, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Roof" type="Polygon2D" parent="02_Buildings/15_b12" unique_id=1247155664]
+z_index = -10
+position = Vector2(11284, 200)
+color = Color(0.29, 0.32, 0.34, 1)
+polygon = PackedVector2Array(0, 0, 76, -40, 756, -40, 832, 0)
+
+[node name="Title" type="Label" parent="02_Buildings/15_b12" unique_id=2123167637]
+z_index = -1
+offset_left = 11300.0
+offset_top = 214.0
+offset_right = 12100.0
+offset_bottom = 246.0
+theme_override_colors/font_color = Color(0.96, 0.94, 0.87, 1)
+theme_override_font_sizes/font_size = 18
+text = "U 临时管制路口"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Sub" type="Label" parent="02_Buildings/15_b12" unique_id=118248843]
+z_index = -1
+offset_left = 11300.0
+offset_top = 242.0
+offset_right = 12100.0
+offset_bottom = 268.0
+theme_override_colors/font_color = Color(0.82, 0.85, 0.84, 1)
+theme_override_font_sizes/font_size = 12
+text = "护栏 · 路牌 · 道路变化"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="16_b13" type="Node2D" parent="02_Buildings" unique_id=1536486354]
+
+[node name="Mass" type="Polygon2D" parent="02_Buildings/16_b13" unique_id=1767084304]
+z_index = -10
+position = Vector2(12100, 0)
+color = Color(0.44, 0.49, 0.52, 1)
+polygon = PackedVector2Array(0, 0, 2200, 0, 2200, 416, 0, 416)
+
+[node name="Outline" type="Line2D" parent="02_Buildings/16_b13" unique_id=337080262]
+z_index = -9
+position = Vector2(12100, 0)
+points = PackedVector2Array(0, 0, 2200, 0, 2200, 416, 0, 416, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Roof" type="Polygon2D" parent="02_Buildings/16_b13" unique_id=1501554035]
+z_index = -10
+position = Vector2(12084, 40)
+color = Color(0.29, 0.32, 0.34, 1)
+polygon = PackedVector2Array(0, 0, 76, -40, 2156, -40, 2232, 0)
+
+[node name="Title" type="Label" parent="02_Buildings/16_b13" unique_id=341957025]
+z_index = -1
+offset_left = 12100.0
+offset_top = 54.0
+offset_right = 14300.0
+offset_bottom = 86.0
+theme_override_colors/font_color = Color(0.96, 0.94, 0.87, 1)
+theme_override_font_sizes/font_size = 18
+text = "K 独立批发仓与装卸区"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Sub" type="Label" parent="02_Buildings/16_b13" unique_id=658128220]
+z_index = -1
+offset_left = 12100.0
+offset_top = 82.0
+offset_right = 14300.0
+offset_bottom = 108.0
+theme_override_colors/font_color = Color(0.82, 0.85, 0.84, 1)
+theme_override_font_sizes/font_size = 12
+text = "D-4 后开放 · 正门 / 装卸门"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Door" type="Polygon2D" parent="02_Buildings/16_b13" unique_id=1443075064]
+z_index = -8
+position = Vector2(13104, 192)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 192, 0, 192, 224, 0, 224)
+
+[node name="Door_Edge" type="Line2D" parent="02_Buildings/16_b13" unique_id=1032797134]
+z_index = -9
+position = Vector2(13104, 192)
+points = PackedVector2Array(0, 0, 192, 0, 192, 224, 0, 224, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="DoorTag" type="Label" parent="02_Buildings/16_b13" unique_id=1429941872]
+z_index = -1
+offset_left = 13140.0
+offset_top = 170.0
+offset_right = 13260.0
+offset_bottom = 196.0
+theme_override_colors/font_color = Color(0.96, 0.94, 0.87, 1)
+theme_override_font_sizes/font_size = 12
+text = "入口"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Window_0_L" type="Polygon2D" parent="02_Buildings/16_b13" unique_id=214445420]
+z_index = -8
+position = Vector2(12584, 152.8)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 88, 0, 88, 96, 0, 96)
+
+[node name="Window_0_L_Edge" type="Line2D" parent="02_Buildings/16_b13" unique_id=1905415175]
+z_index = -9
+position = Vector2(12584, 152.8)
+points = PackedVector2Array(0, 0, 88, 0, 88, 96, 0, 96, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Window_0_R" type="Polygon2D" parent="02_Buildings/16_b13" unique_id=416500050]
+z_index = -8
+position = Vector2(13728, 152.8)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 88, 0, 88, 96, 0, 96)
+
+[node name="Window_0_R_Edge" type="Line2D" parent="02_Buildings/16_b13" unique_id=703009746]
+z_index = -9
+position = Vector2(13728, 152.8)
+points = PackedVector2Array(0, 0, 88, 0, 88, 96, 0, 96, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="17_b14" type="Node2D" parent="02_Buildings" unique_id=908677547]
+
+[node name="Mass" type="Polygon2D" parent="02_Buildings/17_b14" unique_id=1019125392]
+z_index = -10
+position = Vector2(14300, 64)
+color = Color(0.44, 0.49, 0.52, 1)
+polygon = PackedVector2Array(0, 0, 1600, 0, 1600, 352, 0, 352)
+
+[node name="Outline" type="Line2D" parent="02_Buildings/17_b14" unique_id=1097407071]
+z_index = -9
+position = Vector2(14300, 64)
+points = PackedVector2Array(0, 0, 1600, 0, 1600, 352, 0, 352, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Roof" type="Polygon2D" parent="02_Buildings/17_b14" unique_id=1791558941]
+z_index = -10
+position = Vector2(14284, 104)
+color = Color(0.29, 0.32, 0.34, 1)
+polygon = PackedVector2Array(0, 0, 76, -40, 1556, -40, 1632, 0)
+
+[node name="Title" type="Label" parent="02_Buildings/17_b14" unique_id=293464060]
+z_index = -1
+offset_left = 14300.0
+offset_top = 118.0
+offset_right = 15900.0
+offset_bottom = 150.0
+theme_override_colors/font_color = Color(0.96, 0.94, 0.87, 1)
+theme_override_font_sizes/font_size = 18
+text = "L 物流中转口 / 大件取货区"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Sub" type="Label" parent="02_Buildings/17_b14" unique_id=2049958592]
+z_index = -1
+offset_left = 14300.0
+offset_top = 146.0
+offset_right = 15900.0
+offset_bottom = 172.0
+theme_override_colors/font_color = Color(0.82, 0.85, 0.84, 1)
+theme_override_font_sizes/font_size = 12
+text = "P07B 可选自取"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Door" type="Polygon2D" parent="02_Buildings/17_b14" unique_id=809316204]
+z_index = -8
+position = Vector2(15052, 224)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 96, 0, 96, 192, 0, 192)
+
+[node name="Door_Edge" type="Line2D" parent="02_Buildings/17_b14" unique_id=701198282]
+z_index = -9
+position = Vector2(15052, 224)
+points = PackedVector2Array(0, 0, 96, 0, 96, 192, 0, 192, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="DoorTag" type="Label" parent="02_Buildings/17_b14" unique_id=666941088]
+z_index = -1
+offset_left = 15040.0
+offset_top = 202.0
+offset_right = 15160.0
+offset_bottom = 228.0
+theme_override_colors/font_color = Color(0.96, 0.94, 0.87, 1)
+theme_override_font_sizes/font_size = 12
+text = "入口"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Window_0_L" type="Polygon2D" parent="02_Buildings/17_b14" unique_id=209371269]
+z_index = -8
+position = Vector2(14652, 197.6)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 88, 0, 88, 96, 0, 96)
+
+[node name="Window_0_L_Edge" type="Line2D" parent="02_Buildings/17_b14" unique_id=1907075755]
+z_index = -9
+position = Vector2(14652, 197.6)
+points = PackedVector2Array(0, 0, 88, 0, 88, 96, 0, 96, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Window_0_R" type="Polygon2D" parent="02_Buildings/17_b14" unique_id=1575333617]
+z_index = -8
+position = Vector2(15460, 197.6)
+color = Color(0.21, 0.25, 0.28, 1)
+polygon = PackedVector2Array(0, 0, 88, 0, 88, 96, 0, 96)
+
+[node name="Window_0_R_Edge" type="Line2D" parent="02_Buildings/17_b14" unique_id=1422813248]
+z_index = -9
+position = Vector2(15460, 197.6)
+points = PackedVector2Array(0, 0, 88, 0, 88, 96, 0, 96, 0, 0)
+width = 3.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="18_lane4" type="Node2D" parent="02_Buildings" unique_id=749812869]
+
+[node name="03_Lanes" type="Node2D" parent="." unique_id=670694136]
+
+[node name="Lane_lane0" type="Label" parent="03_Lanes" unique_id=109132904]
+z_index = -1
+offset_top = 330.0
+offset_right = 480.0
+offset_bottom = 358.0
+theme_override_colors/font_color = Color(0.82, 0.85, 0.84, 1)
+theme_override_font_sizes/font_size = 14
+text = "左侧巷道 / 围墙"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="LaneDivider_lane0" type="Line2D" parent="03_Lanes" unique_id=1700044343]
+z_index = -9
+position = Vector2(0, 392)
+points = PackedVector2Array(0, 0, 0, 24)
+width = 2.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Lane_lane1" type="Label" parent="03_Lanes" unique_id=2068108716]
+z_index = -1
+offset_left = 1040.0
+offset_top = 330.0
+offset_right = 1200.0
+offset_bottom = 358.0
+theme_override_colors/font_color = Color(0.82, 0.85, 0.84, 1)
+theme_override_font_sizes/font_size = 14
+text = "隔离巷道"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="LaneDivider_lane1" type="Line2D" parent="03_Lanes" unique_id=1632557326]
+z_index = -9
+position = Vector2(1040, 392)
+points = PackedVector2Array(0, 0, 0, 24)
+width = 2.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Lane_lane2" type="Label" parent="03_Lanes" unique_id=1204740896]
+z_index = -1
+offset_left = 2600.0
+offset_top = 330.0
+offset_right = 3080.0
+offset_bottom = 358.0
+theme_override_colors/font_color = Color(0.82, 0.85, 0.84, 1)
+theme_override_font_sizes/font_size = 14
+text = "D 门前巷道 / 收货位"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="LaneDivider_lane2" type="Line2D" parent="03_Lanes" unique_id=1257416529]
+z_index = -9
+position = Vector2(2600, 392)
+points = PackedVector2Array(0, 0, 0, 24)
+width = 2.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Lane_lane3" type="Label" parent="03_Lanes" unique_id=1633251789]
+z_index = -1
+offset_left = 3720.0
+offset_top = 330.0
+offset_right = 3880.0
+offset_bottom = 358.0
+theme_override_colors/font_color = Color(0.82, 0.85, 0.84, 1)
+theme_override_font_sizes/font_size = 14
+text = "巷道"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="LaneDivider_lane3" type="Line2D" parent="03_Lanes" unique_id=860819909]
+z_index = -9
+position = Vector2(3720, 392)
+points = PackedVector2Array(0, 0, 0, 24)
+width = 2.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Lane_lane4" type="Label" parent="03_Lanes" unique_id=1537948316]
+z_index = -1
+offset_left = 15900.0
+offset_top = 330.0
+offset_right = 16380.0
+offset_bottom = 358.0
+theme_override_colors/font_color = Color(0.82, 0.85, 0.84, 1)
+theme_override_font_sizes/font_size = 14
+text = "右侧边界 / 城市边缘"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="LaneDivider_lane4" type="Line2D" parent="03_Lanes" unique_id=272545588]
+z_index = -9
+position = Vector2(15900, 392)
+points = PackedVector2Array(0, 0, 0, 24)
+width = 2.0
+default_color = Color(0.79, 0.82, 0.8, 1)
+
+[node name="Actors" type="Node2D" parent="." unique_id=1284678258]
+
+[node name="Player" parent="Actors" unique_id=1512298410 instance=ExtResource("2_501dt")]
+z_index = 5
+
+[node name="Interaction" type="Node2D" parent="." unique_id=504981504]
+
+[node name="InteractionSensor" type="Node2D" parent="Interaction" unique_id=794543504]
+z_index = 20
+script = ExtResource("4_52ci3")
+actor_path = NodePath("../../Actors/Player")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=560825293]
+limit_left = -480
+limit_top = -900
+limit_right = 16860
+limit_bottom = 760
+script = ExtResource("5_s51s7")
+target_path = NodePath("../Actors/Player")
+look_offset = Vector2(0, -200)
+dead_zone = Vector2(56, 48)
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=1068495069]
+
+[node name="DebugGuides" type="Node2D" parent="." unique_id=1606489300]
+visible = false
+
+[node name="GridV_0" type="Line2D" parent="DebugGuides" unique_id=953806844]
+z_index = 60
+position = Vector2(0, -620)
+points = PackedVector2Array(0, 0, 0, 1180)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridV_320" type="Line2D" parent="DebugGuides" unique_id=646446645]
+z_index = 60
+position = Vector2(320, -620)
+points = PackedVector2Array(0, 0, 0, 1180)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridV_640" type="Line2D" parent="DebugGuides" unique_id=1486233281]
+z_index = 60
+position = Vector2(640, -620)
+points = PackedVector2Array(0, 0, 0, 1180)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridV_960" type="Line2D" parent="DebugGuides" unique_id=1141033375]
+z_index = 60
+position = Vector2(960, -620)
+points = PackedVector2Array(0, 0, 0, 1180)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridV_1280" type="Line2D" parent="DebugGuides" unique_id=1060538624]
+z_index = 60
+position = Vector2(1280, -620)
+points = PackedVector2Array(0, 0, 0, 1180)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridV_1600" type="Line2D" parent="DebugGuides" unique_id=1633846287]
+z_index = 60
+position = Vector2(1600, -620)
+points = PackedVector2Array(0, 0, 0, 1180)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridV_1920" type="Line2D" parent="DebugGuides" unique_id=1158677255]
+z_index = 60
+position = Vector2(1920, -620)
+points = PackedVector2Array(0, 0, 0, 1180)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridV_2240" type="Line2D" parent="DebugGuides" unique_id=945367190]
+z_index = 60
+position = Vector2(2240, -620)
+points = PackedVector2Array(0, 0, 0, 1180)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridV_2560" type="Line2D" parent="DebugGuides" unique_id=167640271]
+z_index = 60
+position = Vector2(2560, -620)
+points = PackedVector2Array(0, 0, 0, 1180)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridV_2880" type="Line2D" parent="DebugGuides" unique_id=1124996193]
+z_index = 60
+position = Vector2(2880, -620)
+points = PackedVector2Array(0, 0, 0, 1180)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridV_3200" type="Line2D" parent="DebugGuides" unique_id=332602695]
+z_index = 60
+position = Vector2(3200, -620)
+points = PackedVector2Array(0, 0, 0, 1180)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridV_3520" type="Line2D" parent="DebugGuides" unique_id=2058082020]
+z_index = 60
+position = Vector2(3520, -620)
+points = PackedVector2Array(0, 0, 0, 1180)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridV_3840" type="Line2D" parent="DebugGuides" unique_id=292513476]
+z_index = 60
+position = Vector2(3840, -620)
+points = PackedVector2Array(0, 0, 0, 1180)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridV_4160" type="Line2D" parent="DebugGuides" unique_id=1714435828]
+z_index = 60
+position = Vector2(4160, -620)
+points = PackedVector2Array(0, 0, 0, 1180)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridV_4480" type="Line2D" parent="DebugGuides" unique_id=864205411]
+z_index = 60
+position = Vector2(4480, -620)
+points = PackedVector2Array(0, 0, 0, 1180)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridV_4800" type="Line2D" parent="DebugGuides" unique_id=1807245950]
+z_index = 60
+position = Vector2(4800, -620)
+points = PackedVector2Array(0, 0, 0, 1180)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridV_5120" type="Line2D" parent="DebugGuides" unique_id=1847891145]
+z_index = 60
+position = Vector2(5120, -620)
+points = PackedVector2Array(0, 0, 0, 1180)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridV_5440" type="Line2D" parent="DebugGuides" unique_id=1460513198]
+z_index = 60
+position = Vector2(5440, -620)
+points = PackedVector2Array(0, 0, 0, 1180)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridV_5760" type="Line2D" parent="DebugGuides" unique_id=1652281688]
+z_index = 60
+position = Vector2(5760, -620)
+points = PackedVector2Array(0, 0, 0, 1180)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridV_6080" type="Line2D" parent="DebugGuides" unique_id=212809754]
+z_index = 60
+position = Vector2(6080, -620)
+points = PackedVector2Array(0, 0, 0, 1180)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridV_6400" type="Line2D" parent="DebugGuides" unique_id=1657940640]
+z_index = 60
+position = Vector2(6400, -620)
+points = PackedVector2Array(0, 0, 0, 1180)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridV_6720" type="Line2D" parent="DebugGuides" unique_id=896356512]
+z_index = 60
+position = Vector2(6720, -620)
+points = PackedVector2Array(0, 0, 0, 1180)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridV_7040" type="Line2D" parent="DebugGuides" unique_id=668500166]
+z_index = 60
+position = Vector2(7040, -620)
+points = PackedVector2Array(0, 0, 0, 1180)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridV_7360" type="Line2D" parent="DebugGuides" unique_id=1500622133]
+z_index = 60
+position = Vector2(7360, -620)
+points = PackedVector2Array(0, 0, 0, 1180)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridV_7680" type="Line2D" parent="DebugGuides" unique_id=393516837]
+z_index = 60
+position = Vector2(7680, -620)
+points = PackedVector2Array(0, 0, 0, 1180)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridV_8000" type="Line2D" parent="DebugGuides" unique_id=1119150732]
+z_index = 60
+position = Vector2(8000, -620)
+points = PackedVector2Array(0, 0, 0, 1180)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridV_8320" type="Line2D" parent="DebugGuides" unique_id=2124086638]
+z_index = 60
+position = Vector2(8320, -620)
+points = PackedVector2Array(0, 0, 0, 1180)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridV_8640" type="Line2D" parent="DebugGuides" unique_id=1988060457]
+z_index = 60
+position = Vector2(8640, -620)
+points = PackedVector2Array(0, 0, 0, 1180)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridV_8960" type="Line2D" parent="DebugGuides" unique_id=411875548]
+z_index = 60
+position = Vector2(8960, -620)
+points = PackedVector2Array(0, 0, 0, 1180)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridV_9280" type="Line2D" parent="DebugGuides" unique_id=850467746]
+z_index = 60
+position = Vector2(9280, -620)
+points = PackedVector2Array(0, 0, 0, 1180)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridV_9600" type="Line2D" parent="DebugGuides" unique_id=1884134192]
+z_index = 60
+position = Vector2(9600, -620)
+points = PackedVector2Array(0, 0, 0, 1180)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridV_9920" type="Line2D" parent="DebugGuides" unique_id=345478099]
+z_index = 60
+position = Vector2(9920, -620)
+points = PackedVector2Array(0, 0, 0, 1180)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridV_10240" type="Line2D" parent="DebugGuides" unique_id=153833854]
+z_index = 60
+position = Vector2(10240, -620)
+points = PackedVector2Array(0, 0, 0, 1180)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridV_10560" type="Line2D" parent="DebugGuides" unique_id=999853412]
+z_index = 60
+position = Vector2(10560, -620)
+points = PackedVector2Array(0, 0, 0, 1180)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridV_10880" type="Line2D" parent="DebugGuides" unique_id=192828495]
+z_index = 60
+position = Vector2(10880, -620)
+points = PackedVector2Array(0, 0, 0, 1180)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridV_11200" type="Line2D" parent="DebugGuides" unique_id=439485080]
+z_index = 60
+position = Vector2(11200, -620)
+points = PackedVector2Array(0, 0, 0, 1180)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridV_11520" type="Line2D" parent="DebugGuides" unique_id=1338178295]
+z_index = 60
+position = Vector2(11520, -620)
+points = PackedVector2Array(0, 0, 0, 1180)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridV_11840" type="Line2D" parent="DebugGuides" unique_id=1424396560]
+z_index = 60
+position = Vector2(11840, -620)
+points = PackedVector2Array(0, 0, 0, 1180)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridV_12160" type="Line2D" parent="DebugGuides" unique_id=719921138]
+z_index = 60
+position = Vector2(12160, -620)
+points = PackedVector2Array(0, 0, 0, 1180)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridV_12480" type="Line2D" parent="DebugGuides" unique_id=1777023071]
+z_index = 60
+position = Vector2(12480, -620)
+points = PackedVector2Array(0, 0, 0, 1180)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridV_12800" type="Line2D" parent="DebugGuides" unique_id=1060685716]
+z_index = 60
+position = Vector2(12800, -620)
+points = PackedVector2Array(0, 0, 0, 1180)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridV_13120" type="Line2D" parent="DebugGuides" unique_id=1091158408]
+z_index = 60
+position = Vector2(13120, -620)
+points = PackedVector2Array(0, 0, 0, 1180)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridV_13440" type="Line2D" parent="DebugGuides" unique_id=853286180]
+z_index = 60
+position = Vector2(13440, -620)
+points = PackedVector2Array(0, 0, 0, 1180)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridV_13760" type="Line2D" parent="DebugGuides" unique_id=54342950]
+z_index = 60
+position = Vector2(13760, -620)
+points = PackedVector2Array(0, 0, 0, 1180)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridV_14080" type="Line2D" parent="DebugGuides" unique_id=807529929]
+z_index = 60
+position = Vector2(14080, -620)
+points = PackedVector2Array(0, 0, 0, 1180)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridV_14400" type="Line2D" parent="DebugGuides" unique_id=1715792621]
+z_index = 60
+position = Vector2(14400, -620)
+points = PackedVector2Array(0, 0, 0, 1180)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridV_14720" type="Line2D" parent="DebugGuides" unique_id=1904561836]
+z_index = 60
+position = Vector2(14720, -620)
+points = PackedVector2Array(0, 0, 0, 1180)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridV_15040" type="Line2D" parent="DebugGuides" unique_id=486998020]
+z_index = 60
+position = Vector2(15040, -620)
+points = PackedVector2Array(0, 0, 0, 1180)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridV_15360" type="Line2D" parent="DebugGuides" unique_id=1585049592]
+z_index = 60
+position = Vector2(15360, -620)
+points = PackedVector2Array(0, 0, 0, 1180)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridV_15680" type="Line2D" parent="DebugGuides" unique_id=803153890]
+z_index = 60
+position = Vector2(15680, -620)
+points = PackedVector2Array(0, 0, 0, 1180)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridV_16000" type="Line2D" parent="DebugGuides" unique_id=255175338]
+z_index = 60
+position = Vector2(16000, -620)
+points = PackedVector2Array(0, 0, 0, 1180)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridV_16320" type="Line2D" parent="DebugGuides" unique_id=1513406102]
+z_index = 60
+position = Vector2(16320, -620)
+points = PackedVector2Array(0, 0, 0, 1180)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridH_-128" type="Line2D" parent="DebugGuides" unique_id=624689402]
+z_index = 60
+position = Vector2(0, -128)
+points = PackedVector2Array(0, 0, 16380, 0)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridH_0" type="Line2D" parent="DebugGuides" unique_id=1336031359]
+z_index = 60
+points = PackedVector2Array(0, 0, 16380, 0)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridH_128" type="Line2D" parent="DebugGuides" unique_id=602610911]
+z_index = 60
+position = Vector2(0, 128)
+points = PackedVector2Array(0, 0, 16380, 0)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridH_256" type="Line2D" parent="DebugGuides" unique_id=270119704]
+z_index = 60
+position = Vector2(0, 256)
+points = PackedVector2Array(0, 0, 16380, 0)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="GridH_416" type="Line2D" parent="DebugGuides" unique_id=1375062614]
+z_index = 60
+position = Vector2(0, 416)
+points = PackedVector2Array(0, 0, 16380, 0)
+width = 1.0
+default_color = Color(0.95, 0.45, 0.35, 0.28)
+
+[node name="Scale160" type="Line2D" parent="DebugGuides" unique_id=1656818651]
+z_index = 61
+position = Vector2(8280, 416)
+points = PackedVector2Array(0, 0, 0, -160)
+width = 2.0
+default_color = Color(0.98, 0.42, 0.32, 0.85)
+
+[node name="ScaleLabel" type="Label" parent="DebugGuides" unique_id=2058195192]
+z_index = -1
+offset_left = 8220.0
+offset_top = 228.0
+offset_right = 8360.0
+offset_bottom = 254.0
+theme_override_colors/font_color = Color(0.98, 0.42, 0.32, 1)
+theme_override_font_sizes/font_size = 12
+text = "160px 人物"
+horizontal_alignment = 1
+autowrap_mode = 3

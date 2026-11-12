@@ -143,11 +143,11 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 14
 text = "启动自检（Smoke Test）"
 
-[node name="OutdoorStreet" type="Button" parent="DevPanel/Box"]
+[node name="Season1Map" type="Button" parent="DevPanel/Box"]
 custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
 theme_override_font_sizes/font_size = 14
-text = "第一季长街白盒总览 (15360px)"
+text = "第一季完整地图（可行走）"
 
 [node name="Close" type="Button" parent="DevPanel/Box"]
 custom_minimum_size = Vector2(0, 36)

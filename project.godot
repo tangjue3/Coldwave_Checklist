@@ -1,6 +1,10 @@
-; 《寒潮清单》Coldfront Checklist — 工程底座配置
-; 阶段：PREP-003 基础场景框架（正式玩法仍暂停）
-; 修改约定见 docs/开发说明.md
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
 
 config_version=5
 
@@ -13,33 +17,19 @@ run/main_scene="res://scenes/menu/main_menu.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"
 
-[debug]
-
-gdscript/warnings/untyped_declaration=0
-
-[display]
-
-window/size/viewport_width=960
-window/size/viewport_height=540
-window/size/resizable=true
-window/size/mode=0
-; VIDEO-QUALITY-002：viewport 模式会把渲染目标钉死在 960×540 再整数放大，
-; 512×704 的角色贴图在 2x 窗口里仍只有 128×176 个采样点，高清完全白费。
-; 改 canvas_items：渲染分辨率随窗口提升，整数缩放保留，像素素材与 UI 逻辑尺寸不变。
-window/stretch/mode="canvas_items"
-window/stretch/aspect="keep"
-window/stretch/scale_mode="integer"
-window/vsync/vsync_mode=1
-
-; 注意：不要设置 gui/theme/custom。ThemeDB 在资源导入前加载项目主题，
-; 全新 .godot/ 时字体 .fontdata 尚不存在会导致首次导入报错。
-; 主题改由 UiTheme autoload 在运行时挂到根窗口。
 [autoload]
 
 UiTheme="*res://scripts/autoload/ui_theme.gd"
 GameState="*res://scripts/autoload/game_state.gd"
 SaveManager="*res://scripts/autoload/save_manager.gd"
 SceneRouter="*res://scripts/autoload/scene_router.gd"
+
+[display]
+
+window/size/viewport_width=960
+window/size/viewport_height=540
+window/stretch/mode="canvas_items"
+window/stretch/scale_mode="integer"
 
 [input]
 
@@ -78,9 +68,9 @@ pause={
 
 [rendering]
 
+textures/canvas_textures/default_texture_filter=0
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
-textures/canvas_textures/default_texture_filter=0
+environment/defaults/default_clear_color=Color(0.105882, 0.121569, 0.133333, 1)
 2d/snap/snap_2d_transforms_to_pixel=true
 2d/snap/snap_2d_vertices_to_pixel=true
-environment/defaults/default_clear_color=Color(0.105882, 0.121569, 0.133333, 1)

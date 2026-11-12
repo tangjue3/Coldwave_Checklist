@@ -16,8 +16,8 @@ func _ready() -> void:
 	$DevPanel/Box/Supermarket.pressed.connect(func() -> void: SceneRouter.goto(&"supermarket"))
 	$DevPanel/Box/Shelter.pressed.connect(func() -> void: SceneRouter.goto(&"shelter"))
 	$DevPanel/Box/Smoke.pressed.connect(func() -> void: SceneRouter.goto_smoke())
-	if has_node("DevPanel/Box/OutdoorStreet"):
-		$DevPanel/Box/OutdoorStreet.pressed.connect(func() -> void: SceneRouter.goto(&"outdoor_street"))
+	if has_node("DevPanel/Box/Season1Map"):
+		$DevPanel/Box/Season1Map.pressed.connect(func() -> void: SceneRouter.goto(&"season1_map"))
 	$DevPanel/Box/Close.pressed.connect(_on_close_dev)
 
 	# 存档未实现：明确禁用，并在脚本层再兜一次底

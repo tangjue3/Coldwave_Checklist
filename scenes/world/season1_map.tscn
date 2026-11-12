@@ -1,0 +1,1191 @@
+[gd_scene format=3 uid="uid://ckt6kpogv5pyr"]
+
+[ext_resource type="Script" uid="uid://2o46u1calw1u" path="res://scripts/world/rd1_world.gd" id="1_bmolc"]
+[ext_resource type="Texture2D" uid="uid://jgtgvtuh08qh" path="res://assets/scenes/season1/GND_人行道_v01.png" id="2_f3jp1"]
+[ext_resource type="Texture2D" uid="uid://eykawogl1vf6" path="res://assets/scenes/season1/C_EXT_630x350_v01.png" id="3_5j0sr"]
+[ext_resource type="Texture2D" uid="uid://bltks5m8rgatj" path="res://assets/scenes/season1/A_EXT_1575x680_v01.png" id="4_1xnkx"]
+[ext_resource type="Texture2D" uid="uid://bvxjvgrlbyw1i" path="res://assets/scenes/season1/FW_EXT_720x680_v01.png" id="5_e22oi"]
+[ext_resource type="Texture2D" uid="uid://cd6lbf7fnexy1" path="res://assets/scenes/season1/院墙_EXT_340x300_v01.png" id="6_1d2er"]
+[ext_resource type="Texture2D" uid="uid://ddb1nyod66peh" path="res://assets/scenes/season1/FT_EXT_1575x1340_v01.png" id="7_47xn7"]
+[ext_resource type="Texture2D" uid="uid://cnkvug8it87jl" path="res://assets/scenes/season1/楼2_EXT_1240x1340_v01.png" id="8_c7ds3"]
+[ext_resource type="Texture2D" uid="uid://bbljn8httxoql" path="res://assets/scenes/season1/车棚_EXT_790x280_v01.png" id="9_gsiae"]
+[ext_resource type="Texture2D" uid="uid://c5nu2bjxbyswo" path="res://assets/scenes/season1/Q_EXT_540x350_v01.png" id="10_68v5l"]
+[ext_resource type="Texture2D" uid="uid://dmkbb8ypylnpr" path="res://assets/scenes/season1/R_EXT_540x350_v01.png" id="11_jmfmb"]
+[ext_resource type="Texture2D" uid="uid://crh8lfoabhb7i" path="res://assets/scenes/season1/垃圾站_EXT_560x235_v01.png" id="12_j0pjj"]
+[ext_resource type="Texture2D" uid="uid://cgngsstxlnwty" path="res://assets/scenes/season1/O_EXT_630x260_v01.png" id="13_vqus3"]
+[ext_resource type="Texture2D" uid="uid://wqr0nkrpupm5" path="res://assets/scenes/season1/J_EXT_1010x680_v01.png" id="14_d2ijk"]
+[ext_resource type="Texture2D" uid="uid://bgh7hvr1k31nf" path="res://assets/scenes/season1/N_EXT_900x395_v01.png" id="15_uvi3i"]
+[ext_resource type="Texture2D" uid="uid://jl71vms6tmft" path="res://assets/scenes/season1/H_EXT_1800x520_v01.png" id="16_1jlwd"]
+[ext_resource type="Texture2D" uid="uid://pdgai5esap66" path="res://assets/scenes/season1/I_EXT_1350x470_v01.png" id="17_k8w65"]
+[ext_resource type="Texture2D" uid="uid://c5yj65qbvg4kx" path="res://assets/scenes/season1/U_EXT_900x300_v01.png" id="18_0taa5"]
+[ext_resource type="Texture2D" uid="uid://wkikc6nlsejn" path="res://assets/scenes/season1/K_EXT_2475x610_v01.png" id="19_omooc"]
+[ext_resource type="Texture2D" uid="uid://cqfifesqn5l5t" path="res://assets/scenes/season1/L_EXT_1800x505_v01.png" id="20_3jb0q"]
+[ext_resource type="PackedScene" path="res://scenes/characters/player.tscn" id="21_qlio8"]
+[ext_resource type="Script" uid="uid://dhontlh7rhxoq" path="res://scripts/interaction/interaction_sensor.gd" id="23_fali8"]
+[ext_resource type="Script" uid="uid://c2m8bmvfd25p" path="res://scripts/characters/follow_camera.gd" id="24_dnnc3"]
+[ext_resource type="Texture2D" uid="uid://b8kp67e0r8xr6" path="res://assets/scenes/season1/BG_天空_4096x1200_v02.png" id="25_bgsky"]
+[ext_resource type="Texture2D" uid="uid://b6cjdyn50lrmp" path="res://assets/scenes/season1/BG_远景城市_4096x900_v02.png" id="26_bgcity"]
+[ext_resource type="Texture2D" uid="uid://daadiijc0jaa1" path="res://assets/scenes/season1/PROP_路灯_96x260_v01.png" id="27_prlamp"]
+[ext_resource type="Texture2D" uid="uid://ba7q5hp4c4lmw" path="res://assets/scenes/season1/PROP_垃圾桶_42x50_v01.png" id="28_prbin"]
+[ext_resource type="Texture2D" uid="uid://djuo5wuwpcsq8" path="res://assets/scenes/season1/树木_360x420_v01.png" id="34_ftree"]
+[ext_resource type="Texture2D" uid="uid://be17cklls3hge" path="res://assets/scenes/season1/电杆_60x560_v01.png" id="35_fpole"]
+[ext_resource type="Texture2D" uid="uid://db64atxswhspy" path="res://assets/scenes/season1/架空线_2048x140_v01.png" id="36_fwire"]
+[ext_resource type="Texture2D" uid="uid://btydqdroiu2x4" path="res://assets/scenes/season1/围墙_520x140_v01.png" id="37_fwall"]
+[ext_resource type="Texture2D" uid="uid://dqtyf1jedwyg2" path="res://assets/scenes/season1/栏杆_360x130_v01.png" id="38_frail"]
+[ext_resource type="Texture2D" uid="uid://bt7yegdxbn8vd" path="res://assets/scenes/season1/树池_260x55_v01.png" id="39_fpool"]
+[ext_resource type="Texture2D" uid="uid://csrb8r7prl4py" path="res://assets/scenes/season1/雪堆_170x45_v01.png" id="40_fpile"]
+[ext_resource type="Texture2D" uid="uid://8qyori7dnc2c" path="res://assets/scenes/season1/消防栓_34x70_v01.png" id="41_fhyd"]
+[ext_resource type="Texture2D" uid="uid://bml4j8ubqw0xs" path="res://assets/scenes/season1/报刊亭_180x200_v01.png" id="42_fkiosk"]
+[ext_resource type="Texture2D" uid="uid://buhhsq0re6ebg" path="res://assets/scenes/season1/自行车_150x100_v01.png" id="43_fbike"]
+[ext_resource type="Script" path="res://scripts/interaction/door_interactable.gd" id="23_fali8_door"]
+
+[sub_resource type="RectangleShape2D" id="Shape_door_c"]
+size = Vector2(120, 160)
+
+[sub_resource type="RectangleShape2D" id="Shape_door_a"]
+size = Vector2(150, 200)
+
+[node name="Season1Map" type="Node2D" unique_id=213745772]
+script = ExtResource("1_bmolc")
+location_display_name = "第一季 · 梧桐里长街（站位规范）"
+world_width = 25095.0
+
+[node name="00_Backdrop" type="Node2D" parent="." unique_id=1315612926]
+
+[node name="Sky" type="Sprite2D" parent="00_Backdrop" unique_id=1394243243]
+z_index = -40
+texture_filter = 4
+texture_repeat = 2
+position = Vector2(-600, -2400)
+scale = Vector2(1.25, 2)
+texture = ExtResource("25_bgsky")
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 0, 21040, 1200)
+
+[node name="CityFar" type="Sprite2D" parent="00_Backdrop" unique_id=1292506467]
+z_index = -30
+texture_filter = 4
+texture_repeat = 2
+position = Vector2(-600, -640)
+scale = Vector2(1.6, 1.6)
+texture = ExtResource("26_bgcity")
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 500, 16437, 400)
+
+[node name="00_Ground" type="Node2D" parent="." unique_id=1528887642]
+
+[node name="GroundArt" type="Sprite2D" parent="00_Ground" unique_id=1461699570]
+z_index = -2
+texture_filter = 4
+texture_repeat = 2
+position = Vector2(-129, 0)
+scale = Vector2(0.9865285, 0.23529412)
+texture = ExtResource("2_f3jp1")
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 0, 26055, 68)
+
+[node name="01_Labels" type="Node2D" parent="." unique_id=970934153]
+
+[node name="01_C_630x350" type="Node2D" parent="01_Labels" unique_id=1175016403]
+position = Vector2(1048, -350)
+
+[node name="Name" type="Label" parent="01_Labels/01_C_630x350" unique_id=1993200084]
+z_index = 10
+offset_left = 39.0
+offset_top = -27.0
+offset_right = 669.0
+offset_bottom = 13.0
+theme_override_colors/font_color = Color(0.9, 0.94, 0.97, 1)
+theme_override_colors/font_outline_color = Color(0.06, 0.08, 0.1, 0.85)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 28
+text = "C  外置设备区"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="02_A_1575x680" type="Node2D" parent="01_Labels" unique_id=806655126]
+position = Vector2(1290, -680)
+
+[node name="Name" type="Label" parent="01_Labels/02_A_1575x680" unique_id=1397413033]
+z_index = 10
+offset_top = -36.0
+offset_right = 1575.0
+theme_override_colors/font_color = Color(0.9, 0.94, 0.97, 1)
+theme_override_colors/font_outline_color = Color(0.06, 0.08, 0.1, 0.85)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 28
+text = "A/B  外婆旧两层小楼"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="03_FW_720x680" type="Node2D" parent="01_Labels" unique_id=724463029]
+position = Vector2(3385, -680)
+
+[node name="Name" type="Label" parent="01_Labels/03_FW_720x680" unique_id=722972647]
+z_index = 10
+offset_top = -36.0
+offset_right = 720.0
+theme_override_colors/font_color = Color(0.9, 0.94, 0.97, 1)
+theme_override_colors/font_outline_color = Color(0.06, 0.08, 0.1, 0.85)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 28
+text = "F/W  公告栏 · 住处"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="04_院墙_340x300" type="Node2D" parent="01_Labels" unique_id=756596498]
+position = Vector2(4285, -300)
+
+[node name="Name" type="Label" parent="01_Labels/04_院墙_340x300" unique_id=1683182037]
+z_index = 10
+offset_left = 104.0
+offset_top = -467.0
+offset_right = 444.0
+offset_bottom = -427.0
+theme_override_colors/font_color = Color(0.9, 0.94, 0.97, 1)
+theme_override_colors/font_outline_color = Color(0.06, 0.08, 0.1, 0.85)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 28
+text = "小区院墙 · 大门"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="05_FT_1575x1340" type="Node2D" parent="01_Labels" unique_id=642850323]
+position = Vector2(4765, -1340)
+
+[node name="Name" type="Label" parent="01_Labels/05_FT_1575x1340" unique_id=479089428]
+z_index = 10
+offset_top = -36.0
+offset_right = 1575.0
+theme_override_colors/font_color = Color(0.9, 0.94, 0.97, 1)
+theme_override_colors/font_outline_color = Color(0.06, 0.08, 0.1, 0.85)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 28
+text = "F/T  居民楼 1 单元"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="06_楼2_1240x1340" type="Node2D" parent="01_Labels" unique_id=2117183196]
+position = Vector2(6560, -1340)
+
+[node name="Name" type="Label" parent="01_Labels/06_楼2_1240x1340" unique_id=310211212]
+z_index = 10
+offset_top = -36.0
+offset_right = 1240.0
+theme_override_colors/font_color = Color(0.9, 0.94, 0.97, 1)
+theme_override_colors/font_outline_color = Color(0.06, 0.08, 0.1, 0.85)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 28
+text = "居民楼 2 单元"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="07_车棚_790x280" type="Node2D" parent="01_Labels" unique_id=549207243]
+position = Vector2(7269, -276)
+
+[node name="Name" type="Label" parent="01_Labels/07_车棚_790x280" unique_id=1475326999]
+z_index = 10
+offset_top = -36.0
+offset_right = 790.0
+theme_override_colors/font_color = Color(0.9, 0.94, 0.97, 1)
+theme_override_colors/font_outline_color = Color(0.06, 0.08, 0.1, 0.85)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 28
+text = "小区车棚"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="08_Q_540x350" type="Node2D" parent="01_Labels" unique_id=92716728]
+position = Vector2(7996, -347)
+
+[node name="Name" type="Label" parent="01_Labels/08_Q_540x350" unique_id=2034349637]
+z_index = 10
+offset_left = 8.0
+offset_top = -32.0
+offset_right = 548.0
+offset_bottom = 8.0
+theme_override_colors/font_color = Color(0.9, 0.94, 0.97, 1)
+theme_override_colors/font_outline_color = Color(0.06, 0.08, 0.1, 0.85)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 28
+text = "Q  陈叔维修角"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="09_R_540x350" type="Node2D" parent="01_Labels" unique_id=1836628659]
+position = Vector2(8696, -347)
+
+[node name="Name" type="Label" parent="01_Labels/09_R_540x350" unique_id=1775613995]
+z_index = 10
+offset_top = -36.0
+offset_right = 540.0
+theme_override_colors/font_color = Color(0.9, 0.94, 0.97, 1)
+theme_override_colors/font_outline_color = Color(0.06, 0.08, 0.1, 0.85)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 28
+text = "R  物业门岗"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="10_垃圾站_560x235" type="Node2D" parent="01_Labels" unique_id=2110654797]
+position = Vector2(9354, -235)
+
+[node name="Name" type="Label" parent="01_Labels/10_垃圾站_560x235" unique_id=1901918326]
+z_index = 10
+offset_top = -36.0
+offset_right = 560.0
+theme_override_colors/font_color = Color(0.9, 0.94, 0.97, 1)
+theme_override_colors/font_outline_color = Color(0.06, 0.08, 0.1, 0.85)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 28
+text = "垃圾站 · 绿化带"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="11_O_630x260" type="Node2D" parent="01_Labels" unique_id=1416904009]
+position = Vector2(10174, -260)
+
+[node name="Name" type="Label" parent="01_Labels/11_O_630x260" unique_id=982766335]
+z_index = 10
+offset_top = -36.0
+offset_right = 630.0
+theme_override_colors/font_color = Color(0.9, 0.94, 0.97, 1)
+theme_override_colors/font_outline_color = Color(0.06, 0.08, 0.1, 0.85)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 28
+text = "O  公交站 · 街角"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="12_J_1010x680" type="Node2D" parent="01_Labels" unique_id=1532529219]
+position = Vector2(10663, -685)
+
+[node name="Name" type="Label" parent="01_Labels/12_J_1010x680" unique_id=575664885]
+z_index = 10
+offset_top = -36.0
+offset_right = 1010.0
+theme_override_colors/font_color = Color(0.9, 0.94, 0.97, 1)
+theme_override_colors/font_outline_color = Color(0.06, 0.08, 0.1, 0.85)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 28
+text = "J  唐宁便利店"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="13_N_900x395" type="Node2D" parent="01_Labels" unique_id=1117042898]
+position = Vector2(11893, -400)
+
+[node name="Name" type="Label" parent="01_Labels/13_N_900x395" unique_id=179060152]
+z_index = 10
+offset_top = -36.0
+offset_right = 900.0
+theme_override_colors/font_color = Color(0.9, 0.94, 0.97, 1)
+theme_override_colors/font_outline_color = Color(0.06, 0.08, 0.1, 0.85)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 28
+text = "N  社区药店"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="14_H_1800x520" type="Node2D" parent="01_Labels" unique_id=2144175684]
+position = Vector2(12865, -520)
+
+[node name="Name" type="Label" parent="01_Labels/14_H_1800x520" unique_id=192456585]
+z_index = 10
+offset_top = -36.0
+offset_right = 1800.0
+theme_override_colors/font_color = Color(0.9, 0.94, 0.97, 1)
+theme_override_colors/font_outline_color = Color(0.06, 0.08, 0.1, 0.85)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 28
+text = "H  灾前连锁超市"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="15_I_1350x470" type="Node2D" parent="01_Labels" unique_id=815357814]
+position = Vector2(14905, -470)
+
+[node name="Name" type="Label" parent="01_Labels/15_I_1350x470" unique_id=976490496]
+z_index = 10
+offset_top = -36.0
+offset_right = 1350.0
+theme_override_colors/font_color = Color(0.9, 0.94, 0.97, 1)
+theme_override_colors/font_outline_color = Color(0.06, 0.08, 0.1, 0.85)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 28
+text = "I  五金 · 家电店"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="16_U_900x300" type="Node2D" parent="01_Labels" unique_id=1170626283]
+position = Vector2(16535, -300)
+
+[node name="Name" type="Label" parent="01_Labels/16_U_900x300" unique_id=2052222849]
+z_index = 10
+offset_top = -36.0
+offset_right = 900.0
+theme_override_colors/font_color = Color(0.9, 0.94, 0.97, 1)
+theme_override_colors/font_outline_color = Color(0.06, 0.08, 0.1, 0.85)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 28
+text = "U  临时管制路口"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="17_K_2475x610" type="Node2D" parent="01_Labels" unique_id=1051238875]
+position = Vector2(17739, -621)
+
+[node name="Name" type="Label" parent="01_Labels/17_K_2475x610" unique_id=1983415955]
+z_index = 10
+offset_top = -36.0
+offset_right = 2475.0
+theme_override_colors/font_color = Color(0.9, 0.94, 0.97, 1)
+theme_override_colors/font_outline_color = Color(0.06, 0.08, 0.1, 0.85)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 28
+text = "K  独立批发仓"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="18_L_1800x505" type="Node2D" parent="01_Labels" unique_id=1012775695]
+position = Vector2(20594, -516)
+
+[node name="Name" type="Label" parent="01_Labels/18_L_1800x505" unique_id=1950308776]
+z_index = 10
+offset_top = -36.0
+offset_right = 1800.0
+theme_override_colors/font_color = Color(0.9, 0.94, 0.97, 1)
+theme_override_colors/font_outline_color = Color(0.06, 0.08, 0.1, 0.85)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 28
+text = "L  物流中转口"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="02_Art" type="Node2D" parent="." unique_id=1939566022]
+
+[node name="01_C_630x350" type="Node2D" parent="02_Art" unique_id=1649202563]
+position = Vector2(1054, -348)
+
+[node name="Art" type="Sprite2D" parent="02_Art/01_C_630x350" unique_id=778407392]
+texture_filter = 4
+position = Vector2(-11.999998, 11.999994)
+scale = Vector2(0.3778966, 0.39251336)
+texture = ExtResource("3_5j0sr")
+centered = false
+
+[node name="02_A_1575x680" type="Node2D" parent="02_Art" unique_id=1620727994]
+position = Vector2(1301, -676)
+
+[node name="Art" type="Sprite2D" parent="02_Art/02_A_1575x680" unique_id=1178274131]
+texture_filter = 4
+position = Vector2(-9, -111.00003)
+scale = Vector2(0.89407456, 0.9640864)
+texture = ExtResource("4_1xnkx")
+centered = false
+
+[node name="03_FW_720x680" type="Node2D" parent="02_Art" unique_id=1536392535]
+position = Vector2(3385, -680)
+
+[node name="Art" type="Sprite2D" parent="02_Art/03_FW_720x680" unique_id=1972157965]
+texture_filter = 4
+position = Vector2(0, 17)
+texture = ExtResource("5_e22oi")
+centered = false
+
+[node name="04_院墙_340x300" type="Node2D" parent="02_Art" unique_id=1190317202]
+position = Vector2(4285, -300)
+
+[node name="Art" type="Sprite2D" parent="02_Art/04_院墙_340x300" unique_id=220006530]
+texture_filter = 4
+position = Vector2(-198, -276)
+scale = Vector2(2.267646, 2.0633333)
+texture = ExtResource("6_1d2er")
+centered = false
+
+[node name="05_FT_1575x1340" type="Node2D" parent="02_Art" unique_id=952889330]
+position = Vector2(4765, -1340)
+
+[node name="Art" type="Sprite2D" parent="02_Art/05_FT_1575x1340" unique_id=593277103]
+texture_filter = 4
+position = Vector2(-15, 173.00002)
+scale = Vector2(0.8634921, 0.8813433)
+texture = ExtResource("7_47xn7")
+centered = false
+
+[node name="06_楼2_1240x1340" type="Node2D" parent="02_Art" unique_id=1822629831]
+position = Vector2(6560, -1340)
+
+[node name="Art" type="Sprite2D" parent="02_Art/06_楼2_1240x1340" unique_id=388350874]
+texture_filter = 4
+position = Vector2(-424, 19)
+texture = ExtResource("8_c7ds3")
+centered = false
+
+[node name="07_车棚_790x280" type="Node2D" parent="02_Art" unique_id=155045664]
+position = Vector2(7269, -276)
+
+[node name="Art" type="Sprite2D" parent="02_Art/07_车棚_790x280" unique_id=1006047924]
+texture_filter = 4
+position = Vector2(0, 25)
+texture = ExtResource("9_gsiae")
+centered = false
+
+[node name="08_Q_540x350" type="Node2D" parent="02_Art" unique_id=1717270784]
+position = Vector2(7996, -347)
+
+[node name="Art" type="Sprite2D" parent="02_Art/08_Q_540x350" unique_id=425850882]
+texture_filter = 4
+position = Vector2(0, 10)
+texture = ExtResource("10_68v5l")
+centered = false
+
+[node name="09_R_540x350" type="Node2D" parent="02_Art" unique_id=949931613]
+position = Vector2(8696, -347)
+
+[node name="Art" type="Sprite2D" parent="02_Art/09_R_540x350" unique_id=1436572616]
+texture_filter = 4
+position = Vector2(0, 13)
+texture = ExtResource("11_jmfmb")
+centered = false
+
+[node name="10_垃圾站_560x235" type="Node2D" parent="02_Art" unique_id=980413194]
+position = Vector2(9354, -235)
+
+[node name="Art" type="Sprite2D" parent="02_Art/10_垃圾站_560x235" unique_id=537960956]
+texture_filter = 4
+position = Vector2(0, 23)
+texture = ExtResource("12_j0pjj")
+centered = false
+
+[node name="11_O_630x260" type="Node2D" parent="02_Art" unique_id=900331326]
+position = Vector2(10174, -260)
+
+[node name="Art" type="Sprite2D" parent="02_Art/11_O_630x260" unique_id=378074591]
+texture_filter = 4
+position = Vector2(12, 16)
+texture = ExtResource("13_vqus3")
+centered = false
+
+[node name="12_J_1010x680" type="Node2D" parent="02_Art" unique_id=612053589]
+position = Vector2(10663, -685)
+
+[node name="Art" type="Sprite2D" parent="02_Art/12_J_1010x680" unique_id=1551315367]
+texture_filter = 4
+position = Vector2(0, 14)
+texture = ExtResource("14_d2ijk")
+centered = false
+
+[node name="13_N_900x395" type="Node2D" parent="02_Art" unique_id=905037202]
+position = Vector2(11893, -400)
+
+[node name="Art" type="Sprite2D" parent="02_Art/13_N_900x395" unique_id=1019861565]
+texture_filter = 4
+position = Vector2(0, 11)
+texture = ExtResource("15_uvi3i")
+centered = false
+
+[node name="14_H_1800x520" type="Node2D" parent="02_Art" unique_id=989378146]
+position = Vector2(12865, -520)
+
+[node name="Art" type="Sprite2D" parent="02_Art/14_H_1800x520" unique_id=546883321]
+texture_filter = 4
+position = Vector2(0, 22)
+texture = ExtResource("16_1jlwd")
+centered = false
+
+[node name="15_I_1350x470" type="Node2D" parent="02_Art" unique_id=2007028080]
+position = Vector2(14905, -470)
+
+[node name="Art" type="Sprite2D" parent="02_Art/15_I_1350x470" unique_id=1651768009]
+texture_filter = 4
+position = Vector2(0, 6)
+texture = ExtResource("17_k8w65")
+centered = false
+
+[node name="16_U_900x300" type="Node2D" parent="02_Art" unique_id=923505455]
+position = Vector2(16535, -300)
+
+[node name="Art" type="Sprite2D" parent="02_Art/16_U_900x300" unique_id=496231601]
+texture_filter = 4
+position = Vector2(0, 20)
+texture = ExtResource("18_0taa5")
+centered = false
+
+[node name="17_K_2475x610" type="Node2D" parent="02_Art" unique_id=1892185561]
+position = Vector2(17739, -621)
+
+[node name="Art" type="Sprite2D" parent="02_Art/17_K_2475x610" unique_id=600796796]
+texture_filter = 4
+position = Vector2(0, 74)
+texture = ExtResource("19_omooc")
+centered = false
+
+[node name="18_L_1800x505" type="Node2D" parent="02_Art" unique_id=864124319]
+position = Vector2(20594, -516)
+
+[node name="Art" type="Sprite2D" parent="02_Art/18_L_1800x505" unique_id=1575327307]
+texture_filter = 4
+position = Vector2(0, 42)
+texture = ExtResource("20_3jb0q")
+centered = false
+
+[node name="03_Props" type="Node2D" parent="." unique_id=401303340]
+
+[node name="Prop_路灯_01" type="Sprite2D" parent="03_Props" unique_id=102944715]
+z_index = 5
+texture_filter = 4
+position = Vector2(6400, -255)
+texture = ExtResource("27_prlamp")
+centered = false
+
+[node name="Prop_路灯_02" type="Sprite2D" parent="03_Props" unique_id=1161505422]
+z_index = 5
+texture_filter = 4
+position = Vector2(7886, -252)
+texture = ExtResource("27_prlamp")
+centered = false
+
+[node name="Prop_路灯_03" type="Sprite2D" parent="03_Props" unique_id=154255330]
+z_index = 5
+texture_filter = 4
+position = Vector2(9234, -255)
+texture = ExtResource("27_prlamp")
+centered = false
+
+[node name="Prop_路灯_04" type="Sprite2D" parent="03_Props" unique_id=678512049]
+z_index = 5
+texture_filter = 4
+position = Vector2(11783, -260)
+texture = ExtResource("27_prlamp")
+centered = false
+
+[node name="Prop_路灯_05" type="Sprite2D" parent="03_Props" unique_id=1084410497]
+z_index = 5
+texture_filter = 4
+position = Vector2(14785, -255)
+texture = ExtResource("27_prlamp")
+centered = false
+
+[node name="Prop_路灯_06" type="Sprite2D" parent="03_Props" unique_id=1307322553]
+z_index = 5
+texture_filter = 4
+position = Vector2(17529, -266)
+texture = ExtResource("27_prlamp")
+centered = false
+
+[node name="Prop_路灯_07" type="Sprite2D" parent="03_Props" unique_id=2102285400]
+z_index = 5
+texture_filter = 4
+position = Vector2(20399, -266)
+texture = ExtResource("27_prlamp")
+centered = false
+
+[node name="Prop_路灯_08" type="Sprite2D" parent="03_Props" unique_id=148730974]
+z_index = 5
+texture_filter = 4
+position = Vector2(4140, -255)
+texture = ExtResource("27_prlamp")
+centered = false
+
+[node name="Prop_垃圾桶_01" type="Sprite2D" parent="03_Props" unique_id=1803194102]
+z_index = 5
+texture_filter = 4
+position = Vector2(2900, -50)
+texture = ExtResource("28_prbin")
+centered = false
+
+[node name="Prop_垃圾桶_03" type="Sprite2D" parent="03_Props" unique_id=4468851]
+z_index = 5
+texture_filter = 4
+position = Vector2(22139, -61)
+texture = ExtResource("28_prbin")
+centered = false
+
+[node name="04_Fill" type="Node2D" parent="." unique_id=169504421]
+
+[node name="Trees" type="Node2D" parent="04_Fill" unique_id=63259043]
+
+[node name="Tree_01" type="Sprite2D" parent="04_Fill/Trees" unique_id=74180662]
+z_index = 3
+texture_filter = 4
+position = Vector2(2784.8, -572)
+scale = Vector2(1.362, 1.362)
+texture = ExtResource("34_ftree")
+centered = false
+
+[node name="Tree_02" type="Sprite2D" parent="04_Fill/Trees" unique_id=837104121]
+z_index = 3
+texture_filter = 4
+position = Vector2(3414.8, -572)
+scale = Vector2(1.362, 1.362)
+texture = ExtResource("34_ftree")
+centered = false
+
+[node name="Tree_03" type="Sprite2D" parent="04_Fill/Trees" unique_id=1327654286]
+z_index = 3
+texture_filter = 4
+position = Vector2(4184.8, -572)
+scale = Vector2(1.362, 1.362)
+texture = ExtResource("34_ftree")
+centered = false
+
+[node name="Tree_04" type="Sprite2D" parent="04_Fill/Trees" unique_id=1188397755]
+z_index = 3
+texture_filter = 4
+position = Vector2(4834.8, -572)
+scale = Vector2(1.362, 1.362)
+texture = ExtResource("34_ftree")
+centered = false
+
+[node name="Tree_05" type="Sprite2D" parent="04_Fill/Trees" unique_id=2140335706]
+z_index = 3
+texture_filter = 4
+position = Vector2(6184.8, -572)
+scale = Vector2(1.362, 1.362)
+texture = ExtResource("34_ftree")
+centered = false
+
+[node name="Tree_06" type="Sprite2D" parent="04_Fill/Trees" unique_id=143254462]
+z_index = 3
+texture_filter = 4
+position = Vector2(8034.8, -572)
+scale = Vector2(1.362, 1.362)
+texture = ExtResource("34_ftree")
+centered = false
+
+[node name="Tree_07" type="Sprite2D" parent="04_Fill/Trees" unique_id=382355983]
+z_index = 3
+texture_filter = 4
+position = Vector2(9894.8, -572)
+scale = Vector2(1.362, 1.362)
+texture = ExtResource("34_ftree")
+centered = false
+
+[node name="Tree_09" type="Sprite2D" parent="04_Fill/Trees" unique_id=484376406]
+z_index = 3
+texture_filter = 4
+position = Vector2(11684.8, -572)
+scale = Vector2(1.362, 1.362)
+texture = ExtResource("34_ftree")
+centered = false
+
+[node name="Tree_10" type="Sprite2D" parent="04_Fill/Trees" unique_id=140124283]
+z_index = 3
+texture_filter = 4
+position = Vector2(14714.8, -572)
+scale = Vector2(1.362, 1.362)
+texture = ExtResource("34_ftree")
+centered = false
+
+[node name="Tree_11" type="Sprite2D" parent="04_Fill/Trees" unique_id=148898480]
+z_index = 3
+texture_filter = 4
+position = Vector2(17284.8, -572)
+scale = Vector2(1.362, 1.362)
+texture = ExtResource("34_ftree")
+centered = false
+
+[node name="Tree_12" type="Sprite2D" parent="04_Fill/Trees" unique_id=1364270441]
+z_index = 3
+texture_filter = 4
+position = Vector2(20384.8, -572)
+scale = Vector2(1.362, 1.362)
+texture = ExtResource("34_ftree")
+centered = false
+
+[node name="Tree_13" type="Sprite2D" parent="04_Fill/Trees" unique_id=876527355]
+z_index = 3
+texture_filter = 4
+position = Vector2(21984.8, -572)
+scale = Vector2(1.362, 1.362)
+texture = ExtResource("34_ftree")
+centered = false
+
+[node name="Tree_14" type="Sprite2D" parent="04_Fill/Trees" unique_id=973231659]
+z_index = 3
+texture_filter = 4
+position = Vector2(23134.8, -572)
+scale = Vector2(1.362, 1.362)
+texture = ExtResource("34_ftree")
+centered = false
+
+[node name="Tree_15" type="Sprite2D" parent="04_Fill/Trees" unique_id=1606422257]
+z_index = 3
+texture_filter = 4
+position = Vector2(24234.8, -572)
+scale = Vector2(1.362, 1.362)
+texture = ExtResource("34_ftree")
+centered = false
+
+[node name="Pools" type="Node2D" parent="04_Fill" unique_id=1153856806]
+
+[node name="Pool_01" type="Sprite2D" parent="04_Fill/Pools" unique_id=1890916512]
+z_index = 4
+texture_filter = 4
+position = Vector2(2972, -52.3)
+scale = Vector2(0.95, 0.95)
+texture = ExtResource("39_fpool")
+centered = false
+
+[node name="Pool_02" type="Sprite2D" parent="04_Fill/Pools" unique_id=52085604]
+z_index = 4
+texture_filter = 4
+position = Vector2(3602, -52.3)
+scale = Vector2(0.95, 0.95)
+texture = ExtResource("39_fpool")
+centered = false
+
+[node name="Pool_03" type="Sprite2D" parent="04_Fill/Pools" unique_id=1648349641]
+z_index = 4
+texture_filter = 4
+position = Vector2(4372, -52.3)
+scale = Vector2(0.95, 0.95)
+texture = ExtResource("39_fpool")
+centered = false
+
+[node name="Pool_04" type="Sprite2D" parent="04_Fill/Pools" unique_id=943200845]
+z_index = 4
+texture_filter = 4
+position = Vector2(5022, -52.3)
+scale = Vector2(0.95, 0.95)
+texture = ExtResource("39_fpool")
+centered = false
+
+[node name="Pool_05" type="Sprite2D" parent="04_Fill/Pools" unique_id=2121902587]
+z_index = 4
+texture_filter = 4
+position = Vector2(6372, -52.3)
+scale = Vector2(0.95, 0.95)
+texture = ExtResource("39_fpool")
+centered = false
+
+[node name="Pool_06" type="Sprite2D" parent="04_Fill/Pools" unique_id=144620787]
+z_index = 4
+texture_filter = 4
+position = Vector2(8222, -52.3)
+scale = Vector2(0.95, 0.95)
+texture = ExtResource("39_fpool")
+centered = false
+
+[node name="Pool_07" type="Sprite2D" parent="04_Fill/Pools" unique_id=165850806]
+z_index = 4
+texture_filter = 4
+position = Vector2(10082, -52.3)
+scale = Vector2(0.95, 0.95)
+texture = ExtResource("39_fpool")
+centered = false
+
+[node name="Pool_09" type="Sprite2D" parent="04_Fill/Pools" unique_id=91590580]
+z_index = 4
+texture_filter = 4
+position = Vector2(11872, -52.3)
+scale = Vector2(0.95, 0.95)
+texture = ExtResource("39_fpool")
+centered = false
+
+[node name="Pool_10" type="Sprite2D" parent="04_Fill/Pools" unique_id=1321823474]
+z_index = 4
+texture_filter = 4
+position = Vector2(14902, -52.3)
+scale = Vector2(0.95, 0.95)
+texture = ExtResource("39_fpool")
+centered = false
+
+[node name="Pool_11" type="Sprite2D" parent="04_Fill/Pools" unique_id=43772633]
+z_index = 4
+texture_filter = 4
+position = Vector2(17472, -52.3)
+scale = Vector2(0.95, 0.95)
+texture = ExtResource("39_fpool")
+centered = false
+
+[node name="Pool_12" type="Sprite2D" parent="04_Fill/Pools" unique_id=834354640]
+z_index = 4
+texture_filter = 4
+position = Vector2(20572, -52.3)
+scale = Vector2(0.95, 0.95)
+texture = ExtResource("39_fpool")
+centered = false
+
+[node name="Pool_13" type="Sprite2D" parent="04_Fill/Pools" unique_id=1428166513]
+z_index = 4
+texture_filter = 4
+position = Vector2(22172, -52.3)
+scale = Vector2(0.95, 0.95)
+texture = ExtResource("39_fpool")
+centered = false
+
+[node name="Pool_14" type="Sprite2D" parent="04_Fill/Pools" unique_id=346187764]
+z_index = 4
+texture_filter = 4
+position = Vector2(23322, -52.3)
+scale = Vector2(0.95, 0.95)
+texture = ExtResource("39_fpool")
+centered = false
+
+[node name="Pool_15" type="Sprite2D" parent="04_Fill/Pools" unique_id=1438476325]
+z_index = 4
+texture_filter = 4
+position = Vector2(24422, -52.3)
+scale = Vector2(0.95, 0.95)
+texture = ExtResource("39_fpool")
+centered = false
+
+[node name="Poles" type="Node2D" parent="04_Fill" unique_id=1288309947]
+
+[node name="Pole_01" type="Sprite2D" parent="04_Fill/Poles" unique_id=1036988110]
+z_index = 3
+texture_filter = 4
+position = Vector2(879.9, -935.8)
+scale = Vector2(1.671, 1.671)
+texture = ExtResource("35_fpole")
+centered = false
+
+[node name="Pole_02" type="Sprite2D" parent="04_Fill/Poles" unique_id=765171948]
+z_index = 3
+texture_filter = 4
+position = Vector2(3079.9, -935.8)
+scale = Vector2(1.671, 1.671)
+texture = ExtResource("35_fpole")
+centered = false
+
+[node name="Pole_03" type="Sprite2D" parent="04_Fill/Poles" unique_id=235044974]
+z_index = 3
+texture_filter = 4
+position = Vector2(6279.9, -935.8)
+scale = Vector2(1.671, 1.671)
+texture = ExtResource("35_fpole")
+centered = false
+
+[node name="Pole_04" type="Sprite2D" parent="04_Fill/Poles" unique_id=1273947508]
+z_index = 3
+texture_filter = 4
+position = Vector2(9679.9, -935.8)
+scale = Vector2(1.671, 1.671)
+texture = ExtResource("35_fpole")
+centered = false
+
+[node name="Pole_05" type="Sprite2D" parent="04_Fill/Poles" unique_id=1710950876]
+z_index = 3
+texture_filter = 4
+position = Vector2(12479.9, -935.8)
+scale = Vector2(1.671, 1.671)
+texture = ExtResource("35_fpole")
+centered = false
+
+[node name="Pole_06" type="Sprite2D" parent="04_Fill/Poles" unique_id=1286348809]
+z_index = 3
+texture_filter = 4
+position = Vector2(15979.9, -935.8)
+scale = Vector2(1.671, 1.671)
+texture = ExtResource("35_fpole")
+centered = false
+
+[node name="Pole_07" type="Sprite2D" parent="04_Fill/Poles" unique_id=1076769884]
+z_index = 3
+texture_filter = 4
+position = Vector2(19779.9, -935.8)
+scale = Vector2(1.671, 1.671)
+texture = ExtResource("35_fpole")
+centered = false
+
+[node name="Pole_08" type="Sprite2D" parent="04_Fill/Poles" unique_id=678148734]
+z_index = 3
+texture_filter = 4
+position = Vector2(22579.9, -935.8)
+scale = Vector2(1.671, 1.671)
+texture = ExtResource("35_fpole")
+centered = false
+
+[node name="Wire" type="Node2D" parent="04_Fill" unique_id=567876614]
+
+[node name="Wires" type="Sprite2D" parent="04_Fill/Wire" unique_id=705815656]
+z_index = 2
+texture_filter = 4
+texture_repeat = 2
+position = Vector2(-600, -944)
+texture = ExtResource("36_fwire")
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 0, 26295, 140)
+
+[node name="Walls" type="Node2D" parent="04_Fill" unique_id=666971110]
+
+[node name="Wall_01" type="Sprite2D" parent="04_Fill/Walls" unique_id=192262963]
+z_index = 3
+texture_filter = 4
+position = Vector2(2587, -207)
+scale = Vector2(1.486, 1.486)
+texture = ExtResource("37_fwall")
+centered = false
+
+[node name="Wall_02" type="Sprite2D" parent="04_Fill/Walls" unique_id=170079391]
+z_index = 3
+texture_filter = 4
+position = Vector2(22350, -208)
+scale = Vector2(1.486, 1.486)
+texture = ExtResource("37_fwall")
+centered = false
+
+[node name="Wall_03" type="Sprite2D" parent="04_Fill/Walls" unique_id=1317907493]
+z_index = 3
+texture_filter = 4
+position = Vector2(23122, -208)
+scale = Vector2(1.486, 1.486)
+texture = ExtResource("37_fwall")
+centered = false
+
+[node name="Wall_04" type="Sprite2D" parent="04_Fill/Walls" unique_id=1434347506]
+z_index = 3
+texture_filter = 4
+position = Vector2(23894, -208)
+scale = Vector2(1.486, 1.486)
+texture = ExtResource("37_fwall")
+centered = false
+
+[node name="Wall_05" type="Sprite2D" parent="04_Fill/Walls" unique_id=610069176]
+z_index = 3
+texture_filter = 4
+position = Vector2(24666, -208)
+scale = Vector2(1.486, 1.486)
+texture = ExtResource("37_fwall")
+centered = false
+
+[node name="Rails" type="Node2D" parent="04_Fill" unique_id=446288913]
+
+[node name="Rail_01" type="Sprite2D" parent="04_Fill/Rails" unique_id=1871391996]
+z_index = 3
+texture_filter = 4
+position = Vector2(2834.8, -177.1)
+scale = Vector2(1.362, 1.362)
+texture = ExtResource("38_frail")
+centered = false
+
+[node name="Rail_02" type="Sprite2D" parent="04_Fill/Rails" unique_id=337730391]
+z_index = 3
+texture_filter = 4
+position = Vector2(5034.8, -177.1)
+scale = Vector2(1.362, 1.362)
+texture = ExtResource("38_frail")
+centered = false
+
+[node name="Piles" type="Node2D" parent="04_Fill" unique_id=1749992991]
+
+[node name="Pile_01" type="Sprite2D" parent="04_Fill/Piles" unique_id=509967066]
+z_index = 4
+texture_filter = 4
+position = Vector2(2796.6, -46.8)
+scale = Vector2(1.04, 1.04)
+texture = ExtResource("40_fpile")
+centered = false
+
+[node name="Pile_02" type="Sprite2D" parent="04_Fill/Piles" unique_id=1994904456]
+z_index = 4
+texture_filter = 4
+position = Vector2(4496.6, -46.8)
+scale = Vector2(1.04, 1.04)
+texture = ExtResource("40_fpile")
+centered = false
+
+[node name="Pile_03" type="Sprite2D" parent="04_Fill/Piles" unique_id=1296384587]
+z_index = 4
+texture_filter = 4
+position = Vector2(6296.6, -46.8)
+scale = Vector2(1.04, 1.04)
+texture = ExtResource("40_fpile")
+centered = false
+
+[node name="Pile_04" type="Sprite2D" parent="04_Fill/Piles" unique_id=414990647]
+z_index = 4
+texture_filter = 4
+position = Vector2(8196.6, -46.8)
+scale = Vector2(1.04, 1.04)
+texture = ExtResource("40_fpile")
+centered = false
+
+[node name="Pile_05" type="Sprite2D" parent="04_Fill/Piles" unique_id=1730470027]
+z_index = 4
+texture_filter = 4
+position = Vector2(9896.6, -46.8)
+scale = Vector2(1.04, 1.04)
+texture = ExtResource("40_fpile")
+centered = false
+
+[node name="Pile_06" type="Sprite2D" parent="04_Fill/Piles" unique_id=1552207681]
+z_index = 4
+texture_filter = 4
+position = Vector2(11796.6, -46.8)
+scale = Vector2(1.04, 1.04)
+texture = ExtResource("40_fpile")
+centered = false
+
+[node name="Pile_07" type="Sprite2D" parent="04_Fill/Piles" unique_id=1735741104]
+z_index = 4
+texture_filter = 4
+position = Vector2(12996.6, -46.8)
+scale = Vector2(1.04, 1.04)
+texture = ExtResource("40_fpile")
+centered = false
+
+[node name="Pile_08" type="Sprite2D" parent="04_Fill/Piles" unique_id=1204550866]
+z_index = 4
+texture_filter = 4
+position = Vector2(16496.6, -46.8)
+scale = Vector2(1.04, 1.04)
+texture = ExtResource("40_fpile")
+centered = false
+
+[node name="Pile_09" type="Sprite2D" parent="04_Fill/Piles" unique_id=675845002]
+z_index = 4
+texture_filter = 4
+position = Vector2(20396.6, -46.8)
+scale = Vector2(1.04, 1.04)
+texture = ExtResource("40_fpile")
+centered = false
+
+[node name="Pile_10" type="Sprite2D" parent="04_Fill/Piles" unique_id=1210121874]
+z_index = 4
+texture_filter = 4
+position = Vector2(22496.6, -46.8)
+scale = Vector2(1.04, 1.04)
+texture = ExtResource("40_fpile")
+centered = false
+
+[node name="Hydrants" type="Node2D" parent="04_Fill" unique_id=480239848]
+
+[node name="Hydrant_01" type="Sprite2D" parent="04_Fill/Hydrants" unique_id=470691777]
+z_index = 4
+texture_filter = 4
+position = Vector2(3441.7, -104)
+scale = Vector2(1.486, 1.486)
+texture = ExtResource("41_fhyd")
+centered = false
+
+[node name="Hydrant_02" type="Sprite2D" parent="04_Fill/Hydrants" unique_id=1019757030]
+z_index = 4
+texture_filter = 4
+position = Vector2(11450, -104)
+scale = Vector2(1.486, 1.486)
+texture = ExtResource("41_fhyd")
+centered = false
+
+[node name="Hydrant_03" type="Sprite2D" parent="04_Fill/Hydrants" unique_id=1974350243]
+z_index = 4
+texture_filter = 4
+position = Vector2(17891.7, -104)
+scale = Vector2(1.486, 1.486)
+texture = ExtResource("41_fhyd")
+centered = false
+
+[node name="Kiosks" type="Node2D" parent="04_Fill" unique_id=1999888181]
+
+[node name="Kiosk_01" type="Sprite2D" parent="04_Fill/Kiosks" unique_id=1809969846]
+z_index = 3
+texture_filter = 4
+position = Vector2(10123, -260)
+scale = Vector2(1.3, 1.3)
+texture = ExtResource("42_fkiosk")
+centered = false
+
+[node name="Kiosk_02" type="Sprite2D" parent="04_Fill/Kiosks" unique_id=994386468]
+z_index = 3
+texture_filter = 4
+position = Vector2(14773, -260)
+scale = Vector2(1.3, 1.3)
+texture = ExtResource("42_fkiosk")
+centered = false
+
+[node name="Bikes" type="Node2D" parent="04_Fill" unique_id=1665852941]
+
+[node name="Bike_01" type="Sprite2D" parent="04_Fill/Bikes" unique_id=85342028]
+z_index = 4
+texture_filter = 4
+position = Vector2(2946.2, -105)
+scale = Vector2(1.05, 1.05)
+texture = ExtResource("43_fbike")
+centered = false
+
+[node name="Bike_02" type="Sprite2D" parent="04_Fill/Bikes" unique_id=866342276]
+z_index = 4
+texture_filter = 4
+position = Vector2(8146.2, -105)
+scale = Vector2(1.05, 1.05)
+texture = ExtResource("43_fbike")
+centered = false
+
+[node name="Bike_03" type="Sprite2D" parent="04_Fill/Bikes" unique_id=1516870694]
+z_index = 4
+texture_filter = 4
+position = Vector2(11996.2, -105)
+scale = Vector2(1.05, 1.05)
+texture = ExtResource("43_fbike")
+centered = false
+
+[node name="Bike_04" type="Sprite2D" parent="04_Fill/Bikes" unique_id=671906037]
+z_index = 4
+texture_filter = 4
+position = Vector2(22096.2, -105)
+scale = Vector2(1.05, 1.05)
+texture = ExtResource("43_fbike")
+centered = false
+
+[node name="Actors" type="Node2D" parent="." unique_id=890100279]
+
+[node name="Player" parent="Actors" unique_id=1142175516 instance=ExtResource("21_qlio8")]
+z_index = 5
+position = Vector2(4762, 194)
+
+[node name="Interaction" type="Node2D" parent="." unique_id=939131187]
+
+[node name="InteractionSensor" type="Node2D" parent="Interaction" unique_id=607246235]
+z_index = 20
+script = ExtResource("23_fali8")
+actor_path = NodePath("../../Actors/Player")
+
+[node name="Door_IntC" type="Area2D" parent="Interaction"]
+position = Vector2(1173, -80)
+script = ExtResource("23_fali8_door")
+target_scene = &"int_c"
+target_spawn_id = &""
+door_label = "C 设备区"
+
+[node name="Hit" type="CollisionShape2D" parent="Interaction/Door_IntC"]
+shape = SubResource("Shape_door_c")
+
+[node name="Door_IntA" type="Area2D" parent="Interaction"]
+position = Vector2(2050, -100)
+script = ExtResource("23_fali8_door")
+target_scene = &"int_a"
+target_spawn_id = &""
+door_label = "A/B 外婆小楼"
+
+[node name="Hit" type="CollisionShape2D" parent="Interaction/Door_IntA"]
+shape = SubResource("Shape_door_a")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1025474903]
+limit_left = -480
+limit_top = -1500
+limit_right = 25575
+limit_bottom = 900
+script = ExtResource("24_dnnc3")
+target_path = NodePath("../Actors/Player")
+look_offset = Vector2(0, -210)
+dead_zone = Vector2(56, 48)
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=467399570]

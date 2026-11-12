@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://s7j4je5135in"
+
+[deps]
+
+files=["res://SCENE-003_美术对接表.建筑或空间名称.translation", "res://SCENE-003_美术对接表.世界坐标.translation", "res://SCENE-003_美术对接表.尺寸.translation", "res://SCENE-003_美术对接表.楼层.translation", "res://SCENE-003_美术对接表.地面Y.translation", "res://SCENE-003_美术对接表.出入口与目标场景.translation", "res://SCENE-003_美术对接表.美术替换槽位.translation", "res://SCENE-003_美术对接表.关联截图.translation", "res://SCENE-003_美术对接表.现有已批准素材.translation", "res://SCENE-003_美术对接表.待制作美术项目.translation"]
+
+source_file="res://SCENE-003_美术对接表.csv"
+dest_files=["res://SCENE-003_美术对接表.建筑或空间名称.translation", "res://SCENE-003_美术对接表.世界坐标.translation", "res://SCENE-003_美术对接表.尺寸.translation", "res://SCENE-003_美术对接表.楼层.translation", "res://SCENE-003_美术对接表.地面Y.translation", "res://SCENE-003_美术对接表.出入口与目标场景.translation", "res://SCENE-003_美术对接表.美术替换槽位.translation", "res://SCENE-003_美术对接表.关联截图.translation", "res://SCENE-003_美术对接表.现有已批准素材.translation", "res://SCENE-003_美术对接表.待制作美术项目.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="2048" height="140" viewBox="0 0 2048 140">
+  <title>架空线 - 2D横版游戏可平铺素材</title>
+  <desc>五根独立、近水平、微下垂的细线；左右端点与切线一致，可周期拼接。</desc>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 0,19 C 512,19 512,32 1024,32 C 1536,32 1536,19 2048,19" stroke="#303841" stroke-width="1.6"/>
+    <path d="M 0,36 C 512,36 512,46 1024,46 C 1536,46 1536,36 2048,36" stroke="#333a40" stroke-width="1.2"/>
+    <path d="M 0,55 C 512,55 512,68 1024,68 C 1536,68 1536,55 2048,55" stroke="#2a3339" stroke-width="1.7"/>
+    <path d="M 0,76 C 512,76 512,88 1024,88 C 1536,88 1536,76 2048,76" stroke="#313a42" stroke-width="1.4"/>
+    <path d="M 0,96 C 512,96 512,109 1024,109 C 1536,109 1536,96 2048,96" stroke="#2d353c" stroke-width="1.5"/>
+  </g>
+</svg>
