@@ -40,7 +40,7 @@ PREFIX_CATEGORY = {
     "ART_SCENE": ("场景", "美术设定集/02-场景"),
     "ART_ITEM": ("物品与家具", "美术设定集/03-物品与家具"),
     "ART_FURN": ("物品与家具", "美术设定集/03-物品与家具"),
-    "ART_UI": ("界面", "美术设定集/04-界面"),
+    "ART_UI": ("界面", "美术设定集/04-界面与UI"),
     "ART_FX": ("特效与动画", "美术设定集/05-特效与动画"),
 }
 PREFIX_ORDER = ["ART_CHAR", "ART_SCENE", "ART_ITEM", "ART_FURN", "ART_UI", "ART_FX"]
