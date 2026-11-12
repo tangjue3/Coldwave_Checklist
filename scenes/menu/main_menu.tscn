@@ -157,6 +157,7 @@ theme_override_styles/normal = SubResource("StyleBoxEmpty_none")
 theme_override_styles/disabled = SubResource("StyleBoxEmpty_none")
 
 [node name="Hint" type="Label" parent="."]
+visible = false
 offset_left = 24.0
 offset_top = 494.0
 offset_right = 640.0

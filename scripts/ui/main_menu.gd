@@ -39,7 +39,7 @@ func _ready() -> void:
 	continue_button.tooltip_text = SaveManager.status()
 
 	_dev_panel.visible = false
-	_hint.text = ""
+	_set_hint("")
 	_apply_button_rects()
 	print("[MENU] 主菜单就绪（美术背景 + 透明点击区）；continue_disabled=",
 		continue_button.disabled, " save_status=", SaveManager.status())
@@ -57,27 +57,33 @@ func _apply_button_rects() -> void:
 		b.size = r.size
 
 
+## 底部提示：有内容才显示。空字符串时连底板一起隐藏，否则会留下一条空的黑条。
+func _set_hint(msg: String) -> void:
+	_hint.text = msg
+	_hint.visible = msg != ""
+
+
 func _on_new_game() -> void:
-	_hint.text = "新游戏流程尚未实现，等待下一阶段任务批准。"
+	_set_hint("新游戏流程尚未实现，等待下一阶段任务批准。")
 
 
 func _on_settings() -> void:
-	_hint.text = "设置界面尚未实现，等待单独任务。"
+	_set_hint("设置界面尚未实现，等待单独任务。")
 
 
 func _on_dev_test() -> void:
 	_dev_panel.visible = true
-	_hint.text = "开发测试入口：仅用于工程验证，不含玩法内容。"
+	_set_hint("开发测试入口：仅用于工程验证，不含玩法内容。")
 
 
 func _on_close_dev() -> void:
 	_dev_panel.visible = false
-	_hint.text = ""
+	_set_hint("")
 
 
 func _on_quit() -> void:
 	if OS.has_feature("web"):
-		_hint.text = "网页版请直接关闭浏览器标签页退出。"
+		_set_hint("网页版请直接关闭浏览器标签页退出。")
 	else:
 		get_tree().quit(0)
 
