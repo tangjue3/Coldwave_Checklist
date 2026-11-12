@@ -49,6 +49,9 @@ const charCount = DATA.filter((d) => d.cat === '角色').length;
 const sceneCount = DATA.filter((d) => d.id.startsWith('ART_SCENE_')).length;
 
 check(`卡片渲染 = ${DATA.length}`, await evalJs("document.querySelectorAll('.card').length") === DATA.length);
+check('默认页显式指向「场景」分类（新资产不再只藏在页签里）',
+  await evalJs("!!document.querySelector('.sceneEntry')") &&
+  await evalJs("document.querySelector('.sceneEntry')?.innerText.includes('归入「场景」分类')"));
 // 卡片是 loading="lazy"：条目多到超出一屏时，视口外的图根本不会开始加载。
 // 先整页滚一遍把懒加载全部触发，再断言，否则是断言自己假失败（与资产无关）。
 await evalJs(`(async () => {
@@ -178,8 +181,9 @@ check('101 只允许挂 water 文件、102 只允许挂 food 文件（防再互�
 
 check('缩略图路径无重复（同 ID 多状态不撞名）',
   new Set(DATA.map((d) => d.thumb).filter(Boolean)).size === DATA.filter((d) => d.thumb).length);
-check('场景条目制作状态均为概念绘制',
-  DATA.filter((d) => d.cat === '场景').every((d) => d.makeStatus === '概念绘制'));
+check('旧 ART_SCENE_ 概念条目仍保持「概念绘制」（新增场景资产不冒充概念图）',
+  DATA.filter((d) => d.cat === '场景' && d.id.startsWith('ART_SCENE_'))
+    .every((d) => d.makeStatus === '概念绘制'));
 // 运行时路径必须落在 assets/ 里：不得直接引用素材库或转存库（那里 .gdignore，克隆后也不该被打包）
 const assetsDir = path.join(ROOT, 'assets');
 const rtOutsideAssets = withPath.filter((d) => {
@@ -360,6 +364,42 @@ const visualCount = DATA.filter((d) => d.tags.includes('视觉质量待优化'))
 check(`标记筛选「视觉质量待优化」→ ${visualCount} 项（3 条角色动画已认可，不应命中）`,
   await evalJs("document.querySelectorAll('.card').length") === visualCount);
 await evalJs("[...document.querySelectorAll('#chips .chip')].find(c=>c.dataset.t==='视觉质量待优化').click()");
+
+// ---- 第一季场景资产页签（2026-11-12）：独立数据来源，不污染素材卡片与 14 条白名单
+const META_PAGE = JSON.parse(await evalJs("document.getElementById('meta-data').textContent"));
+const SA = META_PAGE.sceneAssets || { items: [], summary: {}, groups: [] };
+check('场景资产页签存在',
+  await evalJs("[...document.querySelectorAll('#tabs .tab')].some(t=>t.dataset.v==='scenes')"));
+check(`场景清单 ${SA.summary.total} 条 / 运行时贴图 ${SA.summary.files} 张`,
+  SA.summary.total > 0 && SA.summary.files > 0 && SA.items.length >= SA.summary.total);
+check('场景资产「已接入」以文件真实存在为准',
+  SA.items.filter((x) => x.status === '已接入').every((x) => x.exists));
+check('场景资产全部指向 assets/（不是素材库/转存库）',
+  SA.items.filter((x) => x.exists).every((x) => x.href.startsWith('../assets/scenes/season1/')));
+await evalJs("[...document.querySelectorAll('#tabs .tab')].find(t=>t.dataset.v==='scenes').click()");
+check(`场景页渲染 ${SA.items.length} 张卡片`,
+  await evalJs("document.querySelectorAll('.scenecard').length") === SA.items.length);
+check('场景页不误用素材卡片 class（不干扰卡片计数）',
+  await evalJs("document.querySelectorAll('.card').length") === 0);
+await evalJs("[...document.querySelectorAll('#tabs .tab')].find(t=>t.dataset.v==='assets').click()");
+check('切回素材页后卡片视图恢复', await evalJs("document.querySelectorAll('.card').length") > 0);
+
+// ---- 场景分类：02-场景 这两天做的资产必须真的在「场景」标签里，不是只放在独立页签
+const sceneCards = DATA.filter((d) => d.id.startsWith('SCENE_'));
+check(`「场景」分类收录 ${sceneCards.length} 条第一季场景资产`,
+  sceneCards.length === SA.items.length && sceneCards.length > 40 &&
+  sceneCards.every((d) => d.cat === '场景'));
+check('已出图的场景资产都有可打开的缩略图',
+  sceneCards.filter((d) => d.makeStatus === '已接入运行时')
+    .every((d) => !!d.thumb && fs.existsSync(path.join(ROOT, '素材库', d.thumb))));
+check('场景资产不冒充「运行时可用」/「正式使用」（14 条白名单不受影响）',
+  sceneCards.every((d) => d.status !== '运行时可用' && d.useState !== '正式使用'));
+await evalJs("var q=document.getElementById('q');q.value='';q.dispatchEvent(new Event('input',{bubbles:true}))");
+await evalJs("[...document.querySelectorAll('#nav li')].find(l=>l.dataset.c==='场景').click()");
+check('点「场景」分类能筛出全部场景资产',
+  await evalJs("document.querySelectorAll('.card').length") ===
+    DATA.filter((d) => d.cat === '场景').length);
+await evalJs("[...document.querySelectorAll('#nav li')].find(l=>l.dataset.c==='全部').click()");
 
 const shot2 = await send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: false });
 fs.writeFileSync(`${ROOT}/tests/screenshots/artlib_refs.png`, Buffer.from(shot2.result.data, 'base64'));

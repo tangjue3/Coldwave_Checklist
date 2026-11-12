@@ -333,6 +333,64 @@ def build_data() -> list[dict]:
             "key": f"{r['素材ID']}@{r['当前版本']}",
         })
 
+    # ---- 第一季场景资产：把 02-场景 这两天做的图并进「场景」分类一起展示 ----
+    # 走 02-场景/00-规范/03-待生成清单.csv 管理，不占 ART_ID、不进 14 条运行时白名单。
+    scene = build_scene_assets()
+    for n, s in enumerate(scene["items"], 1):
+        sid = f"SCENE_{n:02d}"
+        fn = s["file"]
+        src = SCENE_ART / fn if s["exists"] else None
+        thumb_file = f"scene_{n:02d}.jpg"
+        has_thumb = make_thumb(src, THUMBS / thumb_file) if src else False
+        label = re.sub(r"^\d+_", "", s["name"]) if "_" in s["name"] else ""
+        if not label:
+            label = re.sub(r"_\d+x\d+_v\d+$|_v\d+$", "", Path(fn).stem)
+        kind = ("室内剖面" if "_INT_" in fn else
+                "室外正立面" if "_EXT_" in fn else
+                "背景与天空" if fn.startswith("BG_") else
+                "地面与道路" if fn.startswith("GND_") else
+                "街道家具与道具" if fn.startswith("PROP_") else
+                "天气与光影" if fn.startswith("WX_") else "填充元素")
+        rt = f"assets/scenes/season1/{fn}" if s["exists"] else ""
+        out.append({
+            "id": sid,
+            "name": f"{label} · {kind}",
+            "cat": "场景",
+            "subject": "第一季 · 梧桐里长街",
+            "version": "v01",
+            "source": "用户生图 · 02-场景 提示词",
+            "usage": f'{s["group"]}　·　世界尺寸 {s["size"] or "—"}',
+            "makeStatus": "已接入运行时" if s["exists"] else "待生成",
+            "status": "已通过设定审核" if s["exists"] else "概念草案",
+            "license": "项目原创生成，第一季范围内使用",
+            "originPath": rt,
+            "originHref": repo_link(rt),
+            "localPath": rt,
+            "localHref": repo_link(rt),
+            "runtimePath": rt,
+            "runtimeHref": repo_link(rt),
+            "notes": (f'{s["group"]} / {s["name"]}　·　清单状态「{s["status"]}」　·　目标文件 {fn}。'
+                      "这批是 Godot 运行时场景资源，由 02-场景/00-规范/03-待生成清单.csv 管理，"
+                      "不占 ART_ID、不进 32 行素材台账与 14 条运行时白名单。"),
+            "related": [{"label": "03-待生成清单.csv",
+                         "href": "美术设定集/02-场景/00-规范/03-待生成清单.csv"}],
+            "anim": {"frames": "", "fps": "", "size": s["size"], "facing": "",
+                     "preview": "", "previewHref": "", "sheet": ""},
+            "act": "不适用",
+            "visual": "未评价",
+            "useState": "未使用",
+            "archived": "",
+            "knownLimits": "",
+            "refFor": [],
+            "tags": [],
+            "frameGlob": "",
+            "frameHrefs": [],
+            "fpsNum": 10,
+            "gif": "",
+            "thumb": f".thumbs/{thumb_file}" if has_thumb else "",
+            "key": f"{sid}@v01",
+        })
+
     # 同 ID 的版本链
     by_id: dict[str, list[dict]] = {}
     for d in out:
@@ -428,6 +486,42 @@ aside{position:sticky;top:170px;align-self:start;max-height:calc(100vh - 190px);
 .mark.vis{background:#fbf0dd;color:#a1731f}
 .mark.arch{background:#eeeae4;color:#8a8272}
 .empty{padding:60px 0;text-align:center;color:var(--muted);grid-column:1/-1}
+/* 第一季场景资产页 */
+.tab[data-v="scenes"]{border-color:#c9a24a;background:#fdf6e8;color:#7c6237;font-weight:600}
+.tab[data-v="scenes"].on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.sceneEntry{display:flex;align-items:center;gap:16px;flex-wrap:wrap;background:#fdf6e8;
+  border:1px solid #e2cd9d;border-left:4px solid #c9a24a;border-radius:9px;
+  padding:12px 16px;margin:0 0 18px}
+.sceneEntry .t{font-size:14px;font-weight:600;color:#7c6237;margin-bottom:3px}
+.sceneEntry .s{font-size:12px;color:#8a7550;line-height:1.6}
+.sceneEntry button{margin-left:auto;background:var(--ink);color:#fff;border:0;border-radius:6px;
+  padding:8px 16px;font-size:12.5px;cursor:pointer;white-space:nowrap}
+.sceneEntry button:hover{opacity:.86}
+.sceneStat{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 14px}
+.sceneStat div{background:var(--card);border:1px solid var(--line);border-radius:8px;
+  padding:8px 15px;font-size:11.5px;color:var(--muted);min-width:96px}
+.sceneStat b{display:block;font-size:20px;line-height:1.3;color:var(--ink);font-weight:600}
+.sceneNote{font-size:12px;line-height:1.85;color:#6b4a17;background:#fdf6e8;
+  border:1px solid #ebdcbe;border-radius:8px;padding:10px 14px;margin:0 0 6px}
+.sceneNote code{font-family:Consolas,monospace;background:#f6ecd7;padding:1px 4px;border-radius:3px}
+.sceneHead{display:flex;align-items:baseline;gap:10px;margin:22px 0 10px;
+  padding-bottom:7px;border-bottom:1px solid var(--line)}
+.sceneHead h3{margin:0;font-size:14px;font-weight:600}
+.sceneHead span{font-size:11.5px;color:var(--muted)}
+.scenegrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(206px,1fr));gap:14px}
+.scenecard{background:var(--card);border:1px solid var(--line);border-radius:9px;
+  overflow:hidden;display:flex;flex-direction:column;text-decoration:none;color:inherit;
+  transition:transform .15s,box-shadow .15s}
+.scenecard:hover{transform:translateY(-2px);box-shadow:0 7px 20px rgba(30,32,36,.12)}
+.scenecard .ph{height:126px;background:var(--stage);display:flex;align-items:center;
+  justify-content:center;overflow:hidden;padding:6px}
+.scenecard .ph img{width:100%;height:100%;object-fit:contain}
+.scenecard .miss{color:var(--muted);font-size:12px}
+.scenecard .meta{padding:9px 11px 11px;font-size:11.5px;line-height:1.65}
+.scenecard .meta>code{font-family:Consolas,monospace;font-size:10.5px;word-break:break-all;
+  color:var(--ink)}
+.scenecard .row{display:flex;justify-content:space-between;gap:6px;color:var(--muted);margin-top:3px}
+.sbadge{font-size:10.5px;padding:1px 7px;border-radius:10px;white-space:nowrap}
 /* 参考图专区 */
 .refgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
 .refcard{background:var(--card);border:1px solid var(--line);border-radius:10px;
@@ -515,11 +609,15 @@ footer{padding:0 30px 40px;color:var(--muted);font-size:11.5px;max-width:1720px;
       <div class="sub">ARTLIB-001 / CLEAN-001　|　第一季　|　离线预览　|　数据内嵌，无需服务与网络</div></div>
     <div class="search"><input id="q" type="search" placeholder="搜索素材 ID / 名称 / 动作 / 说明 / 角色…" autocomplete="off"></div>
   </div>
-  <div class="notice">本库仅供浏览与审核，已被 <code>.gdignore</code> 隔离，不是 Godot 运行时资源。
+  <div class="notice">本库的<strong>素材卡片</strong>仅供浏览与审核，已被 <code>.gdignore</code> 隔离，不是 Godot 运行时资源。
     「技术通过」不等于「美术满意」——三条状态轴分开看。<br>
     <strong>VIDEO-FINALIZE-001</strong>：许知夏 <code>r10 / r11 / r12</code> 三段 512×704
     高清动画已正式登记（运行时可用 / 视觉认可 / 正式使用），<code>v02</code> 仍是唯一外观基准。
-    <strong>脚底滑动与停止过渡相位限制仍未修复</strong>，见「角色动作状态」页与每条详情。</div>
+    <strong>脚底滑动与停止过渡相位限制仍未修复</strong>，见「角色动作状态」页与每条详情。<br>
+    <strong>第一季场景资产（2026-11-12）</strong>：整条街 18 栋室外、12 处室内提示词、
+    43 张运行时贴图（含 2 张室内剖面）已作为 58 张卡片<strong>并入左侧「场景」分类</strong>；
+    另有「第一季场景资产」页签做清单 ↔ 文件对照。这批是 Godot 运行时资源，走
+    <code>02-场景/00-规范/03-待生成清单.csv</code> 管理，<strong>不占 ART_ID、不进本台账与运行时白名单</strong>。</div>
   <div class="tabs" id="tabs"></div>
 </header>
 <div class="wrap">
@@ -577,11 +675,13 @@ footer{padding:0 30px 40px;color:var(--muted);font-size:11.5px;max-width:1720px;
 
   /* ------------------------------------------------ 顶部视图 tabs */
   function tabs(){
-    var vs=[['assets','素材'],['refs','AI 视频参考图'],['gaps','角色动作状态']];
+    var vs=[['assets','素材'],['refs','AI 视频参考图'],['gaps','角色动作状态'],['scenes','第一季场景资产']];
     $('tabs').innerHTML=vs.map(function(v){
       return '<div class="tab '+(state.view===v[0]?'on':'')+'" data-v="'+v[0]+'">'+v[1]+'</div>'}).join('');
     Array.prototype.forEach.call($('tabs').children,function(el){
-      el.onclick=function(){state.view=el.dataset.v;tabs();render()}});
+      el.onclick=function(){state.view=el.dataset.v;
+        try{history.replaceState(null,'','#'+state.view)}catch(e){}
+        tabs();render()}});
   }
   /* ------------------------------------------------ 左侧导航 */
   function nav(){
@@ -653,8 +753,22 @@ footer{padding:0 30px 40px;color:var(--muted);font-size:11.5px;max-width:1720px;
     $('hint').textContent=state.tags.length
       ? '已叠加标记筛选：'+state.tags.join(' + ')+'（同一行可同时命中多个标记）'
       : '三条轴分开看：技术状态（能否上机）/ 视觉评价（美术满不满意）/ 使用状态（游戏里有没有在用）。';
-    $('view').innerHTML='<div class="grid" id="grid">'+(shown.length?shown.map(cardHtml).join('')
+    /* 默认页显式露出这两天做的场景资产，避免新增内容只藏在第四个页签里 */
+    var st=(META.sceneAssets||{}).summary||{};
+    var entry=(state.cat==='全部'&&state.act==='全部'&&!state.q&&!state.tags.length)
+      ? '<div class="sceneEntry"><div style="flex:1;min-width:260px">'+
+        '<div class="t">这两天做的场景资产已归入「场景」分类</div>'+
+        '<div class="s">18 栋室外正立面 · 12 处室内剖面 · 43 张运行时贴图（含 2 张已接入室内）'+
+        '<br>左侧点「场景」即可逐张查看；清单 '+(st.total||0)+' 条　·　待生成 '+
+        (st.pending||0)+' 张</div></div>'+
+        '<button id="goScenes" type="button">查看「场景」分类 →</button></div>'
+      : '';
+    $('view').innerHTML=entry+'<div class="grid" id="grid">'+(shown.length?shown.map(cardHtml).join('')
       :'<div class="empty">没有匹配的素材。换个关键词，或清空筛选。</div>')+'</div>';
+    var go=$('goScenes');
+    if(go)go.onclick=function(){state.cat='场景';state.act='全部';state.q='';
+      document.getElementById('q').value='';
+      nav();actnav();render()};
     Array.prototype.forEach.call(document.querySelectorAll('#grid .card'),function(el){
       el.onclick=function(){open(+el.dataset.i)}});
   }
@@ -745,9 +859,49 @@ footer{padding:0 30px 40px;color:var(--muted);font-size:11.5px;max-width:1720px;
       charRows+otherRows+'</tbody></table>'+sum;
   }
 
+  /* ------------------------------------------------ 第一季场景资产 */
+  function renderScenes(){
+    var S=META.sceneAssets||{items:[],summary:{},groups:[]},st=S.summary||{},items=S.items||[];
+    $('title').textContent='第一季场景资产';
+    $('count').textContent='清单 '+(st.total||0)+' 条　·　运行时贴图 '+(st.files||0)+
+      ' 张　·　室内已接入 '+(st.interior||0)+' 张';
+    $('hint').textContent='按 02-场景 的分组逐张对照；缩略图直接指向 assets/ 下的运行时贴图，点卡片可看原图。'
+      +'「已接入」以文件真实存在为准，标注不算结论。';
+    var stat=[['清单条目',st.total],['运行时贴图',st.files],['已接入',st.integrated],
+      ['待生成',st.pending],['已交付未叠加',st.overlap],['室内已接入',st.interior]];
+    var html='<div class="sceneStat">'+stat.map(function(p){
+      return '<div><b>'+esc(p[1]||0)+'</b>'+esc(p[0])+'</div>'}).join('')+'</div>';
+    html+='<div class="sceneNote">这些是 <strong>Godot 运行时资源</strong>，不是设定库里的概念素材。'
+      +'统一由 <code>02-场景/00-规范/03-待生成清单.csv</code> 管理，'
+      +'<strong>不占 ART_ID、不进 素材台账.csv、不进运行时白名单</strong>——'
+      +'本页只提供「清单 ↔ 实际文件」的可视对照，左侧素材卡片与 14 条白名单不受影响。<br>'
+      +'室内提示词共 12 份，已出图并接入 2 张（<code>int_c</code> / <code>int_a</code>）；'
+      +'其余 10 张室内与 5 张天气图仍待生成。</div>';
+    (S.groups||[]).forEach(function(g){
+      var list=items.filter(function(x){return x.group===g.key});
+      if(!list.length)return;
+      html+='<div class="sceneHead"><h3>'+esc(g.title)+'</h3><span>'+list.length+' 张</span></div>';
+      html+='<div class="scenegrid">'+list.map(function(x){
+        var s=x.status||'',c='#8a8f96',bg='#8a8f961a';
+        if(s==='已接入'){c='#3f8f5b';bg='#3f8f5b1a'}
+        else if(s==='待生成'){c='#c9882f';bg='#c9882f1a'}
+        else if(s.indexOf('已交付')===0){c='#5a83ad';bg='#5a83ad1a'}
+        var badge='<span class="sbadge" style="color:'+c+';background:'+bg+'">'+esc(s)+'</span>';
+        var ph=x.exists?'<img loading="lazy" src="'+esc(x.href)+'" alt="'+esc(x.file)+'">'
+          :'<span class="miss">尚未出图</span>';
+        return '<a class="scenecard"'+(x.exists?' href="'+esc(x.href)+'" target="_blank"':'')+'>'
+          +'<div class="ph">'+ph+'</div><div class="meta"><code>'+esc(x.file)+'</code>'
+          +'<div class="row"><span>'+esc(x.size||'—')+'</span>'+badge+'</div>'
+          +'<div class="row"><span>'+esc(x.name)+'</span></div></div></a>';
+      }).join('')+'</div>';
+    });
+    $('view').innerHTML=html;
+  }
+
   function render(){
     if(state.view==='refs'){renderRefs();return}
     if(state.view==='gaps'){renderGaps();return}
+    if(state.view==='scenes'){renderScenes();return}
     renderAssets();
   }
 
@@ -811,7 +965,10 @@ footer{padding:0 30px 40px;color:var(--muted);font-size:11.5px;max-width:1720px;
     if(d.tags.indexOf('视觉质量待优化')>=0)
       html+='<div class="warn">视觉质量待优化：技术验收已通过、游戏里也在用，但美术质量未获认可，'
         +'需要重新制作。不要因为「能跑」就当成完成。</div>';
-    if(d.status!=='运行时可用')
+    if(d.id.indexOf('SCENE_')===0)
+      html+='<div class="warn">第一季场景运行时资源，由 02-场景 清单管理；'
+        +'不占 ART_ID、不进素材台账与 14 条运行时白名单。卡片状态只用于展示，不代表审核结论。</div>';
+    if(d.status!=='运行时可用' && d.id.indexOf('SCENE_')!==0)
       html+='<div class="warn">当前状态「'+esc(d.status)+'」：不得作为正式运行时资源引用。</div>';
     return html;
   }
@@ -864,6 +1021,10 @@ footer{padding:0 30px 40px;color:var(--muted);font-size:11.5px;max-width:1720px;
     if(!$('modal').classList.contains('show'))return;
     if(e.key==='Escape')close();else if(e.key==='ArrowLeft')step(-1);else if(e.key==='ArrowRight')step(1);
   });
+  /* 支持 #scenes / #refs / #gaps 直接打开对应页签，便于分享与截图 */
+  var hv=(location.hash||'').replace(/^#/,'');
+  if(hv==='cat-scene'){state.cat='场景'}
+  else if(['assets','refs','gaps','scenes'].indexOf(hv)>=0)state.view=hv;
   tabs();nav();actnav();chips();render();
 })();
 </script>
@@ -915,6 +1076,79 @@ def build_ref_panels(data: list[dict], crops: list[dict]) -> list[dict]:
     return out
 
 
+SCENE_CSV = ROOT / "素材库" / "美术设定集" / "02-场景" / "00-规范" / "03-待生成清单.csv"
+SCENE_ART = ROOT / "assets" / "scenes" / "season1"
+
+SCENE_GROUPS = [
+    ("01-建筑", "室外正立面 · 18 栋"),
+    ("02-室内", "室内剖面 · 12 处"),
+    ("03-背景与天空", "背景与天空"),
+    ("04-地面与道路", "地面与道路"),
+    ("05-街道家具与道具", "街道家具与道具"),
+    ("06-天气与光影", "天气与光影（待生成）"),
+    ("07-填充元素", "填充元素"),
+    ("未分类", "运行时存在 · 清单未登记"),
+]
+
+
+def build_scene_assets() -> dict:
+    """第一季场景资产：清单状态 + 运行时贴图实测，供总览页独立页签展示。
+
+    口径：这些是 Godot 运行时资源，由 02-场景/00-规范/03-待生成清单.csv 管理，
+    不占 ART_ID、不进素材台账.csv、不进运行时白名单。页面只做「看得见」的对照，
+    「已接入」以 assets/scenes/season1/ 下文件真实存在为准，不拿标注冒充结论。
+    """
+    rows: list[dict] = []
+    if SCENE_CSV.is_file():
+        with SCENE_CSV.open(encoding="utf-8-sig", newline="") as f:
+            rows = list(csv.DictReader(f))
+
+    items: list[dict] = []
+    for r in rows:
+        parts = r.get("目录", "").split("/")
+        group = parts[0] if parts else "未分类"
+        label = parts[1] if len(parts) > 1 and parts[1] else group
+        fn = r.get("文件名", "")
+        exists = bool(fn) and (SCENE_ART / fn).is_file()
+        items.append({
+            "file": fn,
+            "code": r.get("编号", ""),
+            "group": group,
+            "name": label,
+            "size": r.get("世界尺寸", ""),
+            "status": r.get("状态", ""),
+            "exists": exists,
+            "href": "../assets/scenes/season1/" + fn if exists else "",
+        })
+
+    # 运行时目录里有、清单没列的也列出来，避免页面漏图
+    listed = {i["file"] for i in items}
+    for p in sorted(SCENE_ART.glob("*.png")):
+        if p.name not in listed:
+            items.append({
+                "file": p.name, "code": "", "group": "未分类",
+                "name": "（清单未登记）", "size": "", "status": "清单未登记",
+                "exists": True, "href": "../assets/scenes/season1/" + p.name,
+            })
+
+    def count(pred) -> int:
+        return sum(1 for i in items if pred(i))
+
+    summary = {
+        "total": len(rows),
+        "files": len(list(SCENE_ART.glob("*.png"))),
+        "exists": count(lambda i: i["exists"]),
+        "integrated": count(lambda i: i["status"] == "已接入" and i["exists"]),
+        "pending": count(lambda i: i["status"] == "待生成"),
+        "overlap": count(lambda i: i["status"].startswith("已交付")),
+        "interior": count(lambda i: i["group"] == "02-室内" and i["exists"]),
+    }
+    groups = [{"key": k, "title": t, "n": count(lambda i, k=k: i["group"] == k)}
+              for k, t in SCENE_GROUPS]
+    groups = [g for g in groups if g["n"]]
+    return {"items": items, "summary": summary, "groups": groups}
+
+
 def main() -> None:
     data = build_data()
     build_revised_ledger()
@@ -932,6 +1166,7 @@ def main() -> None:
         "charActions": [{"act": a, "slug": s_, "desc": d, "state": st, "limits": lim}
                         for a, s_, d, st, lim in CHAR_ACTION_STATE],
         "knownLimits": KNOWN_LIMITS,
+        "sceneAssets": build_scene_assets(),
     }
     payload = json.dumps(data, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
     meta_payload = json.dumps(meta, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
