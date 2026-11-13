@@ -1,0 +1,405 @@
+{
+  "type": "inventory_ui_art_candidate",
+  "source": "HUD approved visual language",
+  "reference_resolution": [
+    960,
+    540
+  ],
+  "assets": [
+    {
+      "path": "01-窗口面板/INV_panel_main_760x430.png",
+      "name": "INV_panel_main_760x430.png",
+      "size": "760x430",
+      "category": "背包主窗口",
+      "ninepatch": [
+        29,
+        39,
+        29,
+        25
+      ],
+      "origin": "复用 HUD_panel_tasks 冰霜外框",
+      "status": "候选 / 待审核",
+      "alpha_min": 0,
+      "alpha_max": 255
+    },
+    {
+      "path": "01-窗口面板/INV_panel_details_194x310.png",
+      "name": "INV_panel_details_194x310.png",
+      "size": "194x310",
+      "category": "右侧详情区",
+      "ninepatch": [
+        25,
+        34,
+        25,
+        24
+      ],
+      "origin": "衍生自 HUD_panel_status",
+      "status": "候选 / 待审核",
+      "alpha_min": 0,
+      "alpha_max": 255
+    },
+    {
+      "path": "01-窗口面板/INV_panel_categories_138x302.png",
+      "name": "INV_panel_categories_138x302.png",
+      "size": "138x302",
+      "category": "分类导航底板",
+      "ninepatch": [
+        22,
+        20,
+        22,
+        20
+      ],
+      "origin": "衍生自 HUD_panel_tooltip",
+      "status": "候选 / 待审核",
+      "alpha_min": 0,
+      "alpha_max": 255
+    },
+    {
+      "path": "01-窗口面板/INV_panel_dialog_350x248.png",
+      "name": "INV_panel_dialog_350x248.png",
+      "size": "350x248",
+      "category": "数量 / 转移弹窗",
+      "ninepatch": [
+        24,
+        35,
+        24,
+        21
+      ],
+      "origin": "衍生自 HUD_panel_tasks",
+      "status": "候选 / 待审核",
+      "alpha_min": 0,
+      "alpha_max": 255
+    },
+    {
+      "path": "01-窗口面板/INV_panel_tooltip_256x156.png",
+      "name": "INV_panel_tooltip_256x156.png",
+      "size": "256x156",
+      "category": "物品悬停说明",
+      "ninepatch": [
+        24,
+        28,
+        24,
+        20
+      ],
+      "origin": "衍生自 HUD_panel_tooltip",
+      "status": "候选 / 待审核",
+      "alpha_min": 0,
+      "alpha_max": 255
+    },
+    {
+      "path": "01-窗口面板/INV_panel_search_195x36.png",
+      "name": "INV_panel_search_195x36.png",
+      "size": "195x36",
+      "category": "搜索输入框背景",
+      "ninepatch": [
+        25,
+        11,
+        25,
+        11
+      ],
+      "origin": "衍生自 HUD_panel_interact",
+      "status": "候选 / 待审核",
+      "alpha_min": 0,
+      "alpha_max": 255
+    },
+    {
+      "path": "02-物品格/INV_slot_normal_58x58.png",
+      "name": "INV_slot_normal_58x58.png",
+      "size": "58x58",
+      "category": "物品格状态",
+      "ninepatch": null,
+      "origin": "延续 HUD_slot_normal 视觉设计",
+      "status": "候选 / 待审核",
+      "alpha_min": 0,
+      "alpha_max": 255
+    },
+    {
+      "path": "02-物品格/INV_slot_selected_58x58.png",
+      "name": "INV_slot_selected_58x58.png",
+      "size": "58x58",
+      "category": "物品格状态",
+      "ninepatch": null,
+      "origin": "延续 HUD_slot_selected 视觉设计",
+      "status": "候选 / 待审核",
+      "alpha_min": 0,
+      "alpha_max": 255
+    },
+    {
+      "path": "02-物品格/INV_slot_disabled_58x58.png",
+      "name": "INV_slot_disabled_58x58.png",
+      "size": "58x58",
+      "category": "物品格状态",
+      "ninepatch": null,
+      "origin": "延续 HUD_slot_disabled 视觉设计",
+      "status": "候选 / 待审核",
+      "alpha_min": 0,
+      "alpha_max": 255
+    },
+    {
+      "path": "02-物品格/INV_slot_hover_58x58.png",
+      "name": "INV_slot_hover_58x58.png",
+      "size": "58x58",
+      "category": "物品格状态",
+      "ninepatch": null,
+      "origin": "普通格 + 琥珀描边",
+      "status": "候选 / 待审核",
+      "alpha_min": 0,
+      "alpha_max": 255
+    },
+    {
+      "path": "02-物品格/INV_slot_drag_58x58.png",
+      "name": "INV_slot_drag_58x58.png",
+      "size": "58x58",
+      "category": "拖拽浮层",
+      "ninepatch": null,
+      "origin": "普通格透明度调整",
+      "status": "候选 / 待审核",
+      "alpha_min": 0,
+      "alpha_max": 147
+    },
+    {
+      "path": "03-按钮与分类/INV_button_normal_140x38.png",
+      "name": "INV_button_normal_140x38.png",
+      "size": "140x38",
+      "category": "通用操作按钮",
+      "ninepatch": [
+        24,
+        16,
+        24,
+        16
+      ],
+      "origin": "HUD 资源条同款底材",
+      "status": "候选 / 待审核",
+      "alpha_min": 0,
+      "alpha_max": 255
+    },
+    {
+      "path": "03-按钮与分类/INV_button_hover_140x38.png",
+      "name": "INV_button_hover_140x38.png",
+      "size": "140x38",
+      "category": "通用操作按钮",
+      "ninepatch": [
+        24,
+        16,
+        24,
+        16
+      ],
+      "origin": "HUD 资源条同款底材",
+      "status": "候选 / 待审核",
+      "alpha_min": 0,
+      "alpha_max": 255
+    },
+    {
+      "path": "03-按钮与分类/INV_button_pressed_140x38.png",
+      "name": "INV_button_pressed_140x38.png",
+      "size": "140x38",
+      "category": "通用操作按钮",
+      "ninepatch": [
+        24,
+        16,
+        24,
+        16
+      ],
+      "origin": "HUD 资源条同款底材",
+      "status": "候选 / 待审核",
+      "alpha_min": 0,
+      "alpha_max": 255
+    },
+    {
+      "path": "03-按钮与分类/INV_button_disabled_140x38.png",
+      "name": "INV_button_disabled_140x38.png",
+      "size": "140x38",
+      "category": "通用操作按钮",
+      "ninepatch": [
+        24,
+        16,
+        24,
+        16
+      ],
+      "origin": "HUD 资源条同款底材",
+      "status": "候选 / 待审核",
+      "alpha_min": 0,
+      "alpha_max": 127
+    },
+    {
+      "path": "03-按钮与分类/INV_category_normal_116x36.png",
+      "name": "INV_category_normal_116x36.png",
+      "size": "116x36",
+      "category": "分类按钮",
+      "ninepatch": [
+        24,
+        15,
+        24,
+        15
+      ],
+      "origin": "HUD 资源条同款底材",
+      "status": "候选 / 待审核",
+      "alpha_min": 0,
+      "alpha_max": 255
+    },
+    {
+      "path": "03-按钮与分类/INV_category_selected_116x36.png",
+      "name": "INV_category_selected_116x36.png",
+      "size": "116x36",
+      "category": "分类按钮",
+      "ninepatch": [
+        24,
+        15,
+        24,
+        15
+      ],
+      "origin": "HUD 资源条同款底材",
+      "status": "候选 / 待审核",
+      "alpha_min": 0,
+      "alpha_max": 255
+    },
+    {
+      "path": "03-按钮与分类/INV_category_hover_116x36.png",
+      "name": "INV_category_hover_116x36.png",
+      "size": "116x36",
+      "category": "分类按钮",
+      "ninepatch": [
+        24,
+        15,
+        24,
+        15
+      ],
+      "origin": "HUD 资源条同款底材",
+      "status": "候选 / 待审核",
+      "alpha_min": 0,
+      "alpha_max": 255
+    },
+    {
+      "path": "04-新图标/INV_icon_backpack_64x64.png",
+      "name": "INV_icon_backpack_64x64.png",
+      "size": "64x64",
+      "category": "背包功能图标",
+      "ninepatch": null,
+      "origin": "按既有 HUD 米金色细线风格新绘",
+      "status": "候选 / 待审核",
+      "alpha_min": 0,
+      "alpha_max": 255
+    },
+    {
+      "path": "04-新图标/INV_icon_grid_64x64.png",
+      "name": "INV_icon_grid_64x64.png",
+      "size": "64x64",
+      "category": "背包功能图标",
+      "ninepatch": null,
+      "origin": "按既有 HUD 米金色细线风格新绘",
+      "status": "候选 / 待审核",
+      "alpha_min": 0,
+      "alpha_max": 255
+    },
+    {
+      "path": "04-新图标/INV_icon_medicine_64x64.png",
+      "name": "INV_icon_medicine_64x64.png",
+      "size": "64x64",
+      "category": "背包功能图标",
+      "ninepatch": null,
+      "origin": "按既有 HUD 米金色细线风格新绘",
+      "status": "候选 / 待审核",
+      "alpha_min": 0,
+      "alpha_max": 255
+    },
+    {
+      "path": "04-新图标/INV_icon_trash_64x64.png",
+      "name": "INV_icon_trash_64x64.png",
+      "size": "64x64",
+      "category": "背包功能图标",
+      "ninepatch": null,
+      "origin": "按既有 HUD 米金色细线风格新绘",
+      "status": "候选 / 待审核",
+      "alpha_min": 0,
+      "alpha_max": 255
+    },
+    {
+      "path": "04-新图标/INV_icon_sort_64x64.png",
+      "name": "INV_icon_sort_64x64.png",
+      "size": "64x64",
+      "category": "背包功能图标",
+      "ninepatch": null,
+      "origin": "按既有 HUD 米金色细线风格新绘",
+      "status": "候选 / 待审核",
+      "alpha_min": 0,
+      "alpha_max": 255
+    },
+    {
+      "path": "04-新图标/INV_icon_transfer_64x64.png",
+      "name": "INV_icon_transfer_64x64.png",
+      "size": "64x64",
+      "category": "背包功能图标",
+      "ninepatch": null,
+      "origin": "按既有 HUD 米金色细线风格新绘",
+      "status": "候选 / 待审核",
+      "alpha_min": 0,
+      "alpha_max": 255
+    },
+    {
+      "path": "04-新图标/INV_icon_search_64x64.png",
+      "name": "INV_icon_search_64x64.png",
+      "size": "64x64",
+      "category": "背包功能图标",
+      "ninepatch": null,
+      "origin": "按既有 HUD 米金色细线风格新绘",
+      "status": "候选 / 待审核",
+      "alpha_min": 0,
+      "alpha_max": 255
+    },
+    {
+      "path": "04-新图标/INV_icon_close_64x64.png",
+      "name": "INV_icon_close_64x64.png",
+      "size": "64x64",
+      "category": "背包功能图标",
+      "ninepatch": null,
+      "origin": "按既有 HUD 米金色细线风格新绘",
+      "status": "候选 / 待审核",
+      "alpha_min": 0,
+      "alpha_max": 255
+    },
+    {
+      "path": "04-新图标/INV_icon_lock_64x64.png",
+      "name": "INV_icon_lock_64x64.png",
+      "size": "64x64",
+      "category": "背包功能图标",
+      "ninepatch": null,
+      "origin": "按既有 HUD 米金色细线风格新绘",
+      "status": "候选 / 待审核",
+      "alpha_min": 0,
+      "alpha_max": 255
+    },
+    {
+      "path": "04-新图标/INV_icon_filter_64x64.png",
+      "name": "INV_icon_filter_64x64.png",
+      "size": "64x64",
+      "category": "背包功能图标",
+      "ninepatch": null,
+      "origin": "按既有 HUD 米金色细线风格新绘",
+      "status": "候选 / 待审核",
+      "alpha_min": 0,
+      "alpha_max": 255
+    },
+    {
+      "path": "04-新图标/INV_icon_info_64x64.png",
+      "name": "INV_icon_info_64x64.png",
+      "size": "64x64",
+      "category": "背包功能图标",
+      "ninepatch": null,
+      "origin": "按既有 HUD 米金色细线风格新绘",
+      "status": "候选 / 待审核",
+      "alpha_min": 0,
+      "alpha_max": 255
+    },
+    {
+      "path": "04-新图标/INV_icon_use_64x64.png",
+      "name": "INV_icon_use_64x64.png",
+      "size": "64x64",
+      "category": "背包功能图标",
+      "ninepatch": null,
+      "origin": "按既有 HUD 米金色细线风格新绘",
+      "status": "候选 / 待审核",
+      "alpha_min": 0,
+      "alpha_max": 255
+    }
+  ]
+}

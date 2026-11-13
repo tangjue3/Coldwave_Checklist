@@ -76,3 +76,24 @@ ART_UI_039,ART_UI,界面,已用,空键帽,2026-11-13,TASK-UI-007,HUD 独立透�
 ART_UI_040,ART_UI,界面,已用,霜纹分隔,2026-11-13,TASK-UI-007,HUD 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/hud/candidates_v01/。
 ART_UI_041,ART_UI,界面,已用,进度条轨道,2026-11-13,TASK-UI-007,HUD 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/hud/candidates_v01/。
 ART_UI_042,ART_UI,界面,已用,进度条填充,2026-11-13,TASK-UI-007,HUD 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/hud/candidates_v01/。
+ART_UI_043,ART_UI,界面,已用,背包主窗口,2026-11-13,TASK-UI-010,背包与物资 UI 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/inventory/v01/。
+ART_UI_044,ART_UI,界面,已用,右侧详情区,2026-11-13,TASK-UI-010,背包与物资 UI 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/inventory/v01/。
+ART_UI_045,ART_UI,界面,已用,分类导航底板,2026-11-13,TASK-UI-010,背包与物资 UI 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/inventory/v01/。
+ART_UI_046,ART_UI,界面,已用,数量转移弹窗,2026-11-13,TASK-UI-010,背包与物资 UI 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/inventory/v01/。
+ART_UI_047,ART_UI,界面,已用,物品悬停说明,2026-11-13,TASK-UI-010,背包与物资 UI 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/inventory/v01/。
+ART_UI_048,ART_UI,界面,已用,搜索输入框背景,2026-11-13,TASK-UI-010,背包与物资 UI 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/inventory/v01/。
+ART_UI_049,ART_UI,界面,已用,物品格,2026-11-13,TASK-UI-010,背包与物资 UI 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/inventory/v01/。
+ART_UI_050,ART_UI,界面,已用,通用按钮,2026-11-13,TASK-UI-010,背包与物资 UI 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/inventory/v01/。
+ART_UI_051,ART_UI,界面,已用,分类按钮,2026-11-13,TASK-UI-010,背包与物资 UI 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/inventory/v01/。
+ART_UI_052,ART_UI,界面,已用,图标背包,2026-11-13,TASK-UI-010,背包与物资 UI 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/inventory/v01/。
+ART_UI_053,ART_UI,界面,已用,图标网格,2026-11-13,TASK-UI-010,背包与物资 UI 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/inventory/v01/。
+ART_UI_054,ART_UI,界面,已用,图标医疗,2026-11-13,TASK-UI-010,背包与物资 UI 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/inventory/v01/。
+ART_UI_055,ART_UI,界面,已用,图标删除,2026-11-13,TASK-UI-010,背包与物资 UI 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/inventory/v01/。
+ART_UI_056,ART_UI,界面,已用,图标整理,2026-11-13,TASK-UI-010,背包与物资 UI 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/inventory/v01/。
+ART_UI_057,ART_UI,界面,已用,图标转移,2026-11-13,TASK-UI-010,背包与物资 UI 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/inventory/v01/。
+ART_UI_058,ART_UI,界面,已用,图标搜索,2026-11-13,TASK-UI-010,背包与物资 UI 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/inventory/v01/。
+ART_UI_059,ART_UI,界面,已用,图标关闭,2026-11-13,TASK-UI-010,背包与物资 UI 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/inventory/v01/。
+ART_UI_060,ART_UI,界面,已用,图标锁定,2026-11-13,TASK-UI-010,背包与物资 UI 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/inventory/v01/。
+ART_UI_061,ART_UI,界面,已用,图标筛选,2026-11-13,TASK-UI-010,背包与物资 UI 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/inventory/v01/。
+ART_UI_062,ART_UI,界面,已用,图标信息,2026-11-13,TASK-UI-010,背包与物资 UI 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/inventory/v01/。
+ART_UI_063,ART_UI,界面,已用,图标使用,2026-11-13,TASK-UI-010,背包与物资 UI 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/inventory/v01/。

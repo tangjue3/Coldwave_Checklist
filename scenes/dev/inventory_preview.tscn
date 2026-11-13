@@ -1,0 +1,2292 @@
+[gd_scene load_steps=61 format=3]
+
+[ext_resource type="Script" path="res://scripts/dev/inventory_preview.gd" id="1_script"]
+[ext_resource type="Theme" path="res://assets/ui/themes/font_theme.tres" id="2_theme"]
+[ext_resource type="Texture2D" path="res://assets/scenes/season1/A_INT_1575x680_v01.png" id="3_bg"]
+[ext_resource type="LabelSettings" path="res://assets/ui/labelsettings/final/f_title_serif_18.tres" id="ls_title"]
+[ext_resource type="LabelSettings" path="res://assets/ui/labelsettings/final/f_body_serif_14.tres" id="ls_body"]
+[ext_resource type="LabelSettings" path="res://assets/ui/labelsettings/final/f_value_serif_12.tres" id="ls_value"]
+[ext_resource type="LabelSettings" path="res://assets/ui/labelsettings/final/f_small_serif_11.tres" id="ls_small"]
+[ext_resource type="LabelSettings" path="res://assets/ui/labelsettings/final/f_task_wenkai_14.tres" id="ls_kai"]
+[ext_resource type="Texture2D" path="res://assets/ui/inventory/v01/INV_panel_main_760x430.png" id="p_main"]
+[ext_resource type="Texture2D" path="res://assets/ui/inventory/v01/INV_panel_details_194x310.png" id="p_details"]
+[ext_resource type="Texture2D" path="res://assets/ui/inventory/v01/INV_panel_categories_138x302.png" id="p_cats"]
+[ext_resource type="Texture2D" path="res://assets/ui/inventory/v01/INV_panel_dialog_350x248.png" id="p_dialog"]
+[ext_resource type="Texture2D" path="res://assets/ui/inventory/v01/INV_panel_tooltip_256x156.png" id="p_tip"]
+[ext_resource type="Texture2D" path="res://assets/ui/inventory/v01/INV_slot_normal_58x58.png" id="t_slot_n"]
+[ext_resource type="Texture2D" path="res://assets/ui/inventory/v01/INV_slot_selected_58x58.png" id="t_slot_s"]
+[ext_resource type="Texture2D" path="res://assets/ui/inventory/v01/INV_slot_hover_58x58.png" id="t_slot_h"]
+[ext_resource type="Texture2D" path="res://assets/ui/inventory/v01/INV_slot_disabled_58x58.png" id="t_slot_d"]
+[ext_resource type="Texture2D" path="res://assets/ui/inventory/v01/INV_slot_drag_58x58.png" id="t_slot_drag"]
+[ext_resource type="Texture2D" path="res://assets/ui/inventory/v01/INV_button_normal_140x38.png" id="t_btn_n"]
+[ext_resource type="Texture2D" path="res://assets/ui/inventory/v01/INV_button_hover_140x38.png" id="t_btn_h"]
+[ext_resource type="Texture2D" path="res://assets/ui/inventory/v01/INV_button_pressed_140x38.png" id="t_btn_p"]
+[ext_resource type="Texture2D" path="res://assets/ui/inventory/v01/INV_button_disabled_140x38.png" id="t_btn_d"]
+[ext_resource type="Texture2D" path="res://assets/ui/inventory/v01/INV_category_normal_116x36.png" id="t_cat_n"]
+[ext_resource type="Texture2D" path="res://assets/ui/inventory/v01/INV_category_selected_116x36.png" id="t_cat_s"]
+[ext_resource type="Texture2D" path="res://assets/ui/inventory/v01/INV_category_hover_116x36.png" id="t_cat_h"]
+[ext_resource type="Texture2D" path="res://assets/ui/inventory/v01/INV_icon_backpack_64x64.png" id="i_backpack"]
+[ext_resource type="Texture2D" path="res://assets/ui/inventory/v01/INV_icon_close_64x64.png" id="i_close"]
+[ext_resource type="Texture2D" path="res://assets/ui/inventory/v01/INV_icon_grid_64x64.png" id="i_grid"]
+[ext_resource type="Texture2D" path="res://assets/ui/inventory/v01/INV_icon_medicine_64x64.png" id="i_medicine"]
+[ext_resource type="Texture2D" path="res://assets/ui/inventory/v01/INV_icon_lock_64x64.png" id="i_lock"]
+[ext_resource type="Texture2D" path="res://assets/ui/hud/v01/HUD_icon_bread_72x72.png" id="i_bread"]
+[ext_resource type="Texture2D" path="res://assets/ui/hud/v01/HUD_icon_water_72x72.png" id="i_water"]
+[ext_resource type="Texture2D" path="res://assets/ui/hud/v01/HUD_icon_firewood_72x72.png" id="i_firewood"]
+[ext_resource type="Texture2D" path="res://assets/ui/hud/v01/HUD_icon_pliers_72x72.png" id="i_pliers"]
+[ext_resource type="Texture2D" path="res://assets/ui/hud/v01/HUD_progress_track_r02_78x12.png" id="t_track"]
+[ext_resource type="Texture2D" path="res://assets/ui/hud/v01/HUD_progress_fill_r02_74x8.png" id="t_fill"]
+
+[sub_resource type="StyleBoxTexture" id="SBT_main"]
+texture = ExtResource("p_main")
+texture_margin_left = 29.0
+texture_margin_top = 39.0
+texture_margin_right = 29.0
+texture_margin_bottom = 25.0
+
+[sub_resource type="StyleBoxTexture" id="SBT_det"]
+texture = ExtResource("p_details")
+texture_margin_left = 25.0
+texture_margin_top = 34.0
+texture_margin_right = 25.0
+texture_margin_bottom = 24.0
+
+[sub_resource type="StyleBoxTexture" id="SBT_cats"]
+texture = ExtResource("p_cats")
+texture_margin_left = 22.0
+texture_margin_top = 20.0
+texture_margin_right = 22.0
+texture_margin_bottom = 20.0
+
+[sub_resource type="StyleBoxTexture" id="SBT_dlg"]
+texture = ExtResource("p_dialog")
+texture_margin_left = 24.0
+texture_margin_top = 35.0
+texture_margin_right = 24.0
+texture_margin_bottom = 21.0
+
+[sub_resource type="StyleBoxTexture" id="SBT_tip"]
+texture = ExtResource("p_tip")
+texture_margin_left = 24.0
+texture_margin_top = 28.0
+texture_margin_right = 24.0
+texture_margin_bottom = 20.0
+
+[sub_resource type="StyleBoxTexture" id="SBT_slot_n"]
+texture = ExtResource("t_slot_n")
+texture_margin_left = 0.0
+texture_margin_top = 0.0
+texture_margin_right = 0.0
+texture_margin_bottom = 0.0
+
+[sub_resource type="StyleBoxTexture" id="SBT_slot_h"]
+texture = ExtResource("t_slot_h")
+texture_margin_left = 0.0
+texture_margin_top = 0.0
+texture_margin_right = 0.0
+texture_margin_bottom = 0.0
+
+[sub_resource type="StyleBoxTexture" id="SBT_slot_p"]
+texture = ExtResource("t_slot_s")
+texture_margin_left = 0.0
+texture_margin_top = 0.0
+texture_margin_right = 0.0
+texture_margin_bottom = 0.0
+
+[sub_resource type="StyleBoxTexture" id="SBT_slot_d"]
+texture = ExtResource("t_slot_d")
+texture_margin_left = 0.0
+texture_margin_top = 0.0
+texture_margin_right = 0.0
+texture_margin_bottom = 0.0
+
+[sub_resource type="StyleBoxTexture" id="SBT_btn_n"]
+texture = ExtResource("t_btn_n")
+texture_margin_left = 24.0
+texture_margin_top = 16.0
+texture_margin_right = 24.0
+texture_margin_bottom = 16.0
+
+[sub_resource type="StyleBoxTexture" id="SBT_btn_h"]
+texture = ExtResource("t_btn_h")
+texture_margin_left = 24.0
+texture_margin_top = 16.0
+texture_margin_right = 24.0
+texture_margin_bottom = 16.0
+
+[sub_resource type="StyleBoxTexture" id="SBT_btn_p"]
+texture = ExtResource("t_btn_p")
+texture_margin_left = 24.0
+texture_margin_top = 16.0
+texture_margin_right = 24.0
+texture_margin_bottom = 16.0
+
+[sub_resource type="StyleBoxTexture" id="SBT_btn_d"]
+texture = ExtResource("t_btn_d")
+texture_margin_left = 24.0
+texture_margin_top = 16.0
+texture_margin_right = 24.0
+texture_margin_bottom = 16.0
+
+[sub_resource type="StyleBoxTexture" id="SBT_cat_n"]
+texture = ExtResource("t_cat_n")
+texture_margin_left = 24.0
+texture_margin_top = 15.0
+texture_margin_right = 24.0
+texture_margin_bottom = 15.0
+
+[sub_resource type="StyleBoxTexture" id="SBT_cat_s"]
+texture = ExtResource("t_cat_s")
+texture_margin_left = 24.0
+texture_margin_top = 15.0
+texture_margin_right = 24.0
+texture_margin_bottom = 15.0
+
+[sub_resource type="StyleBoxTexture" id="SBT_cat_h"]
+texture = ExtResource("t_cat_h")
+texture_margin_left = 24.0
+texture_margin_top = 15.0
+texture_margin_right = 24.0
+texture_margin_bottom = 15.0
+
+[sub_resource type="StyleBoxTexture" id="SBT_slot_drag"]
+texture = ExtResource("t_slot_drag")
+texture_margin_left = 0.0
+texture_margin_top = 0.0
+texture_margin_right = 0.0
+texture_margin_bottom = 0.0
+[sub_resource type="StyleBoxTexture" id="SBT_sbtn_n"]
+texture = ExtResource("t_btn_n")
+region_rect = Rect2(10, 3, 130, 33)
+texture_margin_left = 8.0
+texture_margin_top = 6.0
+texture_margin_right = 8.0
+texture_margin_bottom = 6.0
+[sub_resource type="StyleBoxTexture" id="SBT_sbtn_h"]
+texture = ExtResource("t_btn_h")
+region_rect = Rect2(10, 3, 130, 33)
+texture_margin_left = 8.0
+texture_margin_top = 6.0
+texture_margin_right = 8.0
+texture_margin_bottom = 6.0
+[sub_resource type="StyleBoxTexture" id="SBT_sbtn_p"]
+texture = ExtResource("t_btn_p")
+region_rect = Rect2(10, 3, 130, 33)
+texture_margin_left = 8.0
+texture_margin_top = 6.0
+texture_margin_right = 8.0
+texture_margin_bottom = 6.0
+[sub_resource type="StyleBoxTexture" id="SBT_sbtn_d"]
+texture = ExtResource("t_btn_d")
+region_rect = Rect2(10, 3, 130, 33)
+texture_margin_left = 8.0
+texture_margin_top = 6.0
+texture_margin_right = 8.0
+texture_margin_bottom = 6.0
+[sub_resource type="StyleBoxEmpty" id="SBE_empty"]
+
+[sub_resource type="ButtonGroup" id="BG_slot"]
+
+[sub_resource type="ButtonGroup" id="BG_cat"]
+
+[node name="InventoryPreview" type="Node"]
+script = ExtResource("1_script")
+
+[node name="World" type="Node2D" parent="."]
+
+[node name="Bg" type="Sprite2D" parent="World"]
+texture_filter = 3
+position = Vector2(480, 270)
+scale = Vector2(0.61, 0.61)
+texture = ExtResource("3_bg")
+
+[node name="Cam" type="Camera2D" parent="World"]
+position = Vector2(480, 270)
+
+[node name="Overlay" type="CanvasLayer" parent="."]
+layer = 20
+
+[node name="Root" type="Control" parent="Overlay"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme = ExtResource("2_theme")
+
+[node name="Scrim" type="ColorRect" parent="Overlay/Root"]
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 960.0
+offset_bottom = 540.0
+color = Color(0.039, 0.047, 0.059, 0.55)
+mouse_filter = 2
+
+[node name="MainPanel" type="Panel" parent="Overlay/Root"]
+offset_left = 100.0
+offset_top = 56.0
+offset_right = 860.0
+offset_bottom = 486.0
+theme_override_styles/panel = SubResource("SBT_main")
+mouse_filter = 2
+
+[node name="HeaderIcon" type="TextureRect" parent="Overlay/Root/MainPanel"]
+offset_left = 32
+offset_top = 24
+offset_right = 52
+offset_bottom = 44
+texture_filter = 3
+texture = ExtResource("i_backpack")
+expand_mode = 1
+
+[node name="Title" type="Label" parent="Overlay/Root/MainPanel"]
+offset_left = 58
+offset_top = 19
+offset_right = 198
+offset_bottom = 49
+text = "背包"
+label_settings = ExtResource("ls_title")
+vertical_alignment = 1
+
+[node name="WeightLabel" type="Label" parent="Overlay/Root/MainPanel"]
+offset_left = 300
+offset_top = 21
+offset_right = 630
+offset_bottom = 49
+text = "负重 28.4 / 40.0 kg"
+label_settings = ExtResource("ls_body")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="WeightTrack" type="TextureRect" parent="Overlay/Root/MainPanel"]
+offset_left = 640
+offset_top = 28
+offset_right = 718
+offset_bottom = 40
+texture_filter = 3
+texture = ExtResource("t_track")
+expand_mode = 1
+
+[node name="WeightFill" type="NinePatchRect" parent="Overlay/Root/MainPanel"]
+offset_left = 642
+offset_top = 30
+offset_right = 695
+offset_bottom = 38
+texture_filter = 3
+texture = ExtResource("t_fill")
+patch_margin_left = 4
+patch_margin_top = 3
+patch_margin_right = 4
+patch_margin_bottom = 3
+
+[node name="CloseBtn" type="Button" parent="Overlay/Root/MainPanel"]
+offset_left = 700
+offset_top = 16
+offset_right = 732
+offset_bottom = 48
+theme_override_styles/normal = SubResource("SBE_empty")
+theme_override_styles/hover = SubResource("SBE_empty")
+theme_override_styles/pressed = SubResource("SBE_empty")
+theme_override_styles/focus = SubResource("SBE_empty")
+focus_mode = 0
+text = ""
+
+[node name="Icon" type="TextureRect" parent="Overlay/Root/MainPanel/CloseBtn"]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 24.0
+offset_bottom = 24.0
+texture_filter = 3
+texture = ExtResource("i_close")
+expand_mode = 1
+mouse_filter = 2
+
+[node name="CatPanel" type="Panel" parent="Overlay/Root/MainPanel"]
+offset_left = 26.0
+offset_top = 52.0
+offset_right = 164.0
+offset_bottom = 354.0
+theme_override_styles/panel = SubResource("SBT_cats")
+mouse_filter = 2
+
+[node name="Cat0" type="Button" parent="Overlay/Root/MainPanel/CatPanel"]
+offset_left = 11
+offset_top = 26
+offset_right = 127
+offset_bottom = 62
+theme_override_styles/normal = SubResource("SBT_cat_n")
+theme_override_styles/hover = SubResource("SBT_cat_h")
+theme_override_styles/pressed = SubResource("SBT_cat_s")
+theme_override_styles/disabled = SubResource("SBT_cat_n")
+theme_override_styles/focus = SubResource("SBE_empty")
+focus_mode = 0
+text = ""
+toggle_mode = true
+button_group = SubResource("BG_cat")
+button_pressed = true
+
+[node name="Icon" type="TextureRect" parent="Overlay/Root/MainPanel/CatPanel/Cat0"]
+offset_left = 10.0
+offset_top = 9.0
+offset_right = 28.0
+offset_bottom = 27.0
+texture_filter = 3
+texture = ExtResource("i_grid")
+expand_mode = 1
+mouse_filter = 2
+
+[node name="Text" type="Label" parent="Overlay/Root/MainPanel/CatPanel/Cat0"]
+offset_left = 34.0
+offset_top = 6.0
+offset_right = 108.0
+offset_bottom = 30.0
+text = "全部"
+label_settings = ExtResource("ls_body")
+vertical_alignment = 1
+
+[node name="Cat1" type="Button" parent="Overlay/Root/MainPanel/CatPanel"]
+offset_left = 11
+offset_top = 70
+offset_right = 127
+offset_bottom = 106
+theme_override_styles/normal = SubResource("SBT_cat_n")
+theme_override_styles/hover = SubResource("SBT_cat_h")
+theme_override_styles/pressed = SubResource("SBT_cat_s")
+theme_override_styles/disabled = SubResource("SBT_cat_n")
+theme_override_styles/focus = SubResource("SBE_empty")
+focus_mode = 0
+text = ""
+toggle_mode = true
+button_group = SubResource("BG_cat")
+
+[node name="Icon" type="TextureRect" parent="Overlay/Root/MainPanel/CatPanel/Cat1"]
+offset_left = 10.0
+offset_top = 9.0
+offset_right = 28.0
+offset_bottom = 27.0
+texture_filter = 3
+texture = ExtResource("i_bread")
+expand_mode = 1
+mouse_filter = 2
+
+[node name="Text" type="Label" parent="Overlay/Root/MainPanel/CatPanel/Cat1"]
+offset_left = 34.0
+offset_top = 6.0
+offset_right = 108.0
+offset_bottom = 30.0
+text = "食物"
+label_settings = ExtResource("ls_body")
+vertical_alignment = 1
+
+[node name="Cat2" type="Button" parent="Overlay/Root/MainPanel/CatPanel"]
+offset_left = 11
+offset_top = 114
+offset_right = 127
+offset_bottom = 150
+theme_override_styles/normal = SubResource("SBT_cat_n")
+theme_override_styles/hover = SubResource("SBT_cat_h")
+theme_override_styles/pressed = SubResource("SBT_cat_s")
+theme_override_styles/disabled = SubResource("SBT_cat_n")
+theme_override_styles/focus = SubResource("SBE_empty")
+focus_mode = 0
+text = ""
+toggle_mode = true
+button_group = SubResource("BG_cat")
+
+[node name="Icon" type="TextureRect" parent="Overlay/Root/MainPanel/CatPanel/Cat2"]
+offset_left = 10.0
+offset_top = 9.0
+offset_right = 28.0
+offset_bottom = 27.0
+texture_filter = 3
+texture = ExtResource("i_water")
+expand_mode = 1
+mouse_filter = 2
+
+[node name="Text" type="Label" parent="Overlay/Root/MainPanel/CatPanel/Cat2"]
+offset_left = 34.0
+offset_top = 6.0
+offset_right = 108.0
+offset_bottom = 30.0
+text = "饮品"
+label_settings = ExtResource("ls_body")
+vertical_alignment = 1
+
+[node name="Cat3" type="Button" parent="Overlay/Root/MainPanel/CatPanel"]
+offset_left = 11
+offset_top = 158
+offset_right = 127
+offset_bottom = 194
+theme_override_styles/normal = SubResource("SBT_cat_n")
+theme_override_styles/hover = SubResource("SBT_cat_h")
+theme_override_styles/pressed = SubResource("SBT_cat_s")
+theme_override_styles/disabled = SubResource("SBT_cat_n")
+theme_override_styles/focus = SubResource("SBE_empty")
+focus_mode = 0
+text = ""
+toggle_mode = true
+button_group = SubResource("BG_cat")
+
+[node name="Icon" type="TextureRect" parent="Overlay/Root/MainPanel/CatPanel/Cat3"]
+offset_left = 10.0
+offset_top = 9.0
+offset_right = 28.0
+offset_bottom = 27.0
+texture_filter = 3
+texture = ExtResource("i_medicine")
+expand_mode = 1
+mouse_filter = 2
+
+[node name="Text" type="Label" parent="Overlay/Root/MainPanel/CatPanel/Cat3"]
+offset_left = 34.0
+offset_top = 6.0
+offset_right = 108.0
+offset_bottom = 30.0
+text = "药品"
+label_settings = ExtResource("ls_body")
+vertical_alignment = 1
+
+[node name="Cat4" type="Button" parent="Overlay/Root/MainPanel/CatPanel"]
+offset_left = 11
+offset_top = 202
+offset_right = 127
+offset_bottom = 238
+theme_override_styles/normal = SubResource("SBT_cat_n")
+theme_override_styles/hover = SubResource("SBT_cat_h")
+theme_override_styles/pressed = SubResource("SBT_cat_s")
+theme_override_styles/disabled = SubResource("SBT_cat_n")
+theme_override_styles/focus = SubResource("SBE_empty")
+focus_mode = 0
+text = ""
+toggle_mode = true
+button_group = SubResource("BG_cat")
+
+[node name="Icon" type="TextureRect" parent="Overlay/Root/MainPanel/CatPanel/Cat4"]
+offset_left = 10.0
+offset_top = 9.0
+offset_right = 28.0
+offset_bottom = 27.0
+texture_filter = 3
+texture = ExtResource("i_firewood")
+expand_mode = 1
+mouse_filter = 2
+
+[node name="Text" type="Label" parent="Overlay/Root/MainPanel/CatPanel/Cat4"]
+offset_left = 34.0
+offset_top = 6.0
+offset_right = 108.0
+offset_bottom = 30.0
+text = "材料"
+label_settings = ExtResource("ls_body")
+vertical_alignment = 1
+
+[node name="Cat5" type="Button" parent="Overlay/Root/MainPanel/CatPanel"]
+offset_left = 11
+offset_top = 246
+offset_right = 127
+offset_bottom = 282
+theme_override_styles/normal = SubResource("SBT_cat_n")
+theme_override_styles/hover = SubResource("SBT_cat_h")
+theme_override_styles/pressed = SubResource("SBT_cat_s")
+theme_override_styles/disabled = SubResource("SBT_cat_n")
+theme_override_styles/focus = SubResource("SBE_empty")
+focus_mode = 0
+text = ""
+toggle_mode = true
+button_group = SubResource("BG_cat")
+
+[node name="Icon" type="TextureRect" parent="Overlay/Root/MainPanel/CatPanel/Cat5"]
+offset_left = 10.0
+offset_top = 9.0
+offset_right = 28.0
+offset_bottom = 27.0
+texture_filter = 3
+texture = ExtResource("i_pliers")
+expand_mode = 1
+mouse_filter = 2
+
+[node name="Text" type="Label" parent="Overlay/Root/MainPanel/CatPanel/Cat5"]
+offset_left = 34.0
+offset_top = 6.0
+offset_right = 108.0
+offset_bottom = 30.0
+text = "工具"
+label_settings = ExtResource("ls_body")
+vertical_alignment = 1
+
+[node name="Grid" type="Control" parent="Overlay/Root/MainPanel"]
+offset_left = 172.0
+offset_top = 56.0
+offset_right = 545.0
+offset_bottom = 366.0
+mouse_filter = 2
+
+[node name="Slot00" type="Button" parent="Overlay/Root/MainPanel/Grid"]
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 58.0
+offset_bottom = 58.0
+theme_override_styles/normal = SubResource("SBT_slot_n")
+theme_override_styles/hover = SubResource("SBT_slot_h")
+theme_override_styles/pressed = SubResource("SBT_slot_p")
+theme_override_styles/disabled = SubResource("SBT_slot_d")
+theme_override_styles/focus = SubResource("SBE_empty")
+focus_mode = 0
+text = ""
+toggle_mode = true
+button_group = SubResource("BG_slot")
+
+[node name="Icon" type="TextureRect" parent="Overlay/Root/MainPanel/Grid/Slot00"]
+offset_left = 12.0
+offset_top = 8.0
+offset_right = 46.0
+offset_bottom = 42.0
+texture_filter = 3
+expand_mode = 1
+mouse_filter = 2
+
+[node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot00"]
+offset_left = 28.0
+offset_top = 32.0
+offset_right = 56.0
+offset_bottom = 52.0
+text = ""
+label_settings = ExtResource("ls_value")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Slot01" type="Button" parent="Overlay/Root/MainPanel/Grid"]
+offset_left = 63.0
+offset_top = 0.0
+offset_right = 121.0
+offset_bottom = 58.0
+theme_override_styles/normal = SubResource("SBT_slot_n")
+theme_override_styles/hover = SubResource("SBT_slot_h")
+theme_override_styles/pressed = SubResource("SBT_slot_p")
+theme_override_styles/disabled = SubResource("SBT_slot_d")
+theme_override_styles/focus = SubResource("SBE_empty")
+focus_mode = 0
+text = ""
+toggle_mode = true
+button_group = SubResource("BG_slot")
+
+[node name="Icon" type="TextureRect" parent="Overlay/Root/MainPanel/Grid/Slot01"]
+offset_left = 12.0
+offset_top = 8.0
+offset_right = 46.0
+offset_bottom = 42.0
+texture_filter = 3
+expand_mode = 1
+mouse_filter = 2
+
+[node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot01"]
+offset_left = 28.0
+offset_top = 32.0
+offset_right = 56.0
+offset_bottom = 52.0
+text = ""
+label_settings = ExtResource("ls_value")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Slot02" type="Button" parent="Overlay/Root/MainPanel/Grid"]
+offset_left = 126.0
+offset_top = 0.0
+offset_right = 184.0
+offset_bottom = 58.0
+theme_override_styles/normal = SubResource("SBT_slot_n")
+theme_override_styles/hover = SubResource("SBT_slot_h")
+theme_override_styles/pressed = SubResource("SBT_slot_p")
+theme_override_styles/disabled = SubResource("SBT_slot_d")
+theme_override_styles/focus = SubResource("SBE_empty")
+focus_mode = 0
+text = ""
+toggle_mode = true
+button_group = SubResource("BG_slot")
+
+[node name="Icon" type="TextureRect" parent="Overlay/Root/MainPanel/Grid/Slot02"]
+offset_left = 12.0
+offset_top = 8.0
+offset_right = 46.0
+offset_bottom = 42.0
+texture_filter = 3
+expand_mode = 1
+mouse_filter = 2
+
+[node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot02"]
+offset_left = 28.0
+offset_top = 32.0
+offset_right = 56.0
+offset_bottom = 52.0
+text = ""
+label_settings = ExtResource("ls_value")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Slot03" type="Button" parent="Overlay/Root/MainPanel/Grid"]
+offset_left = 189.0
+offset_top = 0.0
+offset_right = 247.0
+offset_bottom = 58.0
+theme_override_styles/normal = SubResource("SBT_slot_n")
+theme_override_styles/hover = SubResource("SBT_slot_h")
+theme_override_styles/pressed = SubResource("SBT_slot_p")
+theme_override_styles/disabled = SubResource("SBT_slot_d")
+theme_override_styles/focus = SubResource("SBE_empty")
+focus_mode = 0
+text = ""
+toggle_mode = true
+button_group = SubResource("BG_slot")
+
+[node name="Icon" type="TextureRect" parent="Overlay/Root/MainPanel/Grid/Slot03"]
+offset_left = 12.0
+offset_top = 8.0
+offset_right = 46.0
+offset_bottom = 42.0
+texture_filter = 3
+expand_mode = 1
+mouse_filter = 2
+
+[node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot03"]
+offset_left = 28.0
+offset_top = 32.0
+offset_right = 56.0
+offset_bottom = 52.0
+text = ""
+label_settings = ExtResource("ls_value")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Slot04" type="Button" parent="Overlay/Root/MainPanel/Grid"]
+offset_left = 252.0
+offset_top = 0.0
+offset_right = 310.0
+offset_bottom = 58.0
+theme_override_styles/normal = SubResource("SBT_slot_n")
+theme_override_styles/hover = SubResource("SBT_slot_h")
+theme_override_styles/pressed = SubResource("SBT_slot_p")
+theme_override_styles/disabled = SubResource("SBT_slot_d")
+theme_override_styles/focus = SubResource("SBE_empty")
+focus_mode = 0
+text = ""
+toggle_mode = true
+button_group = SubResource("BG_slot")
+
+[node name="Icon" type="TextureRect" parent="Overlay/Root/MainPanel/Grid/Slot04"]
+offset_left = 12.0
+offset_top = 8.0
+offset_right = 46.0
+offset_bottom = 42.0
+texture_filter = 3
+expand_mode = 1
+mouse_filter = 2
+
+[node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot04"]
+offset_left = 28.0
+offset_top = 32.0
+offset_right = 56.0
+offset_bottom = 52.0
+text = ""
+label_settings = ExtResource("ls_value")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Slot05" type="Button" parent="Overlay/Root/MainPanel/Grid"]
+offset_left = 315.0
+offset_top = 0.0
+offset_right = 373.0
+offset_bottom = 58.0
+theme_override_styles/normal = SubResource("SBT_slot_n")
+theme_override_styles/hover = SubResource("SBT_slot_h")
+theme_override_styles/pressed = SubResource("SBT_slot_p")
+theme_override_styles/disabled = SubResource("SBT_slot_d")
+theme_override_styles/focus = SubResource("SBE_empty")
+focus_mode = 0
+text = ""
+toggle_mode = true
+button_group = SubResource("BG_slot")
+
+[node name="Icon" type="TextureRect" parent="Overlay/Root/MainPanel/Grid/Slot05"]
+offset_left = 12.0
+offset_top = 8.0
+offset_right = 46.0
+offset_bottom = 42.0
+texture_filter = 3
+expand_mode = 1
+mouse_filter = 2
+
+[node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot05"]
+offset_left = 28.0
+offset_top = 32.0
+offset_right = 56.0
+offset_bottom = 52.0
+text = ""
+label_settings = ExtResource("ls_value")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Slot06" type="Button" parent="Overlay/Root/MainPanel/Grid"]
+offset_left = 0.0
+offset_top = 63.0
+offset_right = 58.0
+offset_bottom = 121.0
+theme_override_styles/normal = SubResource("SBT_slot_n")
+theme_override_styles/hover = SubResource("SBT_slot_h")
+theme_override_styles/pressed = SubResource("SBT_slot_p")
+theme_override_styles/disabled = SubResource("SBT_slot_d")
+theme_override_styles/focus = SubResource("SBE_empty")
+focus_mode = 0
+text = ""
+toggle_mode = true
+button_group = SubResource("BG_slot")
+
+[node name="Icon" type="TextureRect" parent="Overlay/Root/MainPanel/Grid/Slot06"]
+offset_left = 12.0
+offset_top = 8.0
+offset_right = 46.0
+offset_bottom = 42.0
+texture_filter = 3
+expand_mode = 1
+mouse_filter = 2
+
+[node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot06"]
+offset_left = 28.0
+offset_top = 32.0
+offset_right = 56.0
+offset_bottom = 52.0
+text = ""
+label_settings = ExtResource("ls_value")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Slot07" type="Button" parent="Overlay/Root/MainPanel/Grid"]
+offset_left = 63.0
+offset_top = 63.0
+offset_right = 121.0
+offset_bottom = 121.0
+theme_override_styles/normal = SubResource("SBT_slot_n")
+theme_override_styles/hover = SubResource("SBT_slot_h")
+theme_override_styles/pressed = SubResource("SBT_slot_p")
+theme_override_styles/disabled = SubResource("SBT_slot_d")
+theme_override_styles/focus = SubResource("SBE_empty")
+focus_mode = 0
+text = ""
+toggle_mode = true
+button_group = SubResource("BG_slot")
+
+[node name="Icon" type="TextureRect" parent="Overlay/Root/MainPanel/Grid/Slot07"]
+offset_left = 12.0
+offset_top = 8.0
+offset_right = 46.0
+offset_bottom = 42.0
+texture_filter = 3
+expand_mode = 1
+mouse_filter = 2
+
+[node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot07"]
+offset_left = 28.0
+offset_top = 32.0
+offset_right = 56.0
+offset_bottom = 52.0
+text = ""
+label_settings = ExtResource("ls_value")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Slot08" type="Button" parent="Overlay/Root/MainPanel/Grid"]
+offset_left = 126.0
+offset_top = 63.0
+offset_right = 184.0
+offset_bottom = 121.0
+theme_override_styles/normal = SubResource("SBT_slot_n")
+theme_override_styles/hover = SubResource("SBT_slot_h")
+theme_override_styles/pressed = SubResource("SBT_slot_p")
+theme_override_styles/disabled = SubResource("SBT_slot_d")
+theme_override_styles/focus = SubResource("SBE_empty")
+focus_mode = 0
+text = ""
+toggle_mode = true
+button_group = SubResource("BG_slot")
+
+[node name="Icon" type="TextureRect" parent="Overlay/Root/MainPanel/Grid/Slot08"]
+offset_left = 12.0
+offset_top = 8.0
+offset_right = 46.0
+offset_bottom = 42.0
+texture_filter = 3
+expand_mode = 1
+mouse_filter = 2
+
+[node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot08"]
+offset_left = 28.0
+offset_top = 32.0
+offset_right = 56.0
+offset_bottom = 52.0
+text = ""
+label_settings = ExtResource("ls_value")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Slot09" type="Button" parent="Overlay/Root/MainPanel/Grid"]
+offset_left = 189.0
+offset_top = 63.0
+offset_right = 247.0
+offset_bottom = 121.0
+theme_override_styles/normal = SubResource("SBT_slot_n")
+theme_override_styles/hover = SubResource("SBT_slot_h")
+theme_override_styles/pressed = SubResource("SBT_slot_p")
+theme_override_styles/disabled = SubResource("SBT_slot_d")
+theme_override_styles/focus = SubResource("SBE_empty")
+focus_mode = 0
+text = ""
+toggle_mode = true
+button_group = SubResource("BG_slot")
+
+[node name="Icon" type="TextureRect" parent="Overlay/Root/MainPanel/Grid/Slot09"]
+offset_left = 12.0
+offset_top = 8.0
+offset_right = 46.0
+offset_bottom = 42.0
+texture_filter = 3
+expand_mode = 1
+mouse_filter = 2
+
+[node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot09"]
+offset_left = 28.0
+offset_top = 32.0
+offset_right = 56.0
+offset_bottom = 52.0
+text = ""
+label_settings = ExtResource("ls_value")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Slot10" type="Button" parent="Overlay/Root/MainPanel/Grid"]
+offset_left = 252.0
+offset_top = 63.0
+offset_right = 310.0
+offset_bottom = 121.0
+theme_override_styles/normal = SubResource("SBT_slot_n")
+theme_override_styles/hover = SubResource("SBT_slot_h")
+theme_override_styles/pressed = SubResource("SBT_slot_p")
+theme_override_styles/disabled = SubResource("SBT_slot_d")
+theme_override_styles/focus = SubResource("SBE_empty")
+focus_mode = 0
+text = ""
+toggle_mode = true
+button_group = SubResource("BG_slot")
+
+[node name="Icon" type="TextureRect" parent="Overlay/Root/MainPanel/Grid/Slot10"]
+offset_left = 12.0
+offset_top = 8.0
+offset_right = 46.0
+offset_bottom = 42.0
+texture_filter = 3
+expand_mode = 1
+mouse_filter = 2
+
+[node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot10"]
+offset_left = 28.0
+offset_top = 32.0
+offset_right = 56.0
+offset_bottom = 52.0
+text = ""
+label_settings = ExtResource("ls_value")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Slot11" type="Button" parent="Overlay/Root/MainPanel/Grid"]
+offset_left = 315.0
+offset_top = 63.0
+offset_right = 373.0
+offset_bottom = 121.0
+theme_override_styles/normal = SubResource("SBT_slot_n")
+theme_override_styles/hover = SubResource("SBT_slot_h")
+theme_override_styles/pressed = SubResource("SBT_slot_p")
+theme_override_styles/disabled = SubResource("SBT_slot_d")
+theme_override_styles/focus = SubResource("SBE_empty")
+focus_mode = 0
+text = ""
+toggle_mode = true
+button_group = SubResource("BG_slot")
+
+[node name="Icon" type="TextureRect" parent="Overlay/Root/MainPanel/Grid/Slot11"]
+offset_left = 12.0
+offset_top = 8.0
+offset_right = 46.0
+offset_bottom = 42.0
+texture_filter = 3
+expand_mode = 1
+mouse_filter = 2
+
+[node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot11"]
+offset_left = 28.0
+offset_top = 32.0
+offset_right = 56.0
+offset_bottom = 52.0
+text = ""
+label_settings = ExtResource("ls_value")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Slot12" type="Button" parent="Overlay/Root/MainPanel/Grid"]
+offset_left = 0.0
+offset_top = 126.0
+offset_right = 58.0
+offset_bottom = 184.0
+theme_override_styles/normal = SubResource("SBT_slot_n")
+theme_override_styles/hover = SubResource("SBT_slot_h")
+theme_override_styles/pressed = SubResource("SBT_slot_p")
+theme_override_styles/disabled = SubResource("SBT_slot_d")
+theme_override_styles/focus = SubResource("SBE_empty")
+focus_mode = 0
+text = ""
+toggle_mode = true
+button_group = SubResource("BG_slot")
+
+[node name="Icon" type="TextureRect" parent="Overlay/Root/MainPanel/Grid/Slot12"]
+offset_left = 12.0
+offset_top = 8.0
+offset_right = 46.0
+offset_bottom = 42.0
+texture_filter = 3
+expand_mode = 1
+mouse_filter = 2
+
+[node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot12"]
+offset_left = 28.0
+offset_top = 32.0
+offset_right = 56.0
+offset_bottom = 52.0
+text = ""
+label_settings = ExtResource("ls_value")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Slot13" type="Button" parent="Overlay/Root/MainPanel/Grid"]
+offset_left = 63.0
+offset_top = 126.0
+offset_right = 121.0
+offset_bottom = 184.0
+theme_override_styles/normal = SubResource("SBT_slot_n")
+theme_override_styles/hover = SubResource("SBT_slot_h")
+theme_override_styles/pressed = SubResource("SBT_slot_p")
+theme_override_styles/disabled = SubResource("SBT_slot_d")
+theme_override_styles/focus = SubResource("SBE_empty")
+focus_mode = 0
+text = ""
+toggle_mode = true
+button_group = SubResource("BG_slot")
+
+[node name="Icon" type="TextureRect" parent="Overlay/Root/MainPanel/Grid/Slot13"]
+offset_left = 12.0
+offset_top = 8.0
+offset_right = 46.0
+offset_bottom = 42.0
+texture_filter = 3
+expand_mode = 1
+mouse_filter = 2
+
+[node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot13"]
+offset_left = 28.0
+offset_top = 32.0
+offset_right = 56.0
+offset_bottom = 52.0
+text = ""
+label_settings = ExtResource("ls_value")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Slot14" type="Button" parent="Overlay/Root/MainPanel/Grid"]
+offset_left = 126.0
+offset_top = 126.0
+offset_right = 184.0
+offset_bottom = 184.0
+theme_override_styles/normal = SubResource("SBT_slot_n")
+theme_override_styles/hover = SubResource("SBT_slot_h")
+theme_override_styles/pressed = SubResource("SBT_slot_p")
+theme_override_styles/disabled = SubResource("SBT_slot_d")
+theme_override_styles/focus = SubResource("SBE_empty")
+focus_mode = 0
+text = ""
+toggle_mode = true
+button_group = SubResource("BG_slot")
+
+[node name="Icon" type="TextureRect" parent="Overlay/Root/MainPanel/Grid/Slot14"]
+offset_left = 12.0
+offset_top = 8.0
+offset_right = 46.0
+offset_bottom = 42.0
+texture_filter = 3
+expand_mode = 1
+mouse_filter = 2
+
+[node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot14"]
+offset_left = 28.0
+offset_top = 32.0
+offset_right = 56.0
+offset_bottom = 52.0
+text = ""
+label_settings = ExtResource("ls_value")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Slot15" type="Button" parent="Overlay/Root/MainPanel/Grid"]
+offset_left = 189.0
+offset_top = 126.0
+offset_right = 247.0
+offset_bottom = 184.0
+theme_override_styles/normal = SubResource("SBT_slot_n")
+theme_override_styles/hover = SubResource("SBT_slot_h")
+theme_override_styles/pressed = SubResource("SBT_slot_p")
+theme_override_styles/disabled = SubResource("SBT_slot_d")
+theme_override_styles/focus = SubResource("SBE_empty")
+focus_mode = 0
+text = ""
+toggle_mode = true
+button_group = SubResource("BG_slot")
+
+[node name="Icon" type="TextureRect" parent="Overlay/Root/MainPanel/Grid/Slot15"]
+offset_left = 12.0
+offset_top = 8.0
+offset_right = 46.0
+offset_bottom = 42.0
+texture_filter = 3
+expand_mode = 1
+mouse_filter = 2
+
+[node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot15"]
+offset_left = 28.0
+offset_top = 32.0
+offset_right = 56.0
+offset_bottom = 52.0
+text = ""
+label_settings = ExtResource("ls_value")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Slot16" type="Button" parent="Overlay/Root/MainPanel/Grid"]
+offset_left = 252.0
+offset_top = 126.0
+offset_right = 310.0
+offset_bottom = 184.0
+theme_override_styles/normal = SubResource("SBT_slot_n")
+theme_override_styles/hover = SubResource("SBT_slot_h")
+theme_override_styles/pressed = SubResource("SBT_slot_p")
+theme_override_styles/disabled = SubResource("SBT_slot_d")
+theme_override_styles/focus = SubResource("SBE_empty")
+focus_mode = 0
+text = ""
+toggle_mode = true
+button_group = SubResource("BG_slot")
+
+[node name="Icon" type="TextureRect" parent="Overlay/Root/MainPanel/Grid/Slot16"]
+offset_left = 12.0
+offset_top = 8.0
+offset_right = 46.0
+offset_bottom = 42.0
+texture_filter = 3
+expand_mode = 1
+mouse_filter = 2
+
+[node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot16"]
+offset_left = 28.0
+offset_top = 32.0
+offset_right = 56.0
+offset_bottom = 52.0
+text = ""
+label_settings = ExtResource("ls_value")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Slot17" type="Button" parent="Overlay/Root/MainPanel/Grid"]
+offset_left = 315.0
+offset_top = 126.0
+offset_right = 373.0
+offset_bottom = 184.0
+theme_override_styles/normal = SubResource("SBT_slot_n")
+theme_override_styles/hover = SubResource("SBT_slot_h")
+theme_override_styles/pressed = SubResource("SBT_slot_p")
+theme_override_styles/disabled = SubResource("SBT_slot_d")
+theme_override_styles/focus = SubResource("SBE_empty")
+focus_mode = 0
+text = ""
+toggle_mode = true
+button_group = SubResource("BG_slot")
+
+[node name="Icon" type="TextureRect" parent="Overlay/Root/MainPanel/Grid/Slot17"]
+offset_left = 12.0
+offset_top = 8.0
+offset_right = 46.0
+offset_bottom = 42.0
+texture_filter = 3
+expand_mode = 1
+mouse_filter = 2
+
+[node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot17"]
+offset_left = 28.0
+offset_top = 32.0
+offset_right = 56.0
+offset_bottom = 52.0
+text = ""
+label_settings = ExtResource("ls_value")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Slot18" type="Button" parent="Overlay/Root/MainPanel/Grid"]
+offset_left = 0.0
+offset_top = 189.0
+offset_right = 58.0
+offset_bottom = 247.0
+theme_override_styles/normal = SubResource("SBT_slot_n")
+theme_override_styles/hover = SubResource("SBT_slot_h")
+theme_override_styles/pressed = SubResource("SBT_slot_p")
+theme_override_styles/disabled = SubResource("SBT_slot_d")
+theme_override_styles/focus = SubResource("SBE_empty")
+focus_mode = 0
+text = ""
+toggle_mode = true
+button_group = SubResource("BG_slot")
+
+[node name="Icon" type="TextureRect" parent="Overlay/Root/MainPanel/Grid/Slot18"]
+offset_left = 12.0
+offset_top = 8.0
+offset_right = 46.0
+offset_bottom = 42.0
+texture_filter = 3
+expand_mode = 1
+mouse_filter = 2
+
+[node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot18"]
+offset_left = 28.0
+offset_top = 32.0
+offset_right = 56.0
+offset_bottom = 52.0
+text = ""
+label_settings = ExtResource("ls_value")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Slot19" type="Button" parent="Overlay/Root/MainPanel/Grid"]
+offset_left = 63.0
+offset_top = 189.0
+offset_right = 121.0
+offset_bottom = 247.0
+theme_override_styles/normal = SubResource("SBT_slot_n")
+theme_override_styles/hover = SubResource("SBT_slot_h")
+theme_override_styles/pressed = SubResource("SBT_slot_p")
+theme_override_styles/disabled = SubResource("SBT_slot_d")
+theme_override_styles/focus = SubResource("SBE_empty")
+focus_mode = 0
+text = ""
+toggle_mode = true
+button_group = SubResource("BG_slot")
+
+[node name="Icon" type="TextureRect" parent="Overlay/Root/MainPanel/Grid/Slot19"]
+offset_left = 12.0
+offset_top = 8.0
+offset_right = 46.0
+offset_bottom = 42.0
+texture_filter = 3
+expand_mode = 1
+mouse_filter = 2
+
+[node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot19"]
+offset_left = 28.0
+offset_top = 32.0
+offset_right = 56.0
+offset_bottom = 52.0
+text = ""
+label_settings = ExtResource("ls_value")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Slot20" type="Button" parent="Overlay/Root/MainPanel/Grid"]
+offset_left = 126.0
+offset_top = 189.0
+offset_right = 184.0
+offset_bottom = 247.0
+theme_override_styles/normal = SubResource("SBT_slot_n")
+theme_override_styles/hover = SubResource("SBT_slot_h")
+theme_override_styles/pressed = SubResource("SBT_slot_p")
+theme_override_styles/disabled = SubResource("SBT_slot_d")
+theme_override_styles/focus = SubResource("SBE_empty")
+focus_mode = 0
+text = ""
+toggle_mode = true
+button_group = SubResource("BG_slot")
+
+[node name="Icon" type="TextureRect" parent="Overlay/Root/MainPanel/Grid/Slot20"]
+offset_left = 12.0
+offset_top = 8.0
+offset_right = 46.0
+offset_bottom = 42.0
+texture_filter = 3
+expand_mode = 1
+mouse_filter = 2
+
+[node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot20"]
+offset_left = 28.0
+offset_top = 32.0
+offset_right = 56.0
+offset_bottom = 52.0
+text = ""
+label_settings = ExtResource("ls_value")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Slot21" type="Button" parent="Overlay/Root/MainPanel/Grid"]
+offset_left = 189.0
+offset_top = 189.0
+offset_right = 247.0
+offset_bottom = 247.0
+theme_override_styles/normal = SubResource("SBT_slot_n")
+theme_override_styles/hover = SubResource("SBT_slot_h")
+theme_override_styles/pressed = SubResource("SBT_slot_p")
+theme_override_styles/disabled = SubResource("SBT_slot_d")
+theme_override_styles/focus = SubResource("SBE_empty")
+focus_mode = 0
+text = ""
+toggle_mode = true
+button_group = SubResource("BG_slot")
+
+[node name="Icon" type="TextureRect" parent="Overlay/Root/MainPanel/Grid/Slot21"]
+offset_left = 12.0
+offset_top = 8.0
+offset_right = 46.0
+offset_bottom = 42.0
+texture_filter = 3
+expand_mode = 1
+mouse_filter = 2
+
+[node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot21"]
+offset_left = 28.0
+offset_top = 32.0
+offset_right = 56.0
+offset_bottom = 52.0
+text = ""
+label_settings = ExtResource("ls_value")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Slot22" type="Button" parent="Overlay/Root/MainPanel/Grid"]
+offset_left = 252.0
+offset_top = 189.0
+offset_right = 310.0
+offset_bottom = 247.0
+theme_override_styles/normal = SubResource("SBT_slot_n")
+theme_override_styles/hover = SubResource("SBT_slot_h")
+theme_override_styles/pressed = SubResource("SBT_slot_p")
+theme_override_styles/disabled = SubResource("SBT_slot_d")
+theme_override_styles/focus = SubResource("SBE_empty")
+focus_mode = 0
+text = ""
+toggle_mode = true
+button_group = SubResource("BG_slot")
+
+[node name="Icon" type="TextureRect" parent="Overlay/Root/MainPanel/Grid/Slot22"]
+offset_left = 12.0
+offset_top = 8.0
+offset_right = 46.0
+offset_bottom = 42.0
+texture_filter = 3
+expand_mode = 1
+mouse_filter = 2
+
+[node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot22"]
+offset_left = 28.0
+offset_top = 32.0
+offset_right = 56.0
+offset_bottom = 52.0
+text = ""
+label_settings = ExtResource("ls_value")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Slot23" type="Button" parent="Overlay/Root/MainPanel/Grid"]
+offset_left = 315.0
+offset_top = 189.0
+offset_right = 373.0
+offset_bottom = 247.0
+theme_override_styles/normal = SubResource("SBT_slot_n")
+theme_override_styles/hover = SubResource("SBT_slot_h")
+theme_override_styles/pressed = SubResource("SBT_slot_p")
+theme_override_styles/disabled = SubResource("SBT_slot_d")
+theme_override_styles/focus = SubResource("SBE_empty")
+focus_mode = 0
+text = ""
+toggle_mode = true
+button_group = SubResource("BG_slot")
+
+[node name="Icon" type="TextureRect" parent="Overlay/Root/MainPanel/Grid/Slot23"]
+offset_left = 12.0
+offset_top = 8.0
+offset_right = 46.0
+offset_bottom = 42.0
+texture_filter = 3
+expand_mode = 1
+mouse_filter = 2
+
+[node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot23"]
+offset_left = 28.0
+offset_top = 32.0
+offset_right = 56.0
+offset_bottom = 52.0
+text = ""
+label_settings = ExtResource("ls_value")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Slot24" type="Button" parent="Overlay/Root/MainPanel/Grid"]
+offset_left = 0.0
+offset_top = 252.0
+offset_right = 58.0
+offset_bottom = 310.0
+theme_override_styles/normal = SubResource("SBT_slot_n")
+theme_override_styles/hover = SubResource("SBT_slot_h")
+theme_override_styles/pressed = SubResource("SBT_slot_p")
+theme_override_styles/disabled = SubResource("SBT_slot_d")
+theme_override_styles/focus = SubResource("SBE_empty")
+focus_mode = 0
+text = ""
+toggle_mode = true
+button_group = SubResource("BG_slot")
+
+[node name="Icon" type="TextureRect" parent="Overlay/Root/MainPanel/Grid/Slot24"]
+offset_left = 12.0
+offset_top = 8.0
+offset_right = 46.0
+offset_bottom = 42.0
+texture_filter = 3
+expand_mode = 1
+mouse_filter = 2
+
+[node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot24"]
+offset_left = 28.0
+offset_top = 32.0
+offset_right = 56.0
+offset_bottom = 52.0
+text = ""
+label_settings = ExtResource("ls_value")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Slot25" type="Button" parent="Overlay/Root/MainPanel/Grid"]
+offset_left = 63.0
+offset_top = 252.0
+offset_right = 121.0
+offset_bottom = 310.0
+theme_override_styles/normal = SubResource("SBT_slot_n")
+theme_override_styles/hover = SubResource("SBT_slot_h")
+theme_override_styles/pressed = SubResource("SBT_slot_p")
+theme_override_styles/disabled = SubResource("SBT_slot_d")
+theme_override_styles/focus = SubResource("SBE_empty")
+focus_mode = 0
+text = ""
+toggle_mode = true
+button_group = SubResource("BG_slot")
+
+[node name="Icon" type="TextureRect" parent="Overlay/Root/MainPanel/Grid/Slot25"]
+offset_left = 12.0
+offset_top = 8.0
+offset_right = 46.0
+offset_bottom = 42.0
+texture_filter = 3
+expand_mode = 1
+mouse_filter = 2
+
+[node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot25"]
+offset_left = 28.0
+offset_top = 32.0
+offset_right = 56.0
+offset_bottom = 52.0
+text = ""
+label_settings = ExtResource("ls_value")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Slot26" type="Button" parent="Overlay/Root/MainPanel/Grid"]
+offset_left = 126.0
+offset_top = 252.0
+offset_right = 184.0
+offset_bottom = 310.0
+theme_override_styles/normal = SubResource("SBT_slot_n")
+theme_override_styles/hover = SubResource("SBT_slot_h")
+theme_override_styles/pressed = SubResource("SBT_slot_p")
+theme_override_styles/disabled = SubResource("SBT_slot_d")
+theme_override_styles/focus = SubResource("SBE_empty")
+focus_mode = 0
+text = ""
+toggle_mode = true
+button_group = SubResource("BG_slot")
+
+[node name="Icon" type="TextureRect" parent="Overlay/Root/MainPanel/Grid/Slot26"]
+offset_left = 12.0
+offset_top = 8.0
+offset_right = 46.0
+offset_bottom = 42.0
+texture_filter = 3
+expand_mode = 1
+mouse_filter = 2
+
+[node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot26"]
+offset_left = 28.0
+offset_top = 32.0
+offset_right = 56.0
+offset_bottom = 52.0
+text = ""
+label_settings = ExtResource("ls_value")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Slot27" type="Button" parent="Overlay/Root/MainPanel/Grid"]
+offset_left = 189.0
+offset_top = 252.0
+offset_right = 247.0
+offset_bottom = 310.0
+theme_override_styles/normal = SubResource("SBT_slot_n")
+theme_override_styles/hover = SubResource("SBT_slot_h")
+theme_override_styles/pressed = SubResource("SBT_slot_p")
+theme_override_styles/disabled = SubResource("SBT_slot_d")
+theme_override_styles/focus = SubResource("SBE_empty")
+focus_mode = 0
+text = ""
+toggle_mode = true
+button_group = SubResource("BG_slot")
+
+[node name="Icon" type="TextureRect" parent="Overlay/Root/MainPanel/Grid/Slot27"]
+offset_left = 12.0
+offset_top = 8.0
+offset_right = 46.0
+offset_bottom = 42.0
+texture_filter = 3
+expand_mode = 1
+mouse_filter = 2
+
+[node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot27"]
+offset_left = 28.0
+offset_top = 32.0
+offset_right = 56.0
+offset_bottom = 52.0
+text = ""
+label_settings = ExtResource("ls_value")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Slot28" type="Button" parent="Overlay/Root/MainPanel/Grid"]
+offset_left = 252.0
+offset_top = 252.0
+offset_right = 310.0
+offset_bottom = 310.0
+theme_override_styles/normal = SubResource("SBT_slot_n")
+theme_override_styles/hover = SubResource("SBT_slot_h")
+theme_override_styles/pressed = SubResource("SBT_slot_p")
+theme_override_styles/disabled = SubResource("SBT_slot_d")
+theme_override_styles/focus = SubResource("SBE_empty")
+focus_mode = 0
+text = ""
+toggle_mode = true
+button_group = SubResource("BG_slot")
+
+[node name="Icon" type="TextureRect" parent="Overlay/Root/MainPanel/Grid/Slot28"]
+offset_left = 12.0
+offset_top = 8.0
+offset_right = 46.0
+offset_bottom = 42.0
+texture_filter = 3
+expand_mode = 1
+mouse_filter = 2
+
+[node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot28"]
+offset_left = 28.0
+offset_top = 32.0
+offset_right = 56.0
+offset_bottom = 52.0
+text = ""
+label_settings = ExtResource("ls_value")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Slot29" type="Button" parent="Overlay/Root/MainPanel/Grid"]
+offset_left = 315.0
+offset_top = 252.0
+offset_right = 373.0
+offset_bottom = 310.0
+theme_override_styles/normal = SubResource("SBT_slot_n")
+theme_override_styles/hover = SubResource("SBT_slot_h")
+theme_override_styles/pressed = SubResource("SBT_slot_p")
+theme_override_styles/disabled = SubResource("SBT_slot_d")
+theme_override_styles/focus = SubResource("SBE_empty")
+focus_mode = 0
+text = ""
+toggle_mode = true
+button_group = SubResource("BG_slot")
+
+[node name="Icon" type="TextureRect" parent="Overlay/Root/MainPanel/Grid/Slot29"]
+offset_left = 12.0
+offset_top = 8.0
+offset_right = 46.0
+offset_bottom = 42.0
+texture_filter = 3
+expand_mode = 1
+mouse_filter = 2
+
+[node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot29"]
+offset_left = 28.0
+offset_top = 32.0
+offset_right = 56.0
+offset_bottom = 52.0
+text = ""
+label_settings = ExtResource("ls_value")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Details" type="Panel" parent="Overlay/Root/MainPanel"]
+offset_left = 555.0
+offset_top = 52.0
+offset_right = 735.0
+offset_bottom = 362.0
+theme_override_styles/panel = SubResource("SBT_det")
+mouse_filter = 2
+
+[node name="Title" type="Label" parent="Overlay/Root/MainPanel/Details"]
+offset_left = 24.0
+offset_top = 38.0
+offset_right = 156.0
+offset_bottom = 64.0
+text = "物品详情"
+label_settings = ExtResource("ls_title")
+vertical_alignment = 1
+
+[node name="Div1" type="ColorRect" parent="Overlay/Root/MainPanel/Details"]
+offset_left = 24.0
+offset_top = 68.0
+offset_right = 156.0
+offset_bottom = 69.0
+color = Color(0.55, 0.5, 0.42, 0.35)
+
+[node name="ItemIcon" type="TextureRect" parent="Overlay/Root/MainPanel/Details"]
+offset_left = 24.0
+offset_top = 76.0
+offset_right = 64.0
+offset_bottom = 116.0
+texture_filter = 3
+expand_mode = 1
+
+[node name="ItemName" type="Label" parent="Overlay/Root/MainPanel/Details"]
+offset_left = 72.0
+offset_top = 76.0
+offset_right = 156.0
+offset_bottom = 98.0
+text = "面包"
+label_settings = ExtResource("ls_body")
+vertical_alignment = 1
+
+[node name="ItemCat" type="Label" parent="Overlay/Root/MainPanel/Details"]
+offset_left = 72.0
+offset_top = 98.0
+offset_right = 156.0
+offset_bottom = 116.0
+text = "食物"
+label_settings = ExtResource("ls_small")
+vertical_alignment = 1
+
+[node name="Div2" type="ColorRect" parent="Overlay/Root/MainPanel/Details"]
+offset_left = 24.0
+offset_top = 122.0
+offset_right = 156.0
+offset_bottom = 123.0
+color = Color(0.55, 0.5, 0.42, 0.35)
+
+[node name="QtyLabel" type="Label" parent="Overlay/Root/MainPanel/Details"]
+offset_left = 24.0
+offset_top = 128.0
+offset_right = 156.0
+offset_bottom = 148.0
+text = "数量　3"
+label_settings = ExtResource("ls_body")
+vertical_alignment = 1
+
+[node name="WeightLine" type="Label" parent="Overlay/Root/MainPanel/Details"]
+offset_left = 24.0
+offset_top = 150.0
+offset_right = 156.0
+offset_bottom = 170.0
+text = "重量　0.9 kg"
+label_settings = ExtResource("ls_body")
+vertical_alignment = 1
+
+[node name="Div3" type="ColorRect" parent="Overlay/Root/MainPanel/Details"]
+offset_left = 24.0
+offset_top = 174.0
+offset_right = 156.0
+offset_bottom = 175.0
+color = Color(0.55, 0.5, 0.42, 0.35)
+
+[node name="Desc" type="Label" parent="Overlay/Root/MainPanel/Details"]
+offset_left = 24.0
+offset_top = 180.0
+offset_right = 156.0
+offset_bottom = 244.0
+text = "可恢复少量饥饿。"
+label_settings = ExtResource("ls_kai")
+vertical_alignment = 0
+autowrap_mode = 3
+
+[node name="UseBtn" type="Button" parent="Overlay/Root/MainPanel/Details"]
+offset_left = 22.0
+offset_top = 250.0
+offset_right = 84.0
+offset_bottom = 284.0
+theme_override_styles/normal = SubResource("SBT_btn_n")
+theme_override_styles/hover = SubResource("SBT_btn_h")
+theme_override_styles/pressed = SubResource("SBT_btn_p")
+theme_override_styles/disabled = SubResource("SBT_btn_d")
+theme_override_styles/focus = SubResource("SBE_empty")
+focus_mode = 0
+text = ""
+
+[node name="Text" type="Label" parent="Overlay/Root/MainPanel/Details/UseBtn"]
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 62.0
+offset_bottom = 34.0
+text = "使用"
+label_settings = ExtResource("ls_small")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DropBtn" type="Button" parent="Overlay/Root/MainPanel/Details"]
+offset_left = 92.0
+offset_top = 250.0
+offset_right = 154.0
+offset_bottom = 284.0
+theme_override_styles/normal = SubResource("SBT_btn_n")
+theme_override_styles/hover = SubResource("SBT_btn_h")
+theme_override_styles/pressed = SubResource("SBT_btn_p")
+theme_override_styles/disabled = SubResource("SBT_btn_d")
+theme_override_styles/focus = SubResource("SBE_empty")
+focus_mode = 0
+text = ""
+
+[node name="Text" type="Label" parent="Overlay/Root/MainPanel/Details/DropBtn"]
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 62.0
+offset_bottom = 34.0
+text = "丢弃"
+label_settings = ExtResource("ls_small")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Foot" type="Label" parent="Overlay/Root/MainPanel"]
+offset_left = 26.0
+offset_top = 378.0
+offset_right = 446.0
+offset_bottom = 396.0
+text = "物品整理与交互预览 · 测试数据 / 非真实库存"
+label_settings = ExtResource("ls_small")
+vertical_alignment = 1
+
+[node name="MockBadge" type="Label" parent="Overlay/Root/MainPanel"]
+offset_left = 420.0
+offset_top = 378.0
+offset_right = 734.0
+offset_bottom = 396.0
+text = "测试数据：数量与属性均为示意，未接入背包玩法"
+label_settings = ExtResource("ls_small")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Tooltip" type="Panel" parent="Overlay/Root"]
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 256.0
+offset_bottom = 156.0
+visible = false
+theme_override_styles/panel = SubResource("SBT_tip")
+mouse_filter = 2
+
+[node name="TTName" type="Label" parent="Overlay/Root/Tooltip"]
+offset_left = 24.0
+offset_top = 32.0
+offset_right = 232.0
+offset_bottom = 56.0
+text = "面包"
+label_settings = ExtResource("ls_body")
+vertical_alignment = 1
+
+[node name="TTCat" type="Label" parent="Overlay/Root/Tooltip"]
+offset_left = 24.0
+offset_top = 56.0
+offset_right = 232.0
+offset_bottom = 74.0
+text = "食物 · 可食用"
+label_settings = ExtResource("ls_small")
+vertical_alignment = 1
+
+[node name="TTDiv" type="ColorRect" parent="Overlay/Root/Tooltip"]
+offset_left = 24.0
+offset_top = 78.0
+offset_right = 232.0
+offset_bottom = 79.0
+color = Color(0.55, 0.5, 0.42, 0.35)
+
+[node name="TTQty" type="Label" parent="Overlay/Root/Tooltip"]
+offset_left = 24.0
+offset_top = 84.0
+offset_right = 232.0
+offset_bottom = 104.0
+text = "数量 3 · 重量 0.9 kg"
+label_settings = ExtResource("ls_body")
+vertical_alignment = 1
+
+[node name="TTDesc" type="Label" parent="Overlay/Root/Tooltip"]
+offset_left = 24.0
+offset_top = 108.0
+offset_right = 232.0
+offset_bottom = 142.0
+text = "可恢复少量饥饿。"
+label_settings = ExtResource("ls_kai")
+vertical_alignment = 0
+autowrap_mode = 3
+
+[node name="DialogScrim" type="ColorRect" parent="Overlay/Root"]
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 960.0
+offset_bottom = 540.0
+visible = false
+color = Color(0, 0, 0, 0.45)
+mouse_filter = 2
+
+[node name="Dialog" type="Panel" parent="Overlay/Root"]
+offset_left = 305.0
+offset_top = 146.0
+offset_right = 655.0
+offset_bottom = 394.0
+visible = false
+theme_override_styles/panel = SubResource("SBT_dlg")
+mouse_filter = 2
+
+[node name="DlgTitle" type="Label" parent="Overlay/Root/Dialog"]
+offset_left = 24.0
+offset_top = 38.0
+offset_right = 326.0
+offset_bottom = 64.0
+text = "转移物品"
+label_settings = ExtResource("ls_title")
+vertical_alignment = 1
+
+[node name="DlgDiv" type="ColorRect" parent="Overlay/Root/Dialog"]
+offset_left = 24.0
+offset_top = 68.0
+offset_right = 326.0
+offset_bottom = 69.0
+color = Color(0.55, 0.5, 0.42, 0.35)
+
+[node name="DlgIcon" type="TextureRect" parent="Overlay/Root/Dialog"]
+offset_left = 24.0
+offset_top = 76.0
+offset_right = 64.0
+offset_bottom = 116.0
+texture_filter = 3
+expand_mode = 1
+
+[node name="DlgName" type="Label" parent="Overlay/Root/Dialog"]
+offset_left = 74.0
+offset_top = 76.0
+offset_right = 274.0
+offset_bottom = 100.0
+text = "面包"
+label_settings = ExtResource("ls_body")
+vertical_alignment = 1
+
+[node name="DlgHint" type="Label" parent="Overlay/Root/Dialog"]
+offset_left = 74.0
+offset_top = 100.0
+offset_right = 274.0
+offset_bottom = 118.0
+text = "放入仓储 · 上限 20"
+label_settings = ExtResource("ls_small")
+vertical_alignment = 1
+
+[node name="DlgQtyLabel" type="Label" parent="Overlay/Root/Dialog"]
+offset_left = 24.0
+offset_top = 128.0
+offset_right = 104.0
+offset_bottom = 152.0
+text = "数量"
+label_settings = ExtResource("ls_body")
+vertical_alignment = 1
+
+[node name="MinusBtn" type="Button" parent="Overlay/Root/Dialog"]
+offset_left = 100.0
+offset_top = 124.0
+offset_right = 132.0
+offset_bottom = 156.0
+theme_override_styles/normal = SubResource("SBT_sbtn_n")
+theme_override_styles/hover = SubResource("SBT_sbtn_h")
+theme_override_styles/pressed = SubResource("SBT_sbtn_p")
+theme_override_styles/disabled = SubResource("SBT_sbtn_d")
+theme_override_styles/focus = SubResource("SBE_empty")
+focus_mode = 0
+text = ""
+
+[node name="Text" type="Label" parent="Overlay/Root/Dialog/MinusBtn"]
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 32.0
+offset_bottom = 32.0
+text = "−"
+label_settings = ExtResource("ls_body")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DlgQty" type="Label" parent="Overlay/Root/Dialog"]
+offset_left = 140.0
+offset_top = 122.0
+offset_right = 200.0
+offset_bottom = 156.0
+text = "1"
+label_settings = ExtResource("ls_title")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PlusBtn" type="Button" parent="Overlay/Root/Dialog"]
+offset_left = 206.0
+offset_top = 124.0
+offset_right = 238.0
+offset_bottom = 156.0
+theme_override_styles/normal = SubResource("SBT_sbtn_n")
+theme_override_styles/hover = SubResource("SBT_sbtn_h")
+theme_override_styles/pressed = SubResource("SBT_sbtn_p")
+theme_override_styles/disabled = SubResource("SBT_sbtn_d")
+theme_override_styles/focus = SubResource("SBE_empty")
+focus_mode = 0
+text = ""
+
+[node name="Text" type="Label" parent="Overlay/Root/Dialog/PlusBtn"]
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 32.0
+offset_bottom = 32.0
+text = "+"
+label_settings = ExtResource("ls_body")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DlgFoot" type="Label" parent="Overlay/Root/Dialog"]
+offset_left = 24.0
+offset_top = 166.0
+offset_right = 326.0
+offset_bottom = 184.0
+text = "最多可转移 3 件（测试数据）"
+label_settings = ExtResource("ls_small")
+vertical_alignment = 1
+
+[node name="OkBtn" type="Button" parent="Overlay/Root/Dialog"]
+offset_left = 24.0
+offset_top = 186.0
+offset_right = 168.0
+offset_bottom = 224.0
+theme_override_styles/normal = SubResource("SBT_btn_n")
+theme_override_styles/hover = SubResource("SBT_btn_h")
+theme_override_styles/pressed = SubResource("SBT_btn_p")
+theme_override_styles/disabled = SubResource("SBT_btn_d")
+theme_override_styles/focus = SubResource("SBE_empty")
+focus_mode = 0
+text = ""
+
+[node name="Text" type="Label" parent="Overlay/Root/Dialog/OkBtn"]
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 144.0
+offset_bottom = 38.0
+text = "确认"
+label_settings = ExtResource("ls_small")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CancelBtn" type="Button" parent="Overlay/Root/Dialog"]
+offset_left = 182.0
+offset_top = 186.0
+offset_right = 326.0
+offset_bottom = 224.0
+theme_override_styles/normal = SubResource("SBT_btn_n")
+theme_override_styles/hover = SubResource("SBT_btn_h")
+theme_override_styles/pressed = SubResource("SBT_btn_p")
+theme_override_styles/disabled = SubResource("SBT_btn_d")
+theme_override_styles/focus = SubResource("SBE_empty")
+focus_mode = 0
+text = ""
+
+[node name="Text" type="Label" parent="Overlay/Root/Dialog/CancelBtn"]
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 144.0
+offset_bottom = 38.0
+text = "取消"
+label_settings = ExtResource("ls_small")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StatesPage" type="Control" parent="Overlay/Root"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Bg" type="ColorRect" parent="Overlay/Root/StatesPage"]
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 960.0
+offset_bottom = 540.0
+color = Color(0.078, 0.086, 0.102, 1)
+mouse_filter = 2
+
+[node name="Title" type="Label" parent="Overlay/Root/StatesPage"]
+offset_left = 40.0
+offset_top = 24.0
+offset_right = 920.0
+offset_bottom = 56.0
+text = "背包候选素材 · 状态样张（物品格五态 / 按钮四态 / 分类三态 / 九宫格拉伸）"
+label_settings = ExtResource("ls_title")
+vertical_alignment = 1
+
+[node name="SSlot0" type="Button" parent="Overlay/Root/StatesPage"]
+offset_left = 60.0
+offset_top = 76.0
+offset_right = 118.0
+offset_bottom = 134.0
+theme_override_styles/normal = SubResource("SBT_slot_n")
+theme_override_styles/hover = SubResource("SBT_slot_n")
+theme_override_styles/pressed = SubResource("SBT_slot_n")
+theme_override_styles/disabled = SubResource("SBT_slot_n")
+theme_override_styles/focus = SubResource("SBE_empty")
+focus_mode = 0
+text = ""
+
+[node name="SLabel0" type="Label" parent="Overlay/Root/StatesPage"]
+offset_left = 56.0
+offset_top = 142.0
+offset_right = 122.0
+offset_bottom = 160.0
+text = "普通"
+label_settings = ExtResource("ls_small")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SSlot1" type="Button" parent="Overlay/Root/StatesPage"]
+offset_left = 180.0
+offset_top = 76.0
+offset_right = 238.0
+offset_bottom = 134.0
+theme_override_styles/normal = SubResource("SBT_slot_p")
+theme_override_styles/hover = SubResource("SBT_slot_p")
+theme_override_styles/pressed = SubResource("SBT_slot_p")
+theme_override_styles/disabled = SubResource("SBT_slot_p")
+theme_override_styles/focus = SubResource("SBE_empty")
+focus_mode = 0
+text = ""
+
+[node name="SLabel1" type="Label" parent="Overlay/Root/StatesPage"]
+offset_left = 176.0
+offset_top = 142.0
+offset_right = 242.0
+offset_bottom = 160.0
+text = "选中"
+label_settings = ExtResource("ls_small")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SSlot2" type="Button" parent="Overlay/Root/StatesPage"]
+offset_left = 300.0
+offset_top = 76.0
+offset_right = 358.0
+offset_bottom = 134.0
+theme_override_styles/normal = SubResource("SBT_slot_h")
+theme_override_styles/hover = SubResource("SBT_slot_h")
+theme_override_styles/pressed = SubResource("SBT_slot_h")
+theme_override_styles/disabled = SubResource("SBT_slot_h")
+theme_override_styles/focus = SubResource("SBE_empty")
+focus_mode = 0
+text = ""
+
+[node name="SLabel2" type="Label" parent="Overlay/Root/StatesPage"]
+offset_left = 296.0
+offset_top = 142.0
+offset_right = 362.0
+offset_bottom = 160.0
+text = "悬停"
+label_settings = ExtResource("ls_small")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SSlot3" type="Button" parent="Overlay/Root/StatesPage"]
+offset_left = 420.0
+offset_top = 76.0
+offset_right = 478.0
+offset_bottom = 134.0
+theme_override_styles/normal = SubResource("SBT_slot_d")
+theme_override_styles/hover = SubResource("SBT_slot_d")
+theme_override_styles/pressed = SubResource("SBT_slot_d")
+theme_override_styles/disabled = SubResource("SBT_slot_d")
+theme_override_styles/focus = SubResource("SBE_empty")
+focus_mode = 0
+text = ""
+
+[node name="SLabel3" type="Label" parent="Overlay/Root/StatesPage"]
+offset_left = 416.0
+offset_top = 142.0
+offset_right = 482.0
+offset_bottom = 160.0
+text = "禁用"
+label_settings = ExtResource("ls_small")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SSlot4" type="Button" parent="Overlay/Root/StatesPage"]
+offset_left = 540.0
+offset_top = 76.0
+offset_right = 598.0
+offset_bottom = 134.0
+theme_override_styles/normal = SubResource("SBT_slot_drag")
+theme_override_styles/hover = SubResource("SBT_slot_drag")
+theme_override_styles/pressed = SubResource("SBT_slot_drag")
+theme_override_styles/disabled = SubResource("SBT_slot_drag")
+theme_override_styles/focus = SubResource("SBE_empty")
+focus_mode = 0
+text = ""
+
+[node name="SLabel4" type="Label" parent="Overlay/Root/StatesPage"]
+offset_left = 536.0
+offset_top = 142.0
+offset_right = 602.0
+offset_bottom = 160.0
+text = "拖拽"
+label_settings = ExtResource("ls_small")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SBtn0" type="Button" parent="Overlay/Root/StatesPage"]
+offset_left = 60.0
+offset_top = 180.0
+offset_right = 168.0
+offset_bottom = 216.0
+theme_override_styles/normal = SubResource("SBT_btn_n")
+theme_override_styles/hover = SubResource("SBT_btn_n")
+theme_override_styles/pressed = SubResource("SBT_btn_n")
+theme_override_styles/disabled = SubResource("SBT_btn_n")
+theme_override_styles/focus = SubResource("SBE_empty")
+focus_mode = 0
+text = ""
+
+[node name="SBtnLabel0" type="Label" parent="Overlay/Root/StatesPage"]
+offset_left = 58.0
+offset_top = 220.0
+offset_right = 170.0
+offset_bottom = 238.0
+text = "普通"
+label_settings = ExtResource("ls_small")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SBtn1" type="Button" parent="Overlay/Root/StatesPage"]
+offset_left = 184.0
+offset_top = 180.0
+offset_right = 292.0
+offset_bottom = 216.0
+theme_override_styles/normal = SubResource("SBT_btn_h")
+theme_override_styles/hover = SubResource("SBT_btn_h")
+theme_override_styles/pressed = SubResource("SBT_btn_h")
+theme_override_styles/disabled = SubResource("SBT_btn_h")
+theme_override_styles/focus = SubResource("SBE_empty")
+focus_mode = 0
+text = ""
+
+[node name="SBtnLabel1" type="Label" parent="Overlay/Root/StatesPage"]
+offset_left = 182.0
+offset_top = 220.0
+offset_right = 294.0
+offset_bottom = 238.0
+text = "悬停"
+label_settings = ExtResource("ls_small")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SBtn2" type="Button" parent="Overlay/Root/StatesPage"]
+offset_left = 308.0
+offset_top = 180.0
+offset_right = 416.0
+offset_bottom = 216.0
+theme_override_styles/normal = SubResource("SBT_btn_p")
+theme_override_styles/hover = SubResource("SBT_btn_p")
+theme_override_styles/pressed = SubResource("SBT_btn_p")
+theme_override_styles/disabled = SubResource("SBT_btn_p")
+theme_override_styles/focus = SubResource("SBE_empty")
+focus_mode = 0
+text = ""
+
+[node name="SBtnLabel2" type="Label" parent="Overlay/Root/StatesPage"]
+offset_left = 306.0
+offset_top = 220.0
+offset_right = 418.0
+offset_bottom = 238.0
+text = "按下"
+label_settings = ExtResource("ls_small")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SBtn3" type="Button" parent="Overlay/Root/StatesPage"]
+offset_left = 432.0
+offset_top = 180.0
+offset_right = 540.0
+offset_bottom = 216.0
+theme_override_styles/normal = SubResource("SBT_btn_d")
+theme_override_styles/hover = SubResource("SBT_btn_d")
+theme_override_styles/pressed = SubResource("SBT_btn_d")
+theme_override_styles/disabled = SubResource("SBT_btn_d")
+theme_override_styles/focus = SubResource("SBE_empty")
+focus_mode = 0
+text = ""
+
+[node name="SBtnLabel3" type="Label" parent="Overlay/Root/StatesPage"]
+offset_left = 430.0
+offset_top = 220.0
+offset_right = 542.0
+offset_bottom = 238.0
+text = "禁用"
+label_settings = ExtResource("ls_small")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SCat0" type="Button" parent="Overlay/Root/StatesPage"]
+offset_left = 60.0
+offset_top = 256.0
+offset_right = 176.0
+offset_bottom = 292.0
+theme_override_styles/normal = SubResource("SBT_cat_n")
+theme_override_styles/hover = SubResource("SBT_cat_n")
+theme_override_styles/pressed = SubResource("SBT_cat_n")
+theme_override_styles/disabled = SubResource("SBT_cat_n")
+theme_override_styles/focus = SubResource("SBE_empty")
+focus_mode = 0
+text = ""
+
+[node name="SCatLabel0" type="Label" parent="Overlay/Root/StatesPage"]
+offset_left = 60.0
+offset_top = 296.0
+offset_right = 176.0
+offset_bottom = 314.0
+text = "普通"
+label_settings = ExtResource("ls_small")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SCat1" type="Button" parent="Overlay/Root/StatesPage"]
+offset_left = 190.0
+offset_top = 256.0
+offset_right = 306.0
+offset_bottom = 292.0
+theme_override_styles/normal = SubResource("SBT_cat_s")
+theme_override_styles/hover = SubResource("SBT_cat_s")
+theme_override_styles/pressed = SubResource("SBT_cat_s")
+theme_override_styles/disabled = SubResource("SBT_cat_s")
+theme_override_styles/focus = SubResource("SBE_empty")
+focus_mode = 0
+text = ""
+
+[node name="SCatLabel1" type="Label" parent="Overlay/Root/StatesPage"]
+offset_left = 190.0
+offset_top = 296.0
+offset_right = 306.0
+offset_bottom = 314.0
+text = "选中"
+label_settings = ExtResource("ls_small")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SCat2" type="Button" parent="Overlay/Root/StatesPage"]
+offset_left = 320.0
+offset_top = 256.0
+offset_right = 436.0
+offset_bottom = 292.0
+theme_override_styles/normal = SubResource("SBT_cat_h")
+theme_override_styles/hover = SubResource("SBT_cat_h")
+theme_override_styles/pressed = SubResource("SBT_cat_h")
+theme_override_styles/disabled = SubResource("SBT_cat_h")
+theme_override_styles/focus = SubResource("SBE_empty")
+focus_mode = 0
+text = ""
+
+[node name="SCatLabel2" type="Label" parent="Overlay/Root/StatesPage"]
+offset_left = 320.0
+offset_top = 296.0
+offset_right = 436.0
+offset_bottom = 314.0
+text = "悬停"
+label_settings = ExtResource("ls_small")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SliceTitle" type="Label" parent="Overlay/Root/StatesPage"]
+offset_left = 60.0
+offset_top = 330.0
+offset_right = 580.0
+offset_bottom = 354.0
+text = "Tooltip 面板九宫格拉伸（208×120 / 300×196，边距 24/28/24/20）"
+label_settings = ExtResource("ls_small")
+vertical_alignment = 1
+
+[node name="Slice0" type="Panel" parent="Overlay/Root/StatesPage"]
+offset_left = 60.0
+offset_top = 356.0
+offset_right = 268.0
+offset_bottom = 476.0
+theme_override_styles/panel = SubResource("SBT_tip")
+mouse_filter = 2
+
+[node name="SliceText0" type="Label" parent="Overlay/Root/StatesPage/Slice0"]
+offset_left = 20.0
+offset_top = 14.0
+offset_right = 188.0
+offset_bottom = 40.0
+text = "九宫格拉伸"
+label_settings = ExtResource("ls_body")
+vertical_alignment = 1
+
+[node name="Slice1" type="Panel" parent="Overlay/Root/StatesPage"]
+offset_left = 300.0
+offset_top = 356.0
+offset_right = 600.0
+offset_bottom = 552.0
+theme_override_styles/panel = SubResource("SBT_tip")
+mouse_filter = 2
+
+[node name="SliceText1" type="Label" parent="Overlay/Root/StatesPage/Slice1"]
+offset_left = 20.0
+offset_top = 14.0
+offset_right = 280.0
+offset_bottom = 40.0
+text = "九宫格拉伸"
+label_settings = ExtResource("ls_body")
+vertical_alignment = 1
+
+[node name="SliceNote" type="Label" parent="Overlay/Root/StatesPage"]
+offset_left = 620.0
+offset_top = 356.0
+offset_right = 920.0
+offset_bottom = 486.0
+text = "边角不缩放、四边单向重复拉伸。
+本页只用于验收，不出现在正式界面里。"
+label_settings = ExtResource("ls_small")
+vertical_alignment = 0
+autowrap_mode = 3
+

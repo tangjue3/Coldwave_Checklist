@@ -70,6 +70,8 @@ const PATHS: Dictionary = {
 	&"fontfinal": "res://scenes/dev/font_final.tscn",
 	# TASK-UI-007 HUD 独立透明素材包接入验证（屏幕空间 HUD）
 	&"hudprev": "res://scenes/dev/hud_preview.tscn",
+	# TASK-UI-010 背包与物资界面候选素材预览（纯 UI，不接库存逻辑）
+	&"invprev": "res://scenes/dev/inventory_preview.tscn",
 }
 
 ## 自带检查 / 截图 / 退出逻辑的开发场景：路由不再代为截图，避免重复或抢先退出
