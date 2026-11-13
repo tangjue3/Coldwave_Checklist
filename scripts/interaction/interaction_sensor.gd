@@ -18,6 +18,15 @@ signal interacted(target: Interactable)
 @export var enabled: bool = true
 ## 提示框相对锚点的偏移（负 y = 往上）
 @export var prompt_offset: Vector2 = Vector2(0, -14)
+## 是否由本节点在世界坐标里画提示框。
+## TASK-UI-009 之后，正式玩法场景改由 CanvasLayer 里的 GameHud 画屏幕空间提示
+## （世界坐标画法会跟着相机缩放，街道 0.7× 时 13px 字实际只有 9px），
+## 这种情况下宿主把它关掉；门/室内的老场景默认保持原样。
+@export var draw_world_prompt: bool = true:
+	set(value):
+		draw_world_prompt = value
+		if is_inside_tree():
+			queue_redraw()
 
 const THEME_PATH := "res://assets/ui/themes/main_theme.tres"
 const FALLBACK_FONT := "res://assets/ui/fonts/NotoSansSC-Variable.ttf"
@@ -73,7 +82,7 @@ func _physics_process(_delta: float) -> void:
 	_set_target(_pick())
 	# 提示文案会随状态变（购物车「推」→「停车」），而 CanvasItem 的 draw 指令是**保留**的：
 	# 只靠 target_changed 重绘会让旧文案一直留在屏幕上。目标存在时每帧重绘一次。
-	if current != null:
+	if current != null and draw_world_prompt:
 		queue_redraw()
 
 
@@ -163,7 +172,7 @@ func _set_target(t: Interactable) -> void:
 # ------------------------------------------------------------------ 提示框
 
 func _draw() -> void:
-	if not enabled or current == null or _font == null:
+	if not enabled or not draw_world_prompt or current == null or _font == null:
 		return
 	var anchor := current.prompt_anchor() + prompt_offset
 	# 换成局部坐标：本节点放在场景原点，相机缩放 1:1

@@ -38,6 +38,7 @@
 [ext_resource type="Texture2D" uid="uid://8qyori7dnc2c" path="res://assets/scenes/season1/消防栓_34x70_v01.png" id="41_fhyd"]
 [ext_resource type="Texture2D" uid="uid://bml4j8ubqw0xs" path="res://assets/scenes/season1/报刊亭_180x200_v01.png" id="42_fkiosk"]
 [ext_resource type="Texture2D" uid="uid://buhhsq0re6ebg" path="res://assets/scenes/season1/自行车_150x100_v01.png" id="43_fbike"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hud/game_hud.tscn" id="30_hud"]
 
 [sub_resource type="RectangleShape2D" id="Shape_door_c"]
 size = Vector2(99, 199)
@@ -1292,3 +1293,5 @@ look_offset = Vector2(0, -210)
 dead_zone = Vector2(56, 48)
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=467399570]
+
+[node name="HUD" parent="." instance=ExtResource("30_hud")]

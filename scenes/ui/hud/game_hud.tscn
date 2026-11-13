@@ -1,0 +1,929 @@
+[gd_scene load_steps=43 format=3]
+[ext_resource type="Script" path="res://scripts/ui/hud/game_hud.gd" id="1_script"]
+[ext_resource type="Theme" path="res://assets/ui/themes/font_theme.tres" id="2_theme"]
+[ext_resource type="LabelSettings" path="res://assets/ui/labelsettings/final/f_title_serif_18.tres" id="ls_title"]
+[ext_resource type="LabelSettings" path="res://assets/ui/labelsettings/final/f_body_serif_14.tres" id="ls_body"]
+[ext_resource type="LabelSettings" path="res://assets/ui/labelsettings/final/f_value_serif_12.tres" id="ls_value12"]
+[ext_resource type="LabelSettings" path="res://assets/ui/labelsettings/final/f_task_wenkai_14.tres" id="ls_task"]
+[ext_resource type="LabelSettings" path="res://assets/ui/labelsettings/final/f_task_done_wenkai_14.tres" id="ls_taskdone"]
+[ext_resource type="LabelSettings" path="res://assets/ui/labelsettings/final/f_small_serif_11.tres" id="ls_small"]
+[ext_resource type="Texture2D" path="res://assets/ui/hud/v01/HUD_panel_location_432x70.png" id="p_location"]
+[ext_resource type="Texture2D" path="res://assets/ui/hud/v01/HUD_panel_datetime_272x70.png" id="p_datetime"]
+[ext_resource type="Texture2D" path="res://assets/ui/hud/v01/HUD_panel_weather_260x70.png" id="p_weather"]
+[ext_resource type="Texture2D" path="res://assets/ui/hud/v01/HUD_panel_tasks_432x304.png" id="p_tasks"]
+[ext_resource type="Texture2D" path="res://assets/ui/hud/v01/HUD_panel_status_432x328.png" id="p_status"]
+[ext_resource type="Texture2D" path="res://assets/ui/hud/v01/HUD_panel_resource_484x70.png" id="p_resource"]
+[ext_resource type="Texture2D" path="res://assets/ui/hud/v01/HUD_panel_interact_356x70.png" id="p_interact"]
+[ext_resource type="Texture2D" path="res://assets/ui/hud/v01/HUD_slot_normal_90x90.png" id="s_normal"]
+[ext_resource type="Texture2D" path="res://assets/ui/hud/v01/HUD_slot_selected_90x90.png" id="s_selected"]
+[ext_resource type="Texture2D" path="res://assets/ui/hud/v01/HUD_keycap_empty_58x55.png" id="c_keycap"]
+[ext_resource type="Texture2D" path="res://assets/ui/hud/v01/HUD_progress_track_r02_78x12.png" id="c_track"]
+[ext_resource type="Texture2D" path="res://assets/ui/hud/v01/HUD_progress_fill_r02_74x8.png" id="c_fill"]
+[ext_resource type="Texture2D" path="res://assets/ui/hud/v01/HUD_icon_home_72x72.png" id="i_home"]
+[ext_resource type="Texture2D" path="res://assets/ui/hud/v01/HUD_icon_calendar_72x72.png" id="i_calendar"]
+[ext_resource type="Texture2D" path="res://assets/ui/hud/v01/HUD_icon_snowflake_72x72.png" id="i_snowflake"]
+[ext_resource type="Texture2D" path="res://assets/ui/hud/v01/HUD_icon_checklist_72x72.png" id="i_checklist"]
+[ext_resource type="Texture2D" path="res://assets/ui/hud/v01/HUD_icon_chevron_up_72x72.png" id="i_chevron_up"]
+[ext_resource type="Texture2D" path="res://assets/ui/hud/v01/HUD_icon_chevron_down_72x72.png" id="i_chevron_down"]
+[ext_resource type="Texture2D" path="res://assets/ui/hud/v01/HUD_icon_checkbox_empty_72x72.png" id="i_checkbox_empty"]
+[ext_resource type="Texture2D" path="res://assets/ui/hud/v01/HUD_icon_checkbox_checked_72x72.png" id="i_checkbox_checked"]
+[ext_resource type="Texture2D" path="res://assets/ui/hud/v01/HUD_icon_temperature_72x72.png" id="i_temperature"]
+[ext_resource type="Texture2D" path="res://assets/ui/hud/v01/HUD_icon_hunger_72x72.png" id="i_hunger"]
+[ext_resource type="Texture2D" path="res://assets/ui/hud/v01/HUD_icon_thirst_72x72.png" id="i_thirst"]
+[ext_resource type="Texture2D" path="res://assets/ui/hud/v01/HUD_icon_fatigue_72x72.png" id="i_fatigue"]
+[ext_resource type="Texture2D" path="res://assets/ui/hud/v01/HUD_icon_weight_72x72.png" id="i_weight"]
+[ext_resource type="Texture2D" path="res://assets/ui/hud/v01/HUD_icon_cash_72x72.png" id="i_cash"]
+[ext_resource type="Texture2D" path="res://assets/ui/hud/v01/HUD_icon_firewood_72x72.png" id="i_firewood"]
+[ext_resource type="Texture2D" path="res://assets/ui/hud/v01/HUD_icon_cloth_72x72.png" id="i_cloth"]
+[ext_resource type="Texture2D" path="res://assets/ui/hud/v01/HUD_icon_flashlight_72x72.png" id="i_flashlight"]
+[ext_resource type="Texture2D" path="res://assets/ui/hud/v01/HUD_icon_water_72x72.png" id="i_water"]
+[ext_resource type="Texture2D" path="res://assets/ui/hud/v01/HUD_icon_bread_72x72.png" id="i_bread"]
+[ext_resource type="Texture2D" path="res://assets/ui/hud/v01/HUD_icon_pliers_72x72.png" id="i_pliers"]
+[ext_resource type="Texture2D" path="res://assets/ui/hud/v01/HUD_icon_key_72x72.png" id="i_key"]
+[sub_resource type="StyleBoxFlat" id="StyleBox_badge"]
+content_margin_left = 8.0
+content_margin_top = 2.0
+content_margin_right = 8.0
+content_margin_bottom = 2.0
+bg_color = Color(0.078, 0.094, 0.118, 0.72)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.451, 0.404, 0.345, 0.4)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="GameHud" type="CanvasLayer"]
+layer = 20
+script = ExtResource("1_script")
+[node name="Root" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme = ExtResource("2_theme")
+[node name="LocationPanel" type="TextureRect" parent="Root"]
+offset_left = 12.0
+offset_top = 10.0
+offset_right = 228.0
+offset_bottom = 45.0
+texture_filter = 3
+texture = ExtResource("p_location")
+expand_mode = 1
+mouse_filter = 2
+[node name="LocationIcon" type="TextureRect" parent="Root/LocationPanel"]
+offset_left = 8.0
+offset_top = 7.0
+offset_right = 28.0
+offset_bottom = 27.0
+texture_filter = 3
+texture = ExtResource("i_home")
+expand_mode = 1
+[node name="LocationText" type="Label" parent="Root/LocationPanel"]
+offset_left = 32.0
+offset_top = 3.0
+offset_right = 208.0
+offset_bottom = 31.0
+text = "梧桐里 · 长街"
+label_settings = ExtResource("ls_body")
+vertical_alignment = 1
+text_overrun_behavior = 3
+[node name="DateTimePanel" type="TextureRect" parent="Root"]
+offset_left = 241.0
+offset_top = 10.0
+offset_right = 377.0
+offset_bottom = 45.0
+texture_filter = 3
+texture = ExtResource("p_datetime")
+expand_mode = 1
+mouse_filter = 2
+[node name="DateIcon" type="TextureRect" parent="Root/DateTimePanel"]
+offset_left = 8.0
+offset_top = 7.0
+offset_right = 28.0
+offset_bottom = 27.0
+texture_filter = 3
+texture = ExtResource("i_calendar")
+expand_mode = 1
+[node name="DateText" type="Label" parent="Root/DateTimePanel"]
+offset_left = 32.0
+offset_top = 3.0
+offset_right = 132.0
+offset_bottom = 31.0
+text = "第 1 天 06:35"
+label_settings = ExtResource("ls_body")
+vertical_alignment = 1
+text_overrun_behavior = 3
+[node name="WeatherPanel" type="TextureRect" parent="Root"]
+offset_left = 390.0
+offset_top = 10.0
+offset_right = 520.0
+offset_bottom = 45.0
+texture_filter = 3
+texture = ExtResource("p_weather")
+expand_mode = 1
+mouse_filter = 2
+[node name="WeatherIcon" type="TextureRect" parent="Root/WeatherPanel"]
+offset_left = 8.0
+offset_top = 7.0
+offset_right = 28.0
+offset_bottom = 27.0
+texture_filter = 3
+texture = ExtResource("i_snowflake")
+expand_mode = 1
+[node name="WeatherText" type="Label" parent="Root/WeatherPanel"]
+offset_left = 32.0
+offset_top = 3.0
+offset_right = 124.0
+offset_bottom = 31.0
+text = "-18°C 小雪"
+label_settings = ExtResource("ls_body")
+vertical_alignment = 1
+text_overrun_behavior = 3
+[node name="TasksPanel" type="TextureRect" parent="Root"]
+offset_left = 14.0
+offset_top = 57.0
+offset_right = 230.0
+offset_bottom = 209.0
+texture_filter = 3
+texture = ExtResource("p_tasks")
+expand_mode = 1
+mouse_filter = 2
+[node name="TasksIcon" type="TextureRect" parent="Root/TasksPanel"]
+offset_left = 12.0
+offset_top = 9.0
+offset_right = 30.0
+offset_bottom = 27.0
+texture_filter = 3
+texture = ExtResource("i_checklist")
+expand_mode = 1
+[node name="TasksTitle" type="Label" parent="Root/TasksPanel"]
+offset_left = 36.0
+offset_top = 5.0
+offset_right = 166.0
+offset_bottom = 31.0
+text = "今日清单"
+label_settings = ExtResource("ls_title")
+vertical_alignment = 1
+[node name="TasksDivider" type="ColorRect" parent="Root/TasksPanel"]
+offset_left = 12.0
+offset_top = 37.0
+offset_right = 204.0
+offset_bottom = 38.0
+color = Color(0.55, 0.5, 0.42, 0.35)
+[node name="TasksChevron" type="TextureRect" parent="Root/TasksPanel"]
+offset_left = 182.0
+offset_top = 11.0
+offset_right = 196.0
+offset_bottom = 25.0
+texture_filter = 3
+texture = ExtResource("i_chevron_up")
+expand_mode = 1
+[node name="TaskList" type="Control" parent="Root/TasksPanel"]
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 216.0
+offset_bottom = 152.0
+mouse_filter = 2
+[node name="TaskRow1" type="Control" parent="Root/TasksPanel/TaskList"]
+offset_left = 0.0
+offset_top = 48.0
+offset_right = 216.0
+offset_bottom = 70.0
+mouse_filter = 2
+[node name="Box" type="TextureRect" parent="Root/TasksPanel/TaskList/TaskRow1"]
+offset_left = 12.0
+offset_top = 3.0
+offset_right = 26.0
+offset_bottom = 17.0
+texture_filter = 3
+texture = ExtResource("i_checkbox_checked")
+expand_mode = 1
+[node name="Text" type="Label" parent="Root/TasksPanel/TaskList/TaskRow1"]
+offset_left = 32.0
+offset_top = 0.0
+offset_right = 200.0
+offset_bottom = 20.0
+text = "检查壁炉燃料"
+label_settings = ExtResource("ls_taskdone")
+vertical_alignment = 1
+[node name="Strike" type="ColorRect" parent="Root/TasksPanel/TaskList/TaskRow1"]
+offset_left = 33.0
+offset_top = 10.0
+offset_right = 129.0
+offset_bottom = 11.0
+visible = true
+color = Color(0.62, 0.57, 0.48, 0.75)
+[node name="TaskRow2" type="Control" parent="Root/TasksPanel/TaskList"]
+offset_left = 0.0
+offset_top = 71.0
+offset_right = 216.0
+offset_bottom = 93.0
+mouse_filter = 2
+[node name="Box" type="TextureRect" parent="Root/TasksPanel/TaskList/TaskRow2"]
+offset_left = 12.0
+offset_top = 3.0
+offset_right = 26.0
+offset_bottom = 17.0
+texture_filter = 3
+texture = ExtResource("i_checkbox_empty")
+expand_mode = 1
+[node name="Text" type="Label" parent="Root/TasksPanel/TaskList/TaskRow2"]
+offset_left = 32.0
+offset_top = 0.0
+offset_right = 200.0
+offset_bottom = 20.0
+text = "整理厨房物资"
+label_settings = ExtResource("ls_task")
+vertical_alignment = 1
+[node name="Strike" type="ColorRect" parent="Root/TasksPanel/TaskList/TaskRow2"]
+offset_left = 33.0
+offset_top = 10.0
+offset_right = 129.0
+offset_bottom = 11.0
+visible = false
+color = Color(0.62, 0.57, 0.48, 0.75)
+[node name="TaskRow3" type="Control" parent="Root/TasksPanel/TaskList"]
+offset_left = 0.0
+offset_top = 94.0
+offset_right = 216.0
+offset_bottom = 116.0
+mouse_filter = 2
+[node name="Box" type="TextureRect" parent="Root/TasksPanel/TaskList/TaskRow3"]
+offset_left = 12.0
+offset_top = 3.0
+offset_right = 26.0
+offset_bottom = 17.0
+texture_filter = 3
+texture = ExtResource("i_checkbox_empty")
+expand_mode = 1
+[node name="Text" type="Label" parent="Root/TasksPanel/TaskList/TaskRow3"]
+offset_left = 32.0
+offset_top = 0.0
+offset_right = 200.0
+offset_bottom = 20.0
+text = "前往社区超市"
+label_settings = ExtResource("ls_task")
+vertical_alignment = 1
+[node name="Strike" type="ColorRect" parent="Root/TasksPanel/TaskList/TaskRow3"]
+offset_left = 33.0
+offset_top = 10.0
+offset_right = 129.0
+offset_bottom = 11.0
+visible = false
+color = Color(0.62, 0.57, 0.48, 0.75)
+[node name="TaskRow4" type="Control" parent="Root/TasksPanel/TaskList"]
+offset_left = 0.0
+offset_top = 117.0
+offset_right = 216.0
+offset_bottom = 139.0
+mouse_filter = 2
+[node name="Box" type="TextureRect" parent="Root/TasksPanel/TaskList/TaskRow4"]
+offset_left = 12.0
+offset_top = 3.0
+offset_right = 26.0
+offset_bottom = 17.0
+texture_filter = 3
+texture = ExtResource("i_checkbox_empty")
+expand_mode = 1
+[node name="Text" type="Label" parent="Root/TasksPanel/TaskList/TaskRow4"]
+offset_left = 32.0
+offset_top = 0.0
+offset_right = 200.0
+offset_bottom = 20.0
+text = "给水箱包保温层"
+label_settings = ExtResource("ls_task")
+vertical_alignment = 1
+[node name="Strike" type="ColorRect" parent="Root/TasksPanel/TaskList/TaskRow4"]
+offset_left = 33.0
+offset_top = 10.0
+offset_right = 129.0
+offset_bottom = 11.0
+visible = false
+color = Color(0.62, 0.57, 0.48, 0.75)
+[node name="TasksHit" type="Button" parent="Root/TasksPanel"]
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 216.0
+offset_bottom = 38.0
+flat = true
+focus_mode = 0
+mouse_default_cursor_shape = 2
+text = ""
+
+[node name="StatusPanel" type="TextureRect" parent="Root"]
+offset_left = 732.0
+offset_top = 57.0
+offset_right = 948.0
+offset_bottom = 221.0
+texture_filter = 3
+texture = ExtResource("p_status")
+expand_mode = 1
+mouse_filter = 2
+
+[node name="StatusIcon" type="TextureRect" parent="Root/StatusPanel"]
+offset_left = 12.0
+offset_top = 9.0
+offset_right = 30.0
+offset_bottom = 27.0
+texture_filter = 3
+texture = ExtResource("i_temperature")
+expand_mode = 1
+
+[node name="StatusTitle" type="Label" parent="Root/StatusPanel"]
+offset_left = 36.0
+offset_top = 5.0
+offset_right = 156.0
+offset_bottom = 31.0
+text = "生存状态"
+label_settings = ExtResource("ls_title")
+vertical_alignment = 1
+
+[node name="StatusDivider" type="ColorRect" parent="Root/StatusPanel"]
+offset_left = 12.0
+offset_top = 37.0
+offset_right = 204.0
+offset_bottom = 38.0
+color = Color(0.55, 0.5, 0.42, 0.35)
+
+[node name="StatIcon0" type="TextureRect" parent="Root/StatusPanel"]
+offset_left = 12.0
+offset_top = 47.0
+offset_right = 26.0
+offset_bottom = 61.0
+texture_filter = 3
+texture = ExtResource("i_temperature")
+expand_mode = 1
+
+[node name="StatLabel0" type="Label" parent="Root/StatusPanel"]
+offset_left = 30.0
+offset_top = 44.0
+offset_right = 64.0
+offset_bottom = 64.0
+text = "体温"
+label_settings = ExtResource("ls_body")
+vertical_alignment = 1
+
+[node name="StatTrack0" type="TextureRect" parent="Root/StatusPanel"]
+offset_left = 66.0
+offset_top = 47.0
+offset_right = 144.0
+offset_bottom = 59.0
+texture_filter = 3
+texture = ExtResource("c_track")
+expand_mode = 1
+
+[node name="StatFill0" type="NinePatchRect" parent="Root/StatusPanel"]
+offset_left = 68.0
+offset_top = 49.0
+offset_right = 136.0
+offset_bottom = 57.0
+texture_filter = 3
+texture = ExtResource("c_fill")
+patch_margin_left = 4
+patch_margin_top = 3
+patch_margin_right = 4
+patch_margin_bottom = 3
+
+[node name="StatValue0" type="Label" parent="Root/StatusPanel"]
+offset_left = 148.0
+offset_top = 44.0
+offset_right = 202.0
+offset_bottom = 64.0
+text = "36.4°C"
+label_settings = ExtResource("ls_value12")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="StatIcon1" type="TextureRect" parent="Root/StatusPanel"]
+offset_left = 12.0
+offset_top = 69.0
+offset_right = 26.0
+offset_bottom = 83.0
+texture_filter = 3
+texture = ExtResource("i_hunger")
+expand_mode = 1
+
+[node name="StatLabel1" type="Label" parent="Root/StatusPanel"]
+offset_left = 30.0
+offset_top = 66.0
+offset_right = 64.0
+offset_bottom = 86.0
+text = "饥饿"
+label_settings = ExtResource("ls_body")
+vertical_alignment = 1
+
+[node name="StatTrack1" type="TextureRect" parent="Root/StatusPanel"]
+offset_left = 66.0
+offset_top = 69.0
+offset_right = 144.0
+offset_bottom = 81.0
+texture_filter = 3
+texture = ExtResource("c_track")
+expand_mode = 1
+
+[node name="StatFill1" type="NinePatchRect" parent="Root/StatusPanel"]
+offset_left = 68.0
+offset_top = 71.0
+offset_right = 121.0
+offset_bottom = 79.0
+texture_filter = 3
+texture = ExtResource("c_fill")
+patch_margin_left = 4
+patch_margin_top = 3
+patch_margin_right = 4
+patch_margin_bottom = 3
+
+[node name="StatValue1" type="Label" parent="Root/StatusPanel"]
+offset_left = 148.0
+offset_top = 66.0
+offset_right = 202.0
+offset_bottom = 86.0
+text = "72%"
+label_settings = ExtResource("ls_value12")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="StatIcon2" type="TextureRect" parent="Root/StatusPanel"]
+offset_left = 12.0
+offset_top = 91.0
+offset_right = 26.0
+offset_bottom = 105.0
+texture_filter = 3
+texture = ExtResource("i_thirst")
+expand_mode = 1
+
+[node name="StatLabel2" type="Label" parent="Root/StatusPanel"]
+offset_left = 30.0
+offset_top = 88.0
+offset_right = 64.0
+offset_bottom = 108.0
+text = "口渴"
+label_settings = ExtResource("ls_body")
+vertical_alignment = 1
+
+[node name="StatTrack2" type="TextureRect" parent="Root/StatusPanel"]
+offset_left = 66.0
+offset_top = 91.0
+offset_right = 144.0
+offset_bottom = 103.0
+texture_filter = 3
+texture = ExtResource("c_track")
+expand_mode = 1
+
+[node name="StatFill2" type="NinePatchRect" parent="Root/StatusPanel"]
+offset_left = 68.0
+offset_top = 93.0
+offset_right = 115.0
+offset_bottom = 101.0
+texture_filter = 3
+texture = ExtResource("c_fill")
+patch_margin_left = 4
+patch_margin_top = 3
+patch_margin_right = 4
+patch_margin_bottom = 3
+
+[node name="StatValue2" type="Label" parent="Root/StatusPanel"]
+offset_left = 148.0
+offset_top = 88.0
+offset_right = 202.0
+offset_bottom = 108.0
+text = "64%"
+label_settings = ExtResource("ls_value12")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="StatIcon3" type="TextureRect" parent="Root/StatusPanel"]
+offset_left = 12.0
+offset_top = 113.0
+offset_right = 26.0
+offset_bottom = 127.0
+texture_filter = 3
+texture = ExtResource("i_fatigue")
+expand_mode = 1
+
+[node name="StatLabel3" type="Label" parent="Root/StatusPanel"]
+offset_left = 30.0
+offset_top = 110.0
+offset_right = 64.0
+offset_bottom = 130.0
+text = "疲劳"
+label_settings = ExtResource("ls_body")
+vertical_alignment = 1
+
+[node name="StatTrack3" type="TextureRect" parent="Root/StatusPanel"]
+offset_left = 66.0
+offset_top = 113.0
+offset_right = 144.0
+offset_bottom = 125.0
+texture_filter = 3
+texture = ExtResource("c_track")
+expand_mode = 1
+
+[node name="StatFill3" type="NinePatchRect" parent="Root/StatusPanel"]
+offset_left = 68.0
+offset_top = 115.0
+offset_right = 102.0
+offset_bottom = 123.0
+texture_filter = 3
+texture = ExtResource("c_fill")
+patch_margin_left = 4
+patch_margin_top = 3
+patch_margin_right = 4
+patch_margin_bottom = 3
+
+[node name="StatValue3" type="Label" parent="Root/StatusPanel"]
+offset_left = 148.0
+offset_top = 110.0
+offset_right = 202.0
+offset_bottom = 130.0
+text = "46%"
+label_settings = ExtResource("ls_value12")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="StatIcon4" type="TextureRect" parent="Root/StatusPanel"]
+offset_left = 12.0
+offset_top = 135.0
+offset_right = 26.0
+offset_bottom = 149.0
+texture_filter = 3
+texture = ExtResource("i_weight")
+expand_mode = 1
+
+[node name="StatLabel4" type="Label" parent="Root/StatusPanel"]
+offset_left = 30.0
+offset_top = 132.0
+offset_right = 64.0
+offset_bottom = 152.0
+text = "负重"
+label_settings = ExtResource("ls_body")
+vertical_alignment = 1
+
+[node name="StatTrack4" type="TextureRect" parent="Root/StatusPanel"]
+offset_left = 66.0
+offset_top = 135.0
+offset_right = 144.0
+offset_bottom = 147.0
+texture_filter = 3
+texture = ExtResource("c_track")
+expand_mode = 1
+
+[node name="StatFill4" type="NinePatchRect" parent="Root/StatusPanel"]
+offset_left = 68.0
+offset_top = 137.0
+offset_right = 121.0
+offset_bottom = 145.0
+texture_filter = 3
+texture = ExtResource("c_fill")
+patch_margin_left = 4
+patch_margin_top = 3
+patch_margin_right = 4
+patch_margin_bottom = 3
+
+[node name="StatValue4" type="Label" parent="Root/StatusPanel"]
+offset_left = 148.0
+offset_top = 132.0
+offset_right = 202.0
+offset_bottom = 152.0
+text = "28.4/40"
+label_settings = ExtResource("ls_value12")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Slot1" type="TextureRect" parent="Root"]
+offset_left = 335.0
+offset_top = 480.0
+offset_right = 380.0
+offset_bottom = 525.0
+texture_filter = 3
+texture = ExtResource("s_selected")
+expand_mode = 1
+
+[node name="SlotIcon" type="TextureRect" parent="Root/Slot1"]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 37.0
+offset_bottom = 37.0
+texture_filter = 3
+texture = ExtResource("i_flashlight")
+expand_mode = 1
+
+[node name="SlotKey" type="Label" parent="Root/Slot1"]
+offset_left = 3.0
+offset_top = 1.0
+offset_right = 15.0
+offset_bottom = 13.0
+text = "1"
+label_settings = ExtResource("ls_small")
+vertical_alignment = 1
+
+[node name="SlotQty" type="Label" parent="Root/Slot1"]
+offset_left = 28.0
+offset_top = 29.0
+offset_right = 42.0
+offset_bottom = 43.0
+text = ""
+label_settings = ExtResource("ls_small")
+horizontal_alignment = 2
+
+[node name="Slot2" type="TextureRect" parent="Root"]
+offset_left = 384.0
+offset_top = 480.0
+offset_right = 429.0
+offset_bottom = 525.0
+texture_filter = 3
+texture = ExtResource("s_normal")
+expand_mode = 1
+
+[node name="SlotIcon" type="TextureRect" parent="Root/Slot2"]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 37.0
+offset_bottom = 37.0
+texture_filter = 3
+texture = ExtResource("i_water")
+expand_mode = 1
+
+[node name="SlotKey" type="Label" parent="Root/Slot2"]
+offset_left = 3.0
+offset_top = 1.0
+offset_right = 15.0
+offset_bottom = 13.0
+text = "2"
+label_settings = ExtResource("ls_small")
+vertical_alignment = 1
+
+[node name="SlotQty" type="Label" parent="Root/Slot2"]
+offset_left = 28.0
+offset_top = 29.0
+offset_right = 42.0
+offset_bottom = 43.0
+text = "2"
+label_settings = ExtResource("ls_small")
+horizontal_alignment = 2
+
+[node name="Slot3" type="TextureRect" parent="Root"]
+offset_left = 433.0
+offset_top = 480.0
+offset_right = 478.0
+offset_bottom = 525.0
+texture_filter = 3
+texture = ExtResource("s_normal")
+expand_mode = 1
+
+[node name="SlotIcon" type="TextureRect" parent="Root/Slot3"]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 37.0
+offset_bottom = 37.0
+texture_filter = 3
+texture = ExtResource("i_bread")
+expand_mode = 1
+
+[node name="SlotKey" type="Label" parent="Root/Slot3"]
+offset_left = 3.0
+offset_top = 1.0
+offset_right = 15.0
+offset_bottom = 13.0
+text = "3"
+label_settings = ExtResource("ls_small")
+vertical_alignment = 1
+
+[node name="SlotQty" type="Label" parent="Root/Slot3"]
+offset_left = 28.0
+offset_top = 29.0
+offset_right = 42.0
+offset_bottom = 43.0
+text = "3"
+label_settings = ExtResource("ls_small")
+horizontal_alignment = 2
+
+[node name="Slot4" type="TextureRect" parent="Root"]
+offset_left = 482.0
+offset_top = 480.0
+offset_right = 527.0
+offset_bottom = 525.0
+texture_filter = 3
+texture = ExtResource("s_normal")
+expand_mode = 1
+
+[node name="SlotIcon" type="TextureRect" parent="Root/Slot4"]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 37.0
+offset_bottom = 37.0
+texture_filter = 3
+texture = ExtResource("i_firewood")
+expand_mode = 1
+
+[node name="SlotKey" type="Label" parent="Root/Slot4"]
+offset_left = 3.0
+offset_top = 1.0
+offset_right = 15.0
+offset_bottom = 13.0
+text = "4"
+label_settings = ExtResource("ls_small")
+vertical_alignment = 1
+
+[node name="SlotQty" type="Label" parent="Root/Slot4"]
+offset_left = 28.0
+offset_top = 29.0
+offset_right = 42.0
+offset_bottom = 43.0
+text = "8"
+label_settings = ExtResource("ls_small")
+horizontal_alignment = 2
+
+[node name="Slot5" type="TextureRect" parent="Root"]
+offset_left = 531.0
+offset_top = 480.0
+offset_right = 576.0
+offset_bottom = 525.0
+texture_filter = 3
+texture = ExtResource("s_normal")
+expand_mode = 1
+
+[node name="SlotIcon" type="TextureRect" parent="Root/Slot5"]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 37.0
+offset_bottom = 37.0
+texture_filter = 3
+texture = ExtResource("i_pliers")
+expand_mode = 1
+
+[node name="SlotKey" type="Label" parent="Root/Slot5"]
+offset_left = 3.0
+offset_top = 1.0
+offset_right = 15.0
+offset_bottom = 13.0
+text = "5"
+label_settings = ExtResource("ls_small")
+vertical_alignment = 1
+
+[node name="SlotQty" type="Label" parent="Root/Slot5"]
+offset_left = 28.0
+offset_top = 29.0
+offset_right = 42.0
+offset_bottom = 43.0
+text = ""
+label_settings = ExtResource("ls_small")
+horizontal_alignment = 2
+
+[node name="Slot6" type="TextureRect" parent="Root"]
+offset_left = 580.0
+offset_top = 480.0
+offset_right = 625.0
+offset_bottom = 525.0
+texture_filter = 3
+texture = ExtResource("s_normal")
+expand_mode = 1
+
+[node name="SlotIcon" type="TextureRect" parent="Root/Slot6"]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 37.0
+offset_bottom = 37.0
+texture_filter = 3
+texture = ExtResource("i_key")
+expand_mode = 1
+
+[node name="SlotKey" type="Label" parent="Root/Slot6"]
+offset_left = 3.0
+offset_top = 1.0
+offset_right = 15.0
+offset_bottom = 13.0
+text = "6"
+label_settings = ExtResource("ls_small")
+vertical_alignment = 1
+
+[node name="SlotQty" type="Label" parent="Root/Slot6"]
+offset_left = 28.0
+offset_top = 29.0
+offset_right = 42.0
+offset_bottom = 43.0
+text = "1"
+label_settings = ExtResource("ls_small")
+horizontal_alignment = 2
+
+[node name="InteractPanel" type="TextureRect" parent="Root"]
+offset_left = 12.0
+offset_top = 490.0
+offset_right = 190.0
+offset_bottom = 525.0
+texture_filter = 3
+texture = ExtResource("p_interact")
+expand_mode = 1
+visible = false
+mouse_filter = 2
+
+[node name="Keycap" type="TextureRect" parent="Root/InteractPanel"]
+offset_left = 7.0
+offset_top = 7.0
+offset_right = 27.0
+offset_bottom = 25.0
+texture_filter = 3
+texture = ExtResource("c_keycap")
+expand_mode = 1
+
+[node name="KeycapText" type="Label" parent="Root/InteractPanel"]
+offset_left = 7.0
+offset_top = 5.0
+offset_right = 27.0
+offset_bottom = 26.0
+text = "E"
+label_settings = ExtResource("ls_small")
+horizontal_alignment = 1
+
+[node name="InteractText" type="Label" parent="Root/InteractPanel"]
+offset_left = 33.0
+offset_top = 4.0
+offset_right = 169.0
+offset_bottom = 30.0
+text = "进入"
+label_settings = ExtResource("ls_body")
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="ResourcePanel" type="TextureRect" parent="Root"]
+offset_left = 706.0
+offset_top = 490.0
+offset_right = 948.0
+offset_bottom = 525.0
+texture_filter = 3
+texture = ExtResource("p_resource")
+expand_mode = 1
+mouse_filter = 2
+
+[node name="ResCashIcon" type="TextureRect" parent="Root/ResourcePanel"]
+offset_left = 8.0
+offset_top = 10.0
+offset_right = 24.0
+offset_bottom = 26.0
+texture_filter = 3
+texture = ExtResource("i_cash")
+expand_mode = 1
+
+[node name="ResCashText" type="Label" parent="Root/ResourcePanel"]
+offset_left = 28.0
+offset_top = 5.0
+offset_right = 82.0
+offset_bottom = 31.0
+text = "现金 126"
+label_settings = ExtResource("ls_small")
+vertical_alignment = 1
+
+[node name="ResWoodIcon" type="TextureRect" parent="Root/ResourcePanel"]
+offset_left = 90.0
+offset_top = 10.0
+offset_right = 106.0
+offset_bottom = 26.0
+texture_filter = 3
+texture = ExtResource("i_firewood")
+expand_mode = 1
+
+[node name="ResWoodText" type="Label" parent="Root/ResourcePanel"]
+offset_left = 110.0
+offset_top = 5.0
+offset_right = 150.0
+offset_bottom = 31.0
+text = "木材 8"
+label_settings = ExtResource("ls_small")
+vertical_alignment = 1
+
+[node name="ResClothIcon" type="TextureRect" parent="Root/ResourcePanel"]
+offset_left = 158.0
+offset_top = 10.0
+offset_right = 174.0
+offset_bottom = 26.0
+texture_filter = 3
+texture = ExtResource("i_cloth")
+expand_mode = 1
+
+[node name="ResClothText" type="Label" parent="Root/ResourcePanel"]
+offset_left = 178.0
+offset_top = 5.0
+offset_right = 218.0
+offset_bottom = 31.0
+text = "布料 3"
+label_settings = ExtResource("ls_small")
+vertical_alignment = 1
+
+[node name="MockBadge" type="Label" parent="Root"]
+offset_left = 628.0
+offset_top = 12.0
+offset_right = 948.0
+offset_bottom = 34.0
+text = "测试数据：时间·天气·生存·物资·任务·快捷栏"
+label_settings = ExtResource("ls_small")
+theme_override_styles/normal = SubResource("StyleBox_badge")
+horizontal_alignment = 2
+vertical_alignment = 1
+

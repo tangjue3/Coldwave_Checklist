@@ -137,6 +137,41 @@ const APPROVED_RUNTIME = [
   // TASK-UI-003：主菜单背景经用户（美术总监）指示接入 scenes/menu/main_menu.tscn，
   // 运行时副本在 assets/ui/menu/，是本库第一条界面类运行时资源。
   { id: 'ART_UI_004', version: 'r01' },
+  // TASK-UI-009：HUD 独立透明素材包 v01 通过视觉审核并接入正式 HUD
+  // （scenes/ui/hud/game_hud.tscn），下列 33 条升「运行时可用」，运行时副本在 assets/ui/hud/v01/
+  { id: 'ART_UI_006', version: 'r01' },
+  { id: 'ART_UI_007', version: 'r01' },
+  { id: 'ART_UI_008', version: 'r01' },
+  { id: 'ART_UI_009', version: 'r01' },
+  { id: 'ART_UI_010', version: 'r01' },
+  { id: 'ART_UI_011', version: 'r01' },
+  { id: 'ART_UI_012', version: 'r01' },
+  { id: 'ART_UI_015', version: 'r01' },   // 快捷栏格 普通态
+  { id: 'ART_UI_015', version: 'r02' },   // 快捷栏格 选中态
+  { id: 'ART_UI_016', version: 'r01' },
+  { id: 'ART_UI_017', version: 'r01' },
+  { id: 'ART_UI_018', version: 'r01' },
+  { id: 'ART_UI_019', version: 'r01' },
+  { id: 'ART_UI_020', version: 'r01' },
+  { id: 'ART_UI_021', version: 'r01' },
+  { id: 'ART_UI_022', version: 'r01' },
+  { id: 'ART_UI_023', version: 'r01' },
+  { id: 'ART_UI_024', version: 'r01' },
+  { id: 'ART_UI_026', version: 'r01' },
+  { id: 'ART_UI_027', version: 'r01' },
+  { id: 'ART_UI_028', version: 'r01' },
+  { id: 'ART_UI_029', version: 'r01' },
+  { id: 'ART_UI_030', version: 'r01' },
+  { id: 'ART_UI_031', version: 'r01' },
+  { id: 'ART_UI_032', version: 'r01' },
+  { id: 'ART_UI_034', version: 'r01' },
+  { id: 'ART_UI_035', version: 'r01' },
+  { id: 'ART_UI_036', version: 'r01' },
+  { id: 'ART_UI_037', version: 'r01' },
+  { id: 'ART_UI_038', version: 'r01' },
+  { id: 'ART_UI_039', version: 'r01' },
+  { id: 'ART_UI_041', version: 'r02' },   // 进度条轨道 78×12（r01 保留追溯）
+  { id: 'ART_UI_042', version: 'r02' },   // 进度条填充 74×8（r01 保留追溯）
 ];
 // ART-INTEGRATE-005 阶段1：r03 四件已获批，断言从「必须待审核」改为
 // 「四件都必须是运行时可用且已进白名单」，保留质量保护但不拦批准结果。
@@ -149,7 +184,7 @@ check('r03 四件分件全部在运行时白名单内',
   R03_PARTS.every((v) => APPROVED_RUNTIME.some((a) => a.id === 'ART_FURN_103' && a.version === v)));
 const unexpectedRuntime = usable.filter((d) =>
   !APPROVED_RUNTIME.some((a) => a.id === d.id && a.version === d.version));
-check('「运行时可用」仅限已批准白名单（角色 r10–r12 + 车 r01–r03 + 货架 r01 + 商品 r02/r02-shelf + 主菜单背景 r01，共 15 条）',
+check('「运行时可用」仅限已批准白名单（角色 r10–r12 + 车 r01–r03 + 货架 r01 + 商品 r02/r02-shelf + 主菜单背景 r01 + HUD v01 共 33 条，共 48 条）',
   unexpectedRuntime.length === 0,
   `${usable.length} 条，越权 ${unexpectedRuntime.map((d) => d.id + '@' + d.version).join(',') || '无'}`);
 check('概念素材仍全部保持非运行时状态',

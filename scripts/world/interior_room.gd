@@ -33,6 +33,9 @@ var camera_mode: int = 2
 @onready var _player: Node2D = get_node_or_null("Actors/Player")
 @onready var _camera: Camera2D = get_node_or_null("Camera2D")
 
+## 正式 HUD（TASK-UI-009）：室内与街道共用同一个场景，只是地点名换成室内自己的。
+const HUD_SCENE := "res://scenes/ui/hud/game_hud.tscn"
+
 ## 00_Art 在世界坐标里的显示范围，由 _ready 计算
 var _art_rect := Rect2()
 ## Camera2D / Player 在 .tscn 里被摆放的位置（_enter_tree 时抢在子节点 _ready
@@ -52,6 +55,7 @@ func _enter_tree() -> void:
 
 
 func _ready() -> void:
+	GameState.set_location(location_key)
 	var art := get_node_or_null("00_Art") as Sprite2D
 	if art != null and art.texture != null:
 		_art_rect = Rect2(art.position, art.texture.get_size() * art.scale)
@@ -69,11 +73,43 @@ func _ready() -> void:
 		push_warning("[INT] 场景里没有 Actors/Player")
 
 	_apply_camera()
+	_spawn_hud()
 
 	print("[INT] %s(%s) 就绪 图=%.0fx%.0f spawn=%.0f 相机=%s" % [display_name, location_key,
 		_art_rect.size.x, _art_rect.size.y,
 		_player.global_position.x if _player else spawn_x,
 		"固定" if _camera != null and not _camera.get("follow_enabled") else "跟随"])
+
+
+## 室内也挂同一套 HUD：不写进 12 个 .tscn，避免碰用户手工微调过的场景布局。
+## 地点名用本场景自己的 display_name 缩写，比查表更准。
+func _spawn_hud() -> void:
+	var ps := load(HUD_SCENE) as PackedScene
+	if ps == null:
+		push_warning("[INT] HUD 场景加载失败")
+		return
+	var hud := ps.instantiate()
+	hud.name = "HUD"
+	add_child(hud)
+	var short_name := _hud_location()
+	hud.set("location_override", short_name)
+	hud.call("refresh")
+	var sensor := get_node_or_null("Interaction/InteractionSensor")
+	if sensor != null:
+		hud.call("bind_sensor", sensor)
+	print("[INT] HUD 已挂载 地点=%s" % short_name)
+
+
+## "A/B · 外婆旧两层小楼 内部（…）" → "外婆旧两层小楼"
+func _hud_location() -> String:
+	var s := display_name
+	var cut := s.find(" 内部")
+	if cut > 0:
+		s = s.substr(0, cut)
+	var sep := s.find(" · ")
+	if sep >= 0:
+		s = s.substr(sep + 3)
+	return s.strip_edges()
 
 
 func _apply_camera() -> void:

@@ -16,6 +16,7 @@ var _player: Node2D
 var _camera: Camera2D
 var _ui: CanvasLayer
 var _hud: Control
+var _game_hud: Node
 var _guides: Node2D
 var _free_cam := false
 var _clean_on := false
@@ -24,6 +25,8 @@ var _zoom := 0.7
 
 
 func _ready() -> void:
+	# 场景自己声明所在位置：HUD 的地点名据此显示，不依赖是从哪条路径进来的
+	GameState.set_location(location_key)
 	_player = get_node_or_null("Actors/Player") as Node2D
 	_camera = get_node_or_null("Camera2D") as Camera2D
 	_ui = get_node_or_null("UI") as CanvasLayer
@@ -31,8 +34,22 @@ func _ready() -> void:
 	_apply_spawn()
 	_setup_camera()
 	_build_ui()
+	_wire_hud()
 	print("[RD1] ready key=%s width=%.0f player_x=%.0f" % [
 		location_key, world_width, _player.global_position.x if _player else -1.0])
+
+
+## 正式 HUD：接场景里实例化的 GameHud，把交互提示交给它画在屏幕空间。
+## 开发工具条（镜头/标尺）默认隐藏，F1 开关——它和 HUD 顶栏占同一块地方。
+func _wire_hud() -> void:
+	_game_hud = get_node_or_null("HUD")
+	if _game_hud == null:
+		push_warning("[RD1] 场景里没有 HUD 节点，交互提示会退回世界坐标画法")
+		return
+	var sensor := get_node_or_null("Interaction/InteractionSensor")
+	if sensor != null:
+		_game_hud.call("bind_sensor", sensor)
+	_game_hud.call("refresh")
 
 
 
@@ -116,8 +133,10 @@ func _build_ui() -> void:
 	tip.size = Vector2(936, 24)
 	tip.add_theme_font_size_override("font_size", 12)
 	tip.add_theme_color_override("font_color", Color(0.96, 0.94, 0.88))
-	tip.text = "A / D 沿街行走 · F2 自由镜头（J/L/I/K、滚轮、中键拖拽）· [4] 显示/隐藏建筑名 · F4 隐藏文字标注"
+	tip.text = "A / D 沿街行走 · E 交互 · 1–6 快捷栏 · T 清单 · F1 开发工具条 · F2 自由镜头 · F4 隐藏文字标注"
 	_hud.add_child(tip)
+	# 正式 HUD 上线后，开发工具条与顶栏、快捷栏抢位置：默认收起，F1 召唤
+	_hud.visible = false
 	if _guides != null:
 		_guides.visible = false
 
@@ -180,8 +199,6 @@ func _toggle_labels() -> void:
 
 func _toggle_clean() -> void:
 	_clean_on = not _clean_on
-	if _hud != null:
-		_hud.visible = not _clean_on
 	if _guides != null:
 		_guides.visible = false
 	for n in get_tree().get_nodes_in_group(&"layout_label"):
@@ -209,23 +226,18 @@ func _process(delta: float) -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and not event.echo and event.pressed:
 		match event.keycode:
+			# 数字键 1–6 已交给 HUD 快捷栏，镜头预设改走工具条按钮 / F 键
+			KEY_F1:
+				if _hud != null:
+					_hud.visible = not _hud.visible
 			KEY_F2:
 				_set_free_cam(not _free_cam)
 			KEY_F3:
 				_toggle_guides()
 			KEY_F4:
 				_toggle_clean()
-			KEY_4:
+			KEY_F5:
 				_toggle_labels()
-			KEY_1:
-				_set_free_cam(false)
-				_zoom = 0.7
-				if _camera != null:
-					_camera.zoom = Vector2(_zoom, _zoom)
-			KEY_2:
-				_view_overview(0.30)
-			KEY_3:
-				_view_whole_street()
 	if event is InputEventMouseButton and _free_cam:
 		var mb := event as InputEventMouseButton
 		if mb.button_index == MOUSE_BUTTON_WHEEL_UP and mb.pressed:
