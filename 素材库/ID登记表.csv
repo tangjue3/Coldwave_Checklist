@@ -1,4 +1,4 @@
-﻿素材ID,前缀,类别,状态,名称或用途,登记日期,依据,备注
+素材ID,前缀,类别,状态,名称或用途,登记日期,依据,备注
 ART_CHAR_001,ART_CHAR,角色,已用,许知夏（主角）,2026-11-08,ARTLIB-001 / PREP-003,ART-RESET-001（2026-11-10）：v02 为第一季唯一外观基准；v01 与 r01/r02/r03/r04/r09 全部从工程删除，不保留归档与回退版本。新动画由 VIDEO-INTEGRATE 任务产出后在本号下新增 rNN 行；VIDEO-FINALIZE-001（2026-11-10）已正式登记 r10=walk_right / r11=walk_to_idle / r12=idle_right（512×704 高清，用户确认画质满意；脚底滑动与停止过渡相位限制仍未修复）。r01–r09 已删除，故从 r10 起编号
 ART_CHAR_002,ART_CHAR,角色,已用,四位 NPC 侧影合集,2026-11-08,ARTLIB-001,历史合集，四张单角色五视图已另立 104-107
 ART_CHAR_003,ART_CHAR,角色,已用,用户指定画风参考（非本作角色）,2026-11-08,ARTLIB-001,仅作风参考，永不填运行时路径
@@ -39,3 +39,40 @@ ART_UI_003,ART_UI,界面,预留,对话框 / 角色名,2026-11-08,v1.1 05 UI03,�
 ART_FX_001,ART_FX,特效与动画,预留,暖灯、雪、发电机动画,2026-11-08,v1.1 05 FX01,未制作；本轮不生成动画
 ART_UI_004,ART_UI,界面,已用,主菜单背景（1672×941）,2026-11-12,TASK-UI-003,用户提供的主菜单插画；已接入 scenes/menu/main_menu.tscn 作为整屏背景。图内按钮为烘焙视觉，运行时用透明按钮做点击区。
 ART_UI_005,ART_UI,界面,已用,HUD 概念图（1672×941）,2026-11-12,TASK-UI-004,美术总监（ChatGPT）出图、用户转交的 HUD 概念稿；用于字体与排版比对，不接入运行时，台账审核状态=概念草案。
+ART_UI_006,ART_UI,界面,已用,地点栏面板,2026-11-13,TASK-UI-007,HUD 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/hud/candidates_v01/。
+ART_UI_007,ART_UI,界面,已用,日期时间栏面板,2026-11-13,TASK-UI-007,HUD 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/hud/candidates_v01/。
+ART_UI_008,ART_UI,界面,已用,天气栏面板,2026-11-13,TASK-UI-007,HUD 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/hud/candidates_v01/。
+ART_UI_009,ART_UI,界面,已用,今日清单面板,2026-11-13,TASK-UI-007,HUD 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/hud/candidates_v01/。
+ART_UI_010,ART_UI,界面,已用,生存状态面板,2026-11-13,TASK-UI-007,HUD 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/hud/candidates_v01/。
+ART_UI_011,ART_UI,界面,已用,资源条面板,2026-11-13,TASK-UI-007,HUD 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/hud/candidates_v01/。
+ART_UI_012,ART_UI,界面,已用,交互提示面板,2026-11-13,TASK-UI-007,HUD 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/hud/candidates_v01/。
+ART_UI_013,ART_UI,界面,已用,提示条面板,2026-11-13,TASK-UI-007,HUD 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/hud/candidates_v01/。
+ART_UI_014,ART_UI,界面,已用,悬浮提示面板,2026-11-13,TASK-UI-007,HUD 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/hud/candidates_v01/。
+ART_UI_015,ART_UI,界面,已用,快捷栏格（普通/选中/禁用三态）,2026-11-13,TASK-UI-007,HUD 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/hud/candidates_v01/。
+ART_UI_016,ART_UI,界面,已用,图标面包,2026-11-13,TASK-UI-007,HUD 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/hud/candidates_v01/。
+ART_UI_017,ART_UI,界面,已用,图标日历,2026-11-13,TASK-UI-007,HUD 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/hud/candidates_v01/。
+ART_UI_018,ART_UI,界面,已用,图标现金,2026-11-13,TASK-UI-007,HUD 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/hud/candidates_v01/。
+ART_UI_019,ART_UI,界面,已用,图标已勾选,2026-11-13,TASK-UI-007,HUD 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/hud/candidates_v01/。
+ART_UI_020,ART_UI,界面,已用,图标空勾选,2026-11-13,TASK-UI-007,HUD 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/hud/candidates_v01/。
+ART_UI_021,ART_UI,界面,已用,图标清单,2026-11-13,TASK-UI-007,HUD 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/hud/candidates_v01/。
+ART_UI_022,ART_UI,界面,已用,图标下折角,2026-11-13,TASK-UI-007,HUD 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/hud/candidates_v01/。
+ART_UI_023,ART_UI,界面,已用,图标上折角,2026-11-13,TASK-UI-007,HUD 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/hud/candidates_v01/。
+ART_UI_024,ART_UI,界面,已用,图标布料,2026-11-13,TASK-UI-007,HUD 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/hud/candidates_v01/。
+ART_UI_025,ART_UI,界面,已用,图标出口,2026-11-13,TASK-UI-007,HUD 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/hud/candidates_v01/。
+ART_UI_026,ART_UI,界面,已用,图标疲劳,2026-11-13,TASK-UI-007,HUD 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/hud/candidates_v01/。
+ART_UI_027,ART_UI,界面,已用,图标木柴,2026-11-13,TASK-UI-007,HUD 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/hud/candidates_v01/。
+ART_UI_028,ART_UI,界面,已用,图标手电,2026-11-13,TASK-UI-007,HUD 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/hud/candidates_v01/。
+ART_UI_029,ART_UI,界面,已用,图标家园,2026-11-13,TASK-UI-007,HUD 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/hud/candidates_v01/。
+ART_UI_030,ART_UI,界面,已用,图标饥饿,2026-11-13,TASK-UI-007,HUD 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/hud/candidates_v01/。
+ART_UI_031,ART_UI,界面,已用,图标钥匙,2026-11-13,TASK-UI-007,HUD 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/hud/candidates_v01/。
+ART_UI_032,ART_UI,界面,已用,图标钳子,2026-11-13,TASK-UI-007,HUD 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/hud/candidates_v01/。
+ART_UI_033,ART_UI,界面,已用,图标设置,2026-11-13,TASK-UI-007,HUD 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/hud/candidates_v01/。
+ART_UI_034,ART_UI,界面,已用,图标雪花,2026-11-13,TASK-UI-007,HUD 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/hud/candidates_v01/。
+ART_UI_035,ART_UI,界面,已用,图标体温,2026-11-13,TASK-UI-007,HUD 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/hud/candidates_v01/。
+ART_UI_036,ART_UI,界面,已用,图标口渴,2026-11-13,TASK-UI-007,HUD 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/hud/candidates_v01/。
+ART_UI_037,ART_UI,界面,已用,图标水瓶,2026-11-13,TASK-UI-007,HUD 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/hud/candidates_v01/。
+ART_UI_038,ART_UI,界面,已用,图标负重,2026-11-13,TASK-UI-007,HUD 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/hud/candidates_v01/。
+ART_UI_039,ART_UI,界面,已用,空键帽,2026-11-13,TASK-UI-007,HUD 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/hud/candidates_v01/。
+ART_UI_040,ART_UI,界面,已用,霜纹分隔,2026-11-13,TASK-UI-007,HUD 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/hud/candidates_v01/。
+ART_UI_041,ART_UI,界面,已用,进度条轨道,2026-11-13,TASK-UI-007,HUD 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/hud/candidates_v01/。
+ART_UI_042,ART_UI,界面,已用,进度条填充,2026-11-13,TASK-UI-007,HUD 独立透明素材包 v01 候选素材；已归档未审核，运行时副本在 assets/ui/hud/candidates_v01/。

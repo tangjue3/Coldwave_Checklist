@@ -1,0 +1,730 @@
+{
+  "package": "寒潮清单 HUD 独立透明 PNG 候选素材包 v01",
+  "date": "2026-11-13",
+  "status": "候选美术；尚未经过 Godot 引擎实机验收；不得直接标记运行时已批准",
+  "resolution": "960x540 logical",
+  "source": "previously generated HUD PNG atlases; isolated, trimmed and assembled into components",
+  "font_policy": "Font assets are not included; use TASK-UI-006 A/B mixed theme and existing Godot fonts",
+  "assets": [
+    {
+      "file": "01-空白面板/HUD_panel_tasks_432x304.png",
+      "pixels": [
+        432,
+        304
+      ],
+      "logical_size": [
+        216,
+        152
+      ],
+      "description": "今日清单空白面板",
+      "group": "panel",
+      "alpha": "RGBA透明 PNG",
+      "texture_filter": "LINEAR_WITH_MIPMAPS (单独资源)",
+      "sha256": "81ae2ac71c6c0178bc919de933fa73bd46044444db806e4304b3a5a2078ac9a3",
+      "nonzero_alpha_pixels": 128219,
+      "transparent_ratio": 0.0237
+    },
+    {
+      "file": "01-空白面板/HUD_panel_status_432x328.png",
+      "pixels": [
+        432,
+        328
+      ],
+      "logical_size": [
+        216,
+        164
+      ],
+      "description": "生存状态空白面板",
+      "group": "panel",
+      "alpha": "RGBA透明 PNG",
+      "texture_filter": "LINEAR_WITH_MIPMAPS (单独资源)",
+      "sha256": "ff277f81d19a00b36ae35b3028e58d4a43fadcc4bdf45aba01bdd10980d6c2c5",
+      "nonzero_alpha_pixels": 133174,
+      "transparent_ratio": 0.0601
+    },
+    {
+      "file": "01-空白面板/HUD_panel_location_432x70.png",
+      "pixels": [
+        432,
+        70
+      ],
+      "logical_size": [
+        216,
+        35
+      ],
+      "description": "左上地点栏背景",
+      "group": "panel",
+      "alpha": "RGBA透明 PNG",
+      "texture_filter": "LINEAR_WITH_MIPMAPS (单独资源)",
+      "sha256": "4b4be3074583b5b08fc45fca59816af7b109f96e06a2e113d3909a8a58e434ac",
+      "nonzero_alpha_pixels": 26267,
+      "transparent_ratio": 0.1314
+    },
+    {
+      "file": "01-空白面板/HUD_panel_datetime_272x70.png",
+      "pixels": [
+        272,
+        70
+      ],
+      "logical_size": [
+        136,
+        35
+      ],
+      "description": "日期时间栏背景",
+      "group": "panel",
+      "alpha": "RGBA透明 PNG",
+      "texture_filter": "LINEAR_WITH_MIPMAPS (单独资源)",
+      "sha256": "705db1e3bca01b6a76d2f809a2cf6db75b8585397ac0c429a983808d4d843a17",
+      "nonzero_alpha_pixels": 16280,
+      "transparent_ratio": 0.145
+    },
+    {
+      "file": "01-空白面板/HUD_panel_weather_260x70.png",
+      "pixels": [
+        260,
+        70
+      ],
+      "logical_size": [
+        130,
+        35
+      ],
+      "description": "天气与温度栏背景",
+      "group": "panel",
+      "alpha": "RGBA透明 PNG",
+      "texture_filter": "LINEAR_WITH_MIPMAPS (单独资源)",
+      "sha256": "d41488b81eb393625a1d03794d98e2f4ee31ad194e113b5d1362747c86846a81",
+      "nonzero_alpha_pixels": 15530,
+      "transparent_ratio": 0.1467
+    },
+    {
+      "file": "01-空白面板/HUD_panel_interact_356x70.png",
+      "pixels": [
+        356,
+        70
+      ],
+      "logical_size": [
+        178,
+        35
+      ],
+      "description": "左下交互提示空白栏",
+      "group": "panel",
+      "alpha": "RGBA透明 PNG",
+      "texture_filter": "LINEAR_WITH_MIPMAPS (单独资源)",
+      "sha256": "3973510d8149652e463e4b78e10d8a59fae87be40b6080a4b96cffc1f4ef4108",
+      "nonzero_alpha_pixels": 21523,
+      "transparent_ratio": 0.1363
+    },
+    {
+      "file": "01-空白面板/HUD_panel_resource_484x70.png",
+      "pixels": [
+        484,
+        70
+      ],
+      "logical_size": [
+        242,
+        35
+      ],
+      "description": "右下资源信息栏",
+      "group": "panel",
+      "alpha": "RGBA透明 PNG",
+      "texture_filter": "LINEAR_WITH_MIPMAPS (单独资源)",
+      "sha256": "c858e7faaee40bccb0693ce7466f6e8183161ce33bf10cf9969d64cff46f0476",
+      "nonzero_alpha_pixels": 29511,
+      "transparent_ratio": 0.129
+    },
+    {
+      "file": "01-空白面板/HUD_panel_toast_544x100.png",
+      "pixels": [
+        544,
+        100
+      ],
+      "logical_size": [
+        272,
+        50
+      ],
+      "description": "居中提示消息空白面板",
+      "group": "panel",
+      "alpha": "RGBA透明 PNG",
+      "texture_filter": "LINEAR_WITH_MIPMAPS (单独资源)",
+      "sha256": "9283bc67da3b55637bf091695600bf7250cad5a3670de23338e290518c9d26c5",
+      "nonzero_alpha_pixels": 49272,
+      "transparent_ratio": 0.0943
+    },
+    {
+      "file": "01-空白面板/HUD_panel_tooltip_368x144.png",
+      "pixels": [
+        368,
+        144
+      ],
+      "logical_size": [
+        184,
+        72
+      ],
+      "description": "道具悬浮说明空白面板",
+      "group": "panel",
+      "alpha": "RGBA透明 PNG",
+      "texture_filter": "LINEAR_WITH_MIPMAPS (单独资源)",
+      "sha256": "109baa63264397a59ad61af2192ab3a78c8ae32389e9408f0806d896afaf9cdd",
+      "nonzero_alpha_pixels": 48753,
+      "transparent_ratio": 0.08
+    },
+    {
+      "file": "02-快捷栏格/HUD_slot_normal_90x90.png",
+      "pixels": [
+        90,
+        90
+      ],
+      "logical_size": [
+        45,
+        45
+      ],
+      "description": "空快捷栏格，禁止烘焙序号",
+      "group": "slot",
+      "alpha": "RGBA透明 PNG",
+      "texture_filter": "LINEAR_WITH_MIPMAPS (单独资源)",
+      "sha256": "a6312ec3ca1f4e7fa62537329cee8a92e28d22d50d5d786e2782d375c0eb8357",
+      "nonzero_alpha_pixels": 6717,
+      "transparent_ratio": 0.1707
+    },
+    {
+      "file": "02-快捷栏格/HUD_slot_selected_90x90.png",
+      "pixels": [
+        90,
+        90
+      ],
+      "logical_size": [
+        45,
+        45
+      ],
+      "description": "选中快捷栏格，亮琥珀边框",
+      "group": "slot",
+      "alpha": "RGBA透明 PNG",
+      "texture_filter": "LINEAR_WITH_MIPMAPS (单独资源)",
+      "sha256": "f7674035b9b4d6818123887667d418adf65002950d26bbd2b977d335682e5b18",
+      "nonzero_alpha_pixels": 7873,
+      "transparent_ratio": 0.028
+    },
+    {
+      "file": "02-快捷栏格/HUD_slot_disabled_90x90.png",
+      "pixels": [
+        90,
+        90
+      ],
+      "logical_size": [
+        45,
+        45
+      ],
+      "description": "禁用快捷栏格，低对比",
+      "group": "slot",
+      "alpha": "RGBA透明 PNG",
+      "texture_filter": "LINEAR_WITH_MIPMAPS (单独资源)",
+      "sha256": "c3326ef6a79afcbd0ad59729e2b92662823c967f6e0888be09ec3bb87f727f06",
+      "nonzero_alpha_pixels": 6717,
+      "transparent_ratio": 0.1707
+    },
+    {
+      "file": "04-控件与装饰/HUD_keycap_empty_58x55.png",
+      "pixels": [
+        58,
+        55
+      ],
+      "logical_size": [
+        29,
+        27
+      ],
+      "description": "不带文字的交互键帽",
+      "group": "component",
+      "alpha": "RGBA透明 PNG",
+      "texture_filter": "LINEAR_WITH_MIPMAPS (单独资源)",
+      "sha256": "2955aa3a50b64d72a030ca6bcbc0afc2c5b392c328695d48780f5ee99082d19f",
+      "nonzero_alpha_pixels": 2668,
+      "transparent_ratio": 0.1636
+    },
+    {
+      "file": "03-图标/HUD_icon_home_72x72.png",
+      "pixels": [
+        72,
+        72
+      ],
+      "logical_size": [
+        36,
+        36
+      ],
+      "description": "home 单独 PNG 图标",
+      "group": "icon",
+      "alpha": "RGBA透明 PNG",
+      "texture_filter": "LINEAR_WITH_MIPMAPS (单独资源)",
+      "sha256": "49183c90ed9d9f9373123ef38d4210bb7559bb047fde81e4db903c68edaf1848",
+      "nonzero_alpha_pixels": 2274,
+      "transparent_ratio": 0.5613
+    },
+    {
+      "file": "03-图标/HUD_icon_calendar_72x72.png",
+      "pixels": [
+        72,
+        72
+      ],
+      "logical_size": [
+        36,
+        36
+      ],
+      "description": "calendar 单独 PNG 图标",
+      "group": "icon",
+      "alpha": "RGBA透明 PNG",
+      "texture_filter": "LINEAR_WITH_MIPMAPS (单独资源)",
+      "sha256": "158b44b48022fdfdc74026f668f740a32185c6749b8bb40c111aadf39c73b2de",
+      "nonzero_alpha_pixels": 3143,
+      "transparent_ratio": 0.3937
+    },
+    {
+      "file": "03-图标/HUD_icon_snowflake_72x72.png",
+      "pixels": [
+        72,
+        72
+      ],
+      "logical_size": [
+        36,
+        36
+      ],
+      "description": "snowflake 单独 PNG 图标",
+      "group": "icon",
+      "alpha": "RGBA透明 PNG",
+      "texture_filter": "LINEAR_WITH_MIPMAPS (单独资源)",
+      "sha256": "07bf7113ca612c70afc8735ec39e7b8c4a71059558e8af8608850184e996b40c",
+      "nonzero_alpha_pixels": 2116,
+      "transparent_ratio": 0.5918
+    },
+    {
+      "file": "03-图标/HUD_icon_checklist_72x72.png",
+      "pixels": [
+        72,
+        72
+      ],
+      "logical_size": [
+        36,
+        36
+      ],
+      "description": "checklist 单独 PNG 图标",
+      "group": "icon",
+      "alpha": "RGBA透明 PNG",
+      "texture_filter": "LINEAR_WITH_MIPMAPS (单独资源)",
+      "sha256": "a5192a3d7b39090ba88fd36154b57c18f3b00e8b850d540143ea23065763fad1",
+      "nonzero_alpha_pixels": 2568,
+      "transparent_ratio": 0.5046
+    },
+    {
+      "file": "03-图标/HUD_icon_checkbox_checked_72x72.png",
+      "pixels": [
+        72,
+        72
+      ],
+      "logical_size": [
+        36,
+        36
+      ],
+      "description": "checkbox_checked 单独 PNG 图标",
+      "group": "icon",
+      "alpha": "RGBA透明 PNG",
+      "texture_filter": "LINEAR_WITH_MIPMAPS (单独资源)",
+      "sha256": "1a72ea7b554939f3eacf37c7edb2d9bfc24801a650b5ef0ad8c328ee01e5fa8a",
+      "nonzero_alpha_pixels": 3508,
+      "transparent_ratio": 0.3233
+    },
+    {
+      "file": "03-图标/HUD_icon_checkbox_empty_72x72.png",
+      "pixels": [
+        72,
+        72
+      ],
+      "logical_size": [
+        36,
+        36
+      ],
+      "description": "checkbox_empty 单独 PNG 图标",
+      "group": "icon",
+      "alpha": "RGBA透明 PNG",
+      "texture_filter": "LINEAR_WITH_MIPMAPS (单独资源)",
+      "sha256": "037a17fef191f541dfef521c7332e21a51a00cc6e06100b089e50af1f62986de",
+      "nonzero_alpha_pixels": 3503,
+      "transparent_ratio": 0.3243
+    },
+    {
+      "file": "03-图标/HUD_icon_temperature_72x72.png",
+      "pixels": [
+        72,
+        72
+      ],
+      "logical_size": [
+        36,
+        36
+      ],
+      "description": "temperature 单独 PNG 图标",
+      "group": "icon",
+      "alpha": "RGBA透明 PNG",
+      "texture_filter": "LINEAR_WITH_MIPMAPS (单独资源)",
+      "sha256": "7c1a5fa3d9435dec83ace81afa6b66a4c73b5d52f0b45445e3168d5e7e3ad241",
+      "nonzero_alpha_pixels": 1516,
+      "transparent_ratio": 0.7076
+    },
+    {
+      "file": "03-图标/HUD_icon_hunger_72x72.png",
+      "pixels": [
+        72,
+        72
+      ],
+      "logical_size": [
+        36,
+        36
+      ],
+      "description": "hunger 单独 PNG 图标",
+      "group": "icon",
+      "alpha": "RGBA透明 PNG",
+      "texture_filter": "LINEAR_WITH_MIPMAPS (单独资源)",
+      "sha256": "3f7ab2e16e496dfab0403463ef39ed463bf699f9440f814577f6bbea8884cdde",
+      "nonzero_alpha_pixels": 2072,
+      "transparent_ratio": 0.6003
+    },
+    {
+      "file": "03-图标/HUD_icon_thirst_72x72.png",
+      "pixels": [
+        72,
+        72
+      ],
+      "logical_size": [
+        36,
+        36
+      ],
+      "description": "thirst 单独 PNG 图标",
+      "group": "icon",
+      "alpha": "RGBA透明 PNG",
+      "texture_filter": "LINEAR_WITH_MIPMAPS (单独资源)",
+      "sha256": "e70756075471b9b932c680c6dabd3fefc13061efa3dd92d9f219102af84cc877",
+      "nonzero_alpha_pixels": 1606,
+      "transparent_ratio": 0.6902
+    },
+    {
+      "file": "03-图标/HUD_icon_fatigue_72x72.png",
+      "pixels": [
+        72,
+        72
+      ],
+      "logical_size": [
+        36,
+        36
+      ],
+      "description": "fatigue 单独 PNG 图标",
+      "group": "icon",
+      "alpha": "RGBA透明 PNG",
+      "texture_filter": "LINEAR_WITH_MIPMAPS (单独资源)",
+      "sha256": "5bbef8079f210b3d9d9f9bafcd9920c3cc1d3d4f4af060c9cca0789ab44e1ed6",
+      "nonzero_alpha_pixels": 1521,
+      "transparent_ratio": 0.7066
+    },
+    {
+      "file": "03-图标/HUD_icon_weight_72x72.png",
+      "pixels": [
+        72,
+        72
+      ],
+      "logical_size": [
+        36,
+        36
+      ],
+      "description": "weight 单独 PNG 图标",
+      "group": "icon",
+      "alpha": "RGBA透明 PNG",
+      "texture_filter": "LINEAR_WITH_MIPMAPS (单独资源)",
+      "sha256": "92043b304f99a310aaaeff9c78785e9306536fcdc6c65dc7c41c4ed16bc6e954",
+      "nonzero_alpha_pixels": 2604,
+      "transparent_ratio": 0.4977
+    },
+    {
+      "file": "03-图标/HUD_icon_flashlight_72x72.png",
+      "pixels": [
+        72,
+        72
+      ],
+      "logical_size": [
+        36,
+        36
+      ],
+      "description": "flashlight 单独 PNG 图标",
+      "group": "icon",
+      "alpha": "RGBA透明 PNG",
+      "texture_filter": "LINEAR_WITH_MIPMAPS (单独资源)",
+      "sha256": "b3a45c29a7ef8d85840c67bfd70f096f48b5cdd6dfa1e6800551f3becf1f405d",
+      "nonzero_alpha_pixels": 1570,
+      "transparent_ratio": 0.6971
+    },
+    {
+      "file": "03-图标/HUD_icon_water_72x72.png",
+      "pixels": [
+        72,
+        72
+      ],
+      "logical_size": [
+        36,
+        36
+      ],
+      "description": "water 单独 PNG 图标",
+      "group": "icon",
+      "alpha": "RGBA透明 PNG",
+      "texture_filter": "LINEAR_WITH_MIPMAPS (单独资源)",
+      "sha256": "648c690b11097e9e50d7208f3a2fe68b9f9bb2504564838269267c576fab732b",
+      "nonzero_alpha_pixels": 1672,
+      "transparent_ratio": 0.6775
+    },
+    {
+      "file": "03-图标/HUD_icon_bread_72x72.png",
+      "pixels": [
+        72,
+        72
+      ],
+      "logical_size": [
+        36,
+        36
+      ],
+      "description": "bread 单独 PNG 图标",
+      "group": "icon",
+      "alpha": "RGBA透明 PNG",
+      "texture_filter": "LINEAR_WITH_MIPMAPS (单独资源)",
+      "sha256": "d7677ee111fd66bc8ed226dd81c684f78c97c3e3d47ef0c29c6a4e01184769c8",
+      "nonzero_alpha_pixels": 1955,
+      "transparent_ratio": 0.6229
+    },
+    {
+      "file": "03-图标/HUD_icon_firewood_72x72.png",
+      "pixels": [
+        72,
+        72
+      ],
+      "logical_size": [
+        36,
+        36
+      ],
+      "description": "firewood 单独 PNG 图标",
+      "group": "icon",
+      "alpha": "RGBA透明 PNG",
+      "texture_filter": "LINEAR_WITH_MIPMAPS (单独资源)",
+      "sha256": "1f4bef4a49803efa6dcfc64ab565da9e69b2cc362eb5a4c1f7315d585d835c6b",
+      "nonzero_alpha_pixels": 1263,
+      "transparent_ratio": 0.7564
+    },
+    {
+      "file": "03-图标/HUD_icon_pliers_72x72.png",
+      "pixels": [
+        72,
+        72
+      ],
+      "logical_size": [
+        36,
+        36
+      ],
+      "description": "pliers 单独 PNG 图标",
+      "group": "icon",
+      "alpha": "RGBA透明 PNG",
+      "texture_filter": "LINEAR_WITH_MIPMAPS (单独资源)",
+      "sha256": "374571dc4885e59cf2d097c4d7178d59405e75c38de73ff11fb712750be53819",
+      "nonzero_alpha_pixels": 1462,
+      "transparent_ratio": 0.718
+    },
+    {
+      "file": "03-图标/HUD_icon_key_72x72.png",
+      "pixels": [
+        72,
+        72
+      ],
+      "logical_size": [
+        36,
+        36
+      ],
+      "description": "key 单独 PNG 图标",
+      "group": "icon",
+      "alpha": "RGBA透明 PNG",
+      "texture_filter": "LINEAR_WITH_MIPMAPS (单独资源)",
+      "sha256": "aa5573e5bd9147188da8a27bb1bcdff5172f7720cc96dc773fc1bae90473313f",
+      "nonzero_alpha_pixels": 1138,
+      "transparent_ratio": 0.7805
+    },
+    {
+      "file": "03-图标/HUD_icon_cash_72x72.png",
+      "pixels": [
+        72,
+        72
+      ],
+      "logical_size": [
+        36,
+        36
+      ],
+      "description": "cash 单独 PNG 图标",
+      "group": "icon",
+      "alpha": "RGBA透明 PNG",
+      "texture_filter": "LINEAR_WITH_MIPMAPS (单独资源)",
+      "sha256": "a7e9e6967096f58d4efce598696a6cf4351a567e84887552f8883a55de4f908f",
+      "nonzero_alpha_pixels": 1680,
+      "transparent_ratio": 0.6759
+    },
+    {
+      "file": "03-图标/HUD_icon_wood_72x72.png",
+      "pixels": [
+        72,
+        72
+      ],
+      "logical_size": [
+        36,
+        36
+      ],
+      "description": "wood 单独 PNG 图标",
+      "group": "icon",
+      "alpha": "RGBA透明 PNG",
+      "texture_filter": "LINEAR_WITH_MIPMAPS (单独资源)",
+      "sha256": "84ec3931f59c1e25179f0925bc0bb48d3009ab416e8ae29c1d4782273b2eac52",
+      "nonzero_alpha_pixels": 1820,
+      "transparent_ratio": 0.6489
+    },
+    {
+      "file": "03-图标/HUD_icon_cloth_72x72.png",
+      "pixels": [
+        72,
+        72
+      ],
+      "logical_size": [
+        36,
+        36
+      ],
+      "description": "cloth 单独 PNG 图标",
+      "group": "icon",
+      "alpha": "RGBA透明 PNG",
+      "texture_filter": "LINEAR_WITH_MIPMAPS (单独资源)",
+      "sha256": "ffe67affdc898bcaaa9c2e2dbb2038c8b7ea47d783d1dfc6a252ca1b43d58af8",
+      "nonzero_alpha_pixels": 1975,
+      "transparent_ratio": 0.619
+    },
+    {
+      "file": "03-图标/HUD_icon_settings_72x72.png",
+      "pixels": [
+        72,
+        72
+      ],
+      "logical_size": [
+        36,
+        36
+      ],
+      "description": "settings 单独 PNG 图标",
+      "group": "icon",
+      "alpha": "RGBA透明 PNG",
+      "texture_filter": "LINEAR_WITH_MIPMAPS (单独资源)",
+      "sha256": "ff525da99f852211bc187b20bf274367a6d50ecc3c137a489466990f5b761969",
+      "nonzero_alpha_pixels": 1525,
+      "transparent_ratio": 0.7058
+    },
+    {
+      "file": "03-图标/HUD_icon_exit_72x72.png",
+      "pixels": [
+        72,
+        72
+      ],
+      "logical_size": [
+        36,
+        36
+      ],
+      "description": "exit 单独 PNG 图标",
+      "group": "icon",
+      "alpha": "RGBA透明 PNG",
+      "texture_filter": "LINEAR_WITH_MIPMAPS (单独资源)",
+      "sha256": "928bbddb02b513acffe0a0d9be775e013b5cd2fbbd18d92b5607d11418a8395d",
+      "nonzero_alpha_pixels": 2742,
+      "transparent_ratio": 0.4711
+    },
+    {
+      "file": "03-图标/HUD_icon_chevron_up_72x72.png",
+      "pixels": [
+        72,
+        72
+      ],
+      "logical_size": [
+        36,
+        36
+      ],
+      "description": "chevron_up 单独 PNG 图标",
+      "group": "icon",
+      "alpha": "RGBA透明 PNG",
+      "texture_filter": "LINEAR_WITH_MIPMAPS (单独资源)",
+      "sha256": "9be5abf6da8a3c7848fd2d94637277639c96d95f6ac1e0505080b64b8079db08",
+      "nonzero_alpha_pixels": 1145,
+      "transparent_ratio": 0.7791
+    },
+    {
+      "file": "03-图标/HUD_icon_chevron_down_72x72.png",
+      "pixels": [
+        72,
+        72
+      ],
+      "logical_size": [
+        36,
+        36
+      ],
+      "description": "chevron_down 单独 PNG 图标",
+      "group": "icon",
+      "alpha": "RGBA透明 PNG",
+      "texture_filter": "LINEAR_WITH_MIPMAPS (单独资源)",
+      "sha256": "7d7a646901ea7169fe5089cc8c7dfa970eab8025dd471e01235a1625610a1122",
+      "nonzero_alpha_pixels": 1109,
+      "transparent_ratio": 0.7861
+    },
+    {
+      "file": "04-控件与装饰/HUD_progress_track_270x22.png",
+      "pixels": [
+        270,
+        22
+      ],
+      "logical_size": [
+        135,
+        11
+      ],
+      "description": "状态进度条空轨；值与长度由 Godot 计算",
+      "group": "component",
+      "alpha": "RGBA透明 PNG",
+      "texture_filter": "LINEAR_WITH_MIPMAPS (单独资源)",
+      "sha256": "10793d21797f73807a015bd95e080a6a0cd24b992817d41f2fb06f923858dd20",
+      "nonzero_alpha_pixels": 5268,
+      "transparent_ratio": 0.1131
+    },
+    {
+      "file": "04-控件与装饰/HUD_progress_fill_255x12.png",
+      "pixels": [
+        255,
+        12
+      ],
+      "logical_size": [
+        127,
+        6
+      ],
+      "description": "状态进度条琥珀填充；按值裁切或宽度控制",
+      "group": "component",
+      "alpha": "RGBA透明 PNG",
+      "texture_filter": "LINEAR_WITH_MIPMAPS (单独资源)",
+      "sha256": "c710a9d24d03924b975362079a2d63212e2ad9c83d8ec6947088dcb5374e3b82",
+      "nonzero_alpha_pixels": 3044,
+      "transparent_ratio": 0.0052
+    },
+    {
+      "file": "04-控件与装饰/HUD_divider_frost_624x58.png",
+      "pixels": [
+        624,
+        58
+      ],
+      "logical_size": [
+        325,
+        39
+      ],
+      "description": "雪花金线装饰分隔条；不用于重复平铺",
+      "group": "decoration",
+      "alpha": "RGBA透明 PNG",
+      "texture_filter": "LINEAR_WITH_MIPMAPS (单独资源)",
+      "sha256": "b65c989a40a7ee408513d2035b5886b30cfa0a0228f33cc2435165b2afff67d0",
+      "nonzero_alpha_pixels": 5116,
+      "transparent_ratio": 0.8586
+    }
+  ]
+}

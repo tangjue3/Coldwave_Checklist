@@ -68,6 +68,8 @@ const PATHS: Dictionary = {
 	&"fontab": "res://scenes/dev/font_ab.tscn",
 	# TASK-UI-006 最终 HUD 字体方案（A 为主 + 任务行用 B）
 	&"fontfinal": "res://scenes/dev/font_final.tscn",
+	# TASK-UI-007 HUD 独立透明素材包接入验证（屏幕空间 HUD）
+	&"hudprev": "res://scenes/dev/hud_preview.tscn",
 }
 
 ## 自带检查 / 截图 / 退出逻辑的开发场景：路由不再代为截图，避免重复或抢先退出

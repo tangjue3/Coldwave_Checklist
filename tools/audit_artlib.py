@@ -174,7 +174,8 @@ def main() -> int:
 
     unreg = []
     for p in sorted(ART_DIR.rglob("*")):
-        if not p.is_file() or p.suffix.lower() == ".md":
+        # .json 是素材包的 manifest / 元数据，不是美术素材，不参与登记
+        if not p.is_file() or p.suffix.lower() in (".md", ".json"):
             continue
         rel = p.relative_to(LIB).as_posix()
         if rel in registered:
