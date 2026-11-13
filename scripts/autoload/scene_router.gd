@@ -66,6 +66,8 @@ const PATHS: Dictionary = {
 	&"fontprev": "res://scenes/dev/font_preview.tscn",
 	# TASK-UI-005 A/B 字体方案对照（今日清单 + 生存状态两块面板）
 	&"fontab": "res://scenes/dev/font_ab.tscn",
+	# TASK-UI-006 最终 HUD 字体方案（A 为主 + 任务行用 B）
+	&"fontfinal": "res://scenes/dev/font_final.tscn",
 }
 
 ## 自带检查 / 截图 / 退出逻辑的开发场景：路由不再代为截图，避免重复或抢先退出

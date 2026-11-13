@@ -9,7 +9,49 @@
 2. **字号 / 颜色 / 描边 / 阴影** —— 本目录的 `LabelSettings`
 3. **控件级容器样式**（面板底、按钮四态、进度条） —— `assets/ui/themes/font_theme.tres`
 
-## 第二轮：A/B 两套方案（TASK-UI-005，当前推荐）
+## 最终方案（TASK-UI-006 采用，`final/`）
+
+美术总监裁定用 A/B 混合：**标题、正文、状态文字、数值走 A（宋体），只有任务清单正文走 B（霞鹜文楷、无描边）**。
+
+| 角色 | 预设 | 字体 | 字号 | 描边 | 用在哪 |
+|---|---|---|---|---|---|
+| 面板标题 | `f_title_serif_18` | 宋 600 | 18 | 2px @40% | 今日清单 / 生存状态 |
+| 正文 | `f_body_serif_14` | 宋 400 | 14 | 1px @32% | 状态标签（体温 / 饥饿…） |
+| 数值 | `f_value_serif_14` | 宋 400 | 14 | 1px @32% | 体温、百分比 |
+| 长数值 | `f_value_serif_12` | 宋 400 | 12 | 1px @32% | 负重 `28.4 / 40.0 kg` |
+| 任务行 | `f_task_wenkai_14` | 楷 400 | 14 | **0** | 清单未完成项 |
+| 任务已完成 | `f_task_done_wenkai_14` | 楷 400 | 14 | **0** | 已完成项（配删除线） |
+| 小字 | `f_small_serif_11` | 宋 400 | 11 | 1px @30% | 说明、页脚、对照标注 |
+
+预览：`scenes/dev/font_final.tscn`，`--dev-scene=fontfinal`。
+
+### 数值为什么靠「固定盒 + 右对齐」而不是等宽字形
+
+先查过字体特性：Noto Serif SC 的 OpenType 特性表里**没有 `tnum`**（只有 `fwid` / `hwid`，
+那会把数字变成全角或半角，14px 下"36.4°C"会宽到 84px，塞不进状态面板）。
+霞鹜文楷同样没有 `tnum`。所以"数字等宽"这条路在本工程走不通。
+
+改用布局手段兑现同一条要求：
+
+- 状态行的数值盒固定 **80px**（面板内 x 134–214），`horizontal_alignment = 2`；
+- 右对齐意味着**右缘恒为盒右缘**，数字位数变化只影响左缘，不会推动左侧的进度条或标签；
+- 实测：`9.9°C` 文本宽 35px、`36.4°C` 43px、`-12.8°C` 47px —— 三者右缘都是 80，左缘分别是 45 / 37 / 33。
+  这条结论由 `--font-check` 打印，不是估的。
+
+### 面板（占位，等美术的冰霜 PNG）
+
+当前 HUD 面板是 Theme 里的 StyleBox，不是美术图：
+
+```
+bg      #1F242B @ 88%
+边线    #736756 @ 55%，1px
+圆角    5px
+```
+
+冰霜面板 PNG 到位后**只换底图，文字样式一行不改**——文字都挂在 Label / LabelSettings 上，
+与面板贴图完全解耦。
+
+## 第二轮：A/B 两套方案（TASK-UI-005，对比过程留档）
 
 第一版（下面「预设一览」那 13 个）在视觉验收里被判**过于厚重**——标题 21px 带 3px 描边、
 正文 16px 带 2px 描边、数值用金色，整体发闷。第二轮整组重做，放在 `ab/` 子目录：
@@ -63,21 +105,22 @@ godot --headless --path . -- --dev-scene=fontab --font-check --quit          # �
 
 ## 字号档
 
-`11 / 12 / 13 / 14 / 15 / 16 / 17 / 21 / 28`
+**最终方案只用三档：`11 / 12 / 14 / 18`**（小字 / 长数值 / 正文与常规数值 / 面板标题）。
 
-档位是按实际用途定的，没有连续排。新增样式前先问：能不能用现有档？能复用就别加档——
-HUD 上一堆相邻字号（15/16/17 三个并存）本来就是"每处单独调"留下的债。
+历史档位 `13 / 15 / 16 / 17 / 21 / 28` 来自第一、二轮，仍留在库里供回退，但新做界面不要再用——
+15/16/17 三个相邻字号并存，本质是"每处单独调"留下的债。新增样式前先问：能不能用现有三档？
 
 ## 颜色
 
 | 名称 | 值 | 说明 |
 |---|---|---|
-| 米白 ink | `#F2E8D6` | 主文字 |
+| 米白 ink | `#E6DDCB` | 主文字（最终方案，比第一版的 `#F2E8D6` 收了一档亮度） |
 | 次要 dim | `#C9BCA4` | 已完成、说明、页脚 |
 | 禁用 mute | `#8E8271` | 不可用条目 |
 | 浅金 gold | `#D9A96E` | 栏目标签、进度条填充、选中框 |
 | 高光金 hi | `#F0CB92` | 强调数值（当前未用于正文数值） |
-| 暖白 value | `#F6EEDA` | 面板里的数值（概念图里数值不是金色，是偏亮米白） |
+| 暖白 value | `#F4EBD8` | 面板里的数值（不是金色，是偏亮米白） |
+| 已完成 done | `#A89B85` | 任务已完成行，能读但明显次要 |
 | 描边 outline | `#12100C` | 所有文字的描边 |
 | 面板底 panel | `#1F242B` @88% | 半透明面板 |
 | 面板边 border | `#736756` @55% | 面板 1px 边 |
@@ -89,18 +132,20 @@ HUD 上一堆相邻字号（15/16/17 三个并存）本来就是"每处单独调
 - `assets/ui/themes/font_theme.tres` 是**本轮新增的字体主题**：默认字体思源宋体 400、
   Button 四态、Panel、ProgressBar、以及 `HotbarSlot` / `HotbarSlotActive` 两个面板类型变体。
   目前只被 `scenes/dev/font_preview.tscn` 使用。
+  现在被 `font_preview.tscn`（TASK-UI-004）、`font_ab.tscn`（005）、`font_final.tscn`（006）三个预览场景共用。
 - 将来接入正式 HUD 时有两条路：① 把 `font_theme.tres` 的内容并进 `main_theme.tres`；
-  ② 保留两份、按场景挂。**这是待裁定的设计决策，不要自己拍。**
+  ② 保留两份、按场景挂。**TASK-UI-006 明确要求本轮不合并，两条路都还没选。**
 
 ## 验证
 
 ```bash
-# 资源是否都真的加载到了字形（每个预设打印字体名 / 字号 / 描边 / 字宽）
-godot --headless --path . -- --dev-scene=fontprev --font-check --quit
+# 最终方案：校验 7 个角色 + 数值列宽 + 面板占位色
+godot --headless --path . -- --dev-scene=fontfinal --font-check --quit
+godot --path . -- --dev-scene=fontfinal --shot=ui006_final.png --quit
 
-# 视觉预览（HUD 页 / 参数对照页）
-godot --path . -- --dev-scene=fontprev --shot=ui004_hud.png --quit
-godot --path . -- --dev-scene=fontprev --font-page=spec --shot=ui004_spec.png --quit
+# 历史两轮（对照用）
+godot --headless --path . -- --dev-scene=fontprev --font-check --quit
+godot --headless --path . -- --dev-scene=fontab --font-check --quit
 ```
 
 `--font-check` 里有 `get_string_size("寒潮清单")` 的宽度断言：宽度接近 0 就说明字体没导入
