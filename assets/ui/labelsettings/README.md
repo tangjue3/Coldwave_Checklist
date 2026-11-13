@@ -9,7 +9,39 @@
 2. **字号 / 颜色 / 描边 / 阴影** —— 本目录的 `LabelSettings`
 3. **控件级容器样式**（面板底、按钮四态、进度条） —— `assets/ui/themes/font_theme.tres`
 
-## 预设一览
+## 第二轮：A/B 两套方案（TASK-UI-005，当前推荐）
+
+第一版（下面「预设一览」那 13 个）在视觉验收里被判**过于厚重**——标题 21px 带 3px 描边、
+正文 16px 带 2px 描边、数值用金色，整体发闷。第二轮整组重做，放在 `ab/` 子目录：
+
+| 层级 | 方案 A · 精致宋体 | 方案 B · 宋体标题 + 霞鹜文楷正文 |
+|---|---|---|
+| 面板标题 | `x_title_serif_18` 宋 600 / 18px / 描边 2 @40% | `b_title_serif_18` 同 A |
+| 正文 | `a_body_serif_14` 宋 400 / 14px / 描边 1 @32% | `b_body_wenkai_14` 楷 400 / 14px / **无描边** |
+| 数值 | `a_value_serif_14` 宋 400 / 14px / 描边 1 @32% | `b_value_wenkai_14` 楷 400 / 14px / 无描边 |
+| 长数值 | `a_value_serif_12` / `b_value_wenkai_12` 12px | 同左 |
+| 已完成 | `a_done_serif_14` / `b_done_wenkai_14` 降亮度 | 同左 |
+| 小字 | `a_small_serif_11` / `b_small_wenkai_11` 11px | 同左 |
+| 说明标签 | `x_caption_13` 宋 600 + 字距，浅金 | 共用 |
+
+**和第一版的差别**：标题 21→18px、描边 3→2px；正文 16/17→14px、描边 2→1px；数值从
+「宋 600 金色」改回「宋 400 米白」；全部去掉 Black 字重；阴影从 blur2/3 降到 blur0/1、
+透明度 35–45% → 18–22%。
+
+**B 组为什么没有描边**：楷体笔画细，1px 深色描边会把笔画糊在一起，14px 下反而更脏。
+实测对比后 B 组正文/数值改为 0 描边，只靠面板底色（`#1F242B` @88%）提供对比。
+A 组是宋体，笔画有锐角，1px 描边反而让它更利落，保留。
+
+预览场景：`scenes/dev/font_ab.tscn`
+
+```bash
+godot --path . -- --dev-scene=fontab --shot=ui005_ab.png --quit              # A/B 同框
+godot --path . -- --dev-scene=fontab --font-scheme=a --shot=ui005_a.png --quit
+godot --path . -- --dev-scene=fontab --font-scheme=b --shot=ui005_b.png --quit
+godot --headless --path . -- --dev-scene=fontab --font-check --quit          # 只校验
+```
+
+## 预设一览（第一版，已被 `ab/` 取代，保留供回退）
 
 | 文件 | 字号 | 字体 / 字重 | 颜色 | 描边 | 阴影 | 用在哪 |
 |---|---|---|---|---|---|---|

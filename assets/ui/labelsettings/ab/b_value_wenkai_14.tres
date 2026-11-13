@@ -1,0 +1,13 @@
+[gd_resource type="LabelSettings" load_steps=2 format=3]
+
+[ext_resource type="FontVariation" path="res://assets/ui/fonts/variations/wenkai_w400.tres" id="1_f"]
+
+[resource]
+font = ExtResource("1_f")
+font_size = 14
+font_color = Color(0.957, 0.922, 0.847, 1)
+outline_size = 0
+outline_color = Color(0.071, 0.063, 0.047, 0.32)
+shadow_size = 0
+shadow_color = Color(0, 0, 0, 0.0)
+shadow_offset = Vector2(0, 0)

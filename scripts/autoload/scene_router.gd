@@ -64,6 +64,8 @@ const PATHS: Dictionary = {
 	&"vid002": "res://scenes/dev/vid002_verify.tscn",
 	# TASK-UI-004 字体效果预览（只做视觉比对，不接正式 HUD）
 	&"fontprev": "res://scenes/dev/font_preview.tscn",
+	# TASK-UI-005 A/B 字体方案对照（今日清单 + 生存状态两块面板）
+	&"fontab": "res://scenes/dev/font_ab.tscn",
 }
 
 ## 自带检查 / 截图 / 退出逻辑的开发场景：路由不再代为截图，避免重复或抢先退出

@@ -1,0 +1,588 @@
+[gd_scene load_steps=17 format=3]
+
+[ext_resource type="Script" path="res://scripts/dev/font_ab.gd" id="1_script"]
+[ext_resource type="Theme" path="res://assets/ui/themes/font_theme.tres" id="2_theme"]
+[ext_resource type="Texture2D" path="res://assets/scenes/season1/A_INT_1575x680_v01.png" id="3_bg"]
+[ext_resource type="LabelSettings" path="res://assets/ui/labelsettings/ab/x_caption_13.tres" id="4_cap"]
+[ext_resource type="LabelSettings" path="res://assets/ui/labelsettings/ab/x_title_serif_18.tres" id="5_titleA"]
+[ext_resource type="LabelSettings" path="res://assets/ui/labelsettings/ab/a_body_serif_14.tres" id="6_abody"]
+[ext_resource type="LabelSettings" path="res://assets/ui/labelsettings/ab/a_value_serif_14.tres" id="7_aval"]
+[ext_resource type="LabelSettings" path="res://assets/ui/labelsettings/ab/a_done_serif_14.tres" id="8_adone"]
+[ext_resource type="LabelSettings" path="res://assets/ui/labelsettings/ab/a_small_serif_11.tres" id="9_asmall"]
+[ext_resource type="LabelSettings" path="res://assets/ui/labelsettings/ab/b_title_serif_18.tres" id="10_titleB"]
+[ext_resource type="LabelSettings" path="res://assets/ui/labelsettings/ab/b_body_wenkai_14.tres" id="11_bbody"]
+[ext_resource type="LabelSettings" path="res://assets/ui/labelsettings/ab/b_value_wenkai_14.tres" id="12_bval"]
+[ext_resource type="LabelSettings" path="res://assets/ui/labelsettings/ab/b_done_wenkai_14.tres" id="13_bdone"]
+[ext_resource type="LabelSettings" path="res://assets/ui/labelsettings/ab/b_small_wenkai_11.tres" id="14_bsmall"]
+[ext_resource type="LabelSettings" path="res://assets/ui/labelsettings/ab/a_value_serif_12.tres" id="15_aval12"]
+[ext_resource type="LabelSettings" path="res://assets/ui/labelsettings/ab/b_value_wenkai_12.tres" id="16_bval12"]
+
+[node name="FontAB" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+script = ExtResource("1_script")
+
+[node name="Bg" type="TextureRect" parent="."]
+texture_filter = 3
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_bg")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Scrim" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.039, 0.047, 0.059, 0.34)
+
+[node name="RowA" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CapPlate" type="Panel" parent="RowA"]
+offset_left = 24.0
+offset_top = 16.0
+offset_right = 242.0
+offset_bottom = 40.0
+
+[node name="Caption" type="Label" parent="RowA/CapPlate"]
+offset_left = 9.0
+offset_top = 2.0
+offset_right = 209.0
+offset_bottom = 22.0
+text = "方案 A · 精致宋体"
+label_settings = ExtResource("4_cap")
+
+[node name="Task" type="Panel" parent="RowA"]
+offset_left = 24.0
+offset_top = 50.0
+offset_right = 210.0
+offset_bottom = 172.0
+
+[node name="Header" type="Label" parent="RowA/Task"]
+offset_left = 12.0
+offset_top = 3.0
+offset_right = 168.0
+offset_bottom = 33.0
+text = "今日清单"
+label_settings = ExtResource("5_titleA")
+
+[node name="HDivider" type="ColorRect" parent="RowA/Task"]
+offset_left = 12.0
+offset_top = 36.0
+offset_right = 174.0
+offset_bottom = 37.0
+color = Color(0.451, 0.404, 0.345, 0.45)
+
+[node name="Box1" type="Panel" parent="RowA/Task"]
+offset_left = 12.0
+offset_top = 46.0
+offset_right = 23.0
+offset_bottom = 57.0
+theme_type_variation = &"HotbarSlotActive"
+
+[node name="Task1" type="Label" parent="RowA/Task"]
+offset_left = 28.0
+offset_top = 40.0
+offset_right = 174.0
+offset_bottom = 64.0
+text = "检查壁炉燃料"
+label_settings = ExtResource("8_adone")
+
+[node name="Box2" type="Panel" parent="RowA/Task"]
+offset_left = 12.0
+offset_top = 70.0
+offset_right = 23.0
+offset_bottom = 81.0
+theme_type_variation = &"HotbarSlot"
+
+[node name="Task2" type="Label" parent="RowA/Task"]
+offset_left = 28.0
+offset_top = 64.0
+offset_right = 174.0
+offset_bottom = 88.0
+text = "整理厨房物资"
+label_settings = ExtResource("6_abody")
+
+[node name="Box3" type="Panel" parent="RowA/Task"]
+offset_left = 12.0
+offset_top = 94.0
+offset_right = 23.0
+offset_bottom = 105.0
+theme_type_variation = &"HotbarSlot"
+
+[node name="Task3" type="Label" parent="RowA/Task"]
+offset_left = 28.0
+offset_top = 88.0
+offset_right = 174.0
+offset_bottom = 112.0
+text = "前往社区超市"
+label_settings = ExtResource("6_abody")
+
+[node name="Strike1" type="ColorRect" parent="RowA/Task"]
+offset_left = 30.0
+offset_top = 54.0
+offset_right = 116.0
+offset_bottom = 55.0
+color = Color(0.612, 0.561, 0.478, 0.75)
+
+[node name="Status" type="Panel" parent="RowA"]
+offset_left = 760.0
+offset_top = 46.0
+offset_right = 932.0
+offset_bottom = 206.0
+
+[node name="Header" type="Label" parent="RowA/Status"]
+offset_left = 12.0
+offset_top = 3.0
+offset_right = 160.0
+offset_bottom = 33.0
+text = "生存状态"
+label_settings = ExtResource("5_titleA")
+
+[node name="HDivider" type="ColorRect" parent="RowA/Status"]
+offset_left = 12.0
+offset_top = 36.0
+offset_right = 160.0
+offset_bottom = 37.0
+color = Color(0.451, 0.404, 0.345, 0.45)
+
+[node name="R0Dot" type="ColorRect" parent="RowA/Status"]
+offset_left = 12.0
+offset_top = 51.0
+offset_right = 17.0
+offset_bottom = 56.0
+color = Color(0.851, 0.663, 0.431, 0.85)
+
+[node name="R0Label" type="Label" parent="RowA/Status"]
+offset_left = 22.0
+offset_top = 42.0
+offset_right = 52.0
+offset_bottom = 62.0
+text = "体温"
+label_settings = ExtResource("6_abody")
+
+[node name="R0Bar" type="ProgressBar" parent="RowA/Status"]
+offset_left = 54.0
+offset_top = 49.0
+offset_right = 100.0
+offset_bottom = 57.0
+value = 92.0
+show_percentage = false
+
+[node name="R0Value" type="Label" parent="RowA/Status"]
+offset_left = 100.0
+offset_top = 42.0
+offset_right = 160.0
+offset_bottom = 62.0
+text = "36.4°C"
+label_settings = ExtResource("7_aval")
+horizontal_alignment = 2
+
+[node name="R1Dot" type="ColorRect" parent="RowA/Status"]
+offset_left = 12.0
+offset_top = 71.0
+offset_right = 17.0
+offset_bottom = 76.0
+color = Color(0.851, 0.663, 0.431, 0.85)
+
+[node name="R1Label" type="Label" parent="RowA/Status"]
+offset_left = 22.0
+offset_top = 62.0
+offset_right = 52.0
+offset_bottom = 82.0
+text = "饥饿"
+label_settings = ExtResource("6_abody")
+
+[node name="R1Bar" type="ProgressBar" parent="RowA/Status"]
+offset_left = 54.0
+offset_top = 69.0
+offset_right = 100.0
+offset_bottom = 77.0
+value = 72.0
+show_percentage = false
+
+[node name="R1Value" type="Label" parent="RowA/Status"]
+offset_left = 100.0
+offset_top = 62.0
+offset_right = 160.0
+offset_bottom = 82.0
+text = "72%"
+label_settings = ExtResource("7_aval")
+horizontal_alignment = 2
+
+[node name="R2Dot" type="ColorRect" parent="RowA/Status"]
+offset_left = 12.0
+offset_top = 91.0
+offset_right = 17.0
+offset_bottom = 96.0
+color = Color(0.851, 0.663, 0.431, 0.85)
+
+[node name="R2Label" type="Label" parent="RowA/Status"]
+offset_left = 22.0
+offset_top = 82.0
+offset_right = 52.0
+offset_bottom = 102.0
+text = "口渴"
+label_settings = ExtResource("6_abody")
+
+[node name="R2Bar" type="ProgressBar" parent="RowA/Status"]
+offset_left = 54.0
+offset_top = 89.0
+offset_right = 100.0
+offset_bottom = 97.0
+value = 64.0
+show_percentage = false
+
+[node name="R2Value" type="Label" parent="RowA/Status"]
+offset_left = 100.0
+offset_top = 82.0
+offset_right = 160.0
+offset_bottom = 102.0
+text = "64%"
+label_settings = ExtResource("7_aval")
+horizontal_alignment = 2
+
+[node name="R3Dot" type="ColorRect" parent="RowA/Status"]
+offset_left = 12.0
+offset_top = 111.0
+offset_right = 17.0
+offset_bottom = 116.0
+color = Color(0.851, 0.663, 0.431, 0.85)
+
+[node name="R3Label" type="Label" parent="RowA/Status"]
+offset_left = 22.0
+offset_top = 102.0
+offset_right = 52.0
+offset_bottom = 122.0
+text = "疲劳"
+label_settings = ExtResource("6_abody")
+
+[node name="R3Bar" type="ProgressBar" parent="RowA/Status"]
+offset_left = 54.0
+offset_top = 109.0
+offset_right = 100.0
+offset_bottom = 117.0
+value = 46.0
+show_percentage = false
+
+[node name="R3Value" type="Label" parent="RowA/Status"]
+offset_left = 100.0
+offset_top = 102.0
+offset_right = 160.0
+offset_bottom = 122.0
+text = "46%"
+label_settings = ExtResource("7_aval")
+horizontal_alignment = 2
+
+[node name="R4Label" type="Label" parent="RowA/Status"]
+offset_left = 22.0
+offset_top = 120.0
+offset_right = 52.0
+offset_bottom = 140.0
+text = "负重"
+label_settings = ExtResource("6_abody")
+
+[node name="R4Value" type="Label" parent="RowA/Status"]
+offset_left = 0.0
+offset_top = 118.0
+offset_right = 157.0
+offset_bottom = 136.0
+text = "28.4 / 40.0 kg"
+label_settings = ExtResource("15_aval12")
+horizontal_alignment = 2
+
+[node name="R4Bar" type="ProgressBar" parent="RowA/Status"]
+offset_left = 12.0
+offset_top = 140.0
+offset_right = 158.0
+offset_bottom = 148.0
+value = 71.0
+show_percentage = false
+
+[node name="RowB" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CapPlate" type="Panel" parent="RowB"]
+offset_left = 24.0
+offset_top = 268.0
+offset_right = 292.0
+offset_bottom = 292.0
+
+[node name="Caption" type="Label" parent="RowB/CapPlate"]
+offset_left = 9.0
+offset_top = 2.0
+offset_right = 259.0
+offset_bottom = 22.0
+text = "方案 B · 宋体标题 + 霞鹜文楷正文"
+label_settings = ExtResource("4_cap")
+
+[node name="Task" type="Panel" parent="RowB"]
+offset_left = 24.0
+offset_top = 302.0
+offset_right = 210.0
+offset_bottom = 424.0
+
+[node name="Header" type="Label" parent="RowB/Task"]
+offset_left = 12.0
+offset_top = 3.0
+offset_right = 168.0
+offset_bottom = 33.0
+text = "今日清单"
+label_settings = ExtResource("10_titleB")
+
+[node name="HDivider" type="ColorRect" parent="RowB/Task"]
+offset_left = 12.0
+offset_top = 36.0
+offset_right = 174.0
+offset_bottom = 37.0
+color = Color(0.451, 0.404, 0.345, 0.45)
+
+[node name="Box1" type="Panel" parent="RowB/Task"]
+offset_left = 12.0
+offset_top = 46.0
+offset_right = 23.0
+offset_bottom = 57.0
+theme_type_variation = &"HotbarSlotActive"
+
+[node name="Task1" type="Label" parent="RowB/Task"]
+offset_left = 28.0
+offset_top = 40.0
+offset_right = 174.0
+offset_bottom = 64.0
+text = "检查壁炉燃料"
+label_settings = ExtResource("13_bdone")
+
+[node name="Box2" type="Panel" parent="RowB/Task"]
+offset_left = 12.0
+offset_top = 70.0
+offset_right = 23.0
+offset_bottom = 81.0
+theme_type_variation = &"HotbarSlot"
+
+[node name="Task2" type="Label" parent="RowB/Task"]
+offset_left = 28.0
+offset_top = 64.0
+offset_right = 174.0
+offset_bottom = 88.0
+text = "整理厨房物资"
+label_settings = ExtResource("11_bbody")
+
+[node name="Box3" type="Panel" parent="RowB/Task"]
+offset_left = 12.0
+offset_top = 94.0
+offset_right = 23.0
+offset_bottom = 105.0
+theme_type_variation = &"HotbarSlot"
+
+[node name="Task3" type="Label" parent="RowB/Task"]
+offset_left = 28.0
+offset_top = 88.0
+offset_right = 174.0
+offset_bottom = 112.0
+text = "前往社区超市"
+label_settings = ExtResource("11_bbody")
+
+[node name="Strike1" type="ColorRect" parent="RowB/Task"]
+offset_left = 30.0
+offset_top = 54.0
+offset_right = 116.0
+offset_bottom = 55.0
+color = Color(0.612, 0.561, 0.478, 0.75)
+
+[node name="Status" type="Panel" parent="RowB"]
+offset_left = 760.0
+offset_top = 298.0
+offset_right = 932.0
+offset_bottom = 458.0
+
+[node name="Header" type="Label" parent="RowB/Status"]
+offset_left = 12.0
+offset_top = 3.0
+offset_right = 160.0
+offset_bottom = 33.0
+text = "生存状态"
+label_settings = ExtResource("10_titleB")
+
+[node name="HDivider" type="ColorRect" parent="RowB/Status"]
+offset_left = 12.0
+offset_top = 36.0
+offset_right = 160.0
+offset_bottom = 37.0
+color = Color(0.451, 0.404, 0.345, 0.45)
+
+[node name="R0Dot" type="ColorRect" parent="RowB/Status"]
+offset_left = 12.0
+offset_top = 51.0
+offset_right = 17.0
+offset_bottom = 56.0
+color = Color(0.851, 0.663, 0.431, 0.85)
+
+[node name="R0Label" type="Label" parent="RowB/Status"]
+offset_left = 22.0
+offset_top = 42.0
+offset_right = 52.0
+offset_bottom = 62.0
+text = "体温"
+label_settings = ExtResource("11_bbody")
+
+[node name="R0Bar" type="ProgressBar" parent="RowB/Status"]
+offset_left = 54.0
+offset_top = 49.0
+offset_right = 100.0
+offset_bottom = 57.0
+value = 92.0
+show_percentage = false
+
+[node name="R0Value" type="Label" parent="RowB/Status"]
+offset_left = 100.0
+offset_top = 42.0
+offset_right = 160.0
+offset_bottom = 62.0
+text = "36.4°C"
+label_settings = ExtResource("12_bval")
+horizontal_alignment = 2
+
+[node name="R1Dot" type="ColorRect" parent="RowB/Status"]
+offset_left = 12.0
+offset_top = 71.0
+offset_right = 17.0
+offset_bottom = 76.0
+color = Color(0.851, 0.663, 0.431, 0.85)
+
+[node name="R1Label" type="Label" parent="RowB/Status"]
+offset_left = 22.0
+offset_top = 62.0
+offset_right = 52.0
+offset_bottom = 82.0
+text = "饥饿"
+label_settings = ExtResource("11_bbody")
+
+[node name="R1Bar" type="ProgressBar" parent="RowB/Status"]
+offset_left = 54.0
+offset_top = 69.0
+offset_right = 100.0
+offset_bottom = 77.0
+value = 72.0
+show_percentage = false
+
+[node name="R1Value" type="Label" parent="RowB/Status"]
+offset_left = 100.0
+offset_top = 62.0
+offset_right = 160.0
+offset_bottom = 82.0
+text = "72%"
+label_settings = ExtResource("12_bval")
+horizontal_alignment = 2
+
+[node name="R2Dot" type="ColorRect" parent="RowB/Status"]
+offset_left = 12.0
+offset_top = 91.0
+offset_right = 17.0
+offset_bottom = 96.0
+color = Color(0.851, 0.663, 0.431, 0.85)
+
+[node name="R2Label" type="Label" parent="RowB/Status"]
+offset_left = 22.0
+offset_top = 82.0
+offset_right = 52.0
+offset_bottom = 102.0
+text = "口渴"
+label_settings = ExtResource("11_bbody")
+
+[node name="R2Bar" type="ProgressBar" parent="RowB/Status"]
+offset_left = 54.0
+offset_top = 89.0
+offset_right = 100.0
+offset_bottom = 97.0
+value = 64.0
+show_percentage = false
+
+[node name="R2Value" type="Label" parent="RowB/Status"]
+offset_left = 100.0
+offset_top = 82.0
+offset_right = 160.0
+offset_bottom = 102.0
+text = "64%"
+label_settings = ExtResource("12_bval")
+horizontal_alignment = 2
+
+[node name="R3Dot" type="ColorRect" parent="RowB/Status"]
+offset_left = 12.0
+offset_top = 111.0
+offset_right = 17.0
+offset_bottom = 116.0
+color = Color(0.851, 0.663, 0.431, 0.85)
+
+[node name="R3Label" type="Label" parent="RowB/Status"]
+offset_left = 22.0
+offset_top = 102.0
+offset_right = 52.0
+offset_bottom = 122.0
+text = "疲劳"
+label_settings = ExtResource("11_bbody")
+
+[node name="R3Bar" type="ProgressBar" parent="RowB/Status"]
+offset_left = 54.0
+offset_top = 109.0
+offset_right = 100.0
+offset_bottom = 117.0
+value = 46.0
+show_percentage = false
+
+[node name="R3Value" type="Label" parent="RowB/Status"]
+offset_left = 100.0
+offset_top = 102.0
+offset_right = 160.0
+offset_bottom = 122.0
+text = "46%"
+label_settings = ExtResource("12_bval")
+horizontal_alignment = 2
+
+[node name="R4Label" type="Label" parent="RowB/Status"]
+offset_left = 22.0
+offset_top = 120.0
+offset_right = 52.0
+offset_bottom = 140.0
+text = "负重"
+label_settings = ExtResource("11_bbody")
+
+[node name="R4Value" type="Label" parent="RowB/Status"]
+offset_left = 0.0
+offset_top = 118.0
+offset_right = 157.0
+offset_bottom = 136.0
+text = "28.4 / 40.0 kg"
+label_settings = ExtResource("16_bval12")
+horizontal_alignment = 2
+
+[node name="R4Bar" type="ProgressBar" parent="RowB/Status"]
+offset_left = 12.0
+offset_top = 140.0
+offset_right = 158.0
+offset_bottom = 148.0
+value = 71.0
+show_percentage = false
+
