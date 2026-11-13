@@ -168,6 +168,15 @@ func _run() -> void:
 		_check(main.global_position == before_pos and main.size == before_size,
 			"相机 zoom %.1f 后面板位置 %s 尺寸 %s 不变" % [z, main.global_position, main.size])
 
+	# 弹窗按钮都用九宫格贴图（四态齐全）
+	var dlg_bad := 0
+	for nm in ["MinusBtn", "PlusBtn", "OkBtn", "CancelBtn"]:
+		var b := dialog.get_node(nm) as Button
+		for st in ["normal", "hover", "pressed", "disabled"]:
+			if not (b.get_theme_stylebox(st) is StyleBoxTexture):
+				dlg_bad += 1
+	_check(dlg_bad == 0, "弹窗 4 个按钮的 normal/hover/pressed/disabled 均为九宫格贴图")
+
 	# 10) 测试数据被如实标出
 	var badge := main.get_node("MockBadge") as Label
 	_check(badge.visible and badge.text.find("测试数据") >= 0, "测试数据角标常驻：%s" % badge.text)
@@ -179,6 +188,59 @@ func _run() -> void:
 		and sb.texture_margin_left + sb.texture_margin_right < minus.size.x,
 		"小按钮用 region_rect 裁透明边，边距之和 < 控件宽（%s）" % [
 			sb.region_rect if sb != null else "null"])
+
+	# 12) TASK-UI-011：详情栏不拥挤、Tooltip 动态高度、占位图与状态一致性
+	var desc_l := details.get_node("Desc") as Label
+	var use_b := details.get_node("UseBtn") as Button
+	_check(use_b.position.y - (desc_l.position.y + desc_l.size.y) >= 8.0,
+		"详情栏描述与按钮间距 ≥8px（实际 %.0f）" % [use_b.position.y - (desc_l.position.y + desc_l.size.y)])
+	var sb_dbtn := use_b.get_theme_stylebox("normal") as StyleBoxTexture
+	_check(sb_dbtn != null and sb_dbtn.region_rect.size.x > 0.0,
+		"详情按钮用 region_rect 裁透明边，九宫格不塌")
+
+	var items_all: Array = s.call("_items_of", "全部")
+	s.call("_show_tooltip", 1, items_all[1])
+	_check(tooltip.size.y > 156.0, "长描述 Tooltip 自动增高到 %.0f" % tooltip.size.y)
+	_check(String((tooltip.get_node("TTDesc") as Label).text) == String(items_all[1]["desc"]),
+		"Tooltip 显示完整描述（不是第一句）")
+	_check(tooltip.position.y + tooltip.size.y <= 540.0, "长描述 Tooltip 底部不出屏")
+	s.call("_on_slot_hover", 1, false)
+
+	# 最底行格子：Tooltip 应被顶回屏幕内
+	s.call("_show_tooltip", 26, items_all[1])
+	_check(tooltip.position.y >= 0.0 and tooltip.position.y + tooltip.size.y <= 540.0,
+		"底行格子 Tooltip 被夹紧到 y=%.0f..%.0f" % [tooltip.position.y, tooltip.position.y + tooltip.size.y])
+	s.call("_on_slot_hover", 26, false)
+	# 最右列格子：Tooltip 应被夹回屏幕内
+	s.call("_show_tooltip", 5, items_all[1])
+	_check(tooltip.position.x >= 0.0 and tooltip.position.x + tooltip.size.x <= 960.0,
+		"右列格子 Tooltip 被夹紧到 x=%.0f..%.0f" % [tooltip.position.x, tooltip.position.x + tooltip.size.x])
+	s.call("_on_slot_hover", 5, false)
+	s.call("_show_tooltip", 0, items_all[5])
+	_check(tooltip.size.y == 156.0, "单句描述 Tooltip 回到原生 156px（实际 %.0f）" % tooltip.size.y)
+	s.call("_on_slot_hover", 0, false)
+
+	# 图标映射与明确占位图
+	var icon_audit: Dictionary = s.get("ICON_AUDIT")
+	_check(icon_audit.size() == 9 and String(icon_audit["布料"]) == "cloth"
+		and String(icon_audit["退烧药"]) == "", "图标映射审计表：7 专图 / 2 占位，无错误映射")
+	var slot0 := grid.get_node("Slot00") as Button
+	var slot1 := grid.get_node("Slot01") as Button
+	s.call("_on_category_toggled", true, 3)
+	await _wait(2)
+	for sl in [slot0, slot1]:
+		_check((sl.get_node("Icon") as TextureRect).texture == null
+			and (sl.get_node("Ph") as Control).visible,
+			"无正式图标的 %s 槽位显示明确占位图" % sl.name)
+	_check(String((details.get_node("ItemCat") as Label).text).find("图标待补") >= 0,
+		"详情栏如实标注「图标待补」：%s" % (details.get_node("ItemCat") as Label).text)
+
+	# 悬停已选中格子：仍保持选中贴图，不出现两种高亮
+	s.call("_on_slot_hover", 0, true)
+	var hsb := slot0.get_theme_stylebox("hover") as StyleBoxTexture
+	_check(hsb != null and String(hsb.texture.resource_path).ends_with("INV_slot_selected_58x58.png"),
+		"选中格被悬停时 hover 仍用选中贴图（视觉一致）")
+	s.call("_on_slot_hover", 0, false)
 
 	print("[INV-E2E] ==== %d 项失败 ====" % fails)
 	quit(0 if fails == 0 else 1)

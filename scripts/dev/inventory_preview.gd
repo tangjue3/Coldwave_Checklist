@@ -1,5 +1,5 @@
 extends Node
-## 背包与物资界面 · 候选素材预览（TASK-UI-010）
+## 背包与物资界面 · 候选素材预览（TASK-UI-010 / 011 视觉优化）
 ##
 ## 这**不是**背包玩法。场景只做三件事：
 ##   1. 把候选面板/格位/按钮/图标按 960×540 组装出来，看它们在实机上长什么样；
@@ -19,6 +19,8 @@ extends Node
 ##   --dev-scene=invprev --no-text          去文字
 ##   --dev-scene=invprev --cam-zoom=0.7     验证相机缩放不影响界面
 ##   --dev-scene=invprev --inv-check --quit 结构与资源自检
+##   --dev-scene=invprev --inv-state=placeholder     药品分类：两件无正式图标的物品显示占位标记
+##   --dev-scene=invprev --inv-state=hover-selected  悬停已选中的格子，检验高亮一致性
 
 const INV := "res://assets/ui/inventory/v01"
 const HUD := "res://assets/ui/hud/v01"
@@ -44,6 +46,18 @@ const ICON := {
 	"key": "%s/HUD_icon_key_72x72.png" % HUD,
 }
 
+## `medicine` 是**分类**图标（药品页签用），不是任何具体物品的正式图标；
+## 物品表里没有它，避免把通用医疗箱当成"退烧药 / 止痛药"的物品图标。
+const CATEGORY_MEDICINE := "%s/INV_icon_medicine_64x64.png" % INV
+
+## 物品名 → 正式图标键。空字符串 = 尚无正式图标，必须走「明确占位图」。
+## 这张表是机器可校验的映射审计，新增物品时必须在表里登记，verify() 会逐条核对。
+const ICON_AUDIT := {
+	"面包": "bread", "水瓶": "water", "木材": "firewood", "布料": "cloth",
+	"手电筒": "flashlight", "钳子": "pliers", "钥匙": "key",
+	"退烧药": "", "止痛药": "",
+}
+
 ## 测试数据（fixture）。quantity × unit_weight 的合计恰好 28.4 kg，
 ## 与 HUD 预览里的负重读数一致，方便两边对照。
 const ITEMS := [
@@ -54,8 +68,8 @@ const ITEMS := [
 	{"name": "手电筒", "cat": "工具", "qty": 1, "unit": 0.6, "icon": "flashlight", "desc": "停电后唯一的照明。电池要省着用。"},
 	{"name": "钳子", "cat": "工具", "qty": 1, "unit": 0.5, "icon": "pliers", "desc": "拆解家具、剪断铁丝。"},
 	{"name": "钥匙", "cat": "工具", "qty": 1, "unit": 0.1, "icon": "key", "desc": "外婆家的备用钥匙。"},
-	{"name": "退烧药", "cat": "药品", "qty": 2, "unit": 0.2, "icon": "medicine", "desc": "体温过高时服用。"},
-	{"name": "止痛药", "cat": "药品", "qty": 6, "unit": 0.1, "icon": "medicine", "desc": "缓解疼痛，不能治本。"},
+	{"name": "退烧药", "cat": "药品", "qty": 2, "unit": 0.2, "icon": "", "desc": "体温过高时服用。寒潮里退烧药比食物更难找，务必省着用。"},
+	{"name": "止痛药", "cat": "药品", "qty": 6, "unit": 0.1, "icon": "", "desc": "缓解疼痛，不能治本。药效过后要注意保暖和休息。"},
 ]
 
 const CATEGORIES := ["全部", "食物", "饮品", "药品", "材料", "工具"]
@@ -75,6 +89,8 @@ var _cat := "全部"
 var _selected := -1
 var _dialog_qty := 1
 var _closed_hint: Label
+var _sb_hover: StyleBoxTexture
+var _sb_selected: StyleBoxTexture
 
 
 func _ready() -> void:
@@ -105,6 +121,20 @@ func _ready() -> void:
 	(_dialog.get_node("MinusBtn") as Button).pressed.connect(_step_qty.bind(-1))
 	(_dialog.get_node("PlusBtn") as Button).pressed.connect(_step_qty.bind(1))
 
+	# 明确占位图：运行时用 Control 画「? / 占位」，不新增 PNG、不新增 ART_UI 号
+	for b in _slots:
+		var ph := _make_placeholder(Vector2(14, 6), Vector2(30, 30), true)
+		ph.name = "Ph"
+		b.add_child(ph)
+	for parent in [_details, _dialog]:
+		var dph := _make_placeholder(Vector2(26, 92) if parent == _details else Vector2(24, 76),
+			Vector2(40, 40), false)
+		dph.name = "Ph"
+		parent.add_child(dph)
+
+	_sb_hover = _slot_style("INV_slot_hover_58x58.png")
+	_sb_selected = _slot_style("INV_slot_selected_58x58.png")
+
 	# 第 30 格禁用：演示禁用态 + 锁图标（视觉，不代表真实解锁逻辑）
 	_slots[COLS * ROWS - 1].disabled = true
 	_slots[COLS * ROWS - 1].get_node("Icon").texture = load("%s/INV_icon_lock_64x64.png" % INV)
@@ -127,6 +157,10 @@ func _ready() -> void:
 			call_deferred("_open_dialog")
 		"drag":
 			call_deferred("_demo_drag", 2)
+		"placeholder":
+			call_deferred("_demo_placeholder")
+		"hover-selected":
+			call_deferred("_demo_hover", 0)
 	if args.has("inv_states"):
 		_states.visible = true
 	if args.has("no_text"):
@@ -147,21 +181,84 @@ func _items_of(cat: String) -> Array:
 	return out
 
 
+func _make_placeholder(pos: Vector2, sz: Vector2, with_tag: bool) -> Control:
+	var c := Control.new()
+	c.position = pos
+	c.size = sz
+	c.visible = false
+	c.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var frame := Panel.new()
+	frame.name = "Frame"
+	frame.position = Vector2.ZERO
+	frame.size = sz
+	frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var sb := StyleBoxFlat.new()
+	sb.bg_color = Color(0.09, 0.10, 0.12, 0.55)
+	sb.border_color = Color(0.851, 0.663, 0.431, 0.85)
+	sb.set_border_width_all(1)
+	sb.set_corner_radius_all(4)
+	frame.add_theme_stylebox_override("panel", sb)
+	c.add_child(frame)
+	var mark := Label.new()
+	mark.name = "Mark"
+	mark.position = Vector2.ZERO
+	mark.size = sz
+	mark.text = "?"
+	mark.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	mark.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	mark.label_settings = load("res://assets/ui/labelsettings/final/f_body_serif_14.tres")
+	mark.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	c.add_child(mark)
+	if with_tag:
+		var tag := Label.new()
+		tag.name = "Tag"
+		# 「占位」放在框外面下方独立一行，避免和 ? / 数量角标挤在一起
+		tag.position = Vector2(-12, sz.y + 2)
+		tag.size = Vector2(30, 12)
+		tag.text = "占位"
+		tag.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		tag.label_settings = load("res://assets/ui/labelsettings/final/f_small_serif_11.tres")
+		tag.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		c.add_child(tag)
+	return c
+
+
+func _slot_style(file: String) -> StyleBoxTexture:
+	var sb := StyleBoxTexture.new()
+	sb.texture = load("%s/%s" % [INV, file])
+	return sb
+
+
+## 有正式图标就贴图；没有就显示「? / 占位」，绝不拿别的物品图标顶替。
+func _set_icon(texrect: TextureRect, ph: Control, key: String) -> void:
+	var has := key != "" and ICON.has(key) and ResourceLoader.exists(ICON[key])
+	texrect.texture = load(ICON[key]) if has else null
+	ph.visible = not has
+
+
+func _first_sentence(d: String) -> String:
+	var parts := d.split("。")
+	return parts[0] + "。" if parts.size() > 1 else d
+
+
 func _render_grid() -> void:
 	var items := _items_of(_cat)
 	for i in _slots.size():
 		var btn := _slots[i]
 		var icon := btn.get_node("Icon") as TextureRect
+		var ph := btn.get_node("Ph") as Control
 		var qty := btn.get_node("Qty") as Label
 		var locked := i == COLS * ROWS - 1
 		if locked:
+			ph.visible = false
 			continue
 		if i < items.size():
 			var it: Dictionary = items[i]
-			icon.texture = load(ICON[it["icon"]])
+			_set_icon(icon, ph, String(it["icon"]))
 			qty.text = str(it["qty"])
 		else:
 			icon.texture = null
+			ph.visible = false
 			qty.text = ""
 	for b in _slots:
 		if not b.disabled:
@@ -181,17 +278,28 @@ func _select(index: int) -> void:
 	_selected = index
 	_slots[index].set_pressed_no_signal(true)
 	var it: Dictionary = items[index]
-	_details.get_node("ItemIcon").texture = load(ICON[it["icon"]])
+	_set_icon(_details.get_node("ItemIcon") as TextureRect, _details.get_node("Ph") as Control,
+		String(it["icon"]))
 	(_details.get_node("ItemName") as Label).text = it["name"]
-	(_details.get_node("ItemCat") as Label).text = "%s · %s" % [it["cat"], "可食用" if it["cat"] in ["食物", "饮品"] else "可用"]
+	(_details.get_node("ItemCat") as Label).text = "%s · %s" % [it["cat"], _cat_tail(it)]
 	(_details.get_node("QtyLabel") as Label).text = "数量　%d" % it["qty"]
 	(_details.get_node("WeightLine") as Label).text = "重量　%.1f kg" % (it["qty"] * it["unit"])
-	(_details.get_node("Desc") as Label).text = it["desc"]
+	# 详情栏只放第一句，完整描述交给动态高度的 Tooltip，避免文字压到按钮
+	(_details.get_node("Desc") as Label).text = _first_sentence(String(it["desc"]))
+
+
+func _cat_tail(it: Dictionary) -> String:
+	if String(it["icon"]) == "":
+		return "图标待补"
+	if it["cat"] == "饮品":
+		return "可饮用"
+	return "可食用" if it["cat"] == "食物" else "可用"
 
 
 func _clear_details() -> void:
 	_selected = -1
 	(_details.get_node("ItemIcon") as TextureRect).texture = null
+	(_details.get_node("Ph") as Control).visible = false
 	(_details.get_node("ItemName") as Label).text = "未选中"
 	(_details.get_node("ItemCat") as Label).text = ""
 	(_details.get_node("QtyLabel") as Label).text = ""
@@ -232,25 +340,42 @@ func _on_category_toggled(on: bool, index: int) -> void:
 
 
 func _on_slot_hover(index: int, entered: bool) -> void:
+	var btn := _slots[index]
 	if entered:
+		# 选中态优先：悬停已选中的格子仍保持琥珀选中框，不出现两种高亮
+		btn.add_theme_stylebox_override("hover", _sb_selected if btn.button_pressed else _sb_hover)
 		var items := _items_of(_cat)
 		if index >= items.size():
 			return
 		_show_tooltip(index, items[index])
 	else:
+		btn.remove_theme_stylebox_override("hover")
 		_tooltip.visible = false
 
 
+## Tooltip：完整描述 + 自动换行 + 按内容调高（九宫格纵向拉伸）+ 四边夹紧不出屏。
+## 高度用字体自身的 get_multiline_string_size 算，与 Label 的 autowrap 用同一套参数。
 func _show_tooltip(index: int, it: Dictionary) -> void:
 	_tooltip.get_node("TTName").text = it["name"]
-	_tooltip.get_node("TTCat").text = "%s · %s" % [it["cat"], "可食用" if it["cat"] in ["食物", "饮品"] else "可用"]
+	_tooltip.get_node("TTCat").text = "%s · %s" % [it["cat"], _cat_tail(it)]
 	_tooltip.get_node("TTQty").text = "数量 %d · 重量 %.1f kg" % [it["qty"], it["qty"] * it["unit"]]
-	# Tooltip 只放第一句（面板 156px 高，完整描述留给右侧详情栏）
-	_tooltip.get_node("TTDesc").text = String(it["desc"]).split("。")[0] + "。"
-	var slot := _slots[index]
-	var pos := slot.global_position + Vector2(SLOT + 8, 0)
-	pos.x = minf(pos.x, 960.0 - 256.0 - 8.0)
-	pos.y = clampf(pos.y, 8.0, 540.0 - 156.0 - 8.0)
+	var desc := _tooltip.get_node("TTDesc") as Label
+	var full := String(it["desc"])
+	desc.text = full
+	desc.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	var ls := desc.label_settings as LabelSettings
+	var font := ls.font as Font
+	var text_h := font.get_multiline_string_size(full, HORIZONTAL_ALIGNMENT_LEFT,
+		208.0, ls.font_size).y
+	# 一句描述时刚好回到原生 156；多一句就按行高往上加，底边始终留 23px 给九宫格下帽
+	desc.position.y = 113.0
+	var desc_h := maxf(text_h + 3.0, 20.0)
+	desc.size.y = desc_h
+	var want_h := clampf(113.0 + desc_h + 23.0, 156.0, 524.0)
+	_tooltip.size.y = want_h
+	var pos := _slots[index].global_position + Vector2(SLOT + 8, 0)
+	pos.x = clampf(pos.x, 8.0, 960.0 - 256.0 - 8.0)
+	pos.y = clampf(pos.y, 8.0, 540.0 - want_h - 8.0)
 	_tooltip.position = pos
 	_tooltip.visible = true
 
@@ -260,7 +385,8 @@ func _open_dialog() -> void:
 		return
 	var it: Dictionary = _items_of(_cat)[_selected]
 	_dialog_qty = 1
-	_dialog.get_node("DlgIcon").texture = load(ICON[it["icon"]])
+	_set_icon(_dialog.get_node("DlgIcon") as TextureRect, _dialog.get_node("Ph") as Control,
+		String(it["icon"]))
 	(_dialog.get_node("DlgName") as Label).text = it["name"]
 	(_dialog.get_node("DlgHint") as Label).text = "放入仓储 · 上限 20"
 	(_dialog.get_node("DlgFoot") as Label).text = "最多可转移 %d 件（测试数据）" % it["qty"]
@@ -320,14 +446,22 @@ func _demo_hover(index: int) -> void:
 	var items := _items_of(_cat)
 	if index >= items.size():
 		return
-	_slots[index].add_theme_stylebox_override("normal", _hover_style())
+	if not _slots[index].button_pressed:
+		_slots[index].add_theme_stylebox_override("normal", _sb_hover)
 	_show_tooltip(index, items[index])
 
 
+func _demo_placeholder() -> void:
+	await get_tree().process_frame
+	_on_category_toggled(true, 3)
+	_cats[3].set_pressed_no_signal(true)
+	_cats[0].set_pressed_no_signal(false)
+	_select(0)
+	_show_tooltip(0, _items_of(_cat)[0])
+
+
 func _hover_style() -> StyleBoxTexture:
-	var sb := StyleBoxTexture.new()
-	sb.texture = load("%s/INV_slot_hover_58x58.png" % INV)
-	return sb
+	return _sb_hover
 
 
 ## 拖拽样张：源格留空 + 一个半透明幽灵跟着「手里」的位置
@@ -345,7 +479,11 @@ func _demo_drag(index: int) -> void:
 	ghost.size = Vector2(SLOT, SLOT)
 	ghost.position = _grid.global_position + _slots[index].position + Vector2(34, 26)
 	var icon := TextureRect.new()
-	icon.texture = load(ICON[items[index]["icon"]])
+	var key := String(items[index]["icon"])
+	if key != "":
+		icon.texture = load(ICON[key])
+	else:
+		icon.queue_free()
 	icon.texture_filter = 3
 	icon.position = Vector2(11, 9)
 	icon.size = Vector2(36, 36)
@@ -354,6 +492,9 @@ func _demo_drag(index: int) -> void:
 
 
 func _hide_text(node: Node) -> void:
+	if String(node.name) == "Ph":
+		(node as CanvasItem).visible = false
+		return
 	if node is Label:
 		(node as Label).visible = false
 	for c in node.get_children():
@@ -387,7 +528,6 @@ func verify() -> bool:
 		"MainPanel/Details": Vector2(180, 310),
 		"MainPanel/CatPanel": Vector2(138, 302),
 		"Dialog": Vector2(350, 248),
-		"Tooltip": Vector2(256, 156),
 	}
 	for path in expect:
 		var c: Control = _root.get_node_or_null(path)
@@ -403,6 +543,14 @@ func verify() -> bool:
 		else:
 			var note := "原生 1:1" if path != "MainPanel/Details" else "原生高 310，宽按九宫格 -14"
 			print("[INV] OK   %-22s %s（%s）" % [path, got, note])
+
+	# Tooltip 高度按描述动态变化（TASK-UI-011），只校验宽度与原生最小高度
+	var tip := _root.get_node("Tooltip") as Control
+	if tip.size.x != 256.0 or tip.size.y < 156.0:
+		print("[INV] FAIL Tooltip 尺寸 %s，宽应为 256、高不得小于原生 156" % tip.size)
+		ok = false
+	else:
+		print("[INV] OK   %-22s %s（宽 256 固定，高动态 ≥156）" % ["Tooltip", tip.size])
 
 	# 3. 九宫格边距要和 manifest 一致
 	var margin_want := {
@@ -441,14 +589,15 @@ func verify() -> bool:
 	if no_ls != 0:
 		ok = false
 
-	# 5. 贴图节点都有图（空槽除外）
+	# 5. 每个有物品的格子：正式图标 / 明确占位图，二者必居其一
 	var missing := 0
 	for i in COLS * ROWS:
 		var t := _slots[i].get_node("Icon") as TextureRect
+		var ph := _slots[i].get_node("Ph") as Control
 		var has_item := i < _items_of(_cat).size() and i != COLS * ROWS - 1
-		if has_item and t.texture == null:
+		if has_item and t.texture == null and not ph.visible:
 			missing += 1
-	print("[INV] %s 有物品的格子都有图标（缺 %d）" % ["OK  " if missing == 0 else "FAIL", missing])
+	print("[INV] %s 有物品的格子都有图标或占位图（缺 %d）" % ["OK  " if missing == 0 else "FAIL", missing])
 	if missing != 0:
 		ok = false
 
@@ -497,6 +646,70 @@ func verify() -> bool:
 	print("[INV] %s 透明通道检查：%d 张 PNG，无 alpha %d 张" % ["OK  " if bad_alpha == 0 else "FAIL", 30, bad_alpha])
 	if bad_alpha != 0:
 		ok = false
+
+	# 10. 物品名 ↔ 图标映射审计（TASK-UI-011）
+	var wrong := 0
+	for it in ITEMS:
+		var nm := String(it["name"])
+		var key := String(it["icon"])
+		if not ICON_AUDIT.has(nm):
+			print("[INV] FAIL %s 没有登记在 ICON_AUDIT" % nm)
+			wrong += 1
+		elif String(ICON_AUDIT[nm]) != key:
+			print("[INV] FAIL %s 图标映射不符（表=%s / 数据=%s）" % [nm, ICON_AUDIT[nm], key])
+			wrong += 1
+		elif key != "" and not ResourceLoader.exists(ICON[key]):
+			print("[INV] FAIL %s 引用的图标文件不存在：%s" % [nm, key])
+			wrong += 1
+	var dedicated := 0
+	var placeholders := 0
+	for it in ITEMS:
+		if String(it["icon"]) == "":
+			placeholders += 1
+		else:
+			dedicated += 1
+	print("[INV] %s 图标映射审计：专图 %d 件 / 明确占位 %d 件 / 错误映射 %d" % [
+		"OK  " if wrong == 0 else "FAIL", dedicated, placeholders, wrong])
+	if wrong != 0:
+		ok = false
+	var shown_ph := 0
+	for b in _slots:
+		if (b.get_node("Ph") as Control).visible:
+			shown_ph += 1
+	print("[INV] %s 当前分类显示占位标记 %d 个（期望 %d）" % [
+		"OK  " if shown_ph == placeholders else "FAIL", shown_ph, placeholders])
+
+	# 11. 详情栏不拥挤：描述下缘 < 按钮上缘；按钮完整落在面板内
+	var desc_l := _details.get_node("Desc") as Label
+	var use_b := _details.get_node("UseBtn") as Button
+	var drop_b := _details.get_node("DropBtn") as Button
+	var gap := use_b.position.y - (desc_l.position.y + desc_l.size.y)
+	print("[INV] 详情栏 描述下缘 %.0f → 按钮上缘 %.0f，间距 %.0f" % [
+		desc_l.position.y + desc_l.size.y, use_b.position.y, gap])
+	if gap < 8.0:
+		print("[INV] FAIL 描述与按钮间距不足 8px")
+		ok = false
+	var inside := (use_b.position.x >= 20.0 and drop_b.position.x + drop_b.size.x <= _details.size.x - 20.0
+		and use_b.position.y + use_b.size.y <= _details.size.y - 20.0
+		and drop_b.position.x - (use_b.position.x + use_b.size.x) >= 6.0)
+	print("[INV] %s 详情按钮在面板内且左右间距 ≥6px" % ["OK  " if inside else "FAIL"])
+	if not inside:
+		ok = false
+
+	# 12. Tooltip：完整描述 + 动态高度 + 不出屏
+	var long_it: Dictionary = ITEMS[1]
+	_show_tooltip(1, long_it)
+	var tr := Rect2(_tooltip.position, _tooltip.size)
+	var in_screen := (tr.position.x >= 0.0 and tr.position.y >= 0.0
+		and tr.end.x <= 960.0 and tr.end.y <= 540.0)
+	var full_desc := (_tooltip.get_node("TTDesc") as Label).text == String(long_it["desc"])
+	var grew := _tooltip.size.y > 156.0
+	print("[INV] %s Tooltip 完整描述=%s 高度=%.0f（>156=%s） 区域=%s 在屏内=%s" % [
+		"OK  " if (in_screen and full_desc and grew) else "FAIL", full_desc,
+		_tooltip.size.y, grew, tr, in_screen])
+	if not (in_screen and full_desc and grew):
+		ok = false
+	_on_slot_hover(1, false)
 
 	print("[INV] ==== %s ====" % ("全部通过" if ok else "有失败项"))
 	return ok

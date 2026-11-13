@@ -1,4 +1,4 @@
-[gd_scene load_steps=61 format=3]
+[gd_scene load_steps=65 format=3]
 
 [ext_resource type="Script" path="res://scripts/dev/inventory_preview.gd" id="1_script"]
 [ext_resource type="Theme" path="res://assets/ui/themes/font_theme.tres" id="2_theme"]
@@ -183,6 +183,34 @@ texture_margin_left = 8.0
 texture_margin_top = 6.0
 texture_margin_right = 8.0
 texture_margin_bottom = 6.0
+[sub_resource type="StyleBoxTexture" id="SBT_dbtn_n"]
+texture = ExtResource("t_btn_n")
+region_rect = Rect2(10, 3, 130, 33)
+texture_margin_left = 14.0
+texture_margin_top = 8.0
+texture_margin_right = 14.0
+texture_margin_bottom = 8.0
+[sub_resource type="StyleBoxTexture" id="SBT_dbtn_h"]
+texture = ExtResource("t_btn_h")
+region_rect = Rect2(10, 3, 130, 33)
+texture_margin_left = 14.0
+texture_margin_top = 8.0
+texture_margin_right = 14.0
+texture_margin_bottom = 8.0
+[sub_resource type="StyleBoxTexture" id="SBT_dbtn_p"]
+texture = ExtResource("t_btn_p")
+region_rect = Rect2(10, 3, 130, 33)
+texture_margin_left = 14.0
+texture_margin_top = 8.0
+texture_margin_right = 14.0
+texture_margin_bottom = 8.0
+[sub_resource type="StyleBoxTexture" id="SBT_dbtn_d"]
+texture = ExtResource("t_btn_d")
+region_rect = Rect2(10, 3, 130, 33)
+texture_margin_left = 14.0
+texture_margin_top = 8.0
+texture_margin_right = 14.0
+texture_margin_bottom = 8.0
 [sub_resource type="StyleBoxEmpty" id="SBE_empty"]
 
 [sub_resource type="ButtonGroup" id="BG_slot"]
@@ -548,10 +576,10 @@ expand_mode = 1
 mouse_filter = 2
 
 [node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot00"]
-offset_left = 28.0
-offset_top = 32.0
+offset_left = 32.0
+offset_top = 36.0
 offset_right = 56.0
-offset_bottom = 52.0
+offset_bottom = 54.0
 text = ""
 label_settings = ExtResource("ls_value")
 horizontal_alignment = 2
@@ -582,10 +610,10 @@ expand_mode = 1
 mouse_filter = 2
 
 [node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot01"]
-offset_left = 28.0
-offset_top = 32.0
+offset_left = 32.0
+offset_top = 36.0
 offset_right = 56.0
-offset_bottom = 52.0
+offset_bottom = 54.0
 text = ""
 label_settings = ExtResource("ls_value")
 horizontal_alignment = 2
@@ -616,10 +644,10 @@ expand_mode = 1
 mouse_filter = 2
 
 [node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot02"]
-offset_left = 28.0
-offset_top = 32.0
+offset_left = 32.0
+offset_top = 36.0
 offset_right = 56.0
-offset_bottom = 52.0
+offset_bottom = 54.0
 text = ""
 label_settings = ExtResource("ls_value")
 horizontal_alignment = 2
@@ -650,10 +678,10 @@ expand_mode = 1
 mouse_filter = 2
 
 [node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot03"]
-offset_left = 28.0
-offset_top = 32.0
+offset_left = 32.0
+offset_top = 36.0
 offset_right = 56.0
-offset_bottom = 52.0
+offset_bottom = 54.0
 text = ""
 label_settings = ExtResource("ls_value")
 horizontal_alignment = 2
@@ -684,10 +712,10 @@ expand_mode = 1
 mouse_filter = 2
 
 [node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot04"]
-offset_left = 28.0
-offset_top = 32.0
+offset_left = 32.0
+offset_top = 36.0
 offset_right = 56.0
-offset_bottom = 52.0
+offset_bottom = 54.0
 text = ""
 label_settings = ExtResource("ls_value")
 horizontal_alignment = 2
@@ -718,10 +746,10 @@ expand_mode = 1
 mouse_filter = 2
 
 [node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot05"]
-offset_left = 28.0
-offset_top = 32.0
+offset_left = 32.0
+offset_top = 36.0
 offset_right = 56.0
-offset_bottom = 52.0
+offset_bottom = 54.0
 text = ""
 label_settings = ExtResource("ls_value")
 horizontal_alignment = 2
@@ -752,10 +780,10 @@ expand_mode = 1
 mouse_filter = 2
 
 [node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot06"]
-offset_left = 28.0
-offset_top = 32.0
+offset_left = 32.0
+offset_top = 36.0
 offset_right = 56.0
-offset_bottom = 52.0
+offset_bottom = 54.0
 text = ""
 label_settings = ExtResource("ls_value")
 horizontal_alignment = 2
@@ -786,10 +814,10 @@ expand_mode = 1
 mouse_filter = 2
 
 [node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot07"]
-offset_left = 28.0
-offset_top = 32.0
+offset_left = 32.0
+offset_top = 36.0
 offset_right = 56.0
-offset_bottom = 52.0
+offset_bottom = 54.0
 text = ""
 label_settings = ExtResource("ls_value")
 horizontal_alignment = 2
@@ -820,10 +848,10 @@ expand_mode = 1
 mouse_filter = 2
 
 [node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot08"]
-offset_left = 28.0
-offset_top = 32.0
+offset_left = 32.0
+offset_top = 36.0
 offset_right = 56.0
-offset_bottom = 52.0
+offset_bottom = 54.0
 text = ""
 label_settings = ExtResource("ls_value")
 horizontal_alignment = 2
@@ -854,10 +882,10 @@ expand_mode = 1
 mouse_filter = 2
 
 [node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot09"]
-offset_left = 28.0
-offset_top = 32.0
+offset_left = 32.0
+offset_top = 36.0
 offset_right = 56.0
-offset_bottom = 52.0
+offset_bottom = 54.0
 text = ""
 label_settings = ExtResource("ls_value")
 horizontal_alignment = 2
@@ -888,10 +916,10 @@ expand_mode = 1
 mouse_filter = 2
 
 [node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot10"]
-offset_left = 28.0
-offset_top = 32.0
+offset_left = 32.0
+offset_top = 36.0
 offset_right = 56.0
-offset_bottom = 52.0
+offset_bottom = 54.0
 text = ""
 label_settings = ExtResource("ls_value")
 horizontal_alignment = 2
@@ -922,10 +950,10 @@ expand_mode = 1
 mouse_filter = 2
 
 [node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot11"]
-offset_left = 28.0
-offset_top = 32.0
+offset_left = 32.0
+offset_top = 36.0
 offset_right = 56.0
-offset_bottom = 52.0
+offset_bottom = 54.0
 text = ""
 label_settings = ExtResource("ls_value")
 horizontal_alignment = 2
@@ -956,10 +984,10 @@ expand_mode = 1
 mouse_filter = 2
 
 [node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot12"]
-offset_left = 28.0
-offset_top = 32.0
+offset_left = 32.0
+offset_top = 36.0
 offset_right = 56.0
-offset_bottom = 52.0
+offset_bottom = 54.0
 text = ""
 label_settings = ExtResource("ls_value")
 horizontal_alignment = 2
@@ -990,10 +1018,10 @@ expand_mode = 1
 mouse_filter = 2
 
 [node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot13"]
-offset_left = 28.0
-offset_top = 32.0
+offset_left = 32.0
+offset_top = 36.0
 offset_right = 56.0
-offset_bottom = 52.0
+offset_bottom = 54.0
 text = ""
 label_settings = ExtResource("ls_value")
 horizontal_alignment = 2
@@ -1024,10 +1052,10 @@ expand_mode = 1
 mouse_filter = 2
 
 [node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot14"]
-offset_left = 28.0
-offset_top = 32.0
+offset_left = 32.0
+offset_top = 36.0
 offset_right = 56.0
-offset_bottom = 52.0
+offset_bottom = 54.0
 text = ""
 label_settings = ExtResource("ls_value")
 horizontal_alignment = 2
@@ -1058,10 +1086,10 @@ expand_mode = 1
 mouse_filter = 2
 
 [node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot15"]
-offset_left = 28.0
-offset_top = 32.0
+offset_left = 32.0
+offset_top = 36.0
 offset_right = 56.0
-offset_bottom = 52.0
+offset_bottom = 54.0
 text = ""
 label_settings = ExtResource("ls_value")
 horizontal_alignment = 2
@@ -1092,10 +1120,10 @@ expand_mode = 1
 mouse_filter = 2
 
 [node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot16"]
-offset_left = 28.0
-offset_top = 32.0
+offset_left = 32.0
+offset_top = 36.0
 offset_right = 56.0
-offset_bottom = 52.0
+offset_bottom = 54.0
 text = ""
 label_settings = ExtResource("ls_value")
 horizontal_alignment = 2
@@ -1126,10 +1154,10 @@ expand_mode = 1
 mouse_filter = 2
 
 [node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot17"]
-offset_left = 28.0
-offset_top = 32.0
+offset_left = 32.0
+offset_top = 36.0
 offset_right = 56.0
-offset_bottom = 52.0
+offset_bottom = 54.0
 text = ""
 label_settings = ExtResource("ls_value")
 horizontal_alignment = 2
@@ -1160,10 +1188,10 @@ expand_mode = 1
 mouse_filter = 2
 
 [node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot18"]
-offset_left = 28.0
-offset_top = 32.0
+offset_left = 32.0
+offset_top = 36.0
 offset_right = 56.0
-offset_bottom = 52.0
+offset_bottom = 54.0
 text = ""
 label_settings = ExtResource("ls_value")
 horizontal_alignment = 2
@@ -1194,10 +1222,10 @@ expand_mode = 1
 mouse_filter = 2
 
 [node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot19"]
-offset_left = 28.0
-offset_top = 32.0
+offset_left = 32.0
+offset_top = 36.0
 offset_right = 56.0
-offset_bottom = 52.0
+offset_bottom = 54.0
 text = ""
 label_settings = ExtResource("ls_value")
 horizontal_alignment = 2
@@ -1228,10 +1256,10 @@ expand_mode = 1
 mouse_filter = 2
 
 [node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot20"]
-offset_left = 28.0
-offset_top = 32.0
+offset_left = 32.0
+offset_top = 36.0
 offset_right = 56.0
-offset_bottom = 52.0
+offset_bottom = 54.0
 text = ""
 label_settings = ExtResource("ls_value")
 horizontal_alignment = 2
@@ -1262,10 +1290,10 @@ expand_mode = 1
 mouse_filter = 2
 
 [node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot21"]
-offset_left = 28.0
-offset_top = 32.0
+offset_left = 32.0
+offset_top = 36.0
 offset_right = 56.0
-offset_bottom = 52.0
+offset_bottom = 54.0
 text = ""
 label_settings = ExtResource("ls_value")
 horizontal_alignment = 2
@@ -1296,10 +1324,10 @@ expand_mode = 1
 mouse_filter = 2
 
 [node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot22"]
-offset_left = 28.0
-offset_top = 32.0
+offset_left = 32.0
+offset_top = 36.0
 offset_right = 56.0
-offset_bottom = 52.0
+offset_bottom = 54.0
 text = ""
 label_settings = ExtResource("ls_value")
 horizontal_alignment = 2
@@ -1330,10 +1358,10 @@ expand_mode = 1
 mouse_filter = 2
 
 [node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot23"]
-offset_left = 28.0
-offset_top = 32.0
+offset_left = 32.0
+offset_top = 36.0
 offset_right = 56.0
-offset_bottom = 52.0
+offset_bottom = 54.0
 text = ""
 label_settings = ExtResource("ls_value")
 horizontal_alignment = 2
@@ -1364,10 +1392,10 @@ expand_mode = 1
 mouse_filter = 2
 
 [node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot24"]
-offset_left = 28.0
-offset_top = 32.0
+offset_left = 32.0
+offset_top = 36.0
 offset_right = 56.0
-offset_bottom = 52.0
+offset_bottom = 54.0
 text = ""
 label_settings = ExtResource("ls_value")
 horizontal_alignment = 2
@@ -1398,10 +1426,10 @@ expand_mode = 1
 mouse_filter = 2
 
 [node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot25"]
-offset_left = 28.0
-offset_top = 32.0
+offset_left = 32.0
+offset_top = 36.0
 offset_right = 56.0
-offset_bottom = 52.0
+offset_bottom = 54.0
 text = ""
 label_settings = ExtResource("ls_value")
 horizontal_alignment = 2
@@ -1432,10 +1460,10 @@ expand_mode = 1
 mouse_filter = 2
 
 [node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot26"]
-offset_left = 28.0
-offset_top = 32.0
+offset_left = 32.0
+offset_top = 36.0
 offset_right = 56.0
-offset_bottom = 52.0
+offset_bottom = 54.0
 text = ""
 label_settings = ExtResource("ls_value")
 horizontal_alignment = 2
@@ -1466,10 +1494,10 @@ expand_mode = 1
 mouse_filter = 2
 
 [node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot27"]
-offset_left = 28.0
-offset_top = 32.0
+offset_left = 32.0
+offset_top = 36.0
 offset_right = 56.0
-offset_bottom = 52.0
+offset_bottom = 54.0
 text = ""
 label_settings = ExtResource("ls_value")
 horizontal_alignment = 2
@@ -1500,10 +1528,10 @@ expand_mode = 1
 mouse_filter = 2
 
 [node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot28"]
-offset_left = 28.0
-offset_top = 32.0
+offset_left = 32.0
+offset_top = 36.0
 offset_right = 56.0
-offset_bottom = 52.0
+offset_bottom = 54.0
 text = ""
 label_settings = ExtResource("ls_value")
 horizontal_alignment = 2
@@ -1534,10 +1562,10 @@ expand_mode = 1
 mouse_filter = 2
 
 [node name="Qty" type="Label" parent="Overlay/Root/MainPanel/Grid/Slot29"]
-offset_left = 28.0
-offset_top = 32.0
+offset_left = 32.0
+offset_top = 36.0
 offset_right = 56.0
-offset_bottom = 52.0
+offset_bottom = 54.0
 text = ""
 label_settings = ExtResource("ls_value")
 horizontal_alignment = 2
@@ -1552,98 +1580,98 @@ theme_override_styles/panel = SubResource("SBT_det")
 mouse_filter = 2
 
 [node name="Title" type="Label" parent="Overlay/Root/MainPanel/Details"]
-offset_left = 24.0
-offset_top = 38.0
-offset_right = 156.0
-offset_bottom = 64.0
+offset_left = 26.0
+offset_top = 56.0
+offset_right = 154.0
+offset_bottom = 82.0
 text = "物品详情"
 label_settings = ExtResource("ls_title")
 vertical_alignment = 1
 
 [node name="Div1" type="ColorRect" parent="Overlay/Root/MainPanel/Details"]
-offset_left = 24.0
-offset_top = 68.0
-offset_right = 156.0
-offset_bottom = 69.0
+offset_left = 26.0
+offset_top = 86.0
+offset_right = 154.0
+offset_bottom = 87.0
 color = Color(0.55, 0.5, 0.42, 0.35)
 
 [node name="ItemIcon" type="TextureRect" parent="Overlay/Root/MainPanel/Details"]
-offset_left = 24.0
-offset_top = 76.0
-offset_right = 64.0
-offset_bottom = 116.0
+offset_left = 26.0
+offset_top = 92.0
+offset_right = 66.0
+offset_bottom = 132.0
 texture_filter = 3
 expand_mode = 1
 
 [node name="ItemName" type="Label" parent="Overlay/Root/MainPanel/Details"]
 offset_left = 72.0
-offset_top = 76.0
-offset_right = 156.0
-offset_bottom = 98.0
+offset_top = 92.0
+offset_right = 154.0
+offset_bottom = 114.0
 text = "面包"
 label_settings = ExtResource("ls_body")
 vertical_alignment = 1
 
 [node name="ItemCat" type="Label" parent="Overlay/Root/MainPanel/Details"]
 offset_left = 72.0
-offset_top = 98.0
-offset_right = 156.0
-offset_bottom = 116.0
+offset_top = 114.0
+offset_right = 154.0
+offset_bottom = 132.0
 text = "食物"
 label_settings = ExtResource("ls_small")
 vertical_alignment = 1
 
 [node name="Div2" type="ColorRect" parent="Overlay/Root/MainPanel/Details"]
-offset_left = 24.0
-offset_top = 122.0
-offset_right = 156.0
-offset_bottom = 123.0
+offset_left = 26.0
+offset_top = 138.0
+offset_right = 154.0
+offset_bottom = 139.0
 color = Color(0.55, 0.5, 0.42, 0.35)
 
 [node name="QtyLabel" type="Label" parent="Overlay/Root/MainPanel/Details"]
-offset_left = 24.0
-offset_top = 128.0
-offset_right = 156.0
-offset_bottom = 148.0
+offset_left = 26.0
+offset_top = 144.0
+offset_right = 154.0
+offset_bottom = 164.0
 text = "数量　3"
 label_settings = ExtResource("ls_body")
 vertical_alignment = 1
 
 [node name="WeightLine" type="Label" parent="Overlay/Root/MainPanel/Details"]
-offset_left = 24.0
-offset_top = 150.0
-offset_right = 156.0
-offset_bottom = 170.0
+offset_left = 26.0
+offset_top = 164.0
+offset_right = 154.0
+offset_bottom = 184.0
 text = "重量　0.9 kg"
 label_settings = ExtResource("ls_body")
 vertical_alignment = 1
 
 [node name="Div3" type="ColorRect" parent="Overlay/Root/MainPanel/Details"]
-offset_left = 24.0
-offset_top = 174.0
-offset_right = 156.0
-offset_bottom = 175.0
+offset_left = 26.0
+offset_top = 190.0
+offset_right = 154.0
+offset_bottom = 191.0
 color = Color(0.55, 0.5, 0.42, 0.35)
 
 [node name="Desc" type="Label" parent="Overlay/Root/MainPanel/Details"]
-offset_left = 24.0
-offset_top = 180.0
-offset_right = 156.0
-offset_bottom = 244.0
+offset_left = 26.0
+offset_top = 196.0
+offset_right = 154.0
+offset_bottom = 240.0
 text = "可恢复少量饥饿。"
 label_settings = ExtResource("ls_kai")
 vertical_alignment = 0
 autowrap_mode = 3
 
 [node name="UseBtn" type="Button" parent="Overlay/Root/MainPanel/Details"]
-offset_left = 22.0
-offset_top = 250.0
+offset_left = 26.0
+offset_top = 254.0
 offset_right = 84.0
-offset_bottom = 284.0
-theme_override_styles/normal = SubResource("SBT_btn_n")
-theme_override_styles/hover = SubResource("SBT_btn_h")
-theme_override_styles/pressed = SubResource("SBT_btn_p")
-theme_override_styles/disabled = SubResource("SBT_btn_d")
+offset_bottom = 288.0
+theme_override_styles/normal = SubResource("SBT_dbtn_n")
+theme_override_styles/hover = SubResource("SBT_dbtn_h")
+theme_override_styles/pressed = SubResource("SBT_dbtn_p")
+theme_override_styles/disabled = SubResource("SBT_dbtn_d")
 theme_override_styles/focus = SubResource("SBE_empty")
 focus_mode = 0
 text = ""
@@ -1651,7 +1679,7 @@ text = ""
 [node name="Text" type="Label" parent="Overlay/Root/MainPanel/Details/UseBtn"]
 offset_left = 0.0
 offset_top = 0.0
-offset_right = 62.0
+offset_right = 58.0
 offset_bottom = 34.0
 text = "使用"
 label_settings = ExtResource("ls_small")
@@ -1659,14 +1687,14 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="DropBtn" type="Button" parent="Overlay/Root/MainPanel/Details"]
-offset_left = 92.0
-offset_top = 250.0
+offset_left = 96.0
+offset_top = 254.0
 offset_right = 154.0
-offset_bottom = 284.0
-theme_override_styles/normal = SubResource("SBT_btn_n")
-theme_override_styles/hover = SubResource("SBT_btn_h")
-theme_override_styles/pressed = SubResource("SBT_btn_p")
-theme_override_styles/disabled = SubResource("SBT_btn_d")
+offset_bottom = 288.0
+theme_override_styles/normal = SubResource("SBT_dbtn_n")
+theme_override_styles/hover = SubResource("SBT_dbtn_h")
+theme_override_styles/pressed = SubResource("SBT_dbtn_p")
+theme_override_styles/disabled = SubResource("SBT_dbtn_d")
 theme_override_styles/focus = SubResource("SBE_empty")
 focus_mode = 0
 text = ""
@@ -1674,7 +1702,7 @@ text = ""
 [node name="Text" type="Label" parent="Overlay/Root/MainPanel/Details/DropBtn"]
 offset_left = 0.0
 offset_top = 0.0
-offset_right = 62.0
+offset_right = 58.0
 offset_bottom = 34.0
 text = "丢弃"
 label_settings = ExtResource("ls_small")
@@ -1711,43 +1739,43 @@ mouse_filter = 2
 
 [node name="TTName" type="Label" parent="Overlay/Root/Tooltip"]
 offset_left = 24.0
-offset_top = 32.0
+offset_top = 40.0
 offset_right = 232.0
-offset_bottom = 56.0
+offset_bottom = 64.0
 text = "面包"
 label_settings = ExtResource("ls_body")
 vertical_alignment = 1
 
 [node name="TTCat" type="Label" parent="Overlay/Root/Tooltip"]
 offset_left = 24.0
-offset_top = 56.0
+offset_top = 64.0
 offset_right = 232.0
-offset_bottom = 74.0
+offset_bottom = 82.0
 text = "食物 · 可食用"
 label_settings = ExtResource("ls_small")
 vertical_alignment = 1
 
 [node name="TTDiv" type="ColorRect" parent="Overlay/Root/Tooltip"]
 offset_left = 24.0
-offset_top = 78.0
+offset_top = 86.0
 offset_right = 232.0
-offset_bottom = 79.0
+offset_bottom = 87.0
 color = Color(0.55, 0.5, 0.42, 0.35)
 
 [node name="TTQty" type="Label" parent="Overlay/Root/Tooltip"]
 offset_left = 24.0
-offset_top = 84.0
+offset_top = 92.0
 offset_right = 232.0
-offset_bottom = 104.0
+offset_bottom = 112.0
 text = "数量 3 · 重量 0.9 kg"
 label_settings = ExtResource("ls_body")
 vertical_alignment = 1
 
 [node name="TTDesc" type="Label" parent="Overlay/Root/Tooltip"]
 offset_left = 24.0
-offset_top = 108.0
+offset_top = 113.0
 offset_right = 232.0
-offset_bottom = 142.0
+offset_bottom = 143.0
 text = "可恢复少量饥饿。"
 label_settings = ExtResource("ls_kai")
 vertical_alignment = 0
