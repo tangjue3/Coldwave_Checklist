@@ -28,6 +28,13 @@ const DATA_A := {
 	"ResCashText": "现金 126", "ResWoodText": "木材 8", "ResClothText": "布料 3",
 	"SlotQty2": "2", "SlotQty3": "3", "SlotQty4": "8", "SlotQty6": "1",
 }
+## 进度条百分比（与上面文字配套；0–100）
+const PERCENT_A := [92, 72, 64, 46, 71]
+const PERCENT_B := [5, 100, 8, 100, 99]
+const BAR_DEMO := [100, 72, 64, 46, 5, 0]
+const BAR_W := 74.0   # 轨道内宽 = 78 - 2*(2px 定位)
+const BAR_CAP := 8.0  # 左右各 4px 端帽，短于此宽度九宫格会塌，夹到 8
+
 const DATA_B := {
 	"DateText": "第 12 天 21:40",
 	"WeatherText": "-7°C 暴雪",
@@ -56,8 +63,14 @@ func _ready() -> void:
 		($World/Cam as Camera2D).zoom = Vector2(z, z)
 	if args.has("no_text"):
 		_hide_text(_root)
-	if String(args.get("values", "a")) == "b":
+	var data_b := String(args.get("values", "a")) == "b"
+	if data_b:
 		_apply_data(DATA_B)
+	_apply_bars(PERCENT_B if data_b else PERCENT_A)
+	if args.has("bar_demo"):
+		(_root.get_node("BarPage") as Control).visible = true
+		# 六态样张同样走同一套宽度逻辑，0% 必须真正隐藏（否则九宫格端帽会留一个点）
+		_apply_bar_set("BarPage/Fill", BAR_DEMO)
 	if args.has("slot"):
 		_select_slot(int(args["slot"]))
 	var ok := _report()
@@ -87,6 +100,23 @@ func _select_slot(n: int) -> void:
 		if s != null:
 			s.texture = _tex_selected if i == _slot_sel else _tex_normal
 	print("[HUD] 快捷栏选中 = %d" % _slot_sel)
+
+
+## 状态行进度条：轨道是 TextureRect，填充是 NinePatchRect，
+## 只改填充宽度（不改贴图尺寸），左右 4px 端帽由九宫格保住。
+func _apply_bars(percents: Array) -> void:
+	_apply_bar_set("StatFill", percents)
+
+
+func _apply_bar_set(prefix: String, percents: Array) -> void:
+	for i in percents.size():
+		var fill := _root.get_node_or_null("%s%d" % [prefix, i]) as NinePatchRect
+		if fill == null:
+			continue
+		var r := clampf(float(percents[i]) / 100.0, 0.0, 1.0)
+		fill.visible = r > 0.0
+		if r > 0.0:
+			fill.size.x = maxf(BAR_CAP, round(BAR_W * r))
 
 
 func _hide_text(node: Node) -> void:
@@ -175,7 +205,32 @@ func _report() -> bool:
 	else:
 		print("[HUD] OK   美术贴图节点 %d 个，全部有图" % tex_count)
 
-	# 4. 模块坐标（对照交付包 05-预览 的组装图）
+	# 4. 进度条：0% 必须隐藏，其余宽度 = round(74 * ratio)
+	print("[HUD] ---- 进度条 ----")
+	for i in 5:
+		var f2 := _root.get_node_or_null("StatFill%d" % i) as NinePatchRect
+		var t2 := _root.get_node_or_null("StatTrack%d" % i) as TextureRect
+		if f2 == null or t2 == null:
+			print("[HUD] FAIL 缺少 StatTrack%d / StatFill%d" % [i, i])
+			ok = false
+			continue
+		print("[HUD]   行%d 轨道 %d×%d 填充 %d×%d 可见=%s" % [i, int(t2.size.x), int(t2.size.y),
+			int(f2.size.x), int(f2.size.y), f2.visible])
+		if f2.size.x < BAR_CAP:
+			print("[HUD] FAIL 行%d 填充宽度小于端帽宽度" % i)
+			ok = false
+	if (_root.get_node("BarPage") as Control).visible:
+		print("[HUD] ---- 六态样张 ----")
+		for i in 6:
+			var bf := _root.get_node_or_null("BarPage/Fill%d" % i) as NinePatchRect
+			if bf == null:
+				continue
+			print("[HUD]   %d%% → 填充宽 %d 可见=%s" % [[100,72,64,46,5,0][i], int(bf.size.x), bf.visible])
+			if [100,72,64,46,5,0][i] == 0 and bf.visible:
+				print("[HUD] FAIL 0% 仍然显示填充")
+				ok = false
+
+	# 5. 模块坐标（对照交付包 05-预览 的组装图）
 	print("[HUD] ---- 模块矩形（960×540）----")
 	for name in ["LocationPanel", "DateTimePanel", "WeatherPanel", "TasksPanel", "StatusPanel",
 			"Slot1", "Slot6", "InteractPanel", "ResourcePanel"]:
